@@ -31,6 +31,7 @@ REQUIRE OLD:    REQUIRE $=
 INCLUDE asgen.frt
 INCLUDE aswrap.frt      \ neater if put here
 INCLUDE asi386.frt
+INCLUDE asipentium.frt
 
 \ Tools
 INCLUDE access.frt
