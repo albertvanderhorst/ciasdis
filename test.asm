@@ -18,6 +18,7 @@ ASSEMBLER
 :XXX
     MOV, X| T| DI'| MEM| QQQ L,
     JMP, XXX RL,
+AS:, JMP, XXX RW,
     JMP, XXX _AP_ 4 + - (RL,)
     JMP, XXX 1- RL,
     JMPS, XXX RB,
@@ -27,6 +28,18 @@ ASSEMBLER
     JMPS, YYY RB,
     JMPS, YYY 1- RB,
     LEA, AX'| DB| [AX +4* AX] 0 B,
+    LEA, AX'| DW| [AX +4* AX] 12 L,
+OS:,
+    LEA, AX'| DW| [AX +4* AX] 13 L,
+AS:,
+    LEA, AX'| DW| [BX+SI]' 14 W,
+AS:,
+OS:,
+    LEA, AX'| DW| [BX+SI]'   15    W,
+OS:,
+AS:,
+    LEA, AX'| DW| [BX+SI]'   16 W,
+INC|X,  AX|
 \ YYY is a target for forward jumps:
 :YYY
 
