@@ -75,6 +75,7 @@ LINUXFORTHS= ciforthc lina
 # Auxiliary targets. Because of GNU make bug, keep constant.m4.
 OTHERTARGETS= forth.lab forth.lab.lina forth.lab.wina toblock fromblock constant.m4 namescooked.m4
 # C-sources with various aims. FIXME: start with .c names.
+ASTARGETS= cias cidis ciasdis test.bin test2.bin test2.asm
 CSRCAUX= toblock fromblock stealconstant
 CSRCFORTH= ciforth stealconstant
 CSRC= $(CSRCAUX) $(CSRCFORTH)
@@ -199,7 +200,7 @@ clean: \
 ; rm -f $(TARGETS:%=ci86.%.*)  $(CSRCS:%=%.o) $(LINUXFORTHS) VERSION spy\
 ; for i in $(INDICES) ; do rm -f *.$$i *.$$i's' ; done
 
-cleanall: clean  testclean ; \
+cleanall: clean  testclean asclean ; \
     rcsclean ; \
     rm -f $(OTHERTARGETS) ; \
     rm -f *.aux *.log *.ps *.toc *.pdf
@@ -275,6 +276,8 @@ releaseproof : ; for i in $(RELEASECONTENT); do  rcsdiff -w $$i ; done
 
 testclean: ; rm -f $(TESTTARGETS)
 
+asclean: ; rm -f $(ASTARGETS)
+
 # WARNING : the generation of postscript and pdf use the same files
 # for indices, but with different content.
 
@@ -305,8 +308,8 @@ testclean: ; rm -f $(TESTTARGETS)
     sed '/SI[MB]/d' |\
     sed '/OK/d' >p$(PREFIX).$@
 
-qr8080.ps       :; make as80.ps ; mv p0.as80.ps $@
-qr8086.ps       :; make asi86.ps ; mv p0.asi86.ps $@
+qr8080.ps       :; make as80.ps TITLE='QUICK REFERENCE PAGE FOR 8080 ASSEMBLER'; mv p0.as80.ps $@
+qr8086.ps       :; make asi86.ps TITLE='QUICK REFERENCE PAGE FOR 8086 ASSEMBLER'; mv p0.asi86.ps $@
 p0.asi386.ps    :; make asi386.ps PREFIX=0 MASK=FF
 p0F.asi386.ps   :; make asi386.ps PREFIX=0F MASK=FFFF
 
@@ -600,6 +603,9 @@ test.bin : cidis cias test.asm test.cul  ;
 	cias test2.asm test2.bin;
 	cmp test.bin test2.bin && cmp test.bin testresults/test.bin
 
-lina405.asm : cidis lina405 lina405equ.cul lina405.cul ; cidis lina405 lina405.cul>$@
+lina405.asm : cidis lina405 lina405equ.cul lina405.cul ; \
+cidis lina405 lina405.cul| sed -e 's/. DROP-THIS//' >$@
+
+%.bin : %.asm ; cias $< $@
 
 cidis386.zip : $(ASSRC) asi386.frt ;  zip $@ $+

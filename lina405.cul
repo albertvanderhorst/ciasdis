@@ -1,5 +1,7 @@
 0804,9000 -ORG-
 
+"\ DROP-THIS  _end e_ident - EQU filesz      
+\ DROP-THIS INCLUDE lina405equ.cul" 0804,9000 COMMENT
 
 \ Labels by elf.cul
 0804,9000 EQU e_ident
