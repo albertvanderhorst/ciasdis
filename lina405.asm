@@ -42,7 +42,7 @@ BITS-32
 ( 0804,9081 )                  MOV|SG, T| SS| R| AX| 
 ( 0804,9083 )                  MOV, X| T| SP'| MEM| SP_INIT L, 
 ( 0804,9089 )                  MOV, X| T| BP'| MEM| RP_INIT L, 
-( 0804,908F )                  MOVI|XR, SI| CLD1 IL, 
+( 0804,908F )                  MOVI|X, SI| CLD1 IL, 
 ( 0804,9094 )                  LODS, X'| 
 ( 0804,9095 )                  JMPO, ZO| [AX] 
 ( 0804,9097 )   :CLD1   dl X_COLD 
@@ -350,7 +350,7 @@ BITS-32
 ( 0804,97CC )   :X_(LOOP)   dl H_(LOOP) H_(LOOP) 0 X_0BRANCH 
 ( 0804,97DC )                 dl N_(LOOP) 0 
 
-( 0804,97E4 )   :H_(LOOP)    MOVI|XR, BX| 1 IL, 
+( 0804,97E4 )   :H_(LOOP)    MOVI|X, BX| 1 IL, 
 ( 0804,97E9 )   :L0804,97E9    ADD, X| F| BX'| BO| [BP] 0 B, 
 ( 0804,97EC )                  MOV, X| T| AX'| BO| [BP] 0 B, 
 ( 0804,97EF )                  SUB, X| T| AX'| BO| [BP] H_U0 B, 
@@ -491,7 +491,7 @@ BITS-32
 ( 0804,9A9E )                  J, C| N| L0804,9AAD RB,
 ( 0804,9AA0 )                  SUB, X| F| DX'| R| DX| 
 ( 0804,9AA2 )                  MOV, B| F| AL'| R| DL| 
-( 0804,9AA4 )                  MOVI|BR, AL| 1 IB, 
+( 0804,9AA4 )                  MOVI|B, AL| 1 IB, 
 ( 0804,9AA6 )                  NEG, X| R| AX| 
 ( 0804,9AA8 )                  PUSH|X, DX| 
 ( 0804,9AA9 )                  PUSH|X, AX| 
@@ -890,7 +890,7 @@ BITS-32
 
 ( 0804,A218 )   :H_0<    POP|X, AX| 
 ( 0804,A219 )                  OR, X| F| AX'| R| AX| 
-( 0804,A21B )                  MOVI|XR, AX| 0 IL, 
+( 0804,A21B )                  MOVI|X, AX| 0 IL, 
 ( 0804,A220 )                  J, S| N| L0804,A223 RB,
 ( 0804,A222 )                  DEC|X, AX| 
 ( 0804,A223 )   :L0804,A223    PUSH|X, AX| 
@@ -1308,7 +1308,7 @@ BITS-32
 ( 0804,A7C0 )   :X_1   dl H_1 H_1 0 X_0 
 ( 0804,A7D0 )                 dl N_1 0 
 
-( 0804,A7D8 )   :H_1    MOVI|XR, AX| 1 IL, 
+( 0804,A7D8 )   :H_1    MOVI|X, AX| 1 IL, 
 ( 0804,A7DD )                  PUSH|X, AX| 
 ( 0804,A7DE )                  LODS, X'| 
 ( 0804,A7DF )                  JMPO, ZO| [AX] 
@@ -1320,7 +1320,7 @@ BITS-32
 ( 0804,A7EC )   :X_2   dl H_2 H_2 0 X_1 
 ( 0804,A7FC )                 dl N_2 0 
 
-( 0804,A804 )   :H_2    MOVI|XR, AX| 2 IL, 
+( 0804,A804 )   :H_2    MOVI|X, AX| 2 IL, 
 ( 0804,A809 )                  PUSH|X, AX| 
 ( 0804,A80A )                  LODS, X'| 
 ( 0804,A80B )                  JMPO, ZO| [AX] 
@@ -2091,7 +2091,7 @@ BITS-32
 ( 0804,BAA8 )                  REPZ, 
 ( 0804,BAA9 )                  CMPS, B'| 
 ( 0804,BAAA )                  J, Z| Y| L0804,BAB2 RB,
-( 0804,BAAC )                  MOVI|BR, AL| 1 IB, 
+( 0804,BAAC )                  MOVI|B, AL| 1 IB, 
 ( 0804,BAAE )                  J, C| N| L0804,BAB2 RB,
 ( 0804,BAB0 )                  NEG, X| R| AX| 
 ( 0804,BAB2 )   :L0804,BAB2    MOV, X| F| DX'| R| SI| 
@@ -2567,7 +2567,7 @@ BITS-32
 ( 0804,CAD0 )                 dl X_DECIMAL X_ONLY X_FORTH X_DEFINITIONS 
 ( 0804,CAE0 )                 dl X_QUIT semis 
 
-( 0804,CAE8 )                  MOVI|XR, SI| LWARM IL, 
+( 0804,CAE8 )                  MOVI|X, SI| LWARM IL, 
 ( 0804,CAED )                  LODS, X'| 
 ( 0804,CAEE )                  JMPO, ZO| [AX] 
 ( 0804,CAF0 )   :LWARM   dl X_WARM 
