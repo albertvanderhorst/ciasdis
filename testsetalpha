@@ -1,3 +1,13 @@
+\ Testing the DEC Alpha assembler/disassembler
+REQUIRE DUMP
+REQUIRE ALIAS
+'$@ ALIAS @+
+
+ASSEMBLER
+!TALLY
+HEX
+10 HERE 10 MOD - ALLOT ( To get a nice DUMP)
+HERE
 WMB,
 WH64,   Rzb
 WH64,   R7b
@@ -10164,3 +10174,13 @@ ADDL,   R|   R0a   R7b   R0c
 ADDL,   R|   R0a   R0b   Rzc
 ADDL,   R|   R0a   R0b   R7c
 ADDL,   R|   R0a   R0b   R0c
+
+
+HERE
+0 , 0 , 0 , 0 ,
+." Padding"
+." TEST STARTS HERE"
+2DUP OVER - DUMP
+2DUP OVER - "testsetalpha.bin" PUT-FILE
+DISASSEMBLE-RANGE
+BYE

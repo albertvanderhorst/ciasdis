@@ -418,16 +418,16 @@ lina2 : ci86.lina.s ; gcc $+ -l 2>aap
 
 ci86.lina.s :
 
-testasalpha:
 
-# NOT YET!
-#testasalpha: asgen.frt asalpha.frt testsetalpha ; \
-    echo CR REQUIRE INCLUDE REQUIRE DUMP REQUIRE ALIAS \'\$$\@ ALIAS @+ INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testrunalpha|\
-    lina -a    |\
-    sed '1,/TEST STARTS HERE/d' |\
-    sed 's/^[0-9A-F \.,]*://' >$@       ;\
-    diff -w $@ testsetalpha >$@.diff ;\
-    diff $@.diff testresults
+# co -r4.9.1.1 asgen.frt  # Last one that worked for alpha.
+testasalpha: asalpha.frt testsetalpha ; \
+	echo INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testsetalpha |\
+	lina -e |\
+	sed '1,/TEST STARTS HERE/d' |\
+	sed 's/^[0-9A-F \.,]*://' >$@ ;\
+	rm -f asgen.frt               ;\
+	diff -w $@ testsetalpha >$@.diff ;\
+	rcsdiff -bBw -r$(RCSVERSION) $@.diff
 
 testas80: asgen.frt as80.frt testset8080 ; \
     cat $+|\
