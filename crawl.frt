@@ -1,12 +1,8 @@
 
 \ Crawling is the process of following jumps to determine code space.
-\ During crawling always the section labels must be current and sorted.
 
 
 ASSEMBLER
-
-\ During disassembly all sort of labels are inspected.
-\ : (DISASSEMBLE)   (DISASSEMBLE) SECTION-LABELS ;
 
 \ Jump targets that are starting points for further crawling.
 \ Adding and removing from this bag ressembles a recursive action.
@@ -39,6 +35,10 @@ NORMAL-DISASSEMBLY
 
 \ Make section I current.
 : MAKE-CURRENT LABELS[] CELL+ @ EXECUTE ;
+
+\ The following are auxiliary words for `` KNOWN-CODE? '' mainly.
+\ For all those section labels must be current and sorted.
+\ Prepend `` SECTION-LABELS '' if you want to use the auxiliary words.
 
 \ For ADDRESS : "it IS in a current code section"
 \ FIXME: if the jumps are not to the same type of disassembly section
