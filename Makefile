@@ -89,6 +89,17 @@ manual.mi   \
 rational.mi  \
 # That's all folks!
 
+# Source for stand alone assembler
+ASSRC= \
+access.frt   \
+aswrap.frt   \
+asgen.frt    \
+ciasdis.frt  \
+crawl.frt    \
+labelas.frt  \
+labeldis.frt \
+# That's all folks!
+
 # Documentation files and archives
 DOC = \
 COPYING   \
@@ -115,23 +126,11 @@ ci86.alonehd.asm  \
 # That's all folks!
 
 RELEASECONTENT = \
-ci86.gnr        \
-$(CSRC:%=%.c)    \
-$(TARGETS:%=%.cfg) \
-$(DOC)     \
-Makefile         \
-test.mak        \
-$(INGREDIENTS)   \
-$(ASSEMBLERS:%=%.m4) \
-$(DOCTRANSFORMS) \
-$(TOOLS)        \
-blocks.frt       \
-options.frt     \
-genboot.bat      \
-$(EXAMPLES)     \
-wc            \
-errors.linux.txt \
-errors.dos.txt \
+COPYING   \
+README.assembler.txt \
+cias.1          \
+cul.5           \
+$(ASSRC)        \
 # That's all folks!
 
 # 4.0 ### Version : an official release 4.0
@@ -139,22 +138,13 @@ errors.dos.txt \
 VERSION=  # Because normally VERSION is passed via the command line.
 DATE=2030     # To get the newest version
 
-RELEASELINA = \
-COPYING   \
-README.lina \
-ci86.lina.info \
-ci86.lina.html \
-ci86.lina.ps \
-ci86.lina.texinfo \
-ci86.lina.asm      \
-lina      \
-lina.1    \
-forth.lab     \
-$(CSRCAUX:%=%.c)    \
-wc            \
-# That's all folks!
 
 TEMPFILE=/tmp/ciforthscratch
+
+MASK=FF
+PREFIX=0
+TITLE=QUICK REFERENCE PAGE FOR 80386 ASSEMBLER
+TESTTARGETS=*.ps testas* testlina.[0-9] testmina.[0-9] testlinux.[0-9]
 
 # Define NASM as *the* assembler generating bin files.
 %.bin:%.asm
@@ -279,88 +269,9 @@ hdboot: ci86.alonehd.bin
 figdoc.txt glossary.txt frontpage.tif memmap.tif : ; co -r1 $@
 figdoc.zip : figdoc.txt glossary.txt frontpage.tif memmap.tif ; zip figdoc $+
 
-zip : $(RELEASECONTENT) ; echo ciforth-$(VERSION).tar.gz $+ | xargs tar -cvzf
-
-# For msdos truncate all file stems to 8 char's and loose prefix `ci86.'
-# Compiling a simple c-program may be too much, so supply forth.lab
-msdos.zip : $(RELEASECONTENT) mslinks ;\
-	ln -f forth.lab.wina forth.lab ;\
-    echo fg$(VERSION) $(RELEASECONTENT) forth.lab |\
-    sed -e's/ ci86\./ /g' |\
-    sed -e's/ gnr / ci86.gnr /g' |\
-    xargs zip -k
-
-# More messy things in behalf of msdos
-mslinks :
-	ln -sf ci86.lina.asm lina.asm
-	ln -sf ci86.linux.asm linux.asm
-	ln -sf ci86.mina.msm mina.msm
-	ln -sf ci86.wina.asm wina.asm
-	ln -sf ci86.mina.asm forth32.asm
-	ln -sf ci86.mina.bin forth32.com
-	ln -sf ci86.alone.asm alone.asm
-	ln -sf ci86.alonehd.asm alonehd.asm
-	ln -f forth.lab.wina forth.lab
-
-
-forth.lab : forth.lab.lina forth.lab.wina
-
-lina.zip : $(RELEASELINA) ;\
-	make forth.lab.lina
-	ln -f forth.lab.lina forth.lab
-	ls $+ | sed s:^:lina-$(VERSION)/: >MANIFEST
-	(cd ..; ln -s ciforth lina-$(VERSION))
-	(cd ..; tar -czvf ciforth/lina-$(VERSION).tar.gz `cat ciforth/MANIFEST`)
-	(cd ..; rm lina-$(VERSION))
+zip : $(RELEASECONTENT) ; echo cias-$(VERSION).tar.gz $+ | xargs tar -cvzf
 
 releaseproof : ; for i in $(RELEASECONTENT); do  rcsdiff -w $$i ; done
-
-ci86.lina.o : ci86.lina.asm ; nasm $+ -felf -o $@ -l $(@:.o=.lst)
-
-ci86.%.o : ci86.%.asm ; nasm $+ -felf -o $@ -l $(@:.o=.lst)
-
-# The tricky `link.script' has been dispensed with.
-# However, now we need _fini and _init in ciforth.c and
-# there are a few elf sections (.bss) that are mapped in the
-# dictionary. But works.
-ciforthc : ciforth.o ci86.linux.o
-	 ld -static /usr/lib/gcrt1.o $+ -lc  -o ciforthc
-
-# Linux native forth
-lina : ci86.lina.o ; ld $+ -o $@
-
-# This dependancy is problematic.
-# Do `make constant.m4' explicitly beforehand.
-# Because otherwise `constant.m4' is counted into the ``$+'' set.b
-# ci86.alone.asm : constant.m4
-
-# Convenience under linux. Steal the definitions of constants from c include's.
-stealconstant: stealconstant.c ;  \
-    cc $+ -o stealconstant
-
-# Convenience under linux. Steal the definitions of constants from c include's.
-constant.m4 : stealconstant ; $+ >$@
-
-# $Id$
-# Copyright(2000): Albert van der Horst, HCC FIG Holland by GNU Public License
-#
-# Contains everything except making (that is in the makefile)
-
-MASK=FF
-PREFIX=0
-TITLE=QUICK REFERENCE PAGE FOR 80386 ASSEMBLER
-TESTTARGETS=*.ps testas* testlina.[0-9] testmina.[0-9] testlinux.[0-9]
-
-# Source for stand alone assembler
-ASSRC= \
-access.frt   \
-aswrap.frt   \
-asgen.frt    \
-ciasdis.frt  \
-crawl.frt    \
-labelas.frt  \
-labeldis.frt \
-# That's all folks!
 
 testclean: ; rm -f $(TESTTARGETS)
 
@@ -689,5 +600,6 @@ test.bin : cidis cias test.asm test.cul  ;
 	cias test2.asm test2.bin;
 	cmp test.bin test2.bin && cmp test.bin testresults/test.bin
 
-cidis386.zip : $(ASSRC) asi386.frt ;  zip $@ $+
+lina405.asm : cidis lina405 lina405equ.cul lina405.cul ; cidis lina405 lina405.cul
 
+cidis386.zip : $(ASSRC) asi386.frt ;  zip $@ $+
