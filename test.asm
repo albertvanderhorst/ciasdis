@@ -3,7 +3,7 @@
 ASSEMBLER
 1278 ORG
 \ Here it all starts
-\ Fasten Your Seat Belts (tm)   
+\ Fasten Your Seat Belts (tm)
     CLD,                  \ First instruction
     MOV, X| T| DI'| MEM| XXX X,
 :QQQ
@@ -11,6 +11,11 @@ ASSEMBLER
     ADD, B| F| AL'| D0| [SI]
     MOV, X| T| DI'| MEM| XXX X,
 \ XXX is a target for backward jumps:
+:RRR
+        DB  1 ^C &C  65 65 80
+        DW  1 ^C &C  65 65 80
+        DL  1 ^C &C  65 65 80
+        DB  144  144  144  144  144  144  144
 :XXX
     MOV, X| T| DI'| MEM| QQQ X,
     JMP, XXX RX,
