@@ -12,9 +12,9 @@ BITS-32
     RET,
 \ XXX is a target for backward jumps:
 :RRR
-        DB  1 ^C &C  #65 #65 #80
-        DW  1 ^C &C  #65 #65 #80
-        DL  1 ^C &C  #65 #65 #80
+        db  1 ^C &C  #65 #65 #80
+        dw  1 ^C &C  #65 #65 #80
+        dl  1 ^C &C  #65 #65 #80
 :XXX
     MOV, X| T| DI'| MEM| QQQ L,
     JMP, XXX RL,

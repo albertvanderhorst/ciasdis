@@ -258,7 +258,7 @@ endstruct
 \ Dump bytes from target ADDRESS1 to ADDRESS2.
 : DUMP-B
     TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS
-    "        DB" TYPE DO I C@ 3 .R LOOP CR ;
+    "        db" TYPE DO I C@ 3 .R LOOP CR ;
 
 \ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
 : -DB:    'DUMP-B   SECTION ;
@@ -273,7 +273,7 @@ endstruct
 \ Dump words from target ADDRESS1 to ADDRESS2.
 : DUMP-W
     TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS
-    "        DW" TYPE DO I @ SPACE W. 2 +LOOP CR ;
+    "        dw" TYPE DO I @ SPACE W. 2 +LOOP CR ;
 
 \ Section ADDRESS1 .. ADDRESS2 are words with name "name".
 : -DW:    'DUMP-W   SECTION ;
@@ -284,7 +284,7 @@ endstruct
 \ Dump words from target ADDRESS1 to ADDRESS2.
 : DUMP-L
     TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS
-    "        DL" TYPE DO I @ SPACE H. 4 +LOOP CR ;
+    "        dl" TYPE DO I @ SPACE H. 4 +LOOP CR ;
 
 \ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
 : -DL:    'DUMP-L   SECTION ;

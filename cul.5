@@ -5,19 +5,22 @@ cul \- consult file format for
 computer intelligence
 disassembler 386
 .SH "DESCRIPTION"
-\fBcul\fR files are generally used as the second argument for \fBcidis\fR.
+\fBcul\fR files are \fBCONSULTED\fR by \fBcidis\fR.
+They contain a prescription of how the file that has been
+\fbFETCHED\fR (hencetoforth called \fIbinary image\fR) is to be disassembled.
 .br
 On top of the user commands described in this page,
 the full assembler is available after the command \fBASSEMBLER\fR and
 the full Forth language is available after the command \fBFORTH\fR .
+The Forth library is available after suitable installation.
 .\"
 .SH "SYNTAX"
-The syntax in the following applies to the cul file,
-but these commands can be used interactively too.
+These command may reside in the cul file,
+but they can be used interactively too.
 .\"
 .SH "COMMENT"
 A backslash \fB\\\fR followed by a space ignores the remainder of a line.
-A open bracket \fB(\fR followed by a space ignores the remainder of the file
+An open bracket \fB(\fR followed by a space ignores the remainder of the file
 until a closing bracket (so don't use in expressions!).
 Comment signs are not recognized within strings.
 The string symbol `` \fB"\fR '' is not recognized within comment.
@@ -47,15 +50,23 @@ Those two atoms can be manipulated individually, but some commands
 operate on strings.
 
 .br
+Atoms are untyped.
+.\"verbose
+All operators, despite suggestive naming, are allowed on all data.
+Inappropriate use of operators may yield unwanted results.
+.br
 An arithmetic expression combines atom's or other expressions
 by the binary operators
 \fB+ - / * MOD\fR and the unary operator \fBNEGATE\fR
 in a postfix fashion.
-Arithmetic expressions can be combined using the binary operators \fB= <> < > <= >=\fR
-yielding a flag.
+.br
+Arithmetic expressions can be combined using the binary operators
+\fB= <> < > <= >=\fR yielding a flag.
+.br
 A logical expression combines atom's by the bitwise binary operators
 \fBOR AND XOR\fR  and the unary operator \fBINVERT\fR ,
 again in postfix fashion.
+.br
 Brackets are not allowed.
 They are not needed,
 because an unlimited number of atoms can be retained,
@@ -80,13 +91,14 @@ mostly for a name that is hence-to-forth known, e.g. as a label.
 .TP
 \fI<expr>\fR \fBLABEL\fR \fR"name"\fR
 .br
-Add \fI"name"\fR to the plain labels with value \fI<expr>\fR.
+Add a label to the plain labels with name \fI"name"\fR with value \fI<expr>\fR.
 .TP
 \fI<expr>\fR \fI<string>\fR \fBLABELED\fR
 .br
-Add to the plain labels with value \fI<expr>\fR and the name in \fI<string>\fR.
-This is useful if the string is extracted by a calculation from
-the input file.
+Add a label to the plain labels with value \fI<expr>\fR and the
+name in \fI<string>\fR.
+This is useful if the string is extracted from
+the binary image.
 .TP
 \fI<expr>\fR \fBEQU\fR \fI"name"\fR
 .br
@@ -192,7 +204,7 @@ Add the information that \fI<expr>\fR is a target code address.
 It will be taken into account at the next invocation of CRAWL .
 
 .SH "STRING HANDLING"
-Extracting label names from the input file is a vital capability.
+Extracting label names from the binary is a vital capability.
 Note that the keywords in this section are operators,
 in the sense that they leave a result string for further processing.
 .TP
@@ -230,7 +242,7 @@ A class can be made current by typing its name
 and then its content can be
 printed using \fB.LABELS\fR.
 .TP
-\fI<expr>\fR \fI<string>\fR \fBABORT?\fR
+\fI<expr>\fR \fI<string>\fR \fB?ABORT\fR
 .br
 If \fI<expr>\fR\ is not zero,
 output the string on the error channel and exit
@@ -279,6 +291,7 @@ a c-program could contain:
 The actual command to disassemble is:
 .br
  \ \ \ cidis freecell.exe freecell.cul > freecell.asm
+
 .br
 A reusable file to be included if disassembling
 MS-DOS \fB.exe\fR files could contain:
@@ -291,7 +304,7 @@ MS-DOS \fB.exe\fR files could contain:
 .br
 \ \ \ exSignature 2 "MZ" $=
 .br
-\ \ \ \ \ 0 = "Fatal, not an exe header!" ABORT?
+\ \ \ \ \ 0 = "Fatal, not an exe header!" ?ABORT
 .br
 \ \ \ DUP\ LABEL\ exExtrabytes\ \ \ \ \ \ \ 2 +
 .br
@@ -324,6 +337,6 @@ Mistakes in Forth mode can easily crash \fBcias / cidis\fR.
 .SH "AUTHOR"
 Copyright \(co 2004
 Albert van der Horst \fI albert@spenarnc.xs4all.nl\fR.
-\fBIcias / cidis\fR
+\fBcias / cidis\fR
 are made available under the GNU Public License:
 quality, but NO warranty.
