@@ -31,8 +31,8 @@ ASSEMBLER DEFINITIONS  HEX
 \     0010,0000 AMASK 2 is clear           0020,0000 Instruction requires AMASK 2
 \     0040,0000 AMASK 8 is clear           0080,0000 Instruction requires AMASK 8
 
-\    1,000,0000 Disallow /U/SU IEEE        2,0000,0000 /S or /SU trap.
-\    4,000,0000 Disallow /U/SU/SUI         8,0000,0000 /U /SU /SUI trap.
+\    100,0000 Disallow /U/SU IEEE        200,0000 /S or /SU trap.
+\    400,0000 Disallow /U/SU/SUI         800,0000 /U /SU /SUI trap.
 
 \ For DEA set and individual MASK to bad (or back).
 : !BAD    SWAP >BA SWAP TOGGLE ;
@@ -53,17 +53,17 @@ ASSEMBLER DEFINITIONS  HEX
 ( ***************************** 4.7 FP Modifiers ********************** )
 
 (                                   TRP bits                            )
-00,0000,4000 0 E000 0000 xFI /I
-2A,0000,4080 0 E000 2000 xFI /U
-2A,0000,4040 0 E000 2000 xFI /V
+0000,4000 0 E000 0000 xFI /I
+0A00,4080 0 E000 2000 xFI /U
+0A00,4040 0 E000 2000 xFI /V
 (                 4000                                                  )
 (                 6000                                                  )
-00,0000,4020 0 E000 8000 xFI /S        ( Only VAX )
-2A,0000,4080 0 E000 A000 xFI /SU
-0A,0000,4040 0 E000 A000 xFI /SV
+0000,4020 0 E000 8000 xFI /S        ( Only VAX )
+0A00,4080 0 E000 A000 xFI /SU
+0A00,4040 0 E000 A000 xFI /SV
 (                 C000                                                  )
-28,0000,4090 0 E000 E000 xFI /SUI      ( Only IEEE )
-28,0000,4050 0 E000 E000 xFI /SVI
+0800,4090 0 E000 E000 xFI /SUI      ( Only IEEE )
+0800,4050 0 E000 E000 xFI /SVI
 
 (                                   RND bits                            )
 4000 0 1800 0000 xFI /C
@@ -75,16 +75,19 @@ ASSEMBLER DEFINITIONS  HEX
 \ Note all registers are set to uninteresting by default.
 \ Otherwise a ``SHOW:'' would generate 32^3 lines.
 2  0  1F T!
+2  0  1F 0 DFI Rxc    ( Variable register c)
 1 0   20 xFAMILY|
   R0c R1c R2c R3c R4c R5c R6c R7c R8c R9c R10c R11c R12c R13c R14c R15c R16c
   R17c R18c R19c R20c R21c R22c R23c R24c R25c R26c R27c R28c R29c R30c Rzc
 
 6  0  001F,0000 T!
+6  0 001F,0000 10 DFI Rxb    ( Variable register b)
 0001,0000 0  20 xFAMILY|
   R0b R1b R2b R3b R4b R5b R6b R7b R8b R9b R10b R11b R12b R13b R14b R15b R16b
   R17b R18b R19b R20b R21b R22b R23b R24b R25b R26b R27b R28b R29b R30b Rzb
 
 2  0  03E0,0000 T!
+2  0  03E0,0000 15 DFI Rxa    ( Variable register a)
 0020,0000 0   20 xFAMILY|
   R0a R1a R2a R3a R4a R5a R6a R7a R8a R9a R10a R11a R12a R13a R14a R15a R16a
   R17a R18a R19a R20a R21a R22a R23a R24a R25a R26a R27a R28a R29a R30a Rza
@@ -197,7 +200,7 @@ ASSEMBLER DEFINITIONS  HEX
 40A4 0 F3F-MASK T!
     BI: 0.001 BI: 15.000 4 4FAMILY, ADDF, SUBF, MULF, DIVF,
     BI: 0.001 BI: 15.020 4 4FAMILY, ADDG, SUBG, MULG, DIVG,
-4,0000,40A4 0 03FF,E01F  T!
+400,40A4 0 03FF,E01F  T!
     BI: 0.001 BI: 15.0A5 3 4FAMILY, CMPGEQ, CMPGLT, CMPGLE,
 8,40A4 0 F3F-MASK NO-a T!
     BI: 0.020   BI: 14.00A  NO-a 2 4FAMILY, SQRTF, SQRTG,
@@ -214,12 +217,12 @@ ASSEMBLER DEFINITIONS  HEX
 4094 0 001F,F81F         BI: 16.02C NO-a 4PI CVTTS,
 4054 0 001F,F81F         BI: 16.02F NO-a 4PI CVTTQ,
 
-1,0000,4094 0 001F,F81F         BI: 16.03C NO-a 4PI CVTQS,
-1,0000,4094 0 001F,F81F         BI: 16.03E NO-a 4PI CVTQT,
+100,4094 0 001F,F81F         BI: 16.03C NO-a 4PI CVTQS,
+100,4094 0 001F,F81F         BI: 16.03E NO-a 4PI CVTQT,
 
 ( These instructions are irregular!                                     )
-4,0000,4094 0 001F,001F          BI: 16.2AC NO-a 4PI CVTST,
-4,0000,4094 0 001F,001F          BI: 16.6AC NO-a 4PI CVTST/S,
+400,4094 0 001F,001F          BI: 16.2AC NO-a 4PI CVTST,
+400,4094 0 001F,001F          BI: 16.6AC NO-a 4PI CVTST/S,
 
 4084 0 03FF,001F T!
     BI: 0.001 BI: 17.020 3 4FAMILY, CPYS, CPYSE, CPYSN,
@@ -267,7 +270,7 @@ BI: 01.0 BI: 20.0 8 4FAMILY, LDF, LDG, LDS, LDT, STF, STG, STS, STT,
 0 0 3FF,3FFF T!
 BI: 00.200 BI: 1A.000 4 4FAMILY, JMP, JSR, RET, JSR_COROUTINE,
 
-20,0000 0 001F,FFFF 0 DFI c#| \ 21 bits displacement
+20,0000 0 001F,FFFF 0 DFIs c#| \ 21 bits signed displacement
 
 ( DEC calls this a branch instruction format.                           )
 8 0 NORMAL-MASK  T!
@@ -328,3 +331,4 @@ BI: 01.0 BI: 30.0 8 4FAMILY, -- FBEQ, FBLT, FBLE, -- FBNE, FBGE, FBGT,
     DROP ;
 
 PREVIOUS DEFINITIONS
+DECIMAL
