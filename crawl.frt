@@ -64,8 +64,8 @@ REQUIRE BAG
 
 \ For INDEX1 and INDEX2 leave INDEX1 and INDEX2 . Return a new NAME for
 \ the section, plus "not both ARE named"
-: NEW-NAME 2DUP SECTION-NAME 2DUP "NONAME" $= IF 2DROP SECTION-NAME -1 ELSE
-           ROT SECTION-NAME "NONAME" $= THEN ;
+: NEW-NAME 2DUP SECTION-NAME 2DUP NONAME$ $= IF 2DROP SECTION-NAME -1 ELSE
+           ROT SECTION-NAME NONAME$ $= THEN ;
 
 \D  ." EXPECT -1 oops : " 1 2 NEW-NAME  . TYPE 2DROP CR
 \D  ." EXPECT -1 oops : " 2 3 NEW-NAME  . TYPE 2DROP CR
@@ -132,6 +132,140 @@ REQUIRE BAG
 \D 560 590 -db: bytes
 \D .LABELS
 \D  ." EXPECT 1 LESS : " 2 COLLAPSE(I1) .LABELS CR .S
+\ This looks like a proper design.
+\ - sort on the start address, type (disassembler) and end address.
+\ - start with the last section and work down until the second
+\     - if it overlaps with or borders at the previous one and has the
+\       same type and alignment, and the second one is not named
+\       collapse the sections.
+\     - if it overlaps with the previous one and has the same type and
+\       alignment, and the second one is named, trim the first section.
+\     - if it overlaps with the previous and has different type,
+\         issue warning
+\     - if it has a gap, introduce a character section
+\   This may lead to an extra section, one less section, or no change
+\   in the number of sections, but only at or after the current section.
+\ - As a last action, introduce extra sections at the beginning and end.
+\
+\ This leads to words: SAME-TYPE SAME-ALIGN OVERLAP BORDER GAP IS-NAMED
+
+\ For section INDEX: "It HAS the same type and alignment as the previous one."
+: SAME-ALIGN    DUP MAKE-CURRENT  DIS-START SWAP
+    1- MAKE-CURRENT   DIS-START - DIS-STRIDE MOD 0=   ;
+
+\D INIT-ALL SECTION-LABELS  HEX
+\D 12 34 -dc-
+\D 34 65 -db: AAP
+\D 38 80 -dl-
+\D 82 90 -dl-
+\D 88 94 -dl-
+
+\D ." EXPECT: -1 :" 2 SAME-ALIGN . CR
+\D ." EXPECT: -1 :" 3 SAME-ALIGN . CR \ Must become 0
+\D ." EXPECT: -1 :" 4 SAME-ALIGN . CR
+
+\ Redefine it to apply to one INDEX.
+: COMPATIBLE?' DUP 1- SWAP  COMPATIBLE?   ;
+\D ." EXPECT: 0 :" 2 COMPATIBLE?' . CR
+\D ." EXPECT: 0 :" 3 COMPATIBLE?' . CR \ Must become 0
+\D ." EXPECT: -1 :" 4 COMPATIBLE?' . CR
+
+\ For section INDEX return END of previous, START of this one,
+: END+START DUP MAKE-CURRENT DIS-START SWAP 1- MAKE-CURRENT DIS-END SWAP ;
+\D ." EXPECT: 34 34 :" 2 END+START SWAP . . CR
+\D ." EXPECT: 65 38 :" 3 END+START SWAP . . CR
+
+\ Section INDEX overlaps with previous one.
+: OVERLAP? END+START > ;
+\D ." EXPECT: 0 :" 2 OVERLAP? . CR
+\D ." EXPECT: -1 :" 3 OVERLAP? . CR
+\D ." EXPECT: 0 :" 4 OVERLAP? . CR
+
+\ Section INDEX overlaps or borders with the previous one.
+: OVERLAP-OR-BORDER? END+START >= ;
+\D ." EXPECT: -1 :" 2 OVERLAP-OR-BORDER? . CR
+\D ." EXPECT: -1 :" 3 OVERLAP-OR-BORDER? . CR
+\D ." EXPECT: 0 :" 4 OVERLAP-OR-BORDER? . CR
+
+\ Section INDEX has a gap with the previous one.
+: GAP?' END+START < ;
+\D ." EXPECT: 0 :" 2 GAP?' . CR
+\D ." EXPECT: 0 :" 3 GAP?' . CR
+\D ." EXPECT: -1 :" 4 GAP?' . CR
+
+\ For section INDEX: "It HAS a name"
+: IS-NAMED   LABELS[] CELL+ @ ( xt) >NFA @ $@ "NONAME" $= 0= ;
+\D ." EXPECT: -1 :" 2 IS-NAMED . CR
+\D ." EXPECT: 0 :" 3 IS-NAMED . CR
+
+\ Collapse section I into the previous section, that determines the properties.
+: COLLAPSE DUP MAKE-CURRENT DIS-END OVER 1- MAKE-CURRENT DIS-END MAX DIS-END!
+         REMOVE-LABEL ;
+\D ." EXPECT: 5 82 94 4 :"
+\D LAB-UPB . 5 COLLAPSE 4 MAKE-CURRENT DIS-START . DIS-END .  LAB-UPB . CR
+
+\ Trim the section previous to INDEX, such that it borders to section index.
+: TRIM-SECTION DUP MAKE-CURRENT DIS-START SWAP 1- MAKE-CURRENT DIS-END! ;
+\D 90 1000 -dl-
+\D ." EXPECT: 82 90 :" 5 TRIM-SECTION 4 MAKE-CURRENT DIS-START . DIS-END .  CR
+
+\ Combine section INDEX with the previous one.
+: COMBINE
+    DUP OVERLAP-OR-BORDER? OVER IS-NAMED 0= AND IF DUP COLLAPSE THEN
+    DUP OVERLAP? OVER IS-NAMED AND IF DUP TRIM-SECTION THEN  DROP ;
+\D INIT-ALL
+\D 10  30 -dl-
+\D 20  40 -dl-
+\D 30 50  -dl: aap
+\D 60 80  -dl-
+\D 90 100 -dl: noot
+\D ." EXPECT: 5 5 :" LAB-UPB . 5 COMBINE LAB-UPB . CR
+\D ." EXPECT: 5 5 :" LAB-UPB . 4 COMBINE LAB-UPB . CR
+\D ." EXPECT: 5 5 20 30 :" LAB-UPB . 3 COMBINE LAB-UPB . 2 MAKE-CURRENT DIS-START . DIS-END . CR
+\D ." EXPECT: 5 4 10 30 :" LAB-UPB . 2 COMBINE LAB-UPB . 1 MAKE-CURRENT DIS-START . DIS-END . CR
+
+\ Combine section INDEX with a previous overlapping or bordering section.
+: KILL-OVERLAP DUP SAME-ALIGN OVER COMPATIBLE?' AND IF DUP COMBINE THEN DROP ;
+\D INIT-ALL
+\D 10  30 -dl-
+\D 20  40 -dl-
+\D 30 50  -dl: aap
+\D 60 80  -dl-
+\D 90 100 -dl: noot
+\D ." EXPECT: 5 5 :" LAB-UPB . 5 KILL-OVERLAP LAB-UPB . CR
+\D ." EXPECT: 5 5 :" LAB-UPB . 4 KILL-OVERLAP LAB-UPB . CR
+\D ." EXPECT: 5 5 20 30 :" LAB-UPB . 3 KILL-OVERLAP LAB-UPB . 2 MAKE-CURRENT DIS-START . DIS-END . CR
+\D ." EXPECT: 5 4 10 30 :" LAB-UPB . 2 KILL-OVERLAP LAB-UPB . 1 MAKE-CURRENT DIS-START . DIS-END . CR
+\D INIT-ALL
+\D 10  30 -dl-
+\D 20  28 -db-
+\D 30 70  -dl: aap
+\D 60 80  -dl-
+\D 7F 10F -dl-
+\ The following is actually wrong because the aligning is not tested yet.
+\D ." EXPECT: 5 4 60 10F :" LAB-UPB . 5 KILL-OVERLAP LAB-UPB . 4 MAKE-CURRENT DIS-START . DIS-END . CR
+\D ." EXPECT: 4 3 30 10F :" LAB-UPB . 4 KILL-OVERLAP LAB-UPB . 3 MAKE-CURRENT DIS-START . DIS-END . CR
+\D ." EXPECT: 3 3 20 28 :" LAB-UPB . 3 KILL-OVERLAP LAB-UPB . 2 MAKE-CURRENT DIS-START . DIS-END . CR
+\D ." EXPECT: 3 3 10 30 :" LAB-UPB . 2 KILL-OVERLAP LAB-UPB . 1 MAKE-CURRENT DIS-START . DIS-END . CR
+
+\ Introduce char section to fill the gap at INDEX. Note that the result is unordered.
+: FILL-GAP DUP GAP?' IF   DUP END+START -d$-   DUP 1+ LAB-UPB MAX KILL-OVERLAP
+    DUP KILL-OVERLAP THEN DROP ;
+\D ." EXPECT: 3 4 28 30 :" LAB-UPB . 3 FILL-GAP LAB-UPB . 4 MAKE-CURRENT DIS-START . DIS-END . CR
+\D ." EXPECT: 4 4 20 28 :" LAB-UPB . 2 FILL-GAP LAB-UPB . 2 MAKE-CURRENT DIS-START . DIS-END . CR
+
+\ Clean up the section labels, from behind.
+\ Although the bounds may not be valid after a clean up, this works
+\ because a clean up of a section only concerns higher sections, no
+\ longer considered.
+\ So a section can comfortably be removed using the regular removal
+\ mechanism for bags. A newly introduced section automatically falls
+\ into place, because of the conditions regarding the start addresses.
+: CLEAN-UP-SECTIONS  SECTION-LABELS LAB-BOUNDS SWAP 1+ ?DO I KILL-OVERLAP LOOP ;
+
+\ Fill any holes with character sections.
+: PLUG-HOLES  SECTION-LABELS LAB-BOUNDS SWAP 1+ ?DO I FILL-GAP LOOP   SORT-LABELS ;
+
 
 \ ------------------------------------------------------------------------
 ASSEMBLER
@@ -199,7 +333,7 @@ NORMAL-DISASSEMBLY
   CR ." STARTERS:" STARTERS .BAG CR ;
 
 \ Analyse code from ADDRESS , unless already known.
-: ?CRAWL-ONE? DUP KNOWN-CODE? .S 0= IF CRAWL-ONE _ THEN DROP ;
+: ?CRAWL-ONE? DUP KNOWN-CODE? 0= IF CRAWL-ONE _ THEN DROP ;
 
 \ Crawl through code from all points in ``STARTERS''.
 : (CRAWL)   BEGIN STARTERS BAG? WHILE STARTERS BAG@- ?CRAWL-ONE? REPEAT ;

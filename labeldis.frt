@@ -18,6 +18,9 @@ REQUIRE struct
 
 10000 CONSTANT MAX-LABEL
 
+\ This name might later be changed.
+: NONAME$ "NONAME" ;
+
 : \D POSTPONE \ ;
 
 \ -------------------- INTRODUCTION --------------------------------
@@ -367,7 +370,9 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 struct DIS-STRUCT
    F: REVERSE-ORDER >R >R >R >R FDOES> ; \ Cludge, not actually executed.
    F: DIS-START R> , FDOES> @ ;     \ Start of range
+   F: DIS-END! FDOES> ! ;       \ End of range
    F: DIS-END R> , FDOES> @ ;       \ End of range
+   F: DIS-STRIDE 1 , FDOES> @ ;  \ For the moment FIXME!
    F: DIS-XT FDOES> @ ;
    F: DIS-RANGE R> , FDOES> @ >R DIS-START DIS-END R> EXECUTE ;       \ End of range
    F: DIS-CR-XT FDOES> @ ;       \ Which xt?
@@ -385,7 +390,7 @@ endstruct
 20 BAG SECTION-TYPES  \ Contains dea of dumper, creator, alternating.
 
 \ DEA of dump belongs to DEA of creator. Add to ``SECTION-TYPES''.
-: BELONGS-TO-CREATOR SWAP SECTION-TYPES BAG+! SECTION-TYPES BAG+! ;
+: ARE-COUPLED   SWAP SECTION-TYPES BAG+! SECTION-TYPES BAG+! ;
 
 \ For current section, return the XT of a proper defining word.
 : CREATOR-XT   DIS-XT SECTION-TYPES BAG-WHERE CELL+ @ ;
@@ -400,21 +405,21 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Specify that section "name" from AD1 to AD2 uses dis-assembler DEA
 : SECTION   SECTION-LABELS DIS-STRUCT DIS-START LAB+!  LATEST LAB+!  ;
 \ Specify that from AD1 to AD2 dis-assembler DEA is used. (anonymous).
-: ANON-SECTION "NONAME" POSTFIX SECTION ;
+: ANON-SECTION NONAME$ POSTFIX SECTION ;
 
 \ Disassemble from target ADDRESS1 to ADDRESS2.
 : D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R SHOW-END ;
 
-\ Section ADDRESS1 .. ADDRESS2 is code with name "name".
-: -dc:    'D-R-T   'CR+LABEL SECTION ;
-
 \ Section ADDRESS1 .. ADDRESS2 is code with name NAME.
 : -dc    2>R 'D-R-T   'CR+LABEL 2R> POSTFIX  SECTION ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous code section.
-: -dc-    'D-R-T   'CR+LABEL ANON-SECTION ;
+\ Section ADDRESS1 .. ADDRESS2 is code with name "name".
+: -dc:    (WORD) -dc ;
 
-'D-R-T     '-dc:   BELONGS-TO-CREATOR
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous code section.
+: -dc-    NONAME$ -dc ;
+
+'D-R-T     '-dc:   ARE-COUPLED
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 plain.
 : (DUMP-B)   DO I DUP ADORN-ADDRESS C@ 3 .R LOOP CR ;
@@ -431,7 +436,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous byte section.
 : -db-    'DUMP-B   'CR+db ANON-SECTION ;
 
-'DUMP-B    '-db:   BELONGS-TO-CREATOR  \ Register the decompiler.
+'DUMP-B    '-db:   ARE-COUPLED \ Register the decompiler.
 
 \ Print X as a word (4 hex digits).
 : W. 0 4 (DH.) TYPE ;
@@ -451,7 +456,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous word section.
 : -dw-    'DUMP-W   'CR+dw ANON-SECTION ;
 
-'DUMP-W    '-dw:   BELONGS-TO-CREATOR
+'DUMP-W    '-dw:   ARE-COUPLED
 
 \ Dump words from target ADDRESS1 to ADDRESS2.
 : (DUMP-L)   DO I DUP ADORN-ADDRESS @ SPACE .LABEL/. 4 +LOOP CR ;
@@ -468,7 +473,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
 : -dl-    'DUMP-L   'CR+dl ANON-SECTION ;
 
-'DUMP-L    '-dl:   BELONGS-TO-CREATOR
+'DUMP-L    '-dl:   ARE-COUPLED
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-$   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-$) ;
@@ -482,7 +487,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
 : -d$-    'DUMP-$   'CR+d$ ANON-SECTION ;
 
-'DUMP-$    '-d$:   BELONGS-TO-CREATOR
+'DUMP-$    '-d$:   ARE-COUPLED
 
 \ Print a remark about whether START and END fit.
 : .HOW-FIT   2DUP = IF 2DROP ELSE
@@ -498,9 +503,9 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ the end of the input file.
 : HOW-FIT-END    TARGET-END .HOW-FIT ;
 
-\ Abort if END of last section greater than START of new section.
-: OVERLAP-CHECK
-   OVER < IF 0 8 (DH.) ETYPE 1 ABORT"  is an address that runs into next section" THEN DROP ;
+\ Warn if END of last section greater than START of new section.
+: OVERLAP-CHECK  OVER < IF "The following address runs into next section: " ETYPE
+    0 8 (DH.) ETYPE THEN DROP ;
 
 \ Check whether START and END fit. Plug a new section in
 \ if there is a hole. Abort on overlaps.
@@ -586,7 +591,7 @@ ASSEMBLER
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-section.
 : -dc16-    'D-R-T-16   'CR+LABEL ANON-SECTION ;
 
-'D-R-T-16   '-dc16:   BELONGS-TO-CREATOR
+'D-R-T-16   '-dc16:   ARE-COUPLED
 
 DEFINITIONS
 
