@@ -50,19 +50,19 @@ _ 1 0000 0,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 ( only valid for 0016 bits real mode, in combination with an address    )
 ( overwite. Use W, L, appropriately.                                    )
 
-0200 0 38 T!R
+8200 0 38 T!R
  08 00 8 FAMILY|R AX] CX] DX] BX] 0] BP] SI] DI]
-0200 0 C0 T!R
+8200 0 C0 T!R
  40 00 4 FAMILY|R  +1* +2* +4* +8*
-0200 0 0700,0001 T!
+8200 0 0700,0001 T!
  01 00 8 FAMILY|R [AX [CX [DX [BX [SP -- [SI [DI
-0280 00 0100,0007 05 FIR [BP   ( Fits in the hole, safe inconsistency check)
-0240 02 0100,0007 05 FIR [MEM  ( Fits in the hole, safe inconsistency check)
+8280 00 0100,0007 05 FIR [BP   ( Fits in the hole, safe inconsistency check)
+8240 02 0100,0007 05 FIR [MEM  ( Fits in the hole, safe inconsistency check)
 
 4120 0 07 T!R
   01 00 8
     FAMILY|R [BX+SI]' [BX+DI]' [BP+SI]' [BP+DI]' [SI]' [DI]' -- [BX]'
-40A0 0000 2007 06 FIR [BP]'  ( Fits in the hole, safe inconsistency check)
+40A0 0000 07 06 FIR [BP]'  ( Fits in the hole, safe inconsistency check)
 8120 0 07 T!R
  01 00 4 FAMILY|R [AX] [CX] [DX] [BX]
 8120 01 07 04 FIR ~SIB|   ( Fits in the hole, but requires ~SIB, )
@@ -78,7 +78,7 @@ _ 1 0000 0,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 0124 02 C0 40 FIR      DB|
 0128 02 C0 80 FIR      DW|
 0110 00 C0 C0 FIR      R|
-4008 02 C7 06 FIR      MEM|' ( Overrules D0| [BP]')
+4048 02 C7 06 FIR      MEM|' ( Overrules D0| [BP]')
 8108 02 C7 05 FIR      MEM| ( Overrules D0| [BP] )
 
 04,1101 0000 38 T!R
