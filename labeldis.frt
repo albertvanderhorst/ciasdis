@@ -39,7 +39,7 @@ REQUIRE BIN-SEARCH
 1 'DROP \ Dummy printer, dummy length
 struct LABELSTRUCT
   F: .PAY , FDOES> @ EXECUTE ;          \ Print payload
-\   F: LAB+!  FDOES> SET+! ;
+  F: LAB+!  FDOES> SET+! ;              \ Add to ``LABELS''
   F: LABELS   2* BUILD-BAG   LATEST THE-REGISTER BAG+! FDOES> ;
 endstruct
 
@@ -111,7 +111,7 @@ VARIABLE C
 \ Generate a equ label at (target) ADDRESS with "NAME", this can be
 \ any symbolic constant in fact.
 \ The payload is the dea of a constant leaving that address.
-: LABEL   EQU-LABELS   DUP LABELS BAG+!   CONSTANT   LATEST LABELS BAG+! ;
+: LABEL   EQU-LABELS   DUP LAB+!   CONSTANT   LATEST LAB+! ;
 'LABEL ALIAS EQU
 
 \ Adorn the ADDRESS we are currently disassembling with a named label
@@ -143,7 +143,7 @@ VARIABLE C
 
 \ Generate a comment label at ADDRESS. A pointer to the
 \ remainder of the line is the payload.
-: COMMENT:   COMMENT:-LABELS   LABELS BAG+!  ^J (PARSE) $, LABELS BAG+! ;
+: COMMENT:   COMMENT:-LABELS   LAB+!  ^J (PARSE) $, LAB+! ;
 
 \ Remember the comment at the end of this instruction.
 \ Zero means no comment.
@@ -187,7 +187,7 @@ VARIABLE COMMENT:-TO-BE
 
 \ Make STRING the comment in front of label at ADDRESS. A pointer to this
 \ string the payload.
-: COMMENT   MCOMMENT-LABELS   LABELS BAG+!  $, LABELS BAG+! ;
+: COMMENT   MCOMMENT-LABELS   LAB+!  $, LAB+! ;
 
 \ Print comment for instruction at ADDRESS , if any.
 : PRINT-COMMENT MCOMMENT-LABELS  HOST>TARGET  >LABEL DUP IF
@@ -218,21 +218,21 @@ JOPI"
 : .PAY. CELL+ ? ;
 
 \ Contains sector specification, range plus type.
-1000 '.PAY. LABELSTRUCT SECTOR-LABELS   LABELS !BAG
+1000 '.PAY. LABELSTRUCT SECTION-LABELS   LABELS !BAG
 
 \ Define a disassembly sector from AD1 to AD2.
-: SECTOR   SECTOR-LABELS SWAP LABELS BAG+!  LABELS BAG+!  ;
+: SECTION   SECTION-LABELS SWAP LAB+!  LAB+!  ;
 
 \ Target ADDRESS1 through ADDRESS2 (exclusive) is to be treated as
 \ code.
 \ ; -DC-    LABELS SET+!   'D-R LABELS SET+! ;
-'SECTOR ALIAS -DC-
+'SECTION ALIAS -DC-
 
 \ Disassemble from target ADDRESS1 to ADDRESS2.
 : D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R ;
 
 \ Disassemble all those sectors as if they were code.
-: DISASSEMBLE-ALL   SECTOR-LABELS DO-LAB I @ I CELL+ @ D-R-T LOOP-LAB ;
+: DISASSEMBLE-ALL   SECTION-LABELS DO-LAB I @ I CELL+ @ D-R-T LOOP-LAB ;
 
 \ ------------------- Generic again -------------------
 
