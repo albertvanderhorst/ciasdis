@@ -181,6 +181,29 @@
 0804,87AA EQU X_base
 0804,87AF EQU V_base
 0804,9163 EQU _end
+V_base
+4 + DUP EQU  tail               DUP COMMENT:   Allow tail-calls?
+4 + DUP EQU  buffer             DUP COMMENT:   Buffer (for ports to use as needed)
+4 + DUP EQU  source             DUP COMMENT:   Evaluate from RAM or KBD
+4 + DUP EQU  tin                DUP COMMENT:   >IN
+4 + DUP EQU  tp                 DUP COMMENT:   TP (pointer to input buffer)
+4 + DUP EQU  bases              DUP COMMENT:   $hex %bin &oct 'ascii
+
+
+4 + DUP EQU  last               DUP COMMENT:   Last word in dictionary
+4 + DUP EQU  flast              DUP COMMENT:   Last word in 'forth'
+4 + DUP EQU  mlast              DUP COMMENT:   Last word in 'macro'
+
+4 + DUP EQU  retroforth_f
+DROP
+
+0804,91B7  DUP EQU tib          DUP COMMENT:    Text Input Buffer (1k)
+   400 +                        DUP COMMENT:    Stack (2k normal) \ A total of
+   800 +   DUP EQU s0           DUP COMMENT:    Stack (2k below)  / 4k for the stack
+   800 +   DUP EQU d0           DUP COMMENT:    Dictionary (128k)
+2,0000 +   DUP EQU dictend
+DROP
+
 0804,8000 0804,8010 -d$:   NONAME
 0804,8010 0804,8014 -dw:   NONAME
 0804,8014 0804,8028 -dl:   NONAME
@@ -287,4 +310,6 @@
 0804,8799 0804,87A5 -dl:   NONAME
 0804,87A5 0804,87AA -d$:   NONAME
 0804,87AA 0804,87AF -dc:   NONAME
-0804,87AF 0804,87D7 -dl:   NONAME
+V_base    bases     -dl:   NONAME
+bases     last      -db:   NONAME
+last   retroforth_f -dl:   NONAME
