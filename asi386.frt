@@ -46,6 +46,7 @@
 (  AS:          4000 16 bit Addr       8000 32 bit Address              )
 (  OS:         1,0000 16 bit Op      2,0000 32 bit Operand              )
 (  Use debug   4,0000 no ..          8,0000 CR0 ..DB0                   )
+(  FP:        10,0000 FP-specific   20,0000 Not FP                      )
 
 ( Names *ending* in primes BP|' -- not BP'| the prime registers -- are  )
 ( only valid for 16 bits mode, or with an address overwite. Use W, L,   )
@@ -71,29 +72,29 @@
 8120 0 07 T!R
  01 06 2 FAMILY|R [SI] [DI]
 
-0111 0 07 T!R
+20,0111 0 07 T!R
  01 00 8 FAMILY|R AL| CL| DL| BL| AH| CH| DH| BH|
-0112 0 07 T!R
+20,0112 0 07 T!R
  01 00 8 FAMILY|R AX| CX| DX| BX| SP| BP| SI| DI|
 0160 00 C0 00 FIR      ZO|
 0124 02 C0 40 FIR      BO|
 0128 02 C0 80 FIR      XO|
-0110 00 C0 C0 FIR      R|
-4048 02 C7 06 FIR      MEM|' ( Overrules ZO| [BP]')
-8108 02 C7 05 FIR      MEM| ( Overrules ZO| [BP] )
+20,0110 00 C0 C0 FIR      R|
+20,4048 02 C7 06 FIR      MEM|' ( Overrules ZO| [BP]')
+20,8108 02 C7 05 FIR      MEM| ( Overrules ZO| [BP] )
 
-04,1101 0000 38 T!R
+24,1101 0000 38 T!R
  08 00 8 FAMILY|R AL'| CL'| DL'| BL'| AH'| CH'| DH'| BH'|
-04,1102 0000 38 T!R
+24,1102 0000 38 T!R
  08 00 8 FAMILY|R AX'| CX'| DX'| BX'| SP'| BP'| SI'| DI'|
-04,2100 0000  38 T!R   08 00 6 FAMILY|R ES| CS| SS| DS| FS| GS|
-08,0002 0000 3801,0000 T!   ( 3)
+24,2100 0000  38 T!R   08 00 6 FAMILY|R ES| CS| SS| DS| FS| GS|
+28,0002 0000 3801,0000 T!   ( 3)
  08 00 5 FAMILY|R CR0| -- CR2| CR3| CR4|                 ( 3)
  0008 0100 8 FAMILY|R DR0| DR1| DR2| DR3| DR4| DR5| DR6| DR7| ( 3)
 
-0000 0000 0200 T!R  0200 00 2 FAMILY|R F| T|
-04,0401 0000 0100 0000 FIR B|
-04,0402 0000 0100 0100 FIR X|
+20,0000 0000 0200 T!R  0200 00 2 FAMILY|R F| T|
+24,0401 0000 0100 0000 FIR B|
+24,0402 0000 0100 0100 FIR X|
 
 ( --------- These must be found last -------)
 0600 0 01FF 0000 1PI ~SIB,
@@ -139,8 +140,9 @@
 0002 08 C7,0000 T!  08,0000 20,BA0F 4 3FAMILY, BTI, BTSI, BTRI, BTCI, ( 3)
 0002 0 C7,0000 T! ( It says X but in fact W : descriptor mostly - ) ( 3)
   08,0000 00,000F 6 3FAMILY, SLDT, STR, LLDT, LTR, VERR, VERW,  ( 3)
+  10,0000 20,010F 2 3FAMILY, SMSW, LMSW,       ( 3)
 0022 0 C7,0000 T! ( It says X but in fact memory of different sizes) ( 3)
-  08,0000 00,010F 7 3FAMILY, SGDT, SIDT, LGDT, LIDT, SMSW, -- LMSW,       ( 3)
+  08,0000 00,010F 4 3FAMILY, SGDT, SIDT, LGDT, LIDT, ( 3)
 
 ( --------- no fixup operands ----------)
 0001 0 0200,0001 00 FIR B'|

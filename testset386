@@ -2583,6 +2583,14 @@ MOV|FA, B'| C L,
 MOV|TA, X'| C L,
 MOV|TA, B'| C L,
 LMSW, MEM| C L,
+LMSW,   R|   DI|   
+LMSW,   R|   SI|   
+LMSW,   R|   BP|   
+LMSW,   R|   SP|   
+LMSW,   R|   BX|   
+LMSW,   R|   DX|   
+LMSW,   R|   CX|   
+LMSW,   R|   AX|   
 LMSW, XO| [DI] 10 L,
 LMSW, XO| [SI] 10 L,
 LMSW, XO| [BP] 10 L,
@@ -2607,6 +2615,14 @@ LMSW, ZO| [DX]
 LMSW, ZO| [CX]
 LMSW, ZO| [AX]
 SMSW, MEM| C L,
+SMSW,   R|   DI|   
+SMSW,   R|   SI|   
+SMSW,   R|   BP|   
+SMSW,   R|   SP|   
+SMSW,   R|   BX|   
+SMSW,   R|   DX|   
+SMSW,   R|   CX|   
+SMSW,   R|   AX|   
 SMSW, XO| [DI] 10 L,
 SMSW, XO| [SI] 10 L,
 SMSW, XO| [BP] 10 L,
