@@ -9,7 +9,7 @@
 REQUIRE H.
 REQUIRE BAG
 
-: \D ;
+\ : \D ;
 
 \ Make ADDRESS return some label NAME, static memory so use immediately.
 : INVENT-NAME   "L" PAD $!   0 8 (DH.) PAD $+! PAD $@ ;
@@ -167,18 +167,19 @@ NORMAL-DISASSEMBLY
 
 \ For ADDRESS and section I : "It IS code and address is part of it,
 \  or same holds for previous section."
-: IN-CODE?  2DUP IN-CODE-N? IF 2DROP -1 ELSE
-            DUP 1 = IF 2DROP 0 ELSE
-            1- IN-CODE-N? THEN THEN ;
+: IN-CODE?  DUP 0 = IF 2DROP 0 ELSE   \ Not present.
+            2DUP IN-CODE-N? IF 2DROP -1 ELSE
+            DUP 1 = IF 2DROP 0 ELSE   \ Previous not present.
+            1- IN-CODE-N? THEN THEN THEN ;
 
 \ For ADDRESS: "It IS known code, according to ``SECTION-LABELS''".
 : KNOWN-CODE?   SECTION-LABELS DUP WHERE-LABEL LAB-UPB MIN IN-CODE? ;
 
-\ For ADDRESS : "it IS in a current code section"
+\ For ADDRESS : "it FALLS within the binary image"
 : IN-CODE-SPACE?   TARGET-START TARGET-END WITHIN ;
 
 \ For ADDRESS: "It IS usable as a new starter"
-: STARTER?    DUP KNOWN-CODE? 0=  SWAP IN-CODE-SPACE? AND ;
+: STARTER?   DUP KNOWN-CODE? 0=  SWAP IN-CODE-SPACE? AND ;
 
 \ Return the target ADDRESS of the current instruction.
 \ (It must be a jump of course.
