@@ -7,7 +7,15 @@ INCLUDE elf.cul
 
 0804,A0DC EQU semis
 0804,B7AC EQU semiscode
+
 0804,A664 EQU docol
+0804,BE3C  LABEL donumber
+0804,A6EC  LABEL doconstant
+0804,A72C  LABEL dovar
+0804,A75C  LABEL douse
+0804,B814  LABEL dodoes
+0804,C828  LABEL DOVOC          \ High level code.
+0804,9968 LABEL init_user
 0804,F82C EQU last_dea          \ TASK
 0804,95C4 EQU last_dea_envir
 
@@ -26,7 +34,7 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 
 \ Generate a equ label at (target) ADDRESS with NAME,
 \ unless address is already labeled.
-: ?LABELED?  2>R DUP .S >LABEL .S 0= IF 2R> INSERT-EQU ELSE 2R> 2DROP DROP THEN ;
+: ?LABELED?  2>R DUP >LABEL 0= IF 2R> INSERT-EQU ELSE 2R> 2DROP DROP THEN ;
 
 \ ADDRESS points to a valid dea. Add a label to address the dea(xt)
 \ and the datafield.
@@ -67,12 +75,6 @@ DROP ;
 \ Accumulate the information from DEA as a wid, follow the link field.
 : CRAWL-WID BEGIN DUP IS-A-DEA 0C + L@ DUP 0= UNTIL DROP ;
 
-0804,9968 LABEL init_user
-0804,BE3C  LABEL donumber
-0804,A6EC  LABEL doconstant
-0804,A72C  LABEL dovar
-0804,A75C  LABEL douse
-0804,B814  LABEL dodoes
 
 SORT-ALL
 
@@ -83,6 +85,7 @@ SORT-ALL
 init_user       DUP 100 + -dl-
 0804,DA0C       DUP 200 + -dl-
 H_DENOTATION    DUP 10 + -dl-
+H_ENVIRONMENT   DUP 10 + -dl-
 H_FORTH         DUP 10 + -dl-
 
 MAKE-CUL
