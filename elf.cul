@@ -59,9 +59,20 @@ DUP LABEL p_align    4 +
 \D  p_align    L@   ."  p_align   " . CR
 \D  MAKE-CUL
 
-e_entry  L@
 p_vaddr L@ p_offset L@ -   .S -ORG-
 
-EQU-LABELS LABELS !BAG  \ Rid of the preliminary labels
-( starting point -- ) LABEL _start
+\ Correct the labels to have the target position.
+\ Note that the value of the label was stored at 2 places,
+\ this may be a design error.
+: test EQU-LABELS DO-LAB
+    TARGET-START I .S +!   TARGET-START I CELL+ @ >DFA +!
+LOOP-LAB ; test
+
+e_ident    DUP        10 +  -d$-
+e_type    e_version     -dw-
+e_version e_ehsize      -dl-
+e_ehsize  e_headerend   -dw-
+p_type    p_headerend   -dl-
+
+e_entry  L@ LABEL _start
 _start CRAWL
