@@ -1,5 +1,5 @@
 \ 1278 ORG
-\ In files ciforth multiple line strings are allowed.
+\ ciforth allows multiple line strings in files
 
 "
 
