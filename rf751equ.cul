@@ -1,0 +1,11 @@
+\ Manual addition
+
+_end filest - EQU filesz
+_end retroforth_f - EQU retrofilesz
+
+_end       DUP EQU tib
+   400 +
+   800 +   DUP EQU s0
+   800 +   DUP EQU d0
+2,0000 +   DUP EQU dictend
+DROP
