@@ -3,7 +3,7 @@ INCLUDE aswrap.frt
 INCLUDE asgen.frt
 INCLUDE asi586.frt
 
-INCLUDE label.frt
+INCLUDE labelas.frt
 
 FIRSTPASS
 
@@ -16,3 +16,4 @@ INCLUDE test.asm
 
 CODE-SPACE CP @ D-R
 
+INCLUDE labeldis.frt

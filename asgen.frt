@@ -615,6 +615,7 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
     SWAP
     >R R@ POINTER !
     ( startdea -- ) BEGIN
+        ADORN-ADDRESS
         DIS-PI DIS-xFI DIS-DFI DIS-DFIR DIS-FIR DIS-COMMA
         >NEXT%
 (       DUP ID. ." : "  DISS-VECTOR @ EXECUTE                                 )

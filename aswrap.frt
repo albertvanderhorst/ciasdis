@@ -28,8 +28,6 @@ VARIABLE TARGET-START
 \ Swap dictionary pointer back and forth to assembler area.
 : SWAP-AS CP @ DP @    CP ! DP !  ;
 
-
-\ NOT NEEDED
 \ Wrapper for ``ALLOT'' such as used in assembly.
 : AS-ALLOT   SWAP-AS ALLOT SWAP-AS ;
 
@@ -41,3 +39,7 @@ VARIABLE TARGET-START
 \ Only Needed. Maybe ``CP C! 1 CP +!''
 \ Wrapper for ``C,'' such as used in assembly.
 : AS-C,       SWAP-AS C, SWAP-AS ;
+
+\ Adorn the ADDRESS we are currently disassembling with data
+\ from a disassembly data file. Leave ADDRESS.
+: ADORN-ADDRESS ; 
