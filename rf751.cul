@@ -1,5 +1,7 @@
 0804,8000 -ORG-
-0000,1163 EQU filesz
+
+"DROP-THIS INCLUDE rf751equ.cul" 0804,8000 COMMENT
+
 0804,8000 EQU e_ident
 0804,8010 EQU e_type
 0804,8012 EQU e_machine
@@ -24,6 +26,7 @@
 0804,804C EQU p_flags
 0804,8050 EQU p_align
 0804,8054 EQU _start
+0804,8054 EQU filest
 0804,8054 EQU p_headerend
 0804,805E EQU H_emit
 0804,8066 EQU N_emit
@@ -34,6 +37,8 @@
 0804,80B3 EQU H_bye
 0804,80BB EQU N_bye
 0804,80BF EQU X_bye
+0804,80BF EQU X_bye
+0804,80C6 EQU H_syscall
 0804,80C6 EQU H_syscall
 0804,80CE EQU N_syscall
 0804,80D6 EQU X_syscall
@@ -105,9 +110,9 @@
 0804,843D EQU H_(create)
 0804,8445 EQU N_(create)
 0804,844E EQU X_(create)
-0804,848A EQU H_does>
-0804,8492 EQU N_does>
-0804,8498 EQU X_does>
+0804,848A EQU H_mdoes>
+0804,8492 EQU N_mdoes>
+0804,8498 EQU X_mdoes>
 0804,84B6 EQU L0804,84B6
 0804,84C8 EQU L0804,84C8
 0804,84D0 EQU H_]
@@ -120,23 +125,23 @@
 0804,8543 EQU H_compile
 0804,854B EQU N_compile
 0804,8553 EQU X_compile
-0804,857B EQU H_[
-0804,8583 EQU N_[
-0804,8585 EQU X_[
-0804,8589 EQU H_;;
-0804,8591 EQU N_;;
-0804,8594 EQU X_;;
+0804,857B EQU H_m[
+0804,8583 EQU N_m[
+0804,8585 EQU X_m[
+0804,8589 EQU H_m;;
+0804,8591 EQU N_m;;
+0804,8594 EQU X_m;;
 0804,85AE EQU L0804,85AE
-0804,85B9 EQU H_;
-0804,85C1 EQU N_;
-0804,85C3 EQU X_;
+0804,85B9 EQU H_m;
+0804,85C1 EQU N_m;
+0804,85C3 EQU X_m;
 0804,85CA EQU H_:
 0804,85D2 EQU N_:
 0804,85D4 EQU X_:
-0804,85E5 EQU H_literal
-0804,85E5 EQU last_dea_literal
-0804,85ED EQU N_literal
-0804,85F5 EQU X_literal
+0804,85E5 EQU H_mliteral
+0804,85E5 EQU last_dea_macro
+0804,85ED EQU N_mliteral
+0804,85F5 EQU X_mliteral
 0804,860A EQU H_forth
 0804,8612 EQU N_forth
 0804,8618 EQU X_forth
@@ -176,34 +181,34 @@
 0804,8794 EQU X_d0
 0804,8799 EQU V_d0
 0804,879D EQU H_base
-0804,879D EQU last_dea_base
+0804,879D EQU last_dea_forth
 0804,87A5 EQU N_base
 0804,87AA EQU X_base
 0804,87AF EQU V_base
-0804,9163 EQU _end
-V_base
-4 + DUP EQU  tail               DUP COMMENT:   Allow tail-calls?
-4 + DUP EQU  buffer             DUP COMMENT:   Buffer (for ports to use as needed)
-4 + DUP EQU  source             DUP COMMENT:   Evaluate from RAM or KBD
-4 + DUP EQU  tin                DUP COMMENT:   >IN
-4 + DUP EQU  tp                 DUP COMMENT:   TP (pointer to input buffer)
-4 + DUP EQU  bases              DUP COMMENT:   $hex %bin &oct 'ascii
-
-
-4 + DUP EQU  last               DUP COMMENT:   Last word in dictionary
-4 + DUP EQU  flast              DUP COMMENT:   Last word in 'forth'
-4 + DUP EQU  mlast              DUP COMMENT:   Last word in 'macro'
-
-4 + DUP EQU  retroforth_f
-DROP
-
-0804,91B7  DUP EQU tib          DUP COMMENT:    Text Input Buffer (1k)
-   400 +                        DUP COMMENT:    Stack (2k normal) \ A total of
-   800 +   DUP EQU s0           DUP COMMENT:    Stack (2k below)  / 4k for the stack
-   800 +   DUP EQU d0           DUP COMMENT:    Dictionary (128k)
-2,0000 +   DUP EQU dictend
-DROP
-
+0804,91B7 EQU _end
+0804,87B3 EQU tail
+0804,87B7 EQU buffer
+0804,87BB EQU source
+0804,87BF EQU tin
+0804,87C3 EQU tp
+0804,87C7 EQU bases
+0804,87CB EQU last
+0804,87CF EQU flast
+0804,87D3 EQU mlast
+0804,87D7 EQU retroforth_f
+0804,91B7 EQU tib
+0804,9DB7 EQU s0
+0804,A5B7 EQU d0
+0806,A5B7 EQU dictend
+0804,87B3 COMMENT:   Allow tail-calls?
+0804,87B7 COMMENT:   Buffer (for ports to use as needed)
+0804,87BB COMMENT:   Evaluate from RAM or KBD
+0804,87BF COMMENT:   >IN
+0804,87C3 COMMENT:   TP (pointer to input buffer)
+0804,87C7 COMMENT:   $hex %bin &oct 'ascii
+0804,87CB COMMENT:   Last word in dictionary
+0804,87CF COMMENT:   Last word in 'forth'
+0804,87D3 COMMENT:   Last word in 'macro'
 0804,8000 0804,8010 -d$:   NONAME
 0804,8010 0804,8014 -dw:   NONAME
 0804,8014 0804,8028 -dl:   NONAME
@@ -307,9 +312,11 @@ DROP
 0804,8789 0804,8791 -dl:   NONAME
 0804,8791 0804,8794 -d$:   NONAME
 0804,8794 0804,8799 -dc:   NONAME
-0804,8799 0804,87A5 -dl:   NONAME
+0804,8799 0804,879D -dl:   NONAME
+0804,879D 0804,87A5 -dl:   NONAME
 0804,87A5 0804,87AA -d$:   NONAME
 0804,87AA 0804,87AF -dc:   NONAME
-V_base    bases     -dl:   NONAME
-bases     last      -db:   NONAME
-last   retroforth_f -dl:   NONAME
+0804,87AF 0804,87B3 -dl:   NONAME
+0804,87B3 0804,87C7 -dl:   NONAME
+0804,87C7 0804,87CB -db:   NONAME
+0804,87CB 0804,87D7 -dl:   NONAME
