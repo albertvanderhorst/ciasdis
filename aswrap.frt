@@ -26,7 +26,7 @@ VARIABLE CODE-LENGTH
 CODE-LENGTH @    DELAYED-BUFFER CODE-SPACE
 
 \ Point into CODE-SPACE, used to assemble
-VARIABLE CP                 CODE-SPACE CP !
+VARIABLE CP
 
 \ ``HERE'' such as used in assembly.
 : NEW-AS-HERE    CP @ ;   HOT-PATCH AS-HERE
