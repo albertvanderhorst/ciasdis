@@ -16,7 +16,8 @@
 \ This name might later be changed.
 : NONAME$ "NONAME" ;
 
-REQUIRE OLD:    REQUIRE $=
+REQUIRE OLD:    REQUIRE $=      REQUIRE class
+
 \ Patch the word ``PRESENT'' such that no name words are no longer
 \ considered present. This prevent zillion error messages.
 : NEW-PRESENT   OLD: PRESENT DUP IF DUP >NFA @ $@ NONAME$ $= 0= AND THEN ;
@@ -28,10 +29,9 @@ REQUIRE OLD:    REQUIRE $=
 
 \ --------------------------------------------------------------
 
-INCLUDE class.frt
 INCLUDE tools.frt
 INCLUDE asgen.frt
-INCLUDE aswrap.frt      \ neater if put here
+INCLUDE aswrap.frt
 INCLUDE asi386.frt
 INCLUDE asipentium.frt
 
@@ -46,7 +46,7 @@ INCLUDE crawl.frt
 \ In behalf of user.
 REQUIRE #-PREFIX
 \ In behalf of building an executable.
-REQUIRE ARGC    REQUIRE OLD:    REQUIRE SRC>EXEC        REQUIRE INCLUDED
+REQUIRE ARGC
 
 \ Assemble file NAME. Leave compiled BUFFER LENGTH.
 : ASSEMBLED
