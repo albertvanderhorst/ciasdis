@@ -156,6 +156,16 @@ testas386: aswrap.frt asgen.frt asi586.frt testset386 ; \
     diff -w $@ testset386 >$@.diff ;\
     diff $@.diff testresults
 
+test386: aswrap.frt asgen.frt asi586.frt ; \
+    (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
+    lina -e|\
+    sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
+    sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
+    sed 's/~SIB|   1C SIB,,/[AX +1* 0]/' |\
+    sed 's/~SIB|   14 SIB,,/[AX +1* BX]/' >$@       ;\
+    diff -w $@ testset386 >$@.diff ;\
+    diff $@.diff testresults
+
 # Special test to exercise otherwise hidden instructions.
 testas386a: aswrap.frt asgen.frt asi586.frt testset386a ; \
     cat $+|\
