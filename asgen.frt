@@ -2,6 +2,7 @@
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
+
 ( This file `asgen.frt' contains generic tools and is usable at least   )
 ( for making assemblers for e.g. 8080 8086 80386 Pentium 6809 68000     )
 ( 6502 8051.                                                            )
@@ -91,6 +92,7 @@
 
 ( ############### PART I ASSEMBLER #################################### )
 ( MAYBE NOT PRESENT UTILITIES                                           )
+"aswrap.frt" INCLUDED
 REQUIRE !CSP         \ To counter design error to eliminate it.
 REQUIRE @+ ( Fetch from ADDRES. Leave incremented ADDRESS and DATA )
 : !+ >R R@ ! R> CELL+ ; ( Store DATA to ADDRES. Leave incremented ADDRESS)
@@ -217,14 +219,14 @@ HEX
 : >DIS %>BODY 5 CELLS + ;   ( disassembler only for COMMA)
 
 ( Adjust `HERE' for actual instruction length after `DO-POST' did `,' )
-: CORRECT,- ISL @   1 CELLS -  ALLOT ;
-: !POSTIT  HERE ISS !  0 OLDCOMMA ! ;  ( Initialise in behalf of postit )
+: CORRECT,- ISL @   1 CELLS -  AS-ALLOT ;
+: !POSTIT  AS-HERE ISS !  0 OLDCOMMA ! ;  ( Initialise in behalf of postit )
 ( Bookkeeping for a postit using a pointer to the BIBYBA )
 ( information, can fake a postit in disassembling too                   )
 : TALLY:,   @+ TALLY-BI !  @+ TALLY-BY !   @+ TALLY-BA OR!U   @ ISL ! ;
 ( Post the instruction using DATA. )
-: POSTIT   CHECK26   !TALLY !POSTIT  HERE ISS !
-    @+ ,   TALLY:,   CORRECT,- ;
+: POSTIT   CHECK26   !TALLY   !POSTIT
+    @+ AS-,   TALLY:,   CORRECT,- ;
 ( Define an instruction by BA BY BI and the OPCODE                      )
 ( For 1 2 3 and 4 byte opcodes.                                         )
 IS-A IS-1PI : 1PI  CHECK33 CREATE-- , , , , 1 , DOES> REMEMBER POSTIT ;
@@ -331,14 +333,6 @@ CREATE PRO-TALLY 3 CELLS ALLOT  ( Prototype for TALLY-BI BY BA )
 ( Disassemblers try to reconstruct an instruction from current          )
 ( bookkeeping. They are similar but disassemblers take one more aspect  )
 ( into account, a piece of actual code. They do not backtrack but fail. )
-
-( ------------- SYSTEM INDEPENDANT UTILITIES ----------------------------)
-( Build a set "x" with X items. )
-: SET   CREATE HERE CELL+ , CELLS ALLOT DOES> ;
-: !SET   DUP CELL+ SWAP ! ;   ( Make the SET empty )
-: SET?   @+ = 0= ;   ( For the SET : it IS non-empty )
-: SET+!   DUP >R @ ! 0 CELL+ R> +! ;   ( Add ITEM to the SET )
-: .SET   @+ SWAP DO I . 0 CELL+ +LOOP ;   ( Print non-empty SET )
 
 ( ------------- DATA STRUCTURES -----------------------------------------)
 12 SET DISS          ( A row of dea's representing a disassembly. )
