@@ -37,4 +37,4 @@
 0C04,9078 EQU H_EM
 
 \ Manual addition
-0000,6848 EQU filesz
+_end e_ident - EQU filesz
