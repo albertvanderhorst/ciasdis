@@ -145,18 +145,27 @@ REQUIRE POSTFIX
     2 = SWAP "--" CORA 0= AND IF LATEST HIDDEN THEN ;
 
 ( ------------- UTILITIES, SYSTEM INDEPENDANT ------------------------- )
-( Note that the assembler works with bigendian numbers of any length.   )
+( Note that the assembler works with multi-character bigendian numbers  )
 
 (   The FIRST bitset is contained in the SECOND one, leaving it IS      )
 : CONTAINED-IN OVER AND = ;
 ( Compile the ls 8 bits of X at here, leaving the REMAINING bits.       )
 : lsbyte, DUP AS-C, 0008 RSHIFT ;
-( For X and ADDRESS , add the 8 bits below address to x at ls place.    )
+( For X and ADDRESS , add the byte below address to x at l.s. place.    )
 ( Leave X and decremented ADDRESS.                                      )
 : lsbyte@ 1- SWAP 8 LSHIFT OVER C@ OR SWAP ;
+( For X ADDRESS LENGTH , return the NUMBER that at address {bigendian}. )
+( x provides a filler, -1 results in sign extension.                    )
+: lsbytes  >R R@ + BEGIN R> DUP WHILE 1- >R  lsbyte@ REPEAT 2DROP ;
 ( For ADDRESS LENGTH , return the NUMBER that is there {bigendian}.     )
 ( "Multiple byte fetch".                                                )
-: MC@ DUP >R  + 0 SWAP BEGIN R> DUP WHILE 1- >R lsbyte@ REPEAT 2DROP ;
+: MC@ 0 ROT ROT lsbytes ;
+( For ADDRESS LENGTH , return the "number there IS negative"            )
+: MC<0 + 1- C@ 80 AND 80 = ;
+( For ADDRESS LENGTH , return the NUMBER that is there. bigendian and   )
+( signextended.                                                         )
+( "Multiple byte fetch, signed".                                        )
+: MC@-S 2DUP MC<0 ROT ROT lsbytes ;
 
 ( ------------- ASSEMBLER, BOOKKEEPING -------------------------------- )
 ( The bookkeeping is needed for error detection and disassembly.        )
@@ -621,6 +630,7 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 : ((DISASSEMBLE))
     SWAP
     DUP ADORN-ADDRESS    DUP POINTER !   >R
+    3 SPACES
     ( startdea -- ) BEGIN
         DIS-PI DIS-xFI DIS-DFI DIS-DFIR DIS-FIR DIS-COMMA
         >NEXT%
