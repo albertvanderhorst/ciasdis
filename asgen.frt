@@ -238,6 +238,11 @@ DECIMAL
 ( Generate error for ``FIXUP-DATA'' , if the BI and the LEN             )
 ( are not compatible. Leave BI and LEN . Programming error!             )
 : CHECK31A 2DUP OVER >R RSHIFT 1 OR OVER LSHIFT R> <> 31 ?ERROR ;
+( The part of BITS outside of BITFIELD must be either all ones or       )
+( zeros. This checks for a shifted signed field.                        )
+: CHECK32B  2DUP OR INVERT 0= ( all ones) >R
+            INVERT AND 0= ( all zero's ) R> OR ( okay)
+            0= 32 ?ERROR ;
 ( Generate error for postit, if for the inverted BI , some of the the   )
 ( BITS would stick out it. Leave MASK and BITS . Programming error!     )
 : CHECK33 2DUP SWAP INVERT CONTAINED-IN 0= 31 ?ERROR ;
@@ -307,12 +312,21 @@ R> DROP ;
 ( One size fits all, because of the or character of the operations. )
 IS-A IS-xFI   : xFI   CHECK31 CREATE-- , , , , DOES> REMEMBER FIXUP> ;
 
+( For a signed DATA item a LENGTH and a BITFIELD. Shift the data item   )
+( into the bit field and leave IT. Check if it doesn't fit.             )
+: TRIM-SIGNED >R   2DUP R@ SWAP RSHIFT CHECK32B   LSHIFT R> AND ;
 ( Fix up the instruction using DATA and a pointer to the bit POSITION. )
-: FIXUP-DATA @+ ROT SWAP LSHIFT ISS @ OR! TALLY:| CHECK32 ;
+: FIXUP-DATA @+ SWAP >R LSHIFT ISS @ OR! R> TALLY:| CHECK32 ;
+( Fix up the instruction using DATA and a pointer to the bit POSITION. )
+: FIXUP-SIGNED @+ SWAP >R
+    R@ @ TRIM-SIGNED ISS @ OR!
+    R> TALLY:| CHECK32 ;
 ( Define a data fixup by BA BY BI, and LEN the bit position.            )
 ( At assembly time: expect DATA that is shifted before use              )
 ( One size fits all, because of the or character of the operations.     )
 IS-A IS-DFI  : DFI   CHECK31A CREATE-- , , , , DOES> REMEMBER FIXUP-DATA ;
+( Same, but for signed data.                                            )
+IS-A IS-DFIs : DFIs  CHECK31A CREATE-- , , , , DOES> REMEMBER FIXUP-SIGNED ;
 
 ( *************** OBSOLESCENT ***********************************       )
 \ Reverses bytes in a WORD. Return IT.
@@ -398,7 +412,7 @@ CREATE PRO-TALLY 3 CELLS ALLOT  ( Prototype for TALLY-BI BY BA )
 12 SET DISS          ( A row of dea's representing a disassembly. )
 : !DISS DISS !SET ;
 : .DISS-AUX DISS @+ SWAP DO
-    I @ DUP IS-COMMA OVER IS-DFI OR IF I DISS - . THEN ID.
+    I @ DUP IS-COMMA OVER IS-DFI OR OVER IS-DFIs OR IF I DISS - . THEN ID.
  0 CELL+ +LOOP CR ;
 ( DISS-VECTOR can be redefined to generate testsets)
 VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
@@ -432,7 +446,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
    THEN
 ;
 : TRY-DFI
-   DUP IS-DFI IF
+   DUP IS-DFI OVER IS-DFIs OR IF
    DUP >BI @ TALLY-BI @ CONTAINED-IN IF
        DUP >BI TALLY:|
        DUP +DISS
@@ -575,7 +589,7 @@ VARIABLE LATEST-INSTRUCTION
    THEN
 ;
 : DIS-DFI
-   DUP IS-DFI IF
+   DUP IS-DFI OVER IS-DFIs OR IF
    DUP >BI @ TALLY-BI @ CONTAINED-IN IF
    DUP >BA @  COMPATIBLE? IF
        DUP >BI TALLY:|
@@ -660,11 +674,13 @@ VARIABLE LATEST-INSTRUCTION
         .COMMA
     ELSE DUP IS-DFI IF
         .DFI
+    ELSE DUP IS-DFIs IF
+        .DFI            \ For the moment.
     ELSE DUP IS-DFIR IF
         .DFIR
     ELSE
         %~ID.
-    THEN THEN THEN
+    THEN THEN THEN THEN
  0 CELL+ +LOOP
 ;
 

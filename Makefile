@@ -418,15 +418,20 @@ lina2 : ci86.lina.s ; gcc $+ -l 2>aap
 
 ci86.lina.s :
 
-
 testasalpha: asalpha.frt testsetalpha ; \
-	co -r4.9.1.1 asgen.frt  # Last one that worked for alpha.
 	echo INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testsetalpha |\
 	lina -e |\
 	sed '1,/TEST STARTS HERE/d' |\
 	sed 's/^[0-9A-F \.,]*://' >$@ ;\
-	rm -f asgen.frt               ;\
 	diff -w $@ testsetalpha >$@.diff ;\
+	rcsdiff -bBw -r$(RCSVERSION) $@.diff
+
+testas6809: as6809.frt testset6809 ; \
+	echo INCLUDE asgen.frt INCLUDE as6809.frt INCLUDE testset6809 |\
+	lina -e |\
+	sed '1,/TEST STARTS HERE/d' |\
+	sed 's/^[0-9A-F \.,]*://' >$@ ;\
+	diff -w $@ testset6809 >$@.diff ;\
 	rcsdiff -bBw -r$(RCSVERSION) $@.diff
 
 testas80: asgen.frt as80.frt testset8080 ; \
@@ -511,18 +516,6 @@ test386-16: asgen.frt asi386.frt ; \
     lina -e >$@       ;
 #   diff -w $@ testset386 >$@.diff ;\
 #   diff $@.diff testresults
-
-# FIXME : as6809.frt has to be updated to work with the new asgen.frt.
-testas6809: as6809.frt testset6809 ;
-	co -r4.9.1.1 asgen.frt  # Last one that worked for alpha.
-	(echo 5 LOAD; cat asgen.frt  $+)|\
-	lina |\
-	sed '1,/TEST STARTS HERE/d' |\
-	sed 's/^[0-9A-F \.,]*://' >$@ ;\
-	rm -f asgen.frt               ;\
-	diff -w $@ testset6809 >$@.diff ;\
-	rcsdiff -bBw -r$(RCSVERSION) $@.diff
-
 
 as.tgz : $(RELEASEASSEMBLER) cias ciasdis cidis ; echo as$(VERSION).tgz $+ |\
  xargs tar cfz
