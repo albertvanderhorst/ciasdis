@@ -2,7 +2,11 @@
 \ Crawling is the process of following jumps to determine code space.
 \ During crawling always the section labels must be current and sorted.
 
+
 ASSEMBLER
+
+\ During disassembly all sort of labels are inspected.
+\ : (DISASSEMBLE)   (DISASSEMBLE) SECTION-LABELS ;
 
 \ Jump targets that are starting points for further crawling.
 \ Adding and removing from this bag ressembles a recursive action.
@@ -51,16 +55,16 @@ NORMAL-DISASSEMBLY
             1- IN-CODE-N? THEN THEN ;
 
 \ For ADDRESS" "It IS known code, according to ``SECTION-LABELS''".
-: KNOWN-CODE?   DUP FIND-LABEL DUP IF IN-CODE? ELSE 2DROP 0 THEN ;
+: KNOWN-CODE?   SECTION-LABELS DUP FIND-LABEL DUP IF IN-CODE? ELSE 2DROP 0 THEN ;
 
 \ Return the target ADDRESS of the current instruction.
 \ (It must be a jump of course.
-: JUMP-TARGET   POINTER @   LATEST-OFFSET @  + ;
+: JUMP-TARGET   POINTER @   LATEST-OFFSET @  + HOST>TARGET ;
 
 \ Analyse current instruction after disassembly.
 \ DISS LATEST-INSTRUCTION ISS ISL are all valid.
 : ANALYSE-INSTRUCTION   LATEST-INSTRUCTION @ JUMPS IN-BAG? IF
-    JUMP-TARGET KNOWN-CODE? 0= IF JUMP-TARGET STARTERS +! THEN THEN ;
+    JUMP-TARGET KNOWN-CODE? 0= IF JUMP-TARGET STARTERS BAG+! THEN THEN ;
 
 \ Analyse the code range from ADDRESS up to an unconditional transfer.
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.
@@ -72,7 +76,7 @@ NORMAL-DISASSEMBLY
 : ?CRAWL-ONE? DUP KNOWN-CODE? 0= IF CRAWL-ONE _ THEN DROP ;
 
 \ Crawl through code from all points in ``STARTERS''.
-: (CRAWL)   BEGIN STARTERS BAG? WHILE STARTERS BAG@- CRAWL-ONE REPEAT ;
+: (CRAWL)   BEGIN STARTERS BAG? WHILE STARTERS BAG@- ?CRAWL-ONE? REPEAT ;
 
 \ ADDRESS points into code. Crawl through code from there, i.e. add
 \ all information about code ranges that can be derived from that.
