@@ -304,513 +304,513 @@ FLD|e,   ZO|   [BX]
 FLD|e,   ZO|   [DX]
 FLD|e,   ZO|   [CX]
 FLD|e,   ZO|   [AX]
-FISTP,   d|   XO|   [DI]   14 L,
-FISTP,   d|   XO|   [SI]   14 L,
-FISTP,   d|   XO|   [BP]   14 L,
-FISTP,   d|   XO|   [AX +1* BX]   18 L,
-FISTP,   d|   XO|   [BX]   14 L,
-FISTP,   d|   XO|   [DX]   14 L,
-FISTP,   d|   XO|   [CX]   14 L,
-FISTP,   d|   XO|   [AX]   14 L,
-FISTP,   d|   BO|   [DI]   14 B,
-FISTP,   d|   BO|   [SI]   14 B,
-FISTP,   d|   BO|   [BP]   14 B,
-FISTP,   d|   BO|   [AX +1* BX]   18 B,
-FISTP,   d|   BO|   [BX]   14 B,
-FISTP,   d|   BO|   [DX]   14 B,
-FISTP,   d|   BO|   [CX]   14 B,
-FISTP,   d|   BO|   [AX]   14 B,
-FISTP,   d|   ZO|   [DI]
-FISTP,   d|   ZO|   [SI]
-FISTP,   d|   ZO|   [AX +1* BX]
-FISTP,   d|   ZO|   [BX]
-FISTP,   d|   ZO|   [DX]
-FISTP,   d|   ZO|   [CX]
-FISTP,   d|   ZO|   [AX]
-FISTP,   s|   XO|   [DI]   14 L,
-FISTP,   s|   XO|   [SI]   14 L,
-FISTP,   s|   XO|   [BP]   14 L,
-FISTP,   s|   XO|   [AX +1* BX]   18 L,
-FISTP,   s|   XO|   [BX]   14 L,
-FISTP,   s|   XO|   [DX]   14 L,
-FISTP,   s|   XO|   [CX]   14 L,
-FISTP,   s|   XO|   [AX]   14 L,
-FISTP,   s|   BO|   [DI]   14 B,
-FISTP,   s|   BO|   [SI]   14 B,
-FISTP,   s|   BO|   [BP]   14 B,
-FISTP,   s|   BO|   [AX +1* BX]   18 B,
-FISTP,   s|   BO|   [BX]   14 B,
-FISTP,   s|   BO|   [DX]   14 B,
-FISTP,   s|   BO|   [CX]   14 B,
-FISTP,   s|   BO|   [AX]   14 B,
-FISTP,   s|   ZO|   [DI]
-FISTP,   s|   ZO|   [SI]
-FISTP,   s|   ZO|   [AX +1* BX]
-FISTP,   s|   ZO|   [BX]
-FISTP,   s|   ZO|   [DX]
-FISTP,   s|   ZO|   [CX]
-FISTP,   s|   ZO|   [AX]
-FIST,   d|   XO|   [DI]   14 L,
-FIST,   d|   XO|   [SI]   14 L,
-FIST,   d|   XO|   [BP]   14 L,
-FIST,   d|   XO|   [AX +1* BX]   18 L,
-FIST,   d|   XO|   [BX]   14 L,
-FIST,   d|   XO|   [DX]   14 L,
-FIST,   d|   XO|   [CX]   14 L,
-FIST,   d|   XO|   [AX]   14 L,
-FIST,   d|   BO|   [DI]   14 B,
-FIST,   d|   BO|   [SI]   14 B,
-FIST,   d|   BO|   [BP]   14 B,
-FIST,   d|   BO|   [AX +1* BX]   18 B,
-FIST,   d|   BO|   [BX]   14 B,
-FIST,   d|   BO|   [DX]   14 B,
-FIST,   d|   BO|   [CX]   14 B,
-FIST,   d|   BO|   [AX]   14 B,
-FIST,   d|   ZO|   [DI]
-FIST,   d|   ZO|   [SI]
-FIST,   d|   ZO|   [AX +1* BX]
-FIST,   d|   ZO|   [BX]
-FIST,   d|   ZO|   [DX]
-FIST,   d|   ZO|   [CX]
-FIST,   d|   ZO|   [AX]
-FIST,   s|   XO|   [DI]   14 L,
-FIST,   s|   XO|   [SI]   14 L,
-FIST,   s|   XO|   [BP]   14 L,
-FIST,   s|   XO|   [AX +1* BX]   18 L,
-FIST,   s|   XO|   [BX]   14 L,
-FIST,   s|   XO|   [DX]   14 L,
-FIST,   s|   XO|   [CX]   14 L,
-FIST,   s|   XO|   [AX]   14 L,
-FIST,   s|   BO|   [DI]   14 B,
-FIST,   s|   BO|   [SI]   14 B,
-FIST,   s|   BO|   [BP]   14 B,
-FIST,   s|   BO|   [AX +1* BX]   18 B,
-FIST,   s|   BO|   [BX]   14 B,
-FIST,   s|   BO|   [DX]   14 B,
-FIST,   s|   BO|   [CX]   14 B,
-FIST,   s|   BO|   [AX]   14 B,
-FIST,   s|   ZO|   [DI]
-FIST,   s|   ZO|   [SI]
-FIST,   s|   ZO|   [AX +1* BX]
-FIST,   s|   ZO|   [BX]
-FIST,   s|   ZO|   [DX]
-FIST,   s|   ZO|   [CX]
-FIST,   s|   ZO|   [AX]
-FILD,   d|   XO|   [DI]   14 L,
-FILD,   d|   XO|   [SI]   14 L,
-FILD,   d|   XO|   [BP]   14 L,
-FILD,   d|   XO|   [AX +1* BX]   18 L,
-FILD,   d|   XO|   [BX]   14 L,
-FILD,   d|   XO|   [DX]   14 L,
-FILD,   d|   XO|   [CX]   14 L,
-FILD,   d|   XO|   [AX]   14 L,
-FILD,   d|   BO|   [DI]   14 B,
-FILD,   d|   BO|   [SI]   14 B,
-FILD,   d|   BO|   [BP]   14 B,
-FILD,   d|   BO|   [AX +1* BX]   18 B,
-FILD,   d|   BO|   [BX]   14 B,
-FILD,   d|   BO|   [DX]   14 B,
-FILD,   d|   BO|   [CX]   14 B,
-FILD,   d|   BO|   [AX]   14 B,
-FILD,   d|   ZO|   [DI]
-FILD,   d|   ZO|   [SI]
-FILD,   d|   ZO|   [AX +1* BX]
-FILD,   d|   ZO|   [BX]
-FILD,   d|   ZO|   [DX]
-FILD,   d|   ZO|   [CX]
-FILD,   d|   ZO|   [AX]
-FILD,   s|   XO|   [DI]   14 L,
-FILD,   s|   XO|   [SI]   14 L,
-FILD,   s|   XO|   [BP]   14 L,
-FILD,   s|   XO|   [AX +1* BX]   18 L,
-FILD,   s|   XO|   [BX]   14 L,
-FILD,   s|   XO|   [DX]   14 L,
-FILD,   s|   XO|   [CX]   14 L,
-FILD,   s|   XO|   [AX]   14 L,
-FILD,   s|   BO|   [DI]   14 B,
-FILD,   s|   BO|   [SI]   14 B,
-FILD,   s|   BO|   [BP]   14 B,
-FILD,   s|   BO|   [AX +1* BX]   18 B,
-FILD,   s|   BO|   [BX]   14 B,
-FILD,   s|   BO|   [DX]   14 B,
-FILD,   s|   BO|   [CX]   14 B,
-FILD,   s|   BO|   [AX]   14 B,
-FILD,   s|   ZO|   [DI]
-FILD,   s|   ZO|   [SI]
-FILD,   s|   ZO|   [AX +1* BX]
-FILD,   s|   ZO|   [BX]
-FILD,   s|   ZO|   [DX]
-FILD,   s|   ZO|   [CX]
-FILD,   s|   ZO|   [AX]
+FISTP,   |16   XO|   [DI]   14 L,
+FISTP,   |16   XO|   [SI]   14 L,
+FISTP,   |16   XO|   [BP]   14 L,
+FISTP,   |16   XO|   [AX +1* BX]   18 L,
+FISTP,   |16   XO|   [BX]   14 L,
+FISTP,   |16   XO|   [DX]   14 L,
+FISTP,   |16   XO|   [CX]   14 L,
+FISTP,   |16   XO|   [AX]   14 L,
+FISTP,   |16   BO|   [DI]   14 B,
+FISTP,   |16   BO|   [SI]   14 B,
+FISTP,   |16   BO|   [BP]   14 B,
+FISTP,   |16   BO|   [AX +1* BX]   18 B,
+FISTP,   |16   BO|   [BX]   14 B,
+FISTP,   |16   BO|   [DX]   14 B,
+FISTP,   |16   BO|   [CX]   14 B,
+FISTP,   |16   BO|   [AX]   14 B,
+FISTP,   |16   ZO|   [DI]
+FISTP,   |16   ZO|   [SI]
+FISTP,   |16   ZO|   [AX +1* BX]
+FISTP,   |16   ZO|   [BX]
+FISTP,   |16   ZO|   [DX]
+FISTP,   |16   ZO|   [CX]
+FISTP,   |16   ZO|   [AX]
+FISTP,   |32   XO|   [DI]   14 L,
+FISTP,   |32   XO|   [SI]   14 L,
+FISTP,   |32   XO|   [BP]   14 L,
+FISTP,   |32   XO|   [AX +1* BX]   18 L,
+FISTP,   |32   XO|   [BX]   14 L,
+FISTP,   |32   XO|   [DX]   14 L,
+FISTP,   |32   XO|   [CX]   14 L,
+FISTP,   |32   XO|   [AX]   14 L,
+FISTP,   |32   BO|   [DI]   14 B,
+FISTP,   |32   BO|   [SI]   14 B,
+FISTP,   |32   BO|   [BP]   14 B,
+FISTP,   |32   BO|   [AX +1* BX]   18 B,
+FISTP,   |32   BO|   [BX]   14 B,
+FISTP,   |32   BO|   [DX]   14 B,
+FISTP,   |32   BO|   [CX]   14 B,
+FISTP,   |32   BO|   [AX]   14 B,
+FISTP,   |32   ZO|   [DI]
+FISTP,   |32   ZO|   [SI]
+FISTP,   |32   ZO|   [AX +1* BX]
+FISTP,   |32   ZO|   [BX]
+FISTP,   |32   ZO|   [DX]
+FISTP,   |32   ZO|   [CX]
+FISTP,   |32   ZO|   [AX]
+FIST,   |16   XO|   [DI]   14 L,
+FIST,   |16   XO|   [SI]   14 L,
+FIST,   |16   XO|   [BP]   14 L,
+FIST,   |16   XO|   [AX +1* BX]   18 L,
+FIST,   |16   XO|   [BX]   14 L,
+FIST,   |16   XO|   [DX]   14 L,
+FIST,   |16   XO|   [CX]   14 L,
+FIST,   |16   XO|   [AX]   14 L,
+FIST,   |16   BO|   [DI]   14 B,
+FIST,   |16   BO|   [SI]   14 B,
+FIST,   |16   BO|   [BP]   14 B,
+FIST,   |16   BO|   [AX +1* BX]   18 B,
+FIST,   |16   BO|   [BX]   14 B,
+FIST,   |16   BO|   [DX]   14 B,
+FIST,   |16   BO|   [CX]   14 B,
+FIST,   |16   BO|   [AX]   14 B,
+FIST,   |16   ZO|   [DI]
+FIST,   |16   ZO|   [SI]
+FIST,   |16   ZO|   [AX +1* BX]
+FIST,   |16   ZO|   [BX]
+FIST,   |16   ZO|   [DX]
+FIST,   |16   ZO|   [CX]
+FIST,   |16   ZO|   [AX]
+FIST,   |32   XO|   [DI]   14 L,
+FIST,   |32   XO|   [SI]   14 L,
+FIST,   |32   XO|   [BP]   14 L,
+FIST,   |32   XO|   [AX +1* BX]   18 L,
+FIST,   |32   XO|   [BX]   14 L,
+FIST,   |32   XO|   [DX]   14 L,
+FIST,   |32   XO|   [CX]   14 L,
+FIST,   |32   XO|   [AX]   14 L,
+FIST,   |32   BO|   [DI]   14 B,
+FIST,   |32   BO|   [SI]   14 B,
+FIST,   |32   BO|   [BP]   14 B,
+FIST,   |32   BO|   [AX +1* BX]   18 B,
+FIST,   |32   BO|   [BX]   14 B,
+FIST,   |32   BO|   [DX]   14 B,
+FIST,   |32   BO|   [CX]   14 B,
+FIST,   |32   BO|   [AX]   14 B,
+FIST,   |32   ZO|   [DI]
+FIST,   |32   ZO|   [SI]
+FIST,   |32   ZO|   [AX +1* BX]
+FIST,   |32   ZO|   [BX]
+FIST,   |32   ZO|   [DX]
+FIST,   |32   ZO|   [CX]
+FIST,   |32   ZO|   [AX]
+FILD,   |16   XO|   [DI]   14 L,
+FILD,   |16   XO|   [SI]   14 L,
+FILD,   |16   XO|   [BP]   14 L,
+FILD,   |16   XO|   [AX +1* BX]   18 L,
+FILD,   |16   XO|   [BX]   14 L,
+FILD,   |16   XO|   [DX]   14 L,
+FILD,   |16   XO|   [CX]   14 L,
+FILD,   |16   XO|   [AX]   14 L,
+FILD,   |16   BO|   [DI]   14 B,
+FILD,   |16   BO|   [SI]   14 B,
+FILD,   |16   BO|   [BP]   14 B,
+FILD,   |16   BO|   [AX +1* BX]   18 B,
+FILD,   |16   BO|   [BX]   14 B,
+FILD,   |16   BO|   [DX]   14 B,
+FILD,   |16   BO|   [CX]   14 B,
+FILD,   |16   BO|   [AX]   14 B,
+FILD,   |16   ZO|   [DI]
+FILD,   |16   ZO|   [SI]
+FILD,   |16   ZO|   [AX +1* BX]
+FILD,   |16   ZO|   [BX]
+FILD,   |16   ZO|   [DX]
+FILD,   |16   ZO|   [CX]
+FILD,   |16   ZO|   [AX]
+FILD,   |32   XO|   [DI]   14 L,
+FILD,   |32   XO|   [SI]   14 L,
+FILD,   |32   XO|   [BP]   14 L,
+FILD,   |32   XO|   [AX +1* BX]   18 L,
+FILD,   |32   XO|   [BX]   14 L,
+FILD,   |32   XO|   [DX]   14 L,
+FILD,   |32   XO|   [CX]   14 L,
+FILD,   |32   XO|   [AX]   14 L,
+FILD,   |32   BO|   [DI]   14 B,
+FILD,   |32   BO|   [SI]   14 B,
+FILD,   |32   BO|   [BP]   14 B,
+FILD,   |32   BO|   [AX +1* BX]   18 B,
+FILD,   |32   BO|   [BX]   14 B,
+FILD,   |32   BO|   [DX]   14 B,
+FILD,   |32   BO|   [CX]   14 B,
+FILD,   |32   BO|   [AX]   14 B,
+FILD,   |32   ZO|   [DI]
+FILD,   |32   ZO|   [SI]
+FILD,   |32   ZO|   [AX +1* BX]
+FILD,   |32   ZO|   [BX]
+FILD,   |32   ZO|   [DX]
+FILD,   |32   ZO|   [CX]
+FILD,   |32   ZO|   [AX]
 FUCOMPP,
-FIDIV,   r|   d|   XO|   [DI]   18 L,
-FIDIV,   r|   d|   XO|   [SI]   18 L,
-FIDIV,   r|   d|   XO|   [BP]   18 L,
-FIDIV,   r|   d|   XO|   [DX +1* BX]   1C L,
-FIDIV,   r|   d|   XO|   [BX]   18 L,
-FIDIV,   r|   d|   XO|   [DX]   18 L,
-FIDIV,   r|   d|   XO|   [CX]   18 L,
-FIDIV,   r|   d|   XO|   [AX]   18 L,
-FIDIV,   r|   d|   BO|   [DI]   18 B,
-FIDIV,   r|   d|   BO|   [SI]   18 B,
-FIDIV,   r|   d|   BO|   [BP]   18 B,
-FIDIV,   r|   d|   BO|   [DX +1* BX]   1C B,
-FIDIV,   r|   d|   BO|   [BX]   18 B,
-FIDIV,   r|   d|   BO|   [DX]   18 B,
-FIDIV,   r|   d|   BO|   [CX]   18 B,
-FIDIV,   r|   d|   BO|   [AX]   18 B,
-FIDIV,   r|   d|   ZO|   [DI]
-FIDIV,   r|   d|   ZO|   [SI]
-FIDIV,   r|   d|   ZO|   [DX +1* BX]
-FIDIV,   r|   d|   ZO|   [BX]
-FIDIV,   r|   d|   ZO|   [DX]
-FIDIV,   r|   d|   ZO|   [CX]
-FIDIV,   r|   d|   ZO|   [AX]
-FIDIV,   r|   s|   XO|   [DI]   18 L,
-FIDIV,   r|   s|   XO|   [SI]   18 L,
-FIDIV,   r|   s|   XO|   [BP]   18 L,
-FIDIV,   r|   s|   XO|   [DX +1* BX]   1C L,
-FIDIV,   r|   s|   XO|   [BX]   18 L,
-FIDIV,   r|   s|   XO|   [DX]   18 L,
-FIDIV,   r|   s|   XO|   [CX]   18 L,
-FIDIV,   r|   s|   XO|   [AX]   18 L,
-FIDIV,   r|   s|   BO|   [DI]   18 B,
-FIDIV,   r|   s|   BO|   [SI]   18 B,
-FIDIV,   r|   s|   BO|   [BP]   18 B,
-FIDIV,   r|   s|   BO|   [DX +1* BX]   1C B,
-FIDIV,   r|   s|   BO|   [BX]   18 B,
-FIDIV,   r|   s|   BO|   [DX]   18 B,
-FIDIV,   r|   s|   BO|   [CX]   18 B,
-FIDIV,   r|   s|   BO|   [AX]   18 B,
-FIDIV,   r|   s|   ZO|   [DI]
-FIDIV,   r|   s|   ZO|   [SI]
-FIDIV,   r|   s|   ZO|   [DX +1* BX]
-FIDIV,   r|   s|   ZO|   [BX]
-FIDIV,   r|   s|   ZO|   [DX]
-FIDIV,   r|   s|   ZO|   [CX]
-FIDIV,   r|   s|   ZO|   [AX]
-FIDIV,   n|   d|   XO|   [DI]   18 L,
-FIDIV,   n|   d|   XO|   [SI]   18 L,
-FIDIV,   n|   d|   XO|   [BP]   18 L,
-FIDIV,   n|   d|   XO|   [DX +1* BX]   1C L,
-FIDIV,   n|   d|   XO|   [BX]   18 L,
-FIDIV,   n|   d|   XO|   [DX]   18 L,
-FIDIV,   n|   d|   XO|   [CX]   18 L,
-FIDIV,   n|   d|   XO|   [AX]   18 L,
-FIDIV,   n|   d|   BO|   [DI]   18 B,
-FIDIV,   n|   d|   BO|   [SI]   18 B,
-FIDIV,   n|   d|   BO|   [BP]   18 B,
-FIDIV,   n|   d|   BO|   [DX +1* BX]   1C B,
-FIDIV,   n|   d|   BO|   [BX]   18 B,
-FIDIV,   n|   d|   BO|   [DX]   18 B,
-FIDIV,   n|   d|   BO|   [CX]   18 B,
-FIDIV,   n|   d|   BO|   [AX]   18 B,
-FIDIV,   n|   d|   ZO|   [DI]
-FIDIV,   n|   d|   ZO|   [SI]
-FIDIV,   n|   d|   ZO|   [DX +1* BX]
-FIDIV,   n|   d|   ZO|   [BX]
-FIDIV,   n|   d|   ZO|   [DX]
-FIDIV,   n|   d|   ZO|   [CX]
-FIDIV,   n|   d|   ZO|   [AX]
-FIDIV,   n|   s|   XO|   [DI]   18 L,
-FIDIV,   n|   s|   XO|   [SI]   18 L,
-FIDIV,   n|   s|   XO|   [BP]   18 L,
-FIDIV,   n|   s|   XO|   [DX +1* BX]   1C L,
-FIDIV,   n|   s|   XO|   [BX]   18 L,
-FIDIV,   n|   s|   XO|   [DX]   18 L,
-FIDIV,   n|   s|   XO|   [CX]   18 L,
-FIDIV,   n|   s|   XO|   [AX]   18 L,
-FIDIV,   n|   s|   BO|   [DI]   18 B,
-FIDIV,   n|   s|   BO|   [SI]   18 B,
-FIDIV,   n|   s|   BO|   [BP]   18 B,
-FIDIV,   n|   s|   BO|   [DX +1* BX]   1C B,
-FIDIV,   n|   s|   BO|   [BX]   18 B,
-FIDIV,   n|   s|   BO|   [DX]   18 B,
-FIDIV,   n|   s|   BO|   [CX]   18 B,
-FIDIV,   n|   s|   BO|   [AX]   18 B,
-FIDIV,   n|   s|   ZO|   [DI]
-FIDIV,   n|   s|   ZO|   [SI]
-FIDIV,   n|   s|   ZO|   [DX +1* BX]
-FIDIV,   n|   s|   ZO|   [BX]
-FIDIV,   n|   s|   ZO|   [DX]
-FIDIV,   n|   s|   ZO|   [CX]
-FIDIV,   n|   s|   ZO|   [AX]
-FISUB,   r|   d|   XO|   [DI]   18 L,
-FISUB,   r|   d|   XO|   [SI]   18 L,
-FISUB,   r|   d|   XO|   [BP]   18 L,
-FISUB,   r|   d|   XO|   [DX +1* BX]   1C L,
-FISUB,   r|   d|   XO|   [BX]   18 L,
-FISUB,   r|   d|   XO|   [DX]   18 L,
-FISUB,   r|   d|   XO|   [CX]   18 L,
-FISUB,   r|   d|   XO|   [AX]   18 L,
-FISUB,   r|   d|   BO|   [DI]   18 B,
-FISUB,   r|   d|   BO|   [SI]   18 B,
-FISUB,   r|   d|   BO|   [BP]   18 B,
-FISUB,   r|   d|   BO|   [DX +1* BX]   1C B,
-FISUB,   r|   d|   BO|   [BX]   18 B,
-FISUB,   r|   d|   BO|   [DX]   18 B,
-FISUB,   r|   d|   BO|   [CX]   18 B,
-FISUB,   r|   d|   BO|   [AX]   18 B,
-FISUB,   r|   d|   ZO|   [DI]
-FISUB,   r|   d|   ZO|   [SI]
-FISUB,   r|   d|   ZO|   [DX +1* BX]
-FISUB,   r|   d|   ZO|   [BX]
-FISUB,   r|   d|   ZO|   [DX]
-FISUB,   r|   d|   ZO|   [CX]
-FISUB,   r|   d|   ZO|   [AX]
-FISUB,   r|   s|   XO|   [DI]   18 L,
-FISUB,   r|   s|   XO|   [SI]   18 L,
-FISUB,   r|   s|   XO|   [BP]   18 L,
-FISUB,   r|   s|   XO|   [DX +1* BX]   1C L,
-FISUB,   r|   s|   XO|   [BX]   18 L,
-FISUB,   r|   s|   XO|   [DX]   18 L,
-FISUB,   r|   s|   XO|   [CX]   18 L,
-FISUB,   r|   s|   XO|   [AX]   18 L,
-FISUB,   r|   s|   BO|   [DI]   18 B,
-FISUB,   r|   s|   BO|   [SI]   18 B,
-FISUB,   r|   s|   BO|   [BP]   18 B,
-FISUB,   r|   s|   BO|   [DX +1* BX]   1C B,
-FISUB,   r|   s|   BO|   [BX]   18 B,
-FISUB,   r|   s|   BO|   [DX]   18 B,
-FISUB,   r|   s|   BO|   [CX]   18 B,
-FISUB,   r|   s|   BO|   [AX]   18 B,
-FISUB,   r|   s|   ZO|   [DI]
-FISUB,   r|   s|   ZO|   [SI]
-FISUB,   r|   s|   ZO|   [DX +1* BX]
-FISUB,   r|   s|   ZO|   [BX]
-FISUB,   r|   s|   ZO|   [DX]
-FISUB,   r|   s|   ZO|   [CX]
-FISUB,   r|   s|   ZO|   [AX]
-FISUB,   n|   d|   XO|   [DI]   18 L,
-FISUB,   n|   d|   XO|   [SI]   18 L,
-FISUB,   n|   d|   XO|   [BP]   18 L,
-FISUB,   n|   d|   XO|   [DX +1* BX]   1C L,
-FISUB,   n|   d|   XO|   [BX]   18 L,
-FISUB,   n|   d|   XO|   [DX]   18 L,
-FISUB,   n|   d|   XO|   [CX]   18 L,
-FISUB,   n|   d|   XO|   [AX]   18 L,
-FISUB,   n|   d|   BO|   [DI]   18 B,
-FISUB,   n|   d|   BO|   [SI]   18 B,
-FISUB,   n|   d|   BO|   [BP]   18 B,
-FISUB,   n|   d|   BO|   [DX +1* BX]   1C B,
-FISUB,   n|   d|   BO|   [BX]   18 B,
-FISUB,   n|   d|   BO|   [DX]   18 B,
-FISUB,   n|   d|   BO|   [CX]   18 B,
-FISUB,   n|   d|   BO|   [AX]   18 B,
-FISUB,   n|   d|   ZO|   [DI]
-FISUB,   n|   d|   ZO|   [SI]
-FISUB,   n|   d|   ZO|   [DX +1* BX]
-FISUB,   n|   d|   ZO|   [BX]
-FISUB,   n|   d|   ZO|   [DX]
-FISUB,   n|   d|   ZO|   [CX]
-FISUB,   n|   d|   ZO|   [AX]
-FISUB,   n|   s|   XO|   [DI]   18 L,
-FISUB,   n|   s|   XO|   [SI]   18 L,
-FISUB,   n|   s|   XO|   [BP]   18 L,
-FISUB,   n|   s|   XO|   [DX +1* BX]   1C L,
-FISUB,   n|   s|   XO|   [BX]   18 L,
-FISUB,   n|   s|   XO|   [DX]   18 L,
-FISUB,   n|   s|   XO|   [CX]   18 L,
-FISUB,   n|   s|   XO|   [AX]   18 L,
-FISUB,   n|   s|   BO|   [DI]   18 B,
-FISUB,   n|   s|   BO|   [SI]   18 B,
-FISUB,   n|   s|   BO|   [BP]   18 B,
-FISUB,   n|   s|   BO|   [DX +1* BX]   1C B,
-FISUB,   n|   s|   BO|   [BX]   18 B,
-FISUB,   n|   s|   BO|   [DX]   18 B,
-FISUB,   n|   s|   BO|   [CX]   18 B,
-FISUB,   n|   s|   BO|   [AX]   18 B,
-FISUB,   n|   s|   ZO|   [DI]
-FISUB,   n|   s|   ZO|   [SI]
-FISUB,   n|   s|   ZO|   [DX +1* BX]
-FISUB,   n|   s|   ZO|   [BX]
-FISUB,   n|   s|   ZO|   [DX]
-FISUB,   n|   s|   ZO|   [CX]
-FISUB,   n|   s|   ZO|   [AX]
-FICOMP,   d|   XO|   [DI]   14 L,
-FICOMP,   d|   XO|   [SI]   14 L,
-FICOMP,   d|   XO|   [BP]   14 L,
-FICOMP,   d|   XO|   [AX +1* BX]   18 L,
-FICOMP,   d|   XO|   [BX]   14 L,
-FICOMP,   d|   XO|   [DX]   14 L,
-FICOMP,   d|   XO|   [CX]   14 L,
-FICOMP,   d|   XO|   [AX]   14 L,
-FICOMP,   d|   BO|   [DI]   14 B,
-FICOMP,   d|   BO|   [SI]   14 B,
-FICOMP,   d|   BO|   [BP]   14 B,
-FICOMP,   d|   BO|   [AX +1* BX]   18 B,
-FICOMP,   d|   BO|   [BX]   14 B,
-FICOMP,   d|   BO|   [DX]   14 B,
-FICOMP,   d|   BO|   [CX]   14 B,
-FICOMP,   d|   BO|   [AX]   14 B,
-FICOMP,   d|   ZO|   [DI]
-FICOMP,   d|   ZO|   [SI]
-FICOMP,   d|   ZO|   [AX +1* BX]
-FICOMP,   d|   ZO|   [BX]
-FICOMP,   d|   ZO|   [DX]
-FICOMP,   d|   ZO|   [CX]
-FICOMP,   d|   ZO|   [AX]
-FICOMP,   s|   XO|   [DI]   14 L,
-FICOMP,   s|   XO|   [SI]   14 L,
-FICOMP,   s|   XO|   [BP]   14 L,
-FICOMP,   s|   XO|   [AX +1* BX]   18 L,
-FICOMP,   s|   XO|   [BX]   14 L,
-FICOMP,   s|   XO|   [DX]   14 L,
-FICOMP,   s|   XO|   [CX]   14 L,
-FICOMP,   s|   XO|   [AX]   14 L,
-FICOMP,   s|   BO|   [DI]   14 B,
-FICOMP,   s|   BO|   [SI]   14 B,
-FICOMP,   s|   BO|   [BP]   14 B,
-FICOMP,   s|   BO|   [AX +1* BX]   18 B,
-FICOMP,   s|   BO|   [BX]   14 B,
-FICOMP,   s|   BO|   [DX]   14 B,
-FICOMP,   s|   BO|   [CX]   14 B,
-FICOMP,   s|   BO|   [AX]   14 B,
-FICOMP,   s|   ZO|   [DI]
-FICOMP,   s|   ZO|   [SI]
-FICOMP,   s|   ZO|   [AX +1* BX]
-FICOMP,   s|   ZO|   [BX]
-FICOMP,   s|   ZO|   [DX]
-FICOMP,   s|   ZO|   [CX]
-FICOMP,   s|   ZO|   [AX]
-FICOM,   d|   XO|   [DI]   14 L,
-FICOM,   d|   XO|   [SI]   14 L,
-FICOM,   d|   XO|   [BP]   14 L,
-FICOM,   d|   XO|   [AX +1* BX]   18 L,
-FICOM,   d|   XO|   [BX]   14 L,
-FICOM,   d|   XO|   [DX]   14 L,
-FICOM,   d|   XO|   [CX]   14 L,
-FICOM,   d|   XO|   [AX]   14 L,
-FICOM,   d|   BO|   [DI]   14 B,
-FICOM,   d|   BO|   [SI]   14 B,
-FICOM,   d|   BO|   [BP]   14 B,
-FICOM,   d|   BO|   [AX +1* BX]   18 B,
-FICOM,   d|   BO|   [BX]   14 B,
-FICOM,   d|   BO|   [DX]   14 B,
-FICOM,   d|   BO|   [CX]   14 B,
-FICOM,   d|   BO|   [AX]   14 B,
-FICOM,   d|   ZO|   [DI]
-FICOM,   d|   ZO|   [SI]
-FICOM,   d|   ZO|   [AX +1* BX]
-FICOM,   d|   ZO|   [BX]
-FICOM,   d|   ZO|   [DX]
-FICOM,   d|   ZO|   [CX]
-FICOM,   d|   ZO|   [AX]
-FICOM,   s|   XO|   [DI]   14 L,
-FICOM,   s|   XO|   [SI]   14 L,
-FICOM,   s|   XO|   [BP]   14 L,
-FICOM,   s|   XO|   [AX +1* BX]   18 L,
-FICOM,   s|   XO|   [BX]   14 L,
-FICOM,   s|   XO|   [DX]   14 L,
-FICOM,   s|   XO|   [CX]   14 L,
-FICOM,   s|   XO|   [AX]   14 L,
-FICOM,   s|   BO|   [DI]   14 B,
-FICOM,   s|   BO|   [SI]   14 B,
-FICOM,   s|   BO|   [BP]   14 B,
-FICOM,   s|   BO|   [AX +1* BX]   18 B,
-FICOM,   s|   BO|   [BX]   14 B,
-FICOM,   s|   BO|   [DX]   14 B,
-FICOM,   s|   BO|   [CX]   14 B,
-FICOM,   s|   BO|   [AX]   14 B,
-FICOM,   s|   ZO|   [DI]
-FICOM,   s|   ZO|   [SI]
-FICOM,   s|   ZO|   [AX +1* BX]
-FICOM,   s|   ZO|   [BX]
-FICOM,   s|   ZO|   [DX]
-FICOM,   s|   ZO|   [CX]
-FICOM,   s|   ZO|   [AX]
-FIMUL,   d|   XO|   [DI]   14 L,
-FIMUL,   d|   XO|   [SI]   14 L,
-FIMUL,   d|   XO|   [BP]   14 L,
-FIMUL,   d|   XO|   [AX +1* BX]   18 L,
-FIMUL,   d|   XO|   [BX]   14 L,
-FIMUL,   d|   XO|   [DX]   14 L,
-FIMUL,   d|   XO|   [CX]   14 L,
-FIMUL,   d|   XO|   [AX]   14 L,
-FIMUL,   d|   BO|   [DI]   14 B,
-FIMUL,   d|   BO|   [SI]   14 B,
-FIMUL,   d|   BO|   [BP]   14 B,
-FIMUL,   d|   BO|   [AX +1* BX]   18 B,
-FIMUL,   d|   BO|   [BX]   14 B,
-FIMUL,   d|   BO|   [DX]   14 B,
-FIMUL,   d|   BO|   [CX]   14 B,
-FIMUL,   d|   BO|   [AX]   14 B,
-FIMUL,   d|   ZO|   [DI]
-FIMUL,   d|   ZO|   [SI]
-FIMUL,   d|   ZO|   [AX +1* BX]
-FIMUL,   d|   ZO|   [BX]
-FIMUL,   d|   ZO|   [DX]
-FIMUL,   d|   ZO|   [CX]
-FIMUL,   d|   ZO|   [AX]
-FIMUL,   s|   XO|   [DI]   14 L,
-FIMUL,   s|   XO|   [SI]   14 L,
-FIMUL,   s|   XO|   [BP]   14 L,
-FIMUL,   s|   XO|   [AX +1* BX]   18 L,
-FIMUL,   s|   XO|   [BX]   14 L,
-FIMUL,   s|   XO|   [DX]   14 L,
-FIMUL,   s|   XO|   [CX]   14 L,
-FIMUL,   s|   XO|   [AX]   14 L,
-FIMUL,   s|   BO|   [DI]   14 B,
-FIMUL,   s|   BO|   [SI]   14 B,
-FIMUL,   s|   BO|   [BP]   14 B,
-FIMUL,   s|   BO|   [AX +1* BX]   18 B,
-FIMUL,   s|   BO|   [BX]   14 B,
-FIMUL,   s|   BO|   [DX]   14 B,
-FIMUL,   s|   BO|   [CX]   14 B,
-FIMUL,   s|   BO|   [AX]   14 B,
-FIMUL,   s|   ZO|   [DI]
-FIMUL,   s|   ZO|   [SI]
-FIMUL,   s|   ZO|   [AX +1* BX]
-FIMUL,   s|   ZO|   [BX]
-FIMUL,   s|   ZO|   [DX]
-FIMUL,   s|   ZO|   [CX]
-FIMUL,   s|   ZO|   [AX]
-FIADD,   d|   XO|   [DI]   14 L,
-FIADD,   d|   XO|   [SI]   14 L,
-FIADD,   d|   XO|   [BP]   14 L,
-FIADD,   d|   XO|   [AX +1* BX]   18 L,
-FIADD,   d|   XO|   [BX]   14 L,
-FIADD,   d|   XO|   [DX]   14 L,
-FIADD,   d|   XO|   [CX]   14 L,
-FIADD,   d|   XO|   [AX]   14 L,
-FIADD,   d|   BO|   [DI]   14 B,
-FIADD,   d|   BO|   [SI]   14 B,
-FIADD,   d|   BO|   [BP]   14 B,
-FIADD,   d|   BO|   [AX +1* BX]   18 B,
-FIADD,   d|   BO|   [BX]   14 B,
-FIADD,   d|   BO|   [DX]   14 B,
-FIADD,   d|   BO|   [CX]   14 B,
-FIADD,   d|   BO|   [AX]   14 B,
-FIADD,   d|   ZO|   [DI]
-FIADD,   d|   ZO|   [SI]
-FIADD,   d|   ZO|   [AX +1* BX]
-FIADD,   d|   ZO|   [BX]
-FIADD,   d|   ZO|   [DX]
-FIADD,   d|   ZO|   [CX]
-FIADD,   d|   ZO|   [AX]
-FIADD,   s|   XO|   [DI]   14 L,
-FIADD,   s|   XO|   [SI]   14 L,
-FIADD,   s|   XO|   [BP]   14 L,
-FIADD,   s|   XO|   [AX +1* BX]   18 L,
-FIADD,   s|   XO|   [BX]   14 L,
-FIADD,   s|   XO|   [DX]   14 L,
-FIADD,   s|   XO|   [CX]   14 L,
-FIADD,   s|   XO|   [AX]   14 L,
-FIADD,   s|   BO|   [DI]   14 B,
-FIADD,   s|   BO|   [SI]   14 B,
-FIADD,   s|   BO|   [BP]   14 B,
-FIADD,   s|   BO|   [AX +1* BX]   18 B,
-FIADD,   s|   BO|   [BX]   14 B,
-FIADD,   s|   BO|   [DX]   14 B,
-FIADD,   s|   BO|   [CX]   14 B,
-FIADD,   s|   BO|   [AX]   14 B,
-FIADD,   s|   ZO|   [DI]
-FIADD,   s|   ZO|   [SI]
-FIADD,   s|   ZO|   [AX +1* BX]
-FIADD,   s|   ZO|   [BX]
-FIADD,   s|   ZO|   [DX]
-FIADD,   s|   ZO|   [CX]
-FIADD,   s|   ZO|   [AX]
+FIDIV,   r|   |16   XO|   [DI]   18 L,
+FIDIV,   r|   |16   XO|   [SI]   18 L,
+FIDIV,   r|   |16   XO|   [BP]   18 L,
+FIDIV,   r|   |16   XO|   [DX +1* BX]   1C L,
+FIDIV,   r|   |16   XO|   [BX]   18 L,
+FIDIV,   r|   |16   XO|   [DX]   18 L,
+FIDIV,   r|   |16   XO|   [CX]   18 L,
+FIDIV,   r|   |16   XO|   [AX]   18 L,
+FIDIV,   r|   |16   BO|   [DI]   18 B,
+FIDIV,   r|   |16   BO|   [SI]   18 B,
+FIDIV,   r|   |16   BO|   [BP]   18 B,
+FIDIV,   r|   |16   BO|   [DX +1* BX]   1C B,
+FIDIV,   r|   |16   BO|   [BX]   18 B,
+FIDIV,   r|   |16   BO|   [DX]   18 B,
+FIDIV,   r|   |16   BO|   [CX]   18 B,
+FIDIV,   r|   |16   BO|   [AX]   18 B,
+FIDIV,   r|   |16   ZO|   [DI]
+FIDIV,   r|   |16   ZO|   [SI]
+FIDIV,   r|   |16   ZO|   [DX +1* BX]
+FIDIV,   r|   |16   ZO|   [BX]
+FIDIV,   r|   |16   ZO|   [DX]
+FIDIV,   r|   |16   ZO|   [CX]
+FIDIV,   r|   |16   ZO|   [AX]
+FIDIV,   r|   |32   XO|   [DI]   18 L,
+FIDIV,   r|   |32   XO|   [SI]   18 L,
+FIDIV,   r|   |32   XO|   [BP]   18 L,
+FIDIV,   r|   |32   XO|   [DX +1* BX]   1C L,
+FIDIV,   r|   |32   XO|   [BX]   18 L,
+FIDIV,   r|   |32   XO|   [DX]   18 L,
+FIDIV,   r|   |32   XO|   [CX]   18 L,
+FIDIV,   r|   |32   XO|   [AX]   18 L,
+FIDIV,   r|   |32   BO|   [DI]   18 B,
+FIDIV,   r|   |32   BO|   [SI]   18 B,
+FIDIV,   r|   |32   BO|   [BP]   18 B,
+FIDIV,   r|   |32   BO|   [DX +1* BX]   1C B,
+FIDIV,   r|   |32   BO|   [BX]   18 B,
+FIDIV,   r|   |32   BO|   [DX]   18 B,
+FIDIV,   r|   |32   BO|   [CX]   18 B,
+FIDIV,   r|   |32   BO|   [AX]   18 B,
+FIDIV,   r|   |32   ZO|   [DI]
+FIDIV,   r|   |32   ZO|   [SI]
+FIDIV,   r|   |32   ZO|   [DX +1* BX]
+FIDIV,   r|   |32   ZO|   [BX]
+FIDIV,   r|   |32   ZO|   [DX]
+FIDIV,   r|   |32   ZO|   [CX]
+FIDIV,   r|   |32   ZO|   [AX]
+FIDIV,   n|   |16   XO|   [DI]   18 L,
+FIDIV,   n|   |16   XO|   [SI]   18 L,
+FIDIV,   n|   |16   XO|   [BP]   18 L,
+FIDIV,   n|   |16   XO|   [DX +1* BX]   1C L,
+FIDIV,   n|   |16   XO|   [BX]   18 L,
+FIDIV,   n|   |16   XO|   [DX]   18 L,
+FIDIV,   n|   |16   XO|   [CX]   18 L,
+FIDIV,   n|   |16   XO|   [AX]   18 L,
+FIDIV,   n|   |16   BO|   [DI]   18 B,
+FIDIV,   n|   |16   BO|   [SI]   18 B,
+FIDIV,   n|   |16   BO|   [BP]   18 B,
+FIDIV,   n|   |16   BO|   [DX +1* BX]   1C B,
+FIDIV,   n|   |16   BO|   [BX]   18 B,
+FIDIV,   n|   |16   BO|   [DX]   18 B,
+FIDIV,   n|   |16   BO|   [CX]   18 B,
+FIDIV,   n|   |16   BO|   [AX]   18 B,
+FIDIV,   n|   |16   ZO|   [DI]
+FIDIV,   n|   |16   ZO|   [SI]
+FIDIV,   n|   |16   ZO|   [DX +1* BX]
+FIDIV,   n|   |16   ZO|   [BX]
+FIDIV,   n|   |16   ZO|   [DX]
+FIDIV,   n|   |16   ZO|   [CX]
+FIDIV,   n|   |16   ZO|   [AX]
+FIDIV,   n|   |32   XO|   [DI]   18 L,
+FIDIV,   n|   |32   XO|   [SI]   18 L,
+FIDIV,   n|   |32   XO|   [BP]   18 L,
+FIDIV,   n|   |32   XO|   [DX +1* BX]   1C L,
+FIDIV,   n|   |32   XO|   [BX]   18 L,
+FIDIV,   n|   |32   XO|   [DX]   18 L,
+FIDIV,   n|   |32   XO|   [CX]   18 L,
+FIDIV,   n|   |32   XO|   [AX]   18 L,
+FIDIV,   n|   |32   BO|   [DI]   18 B,
+FIDIV,   n|   |32   BO|   [SI]   18 B,
+FIDIV,   n|   |32   BO|   [BP]   18 B,
+FIDIV,   n|   |32   BO|   [DX +1* BX]   1C B,
+FIDIV,   n|   |32   BO|   [BX]   18 B,
+FIDIV,   n|   |32   BO|   [DX]   18 B,
+FIDIV,   n|   |32   BO|   [CX]   18 B,
+FIDIV,   n|   |32   BO|   [AX]   18 B,
+FIDIV,   n|   |32   ZO|   [DI]
+FIDIV,   n|   |32   ZO|   [SI]
+FIDIV,   n|   |32   ZO|   [DX +1* BX]
+FIDIV,   n|   |32   ZO|   [BX]
+FIDIV,   n|   |32   ZO|   [DX]
+FIDIV,   n|   |32   ZO|   [CX]
+FIDIV,   n|   |32   ZO|   [AX]
+FISUB,   r|   |16   XO|   [DI]   18 L,
+FISUB,   r|   |16   XO|   [SI]   18 L,
+FISUB,   r|   |16   XO|   [BP]   18 L,
+FISUB,   r|   |16   XO|   [DX +1* BX]   1C L,
+FISUB,   r|   |16   XO|   [BX]   18 L,
+FISUB,   r|   |16   XO|   [DX]   18 L,
+FISUB,   r|   |16   XO|   [CX]   18 L,
+FISUB,   r|   |16   XO|   [AX]   18 L,
+FISUB,   r|   |16   BO|   [DI]   18 B,
+FISUB,   r|   |16   BO|   [SI]   18 B,
+FISUB,   r|   |16   BO|   [BP]   18 B,
+FISUB,   r|   |16   BO|   [DX +1* BX]   1C B,
+FISUB,   r|   |16   BO|   [BX]   18 B,
+FISUB,   r|   |16   BO|   [DX]   18 B,
+FISUB,   r|   |16   BO|   [CX]   18 B,
+FISUB,   r|   |16   BO|   [AX]   18 B,
+FISUB,   r|   |16   ZO|   [DI]
+FISUB,   r|   |16   ZO|   [SI]
+FISUB,   r|   |16   ZO|   [DX +1* BX]
+FISUB,   r|   |16   ZO|   [BX]
+FISUB,   r|   |16   ZO|   [DX]
+FISUB,   r|   |16   ZO|   [CX]
+FISUB,   r|   |16   ZO|   [AX]
+FISUB,   r|   |32   XO|   [DI]   18 L,
+FISUB,   r|   |32   XO|   [SI]   18 L,
+FISUB,   r|   |32   XO|   [BP]   18 L,
+FISUB,   r|   |32   XO|   [DX +1* BX]   1C L,
+FISUB,   r|   |32   XO|   [BX]   18 L,
+FISUB,   r|   |32   XO|   [DX]   18 L,
+FISUB,   r|   |32   XO|   [CX]   18 L,
+FISUB,   r|   |32   XO|   [AX]   18 L,
+FISUB,   r|   |32   BO|   [DI]   18 B,
+FISUB,   r|   |32   BO|   [SI]   18 B,
+FISUB,   r|   |32   BO|   [BP]   18 B,
+FISUB,   r|   |32   BO|   [DX +1* BX]   1C B,
+FISUB,   r|   |32   BO|   [BX]   18 B,
+FISUB,   r|   |32   BO|   [DX]   18 B,
+FISUB,   r|   |32   BO|   [CX]   18 B,
+FISUB,   r|   |32   BO|   [AX]   18 B,
+FISUB,   r|   |32   ZO|   [DI]
+FISUB,   r|   |32   ZO|   [SI]
+FISUB,   r|   |32   ZO|   [DX +1* BX]
+FISUB,   r|   |32   ZO|   [BX]
+FISUB,   r|   |32   ZO|   [DX]
+FISUB,   r|   |32   ZO|   [CX]
+FISUB,   r|   |32   ZO|   [AX]
+FISUB,   n|   |16   XO|   [DI]   18 L,
+FISUB,   n|   |16   XO|   [SI]   18 L,
+FISUB,   n|   |16   XO|   [BP]   18 L,
+FISUB,   n|   |16   XO|   [DX +1* BX]   1C L,
+FISUB,   n|   |16   XO|   [BX]   18 L,
+FISUB,   n|   |16   XO|   [DX]   18 L,
+FISUB,   n|   |16   XO|   [CX]   18 L,
+FISUB,   n|   |16   XO|   [AX]   18 L,
+FISUB,   n|   |16   BO|   [DI]   18 B,
+FISUB,   n|   |16   BO|   [SI]   18 B,
+FISUB,   n|   |16   BO|   [BP]   18 B,
+FISUB,   n|   |16   BO|   [DX +1* BX]   1C B,
+FISUB,   n|   |16   BO|   [BX]   18 B,
+FISUB,   n|   |16   BO|   [DX]   18 B,
+FISUB,   n|   |16   BO|   [CX]   18 B,
+FISUB,   n|   |16   BO|   [AX]   18 B,
+FISUB,   n|   |16   ZO|   [DI]
+FISUB,   n|   |16   ZO|   [SI]
+FISUB,   n|   |16   ZO|   [DX +1* BX]
+FISUB,   n|   |16   ZO|   [BX]
+FISUB,   n|   |16   ZO|   [DX]
+FISUB,   n|   |16   ZO|   [CX]
+FISUB,   n|   |16   ZO|   [AX]
+FISUB,   n|   |32   XO|   [DI]   18 L,
+FISUB,   n|   |32   XO|   [SI]   18 L,
+FISUB,   n|   |32   XO|   [BP]   18 L,
+FISUB,   n|   |32   XO|   [DX +1* BX]   1C L,
+FISUB,   n|   |32   XO|   [BX]   18 L,
+FISUB,   n|   |32   XO|   [DX]   18 L,
+FISUB,   n|   |32   XO|   [CX]   18 L,
+FISUB,   n|   |32   XO|   [AX]   18 L,
+FISUB,   n|   |32   BO|   [DI]   18 B,
+FISUB,   n|   |32   BO|   [SI]   18 B,
+FISUB,   n|   |32   BO|   [BP]   18 B,
+FISUB,   n|   |32   BO|   [DX +1* BX]   1C B,
+FISUB,   n|   |32   BO|   [BX]   18 B,
+FISUB,   n|   |32   BO|   [DX]   18 B,
+FISUB,   n|   |32   BO|   [CX]   18 B,
+FISUB,   n|   |32   BO|   [AX]   18 B,
+FISUB,   n|   |32   ZO|   [DI]
+FISUB,   n|   |32   ZO|   [SI]
+FISUB,   n|   |32   ZO|   [DX +1* BX]
+FISUB,   n|   |32   ZO|   [BX]
+FISUB,   n|   |32   ZO|   [DX]
+FISUB,   n|   |32   ZO|   [CX]
+FISUB,   n|   |32   ZO|   [AX]
+FICOMP,   |16   XO|   [DI]   14 L,
+FICOMP,   |16   XO|   [SI]   14 L,
+FICOMP,   |16   XO|   [BP]   14 L,
+FICOMP,   |16   XO|   [AX +1* BX]   18 L,
+FICOMP,   |16   XO|   [BX]   14 L,
+FICOMP,   |16   XO|   [DX]   14 L,
+FICOMP,   |16   XO|   [CX]   14 L,
+FICOMP,   |16   XO|   [AX]   14 L,
+FICOMP,   |16   BO|   [DI]   14 B,
+FICOMP,   |16   BO|   [SI]   14 B,
+FICOMP,   |16   BO|   [BP]   14 B,
+FICOMP,   |16   BO|   [AX +1* BX]   18 B,
+FICOMP,   |16   BO|   [BX]   14 B,
+FICOMP,   |16   BO|   [DX]   14 B,
+FICOMP,   |16   BO|   [CX]   14 B,
+FICOMP,   |16   BO|   [AX]   14 B,
+FICOMP,   |16   ZO|   [DI]
+FICOMP,   |16   ZO|   [SI]
+FICOMP,   |16   ZO|   [AX +1* BX]
+FICOMP,   |16   ZO|   [BX]
+FICOMP,   |16   ZO|   [DX]
+FICOMP,   |16   ZO|   [CX]
+FICOMP,   |16   ZO|   [AX]
+FICOMP,   |32   XO|   [DI]   14 L,
+FICOMP,   |32   XO|   [SI]   14 L,
+FICOMP,   |32   XO|   [BP]   14 L,
+FICOMP,   |32   XO|   [AX +1* BX]   18 L,
+FICOMP,   |32   XO|   [BX]   14 L,
+FICOMP,   |32   XO|   [DX]   14 L,
+FICOMP,   |32   XO|   [CX]   14 L,
+FICOMP,   |32   XO|   [AX]   14 L,
+FICOMP,   |32   BO|   [DI]   14 B,
+FICOMP,   |32   BO|   [SI]   14 B,
+FICOMP,   |32   BO|   [BP]   14 B,
+FICOMP,   |32   BO|   [AX +1* BX]   18 B,
+FICOMP,   |32   BO|   [BX]   14 B,
+FICOMP,   |32   BO|   [DX]   14 B,
+FICOMP,   |32   BO|   [CX]   14 B,
+FICOMP,   |32   BO|   [AX]   14 B,
+FICOMP,   |32   ZO|   [DI]
+FICOMP,   |32   ZO|   [SI]
+FICOMP,   |32   ZO|   [AX +1* BX]
+FICOMP,   |32   ZO|   [BX]
+FICOMP,   |32   ZO|   [DX]
+FICOMP,   |32   ZO|   [CX]
+FICOMP,   |32   ZO|   [AX]
+FICOM,   |16   XO|   [DI]   14 L,
+FICOM,   |16   XO|   [SI]   14 L,
+FICOM,   |16   XO|   [BP]   14 L,
+FICOM,   |16   XO|   [AX +1* BX]   18 L,
+FICOM,   |16   XO|   [BX]   14 L,
+FICOM,   |16   XO|   [DX]   14 L,
+FICOM,   |16   XO|   [CX]   14 L,
+FICOM,   |16   XO|   [AX]   14 L,
+FICOM,   |16   BO|   [DI]   14 B,
+FICOM,   |16   BO|   [SI]   14 B,
+FICOM,   |16   BO|   [BP]   14 B,
+FICOM,   |16   BO|   [AX +1* BX]   18 B,
+FICOM,   |16   BO|   [BX]   14 B,
+FICOM,   |16   BO|   [DX]   14 B,
+FICOM,   |16   BO|   [CX]   14 B,
+FICOM,   |16   BO|   [AX]   14 B,
+FICOM,   |16   ZO|   [DI]
+FICOM,   |16   ZO|   [SI]
+FICOM,   |16   ZO|   [AX +1* BX]
+FICOM,   |16   ZO|   [BX]
+FICOM,   |16   ZO|   [DX]
+FICOM,   |16   ZO|   [CX]
+FICOM,   |16   ZO|   [AX]
+FICOM,   |32   XO|   [DI]   14 L,
+FICOM,   |32   XO|   [SI]   14 L,
+FICOM,   |32   XO|   [BP]   14 L,
+FICOM,   |32   XO|   [AX +1* BX]   18 L,
+FICOM,   |32   XO|   [BX]   14 L,
+FICOM,   |32   XO|   [DX]   14 L,
+FICOM,   |32   XO|   [CX]   14 L,
+FICOM,   |32   XO|   [AX]   14 L,
+FICOM,   |32   BO|   [DI]   14 B,
+FICOM,   |32   BO|   [SI]   14 B,
+FICOM,   |32   BO|   [BP]   14 B,
+FICOM,   |32   BO|   [AX +1* BX]   18 B,
+FICOM,   |32   BO|   [BX]   14 B,
+FICOM,   |32   BO|   [DX]   14 B,
+FICOM,   |32   BO|   [CX]   14 B,
+FICOM,   |32   BO|   [AX]   14 B,
+FICOM,   |32   ZO|   [DI]
+FICOM,   |32   ZO|   [SI]
+FICOM,   |32   ZO|   [AX +1* BX]
+FICOM,   |32   ZO|   [BX]
+FICOM,   |32   ZO|   [DX]
+FICOM,   |32   ZO|   [CX]
+FICOM,   |32   ZO|   [AX]
+FIMUL,   |16   XO|   [DI]   14 L,
+FIMUL,   |16   XO|   [SI]   14 L,
+FIMUL,   |16   XO|   [BP]   14 L,
+FIMUL,   |16   XO|   [AX +1* BX]   18 L,
+FIMUL,   |16   XO|   [BX]   14 L,
+FIMUL,   |16   XO|   [DX]   14 L,
+FIMUL,   |16   XO|   [CX]   14 L,
+FIMUL,   |16   XO|   [AX]   14 L,
+FIMUL,   |16   BO|   [DI]   14 B,
+FIMUL,   |16   BO|   [SI]   14 B,
+FIMUL,   |16   BO|   [BP]   14 B,
+FIMUL,   |16   BO|   [AX +1* BX]   18 B,
+FIMUL,   |16   BO|   [BX]   14 B,
+FIMUL,   |16   BO|   [DX]   14 B,
+FIMUL,   |16   BO|   [CX]   14 B,
+FIMUL,   |16   BO|   [AX]   14 B,
+FIMUL,   |16   ZO|   [DI]
+FIMUL,   |16   ZO|   [SI]
+FIMUL,   |16   ZO|   [AX +1* BX]
+FIMUL,   |16   ZO|   [BX]
+FIMUL,   |16   ZO|   [DX]
+FIMUL,   |16   ZO|   [CX]
+FIMUL,   |16   ZO|   [AX]
+FIMUL,   |32   XO|   [DI]   14 L,
+FIMUL,   |32   XO|   [SI]   14 L,
+FIMUL,   |32   XO|   [BP]   14 L,
+FIMUL,   |32   XO|   [AX +1* BX]   18 L,
+FIMUL,   |32   XO|   [BX]   14 L,
+FIMUL,   |32   XO|   [DX]   14 L,
+FIMUL,   |32   XO|   [CX]   14 L,
+FIMUL,   |32   XO|   [AX]   14 L,
+FIMUL,   |32   BO|   [DI]   14 B,
+FIMUL,   |32   BO|   [SI]   14 B,
+FIMUL,   |32   BO|   [BP]   14 B,
+FIMUL,   |32   BO|   [AX +1* BX]   18 B,
+FIMUL,   |32   BO|   [BX]   14 B,
+FIMUL,   |32   BO|   [DX]   14 B,
+FIMUL,   |32   BO|   [CX]   14 B,
+FIMUL,   |32   BO|   [AX]   14 B,
+FIMUL,   |32   ZO|   [DI]
+FIMUL,   |32   ZO|   [SI]
+FIMUL,   |32   ZO|   [AX +1* BX]
+FIMUL,   |32   ZO|   [BX]
+FIMUL,   |32   ZO|   [DX]
+FIMUL,   |32   ZO|   [CX]
+FIMUL,   |32   ZO|   [AX]
+FIADD,   |16   XO|   [DI]   14 L,
+FIADD,   |16   XO|   [SI]   14 L,
+FIADD,   |16   XO|   [BP]   14 L,
+FIADD,   |16   XO|   [AX +1* BX]   18 L,
+FIADD,   |16   XO|   [BX]   14 L,
+FIADD,   |16   XO|   [DX]   14 L,
+FIADD,   |16   XO|   [CX]   14 L,
+FIADD,   |16   XO|   [AX]   14 L,
+FIADD,   |16   BO|   [DI]   14 B,
+FIADD,   |16   BO|   [SI]   14 B,
+FIADD,   |16   BO|   [BP]   14 B,
+FIADD,   |16   BO|   [AX +1* BX]   18 B,
+FIADD,   |16   BO|   [BX]   14 B,
+FIADD,   |16   BO|   [DX]   14 B,
+FIADD,   |16   BO|   [CX]   14 B,
+FIADD,   |16   BO|   [AX]   14 B,
+FIADD,   |16   ZO|   [DI]
+FIADD,   |16   ZO|   [SI]
+FIADD,   |16   ZO|   [AX +1* BX]
+FIADD,   |16   ZO|   [BX]
+FIADD,   |16   ZO|   [DX]
+FIADD,   |16   ZO|   [CX]
+FIADD,   |16   ZO|   [AX]
+FIADD,   |32   XO|   [DI]   14 L,
+FIADD,   |32   XO|   [SI]   14 L,
+FIADD,   |32   XO|   [BP]   14 L,
+FIADD,   |32   XO|   [AX +1* BX]   18 L,
+FIADD,   |32   XO|   [BX]   14 L,
+FIADD,   |32   XO|   [DX]   14 L,
+FIADD,   |32   XO|   [CX]   14 L,
+FIADD,   |32   XO|   [AX]   14 L,
+FIADD,   |32   BO|   [DI]   14 B,
+FIADD,   |32   BO|   [SI]   14 B,
+FIADD,   |32   BO|   [BP]   14 B,
+FIADD,   |32   BO|   [AX +1* BX]   18 B,
+FIADD,   |32   BO|   [BX]   14 B,
+FIADD,   |32   BO|   [DX]   14 B,
+FIADD,   |32   BO|   [CX]   14 B,
+FIADD,   |32   BO|   [AX]   14 B,
+FIADD,   |32   ZO|   [DI]
+FIADD,   |32   ZO|   [SI]
+FIADD,   |32   ZO|   [AX +1* BX]
+FIADD,   |32   ZO|   [BX]
+FIADD,   |32   ZO|   [DX]
+FIADD,   |32   ZO|   [CX]
+FIADD,   |32   ZO|   [AX]
 FCOS,
 FSIN,
 FSCALE,
