@@ -3,9 +3,11 @@
 
 ( ############## GENERIC PART OF ASSEMBER ############################# )
 
+                                HEX
+
 : \   ^J WORD DROP ; IMMEDIATE
 
-: ALIAS CREATE , DOES> @ EXECUTE ;
+: ALIAS CREATE -3 ALLOT ( JMP, E| .. E, ) 7E C, , ;
 
 ( --assembler_postit_fixup_1 ) \ A2oct21 AvdH
 \ REQUIRE ASSEMBLER
@@ -46,30 +48,34 @@ VARIABLE ISS ( Instruction start )
 ( ############## 8089 ASSEMBLER ADDITIONS ############################# )
 
 \ ASSEMBLER DEFINITIONS
-HEX
-: W,   DUP 8 RSHIFT C,   C, ;
 
-( ############## 6809 ASSEMBLER PROPER ################################ )
+( -------------- Commaers --------------------------------------------- )
 ' C,   ALIAS #,     ( immediate byte data)
-' W,   ALIAS ##,    ( immediate data : cell)
+' ,    ALIAS ##,    ( immediate data : cell)
 ' C,   ALIAS CO,    ( address: byte offset)
-' W,   ALIAS WO,    ( cell: address or offset)
+' ,    ALIAS WO,    ( cell: address or offset)
 ' C,   ALIAS DO,    ( direct page offset )
-' W,   ALIAS E,     ( extended address )
-' C,   ALIAS STACK, ( what to push or pop)
+' ,    ALIAS E,     ( extended address )
+' C,   ALIAS )S,    ( what to push or pop)
 
-\ Adressing modes go here
+( -------------- General fixups --------------------------------------- )
+
+\ The data between brackets show what bits are filled in by a fixup,
+\ or what is left to be filled by an opcode .
+
+\ Adressing modes go here.         Implied register.
 ( 30 ) 00 1FI #|                  ( 30 ) 00 1FI A|
 ( 30 ) 10 1FI DP|                 ( 30 ) 10 1FI B|
 ( 30 ) 20 1FI []|
 ( 30 ) 30 1FI E|
 
+\ The indirection requires another byte to fixup.
+: [] []| 0 C, ;
 
 ( --------------- Handling of the index byte. ------------------------- )
+
 ' DFI ALIAS (|#,)    \ Incorporate 5 bit unsigned DATA.
 
-\ Incorporate signed DATA. Cut off negative values at 5 bits.
-: |#, DUP -10 +10 WITHIN 0= ABORT" offset > 5 bits"  1F AND   (|#,) ;
 20 0 4 1FAMILY| X Y U S
 ( FF ) 9F 1FI [##]
 
@@ -77,7 +83,9 @@ HEX
 01 91 06 1FAMILY| [,R++] -- [,--R] [,R] [B,R] [A,R]
 10 8B 02 1FAMILY| D,R [D,R]
 
-\ The don't care bits translate to underscores
+\ Underscores are irrelevant for the functionality of the fixup.
+\ (They originate from don't care bits.)
+
 10 88 02 1FAMILY| #,R [#,R]
 10 89 02 1FAMILY| ##,R [##,R]
 
@@ -148,16 +156,16 @@ HEX
 : | CREATE DUP C, 1 LSHIFT DOES> C@ OR ;
 1 | CCR&  | A&   | B&   | DPR&   | X&   | Y&   | U&   | PC&   DROP
 \ '| HIDDEN
-\ : (& DSP@ 0 ;    : )S, STACK, ?CSP ;
-: (& 0 ;    : )S, STACK, ;
-
-\ The indirection require another byte to fixup.
-: [] []| 0 C, ;
+: (& 0 ;    \ )S,  : see commaers.
 
 \ None of the essential
 ' ASL, ALIAS LSL,
 
-( ############## ACTUAL GENERATION OF CODE ############################# )
+( ############## REDEFINITION FOR SAFETY/CONVENIENCE ################# )
+
+: |#, DUP -10 +10 WITHIN 0= ABORT" offset > 5 bits"  1F AND   (|#,) ;
+
+( ############## ACTUAL GENERATION OF CODE ############################ )
 
 : NEXT,   JMP, [] [,R++] Y   ;
 
@@ -170,3 +178,5 @@ HEX
 \ Example of usage
 \ : var  CREATE 0 ,
 \     ;CODE LDX, [] ,R S   STD, [] ,R S   TFR, X== =>D   NEXT, ;
+
+                        DECIMAL
