@@ -145,13 +145,18 @@ REQUIRE POSTFIX
     2 = SWAP "--" CORA 0= AND IF LATEST HIDDEN THEN ;
 
 ( ------------- UTILITIES, SYSTEM INDEPENDANT ------------------------- )
+( Note that the assembler works with bigendian numbers of any length.   )
+
 (   The FIRST bitset is contained in the SECOND one, leaving it IS      )
 : CONTAINED-IN OVER AND = ;
-CREATE TABLE 0 , FF , FFFF , FFFFFF , FFFFFFFF ,
-( From a MASK leave only SOME first bytes up, return IT                 )
-( First means lower in memory, this relies on big endian.               )
-: FIRSTBYTES CELLS TABLE + @ AND ;
+( Compile the ls 8 bits of X at here, leaving the REMAINING bits.       )
 : lsbyte, DUP AS-C, 0008 RSHIFT ;
+( For X and ADDRESS , add the 8 bits below address to x at ls place.    )
+( Leave X and decremented ADDRESS.                                      )
+: lsbyte@ 1- SWAP 8 LSHIFT OVER C@ OR SWAP ;
+( For ADDRESS LENGTH , return the NUMBER that is there {bigendian}.     )
+( "Multiple byte fetch".                                                )
+: MC@ DUP >R  + 0 SWAP BEGIN R> DUP WHILE 1- >R lsbyte@ REPEAT 2DROP ;
 
 ( ------------- ASSEMBLER, BOOKKEEPING -------------------------------- )
 ( The bookkeeping is needed for error detection and disassembly.        )
@@ -475,7 +480,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 VARIABLE POINTER       HERE POINTER !
 
 ( Get the valid part of the INSTRUCTION under examination               )
-: INSTRUCTION  ISS @ @   ISL @   FIRSTBYTES ;
+: INSTRUCTION  ISS @   ISL @   MC@ ;
 
 ( These disassemblers are quite similar:                                )
 ( if the DEA on the stack is of the right type and if the               )
@@ -487,7 +492,9 @@ VARIABLE POINTER       HERE POINTER !
 : DIS-PI
     DUP IS-PI IF
     AT-REST? IF
-    DUP >BI @ INVERT OVER >CNT @ FIRSTBYTES POINTER @ @ AND OVER >DATA @ = IF
+    DUP >BI OVER >CNT @  MC@ INVERT
+    >R POINTER @ OVER >CNT @  MC@ R>   AND
+    OVER >DATA @ = IF
         DUP >BI TALLY:,
         DUP +DISS
         POINTER @ ISS !
@@ -567,14 +574,14 @@ VARIABLE POINTER       HERE POINTER !
 
 ( Print a standard disassembly for the commaer DEA.                     )
 : .COMMA-STANDARD
-    POINTER @ @ OVER >CNT @ FIRSTBYTES U.
+    POINTER @ OVER >CNT @ MC@ U.
     DUP >CNT @ POINTER +!
     %ID.                         ( DEA -- )
 ;
 
 ( Print a signed disassembly for the commaer DEA.                       )
 : .COMMA-SIGNED
-    POINTER @ @ OVER >CNT @ FIRSTBYTES .
+    POINTER @ OVER >CNT @ MC@ .
     DUP >CNT @ POINTER +!
     %ID.                         ( DEA -- )
 ;
@@ -612,8 +619,8 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 ( Based on what is currently left in `TALLY!' )
 ( Leave a POINTER pointing after that instruction. )
 : ((DISASSEMBLE))
-    SWAP 
-    DUP ADORN-ADDRESS    DUP POINTER !   >R 
+    SWAP
+    DUP ADORN-ADDRESS    DUP POINTER !   >R
     ( startdea -- ) BEGIN
         DIS-PI DIS-xFI DIS-DFI DIS-DFIR DIS-FIR DIS-COMMA
         >NEXT%
