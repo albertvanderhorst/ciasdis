@@ -12,19 +12,19 @@
 ( --assembler_postit_fixup_1 ) \ A2oct21 AvdH
 \ REQUIRE ASSEMBLER
 \ ASSEMBLER DEFINITIONS
-VARIABLE ISS ( Instruction start )
+VARIABLE ISF ( Fixup position )
 
 ( --assembler_postit_fixup_2 ) \ A2oct21 AvdH
-: C| HERE 1-   DUP >R   C@ OR   R> C! ;  ( c.f. C, )
-' COUNT ALIAS C@+
-: POST, C@+ C, ;
+: C|   ISF @   C@ XOR   ISF @ C! ;  ( c.f. C, )
 
+\ Remember where to fix up.
+: POST> HERE 1- ISF ! ;
 \ If the input is "--" skip it, leave " there WAS no skip".
 : NO--? SOURCE DROP >IN @ + C@ &- = DUP
     IF BL WORD DROP THEN INVERT ;
 
-: 1PI CREATE C, DOES> POST, DROP ;
-: 2PI CREATE C, C, DOES> POST, POST, DROP ;
+: 1PI CREATE C, DOES> C@ C, POST> ;
+: 2PI CREATE C, C, DOES> COUNT C, C@ C, POST> ;
 
 : 1FI CREATE C, DOES> C@ C| ;
 
@@ -65,7 +65,7 @@ VARIABLE ISS ( Instruction start )
 ( 30 ) 30 1FI E|
 
 \ The indirection requires another byte to fixup.
-: [] []| 0 C, ;
+: []   []| 0 C,   1 ISF +! ;
 
 ( --------------- Handling of the index byte. ------------------------- )
 
