@@ -182,6 +182,25 @@ JOPI"
 \D 12 PRINT-COMMENT CR  \ Should give nothing, not found!
 \D 12 0 HOST>TARGET - PRINT-COMMENT CR
 
+\ ------------------- Generic again -------------------
+
+
+\ Print out everything we know about ADDRESS.
+: (ADORN-ADDRESS)
+    PRINT-OLD-COMMENT:
+    DUP PRINT-COMMENT
+    DUP REMEMBER-COMMENT:
+    CR ADORN-WITH-LABEL ;
+
+\ Revector ``ADORN-ADDRESS'' used in "asgen.frt".
+'(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !
+
+\ Disassemble the current program as stored in the ``CODE-BUFFER''.
+: DISASSEMBLE-TARGET
+    INIT-COMMENT:
+    TARGET-START @ .  " ORG" TYPE CR
+    CODE-SPACE CP @ D-R
+    CP @ ADORN-ADDRESS ;
 
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
@@ -244,23 +263,3 @@ ASSEMBLER DEFINITIONS
 '.COMMA-LABEL  'B,    >DIS !  ( immediate byte : address/offset )
 
 PREVIOUS DEFINITIONS
-
-\ ------------------- Generic again -------------------
-
-
-\ Print out everything we know about ADDRESS.
-: (ADORN-ADDRESS)
-    PRINT-OLD-COMMENT:
-    DUP PRINT-COMMENT
-    DUP REMEMBER-COMMENT:
-    CR ADORN-WITH-LABEL ;
-
-\ Revector ``ADORN-ADDRESS'' used in "asgen.frt".
-'(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !
-
-\ Disassemble the current program as stored in the ``CODE-BUFFER''.
-: DISASSEMBLE-TARGET
-    INIT-COMMENT:
-    TARGET-START @ .  " ORG" TYPE CR
-    CODE-SPACE CP @ D-R
-    CP @ ADORN-ADDRESS ;
