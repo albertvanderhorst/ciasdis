@@ -124,7 +124,7 @@ lina2 : ci86.lina.s ; gcc $+ -l 2>aap
 
 ci86.lina.s :
 
-testasalpha: aswrap.frt asgen.frt asalpha.frt testsetalpha ; \
+testasalpha: asgen.frt asalpha.frt testsetalpha ; \
     echo CR REQUIRE INCLUDE REQUIRE DUMP REQUIRE ALIAS \'\$$\@ ALIAS @+ INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testrunalpha|\
     lina -a    |\
     sed '1,/TEST STARTS HERE/d' |\
@@ -132,7 +132,7 @@ testasalpha: aswrap.frt asgen.frt asalpha.frt testsetalpha ; \
     diff -w $@ testsetalpha >$@.diff ;\
     diff $@.diff testresults
 
-testas80: aswrap.frt asgen.frt as80.frt testset8080 ; \
+testas80: asgen.frt as80.frt testset8080 ; \
     cat $+|\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
@@ -140,7 +140,7 @@ testas80: aswrap.frt asgen.frt as80.frt testset8080 ; \
     diff -w $@ testset8080 >$@.diff ;\
     diff $@.diff testresults
 
-testas86: aswrap.frt asgen.frt asi86.frt testset8086 ; \
+testas86: asgen.frt asi86.frt testset8086 ; \
     cat $+|\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
@@ -148,7 +148,7 @@ testas86: aswrap.frt asgen.frt asi86.frt testset8086 ; \
     diff -w $@ testset8086 >$@.diff ;\
     diff $@.diff testresults
 
-testas386: aswrap.frt asgen.frt asi586.frt testset386 ; \
+testas386: asgen.frt asi586.frt testset386 ; \
     cat $+|\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
@@ -156,7 +156,7 @@ testas386: aswrap.frt asgen.frt asi586.frt testset386 ; \
     diff -w $@ testset386 >$@.diff ;\
     diff $@.diff testresults
 
-test386: aswrap.frt asgen.frt asi586.frt ; \
+test386: asgen.frt asi586.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-32   SHOW-ALL)|\
     lina -e|\
     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
@@ -166,14 +166,14 @@ test386: aswrap.frt asgen.frt asi586.frt ; \
     diff -w $@ testset386 >$@.diff ;\
     diff $@.diff testresults
 
-test386-16: aswrap.frt asgen.frt asi586.frt ; \
+test386-16: asgen.frt asi586.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
     lina -e >$@       ;
 #   diff -w $@ testset386 >$@.diff ;\
 #   diff $@.diff testresults
 
 # Special test to exercise otherwise hidden instructions.
-testas386a: aswrap.frt asgen.frt asi586.frt testset386a ; \
+testas386a: asgen.frt asi586.frt testset386a ; \
     cat $+|\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\

@@ -107,10 +107,22 @@
 ( of putting the information that we are in a 16 bit operand segment    )
 ( in TALLY-BA , it transforms that information to 32 bit.               )
 
+( ############### PRELUDE ############################################# )
+
+( Wrapper for asgen, when we want to test without label mechanisms.     )
+( These are hot patched for reverse engineering.                        )
+
+REQUIRE ALIAS
+
+'HERE  ALIAS AS-HERE
+'C,    ALIAS AS-C,
+'ALLOT  ALIAS AS-ALLOT
+'HERE  ALIAS _AP_
+: ADORN-ADDRESS DROP CR ;   ( Action between two disassembled instr.    )
+
 ( ############### PART I ASSEMBLER #################################### )
 ( MAYBE NOT PRESENT UTILITIES                                           )
 REQUIRE !CSP         \ To counter design error to eliminate it.
-REQUIRE ALIAS  ( Error in library around @+ )
 REQUIRE @+ ( Fetch from ADDRES. Leave incremented ADDRESS and DATA )
 : !+ >R R@ ! R> CELL+ ; ( Store DATA to ADDRES. Leave incremented ADDRESS)
 ( Fetch from decremented ADDRES. Leave DATA and ADDRESS)

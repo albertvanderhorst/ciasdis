@@ -1,6 +1,6 @@
 
-INCLUDE aswrap.frt
 INCLUDE asgen.frt
+INCLUDE aswrap.frt
 INCLUDE asi586.frt
 
 \ These two files could be incorporated in 2 previous ones.
