@@ -458,6 +458,17 @@ endstruct
 \ the end of the input file.
 : HOW-FIT-END    TARGET-END .HOW-FIT ;
 
+\ Print a remark about whether START and END fit.
+: PLUG-HOLE   2DUP < IF
+   CR "\ Hole sections." TYPE CR .S -d$- ELSE 2DROP
+THEN  ;
+
+\ Add sectors of type string where there are holes. section-labels must be
+\ sorted on entry, and are sorted on exit.
+: PLUG-HOLES   TARGET-START SECTION-LABELS DO-LAB
+        I CELL+ @ EXECUTE DIS-START   PLUG-HOLE   I CELL+ @ EXECUTE DIS-END
+    LOOP-LAB   TARGET-END PLUG-HOLE   SORT-LABELS ;
+
 \ Disassemble all those sectors as if they were code.
 : DISASSEMBLE-ALL   NEXT-CUT!   TARGET-START
     SECTION-LABELS DO-LAB I CELL+ @ EXECUTE   HOW-FIT DIS-RANGE LOOP-LAB
@@ -496,7 +507,7 @@ endstruct
 \ Using (only) information from file with NAME,
 \ disassemble the current program as stored in the ``CODE-BUFFER''.
 : CONSULTED   INIT-ALL   HEX INCLUDED ( file)   SORT-ALL
-    DISASSEMBLE-TARGET DECIMAL ;
+    PLUG-HOLES DISASSEMBLE-TARGET DECIMAL ;
 
 \ Consult "file" as per ``CONSULT''
 : CONSULT   (WORD) CONSULTED ;
