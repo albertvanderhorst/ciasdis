@@ -68,9 +68,12 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 \ Print the addresses and payloads of the labels.
 : .LABELS  DO-LAB I @ .  I .PAY CR LOOP-LAB ;
 
+\ Return highest INDEX allowed in labels.
+: LAB-UPB   LABELS |BAG| 2/ ;
+
 \ Return LOWER and UPPER indices of the labels , inclusive.
 \ The lower index is 1 and the upper index is corresponding.
-: LAB-BOUNDS   1   LABELS |BAG| 2/ ;
+: LAB-BOUNDS   1 LAB-UPB ;
 
 \ In behalf of qsort.
 \ For INDEX1 and INDEX2: "the value of the first
@@ -92,18 +95,27 @@ VARIABLE CONT
 \ For INDEX1 : "the value of the label IS less than ``CONT''"
 : L<    LABELS[] @   CONT @   < ;
 
-VARIABLE LABEL-CACHE    \ Index of next label.
 
+\ Find the INDEX where ADDRESS belongs in a sorted array.
+\ This may be outside, if it is larger than any.
+: WHERE-LABEL   CONT !   LAB-BOUNDS 1+   'L<   BIN-SEARCH   ;
+
+VARIABLE LABEL-CACHE    \ Index of next label.
 \ Find the first label that is equal to (or greater than) VALUE
 \ Return INDEX or zero if not found. Put it in the label-cache too.
 \ Note ``BIN-SEARCH'' returns the non-inclusive upper bound if not found.
-: FIND-LABEL   CONT !   LAB-BOUNDS 1+   DUP >R
-    'L<   BIN-SEARCH   DUP R> <> AND    DUP LABEL-CACHE ! ;
+: FIND-LABEL   WHERE-LABEL   DUP LAB-UPB 1+ <> AND    DUP LABEL-CACHE ! ;
 
 \ Find ADDRESS in the label table. Return DEA of an exact
 \ matching label or zero if not found.
 : >LABEL   FIND-LABEL DUP IF LABELS[]  DUP @  CONT @ - IF DROP 0 THEN THEN ;
 
+\ Roll the last label to place INDEX.
+\ A label occupies two consecutive places!
+: ROLL-LABEL   DUP   LABELS[]  DUP LABELS BAG-HOLE   LABELS BAG-HOLE
+   LAB-BOUNDS SWAP DROP   LAB<->   -2 CELLS LABELS  +! ;
+
+\ FIXME: The following is dead code. (As is LABEL-CACHE).
 \ Return the next label or 0.
 : NEXT-LABEL   LABEL-CACHE @   DUP IF
    1+ DUP LAB-BOUNDS + = IF DROP 0 THEN
@@ -118,6 +130,10 @@ VARIABLE LABEL-CACHE    \ Index of next label.
 \ any symbolic constant in fact.
 \ The payload is the dea of a constant leaving that address.
 : LABEL   EQU-LABELS   DUP LAB+!   CONSTANT   LATEST LAB+! ;
+
+\ Generate a equ label at (target) ADDRESS with NAME. Like ``LABEL''.
+: LABELED   POSTFIX CONSTANT   EQU-LABELS   LATEST DUP EXECUTE LAB+! LAB+! ;
+
 'LABEL ALIAS EQU
 
 
@@ -290,6 +306,10 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 is code with name "name".
 : -dc:    'D-R-T   'CR+LABEL SECTION ;
 
+\ FIXME : to be tested still!
+\ Section ADDRESS1 .. ADDRESS2 is code with name NAME.
+: -dc    2>R 'D-R-T   'CR+LABEL 2R> POSTFIX  SECTION ;
+
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous code section.
 : -dc-    'D-R-T   'CR+LABEL ANON-SECTION ;
 
@@ -386,7 +406,7 @@ ASSEMBLER
 (                       SECTIONS                                        )
 
 \ Disassemble from target ADDRESS1 to ADDRESS2 as 16 bit.
-: D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" ;
+: D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" TYPE ;
 
 \ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
 : -dc16:    'D-R-T-16   'CR+LABEL SECTION ;
@@ -465,7 +485,7 @@ VARIABLE LATEST-OFFSET
 \ Contains all instruction that represent an unconditional transfer
 \ of control. It may be followed by data instead of code.
 0 BAG UNCONDITIONAL-TRANSFERS
-  'CALL, , 'CALLFAR, , 'CALLFARO, , 'CALLO, , 'INT, , 'INT3, , 'INTO, ,
+\   'CALL, , 'CALLFAR, , 'CALLFARO, , 'CALLO, , 'INT, , 'INT3, , 'INTO, ,
   'IRET, , 'JMP, , 'JMPFAR, , 'JMPFARO, , 'JMPO, , 'JMPS, , 'RET+, ,
   'RET, , 'RETFAR+, , 'RETFAR, ,
 HERE UNCONDITIONAL-TRANSFERS !

@@ -14,7 +14,7 @@ CP @ CODE-SPACE - START +   EQU END
 START -ORG-
 0505  LABEL QQQ
 050F  LABEL RRR
-START RRR -dc: poo      \ Named section
+START RRR "poo" -dc \ Named section
 RRR   DUP 6 + -db: bytes
 RRR 3 + LABEL RRRR
 RRR 6 +   DUP 0C +  -dw: words

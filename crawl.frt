@@ -25,16 +25,10 @@ NORMAL-DISASSEMBLY
 \ FIXME! Knullig.
 : END-HOST  CP @ ;
 
-\ Swap the ITH and last label.
-\ A label occupies two consecutive places!
-: SWAP-LABEL   DUP   LABELS[]  DUP LABELS BAG-HOLE   LABELS BAG-HOLE
-   LAB-BOUNDS SWAP DROP   LAB<->   -2 CELLS LABELS  +! ;
-
 \ Add the information that ADDRESS1 to ADDRESS2 is a code section.
-\ It is added to the end, then swapped to the right place.
-: ADD-SECTION   SECTION-LABELS
-    OVER FIND-LABEL >R   REQUIRED-XT 'CR+LABEL ANON-SECTION
-    R> DUP IF SWAP-LABEL _ THEN DROP ;
+\ If section labels was sorted, it remains so.
+: INSERT-SECTION   OVER SECTION-LABELS WHERE-LABEL >R
+    REQUIRED-XT 'CR+LABEL ANON-SECTION   R> ROLL-LABEL .LABELS ;
 
 \ Make section I current.
 : MAKE-CURRENT LABELS[] CELL+ @ EXECUTE ;
@@ -80,7 +74,7 @@ NORMAL-DISASSEMBLY
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.
 : CRAWL-ONE  DUP >R TARGET>HOST BEGIN (DISASSEMBLE) ANALYSE-INSTRUCTION
     DUP END-HOST >=   LATEST-INSTRUCTION @ UNCONDITIONAL-TRANSFERS IN-BAG?   OR
-  UNTIL     R> SWAP HOST>TARGET ADD-SECTION
+  UNTIL     R> SWAP HOST>TARGET INSERT-SECTION
   CR ." STARTERS:" STARTERS .BAG CR ;
 
 \ Analyse code from ADDRESS , unless already known.
