@@ -62,17 +62,19 @@ CONTEXT @ CURRENT !
 \ Add remainder of line to codespace, as bytes.
 : DB   !DX-SET  GET-DX-SET    C,-DX-SET  ;
 
-\ NOTE: The following assumes W, and L, are defined in the specific assembler.
+\ NOTE: The following assumes (W,) and (L,) are defined in the specific assembler.
+\ These must not be commaers, just lay down 16 or 32 bits entities in the
+\ right endian format.
 
 ASSEMBLER
 \ Output ``DX-SET'' as words (16-bits)
-: W,-DX-SET  BEGIN DX-SET BAG@- W,  DX-SET BAG? 0= UNTIL ;
+: W,-DX-SET  BEGIN DX-SET BAG@- (W,)  DX-SET BAG? 0= UNTIL ;
 
 \ Add remainder of line to codespace, as words.
 : DW   !DX-SET  GET-DX-SET    W,-DX-SET  ;
 
 \ Output ``DX-SET'' as longs (32-bits)
-: L,-DX-SET  BEGIN DX-SET BAG@- L,  DX-SET BAG? 0= UNTIL ;
+: L,-DX-SET  BEGIN DX-SET BAG@- (L,)  DX-SET BAG? 0= UNTIL ;
 
 \ Add remainder of line to codespace, as longs (or, mostly, cells).
 : DL   !DX-SET  GET-DX-SET    L,-DX-SET  ;
