@@ -9,6 +9,5 @@
 'HERE  ALIAS _AP_
 
 \ Adorn the ADDRESS we are currently disassembling with data
-\ from a disassembly data file. Leave ADDRESS.
-: ADORN-ADDRESS ; 
-
+\ from a disassembly data file.
+: ADORN-ADDRESS DROP ;
