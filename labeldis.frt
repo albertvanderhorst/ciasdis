@@ -16,6 +16,8 @@ REQUIRE 2>R
 REQUIRE BAG             \ Simple bag facility
 REQUIRE struct
 
+10000 CONSTANT MAX-LABEL
+
 : \D POSTPONE \ ;
 
 \ -------------------- INTRODUCTION --------------------------------
@@ -157,6 +159,9 @@ VARIABLE LABEL-CACHE    \ Index of next label.
 \ if any.
 : ADORN-WITH-LABEL   =EQU-LABEL .EQU-LABEL ;
 
+( Print X as a symbolic label if possible, else as a number             )
+: .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP H. SPACE THEN ;
+
 \D 12 LABEL AAP
 \D 5 LABEL NOOT
 \D 2 LABEL MIES
@@ -180,7 +185,7 @@ VARIABLE LABEL-CACHE    \ Index of next label.
 : .COMMENT:   LABELS[] DUP @ H. " COMMENT: " TYPE  CELL+ @ $@ TYPE CR ;
 
 \ Contains comment labels, i.e. structs as associate with ``COMMENT:''
-1000 '.PAY$ '.COMMENT: LABELSTRUCT COMMENT:-LABELS LABELS !BAG
+MAX-LABEL '.PAY$ '.COMMENT: LABELSTRUCT COMMENT:-LABELS LABELS !BAG
 
 \ Generate a comment label at ADDRESS. A pointer to the
 \ remainder of the line is the payload.
@@ -227,7 +232,7 @@ VARIABLE COMMENT:-TO-BE
 : .MCOMMENT   LABELS[] DUP CELL+ @ $@ ."$" SPACE @ H. " COMMENT " TYPE  CR ;
 
 \ Contains multiple line comment labels, i.e. structs as associate with ``COMMENT''
-1000 '.PAY$ '.MCOMMENT LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
+MAX-LABEL '.PAY$ '.MCOMMENT LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 
 \ Make STRING the comment in front of label at ADDRESS. A pointer to this
 \ string the payload.
@@ -390,7 +395,7 @@ endstruct
     CREATOR-XT ID. LABEL-NAME TYPE CR ;
 
 \ Contains sector specification, range plus type.
-1000 '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !BAG
+MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !BAG
 
 \ Specify that section "name" from AD1 to AD2 uses dis-assembler DEA
 : SECTION   SECTION-LABELS DIS-STRUCT DIS-START LAB+!  LATEST LAB+!  ;
@@ -449,7 +454,7 @@ endstruct
 'DUMP-W    '-dw:   BELONGS-TO-CREATOR
 
 \ Dump words from target ADDRESS1 to ADDRESS2.
-: (DUMP-L)   DO I DUP ADORN-ADDRESS @ SPACE H. 4 +LOOP CR ;
+: (DUMP-L)   DO I DUP ADORN-ADDRESS @ SPACE .LABEL/. 4 +LOOP CR ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-L) ;
@@ -590,9 +595,6 @@ DEFINITIONS
 \ This is kept up to date during disassembly.
 \ It is useful for the code crawler.
 VARIABLE LATEST-OFFSET
-
-( Print X as a symbolic label if possible, else as a number             )
-: .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP H. SPACE THEN ;
 
 ( Print a disassembly, for a commaer DEA , taking into account labels,  )
 ( {suitable for e.g. the commaer ``IX,''}                               )
