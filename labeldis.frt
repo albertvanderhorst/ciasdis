@@ -1,9 +1,11 @@
-( $Id$ )
-( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
-( Uses Richard Stallmans convention. Uppercased word are parameters.    )
+ ( $Id$ )
+ ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
+ ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
 ( Handle labels as far as disassembly is concerned.                     )
 ( There is a separate one for the assembler.                            )
+
+INCLUDE struct.frt
 
 REQUIRE ALIAS
 REQUIRE @+
@@ -14,8 +16,16 @@ REQUIRE BIN-SEARCH
 
 : \D ;
 
+: BUILD-SET   HERE CELL+ , CELLS ALLOT ;
+
+\ Define a structure for label-like things of length N.
+1 \ Dummy length
+struct LABELSTRUCT
+  F: LABELS BUILD-SET FDOES> ;
+endstruct
+
 \ Contains labels, i.e. dea's of things that leave a number
-   1000 SET LABELS   LABELS !SET
+1000 LABELSTRUCT PLAIN-LABELS        LABELS !SET
 
 \ Associate ADDRES with "NAME". (Store it in ``LABELS'')
 : LABEL   CONSTANT   LATEST LABELS SET+! ;
