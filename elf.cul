@@ -74,8 +74,12 @@ e_version e_ehsize      -dl-
 e_ehsize  e_headerend   -dw-
 p_type    p_headerend   -dl-
 
-e_ident p_filesz L@ + LABEL _end
-_end e_ident - EQU filesz
+p_filesz L@ EQU filesz
+p_vaddr L@ EQU  filest
+filest filesz + LABEL _end
 
 e_entry  L@ LABEL _start
+
+\ Crawl using elf's information. In rare case it is ill-advised
+\ to do it automatically.
 : ELF-CRAWL   _start CRAWL ;
