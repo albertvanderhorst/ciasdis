@@ -1,0 +1,62 @@
+( $Id$ )
+( Copyright{2004}: Albert van der Horst, HCC FIG Holland by GNU Public License)
+
+\ Consult file for ciasdis. (See man 5 cul).
+\ In behalf of analysing Windows exe files.
+
+0 -ORG-         \ Preliminary, to find out.
+0 TARGET>HOST 2 "MZ" $= 0 = "Fatal, not an ex header!" ?ABORT
+08  W@  10 *    NEGATE DUP -ORG-
+
+DUP LABEL exHeaderStart
+DUP LABEL exSignature        2 +
+DUP LABEL exExtrabytes       2 +
+DUP LABEL exPages            2 +
+DUP LABEL exRelocItems       2 +
+DUP LABEL exHeaderSize       2 +
+DUP LABEL exMinAlloc         2 +
+DUP LABEL exMaxAlloc         2 +
+DUP LABEL exInitSS           2 +
+DUP LABEL exInitSp           2 +
+DUP LABEL exCheckSum         2 +
+DUP LABEL exInitIP           2 +
+DUP LABEL exInitCS           2 +
+DUP LABEL exRelocTable       2 +
+DUP LABEL exOverlay          2 +
+    LABEL exHeaderEnd
+
+exHeaderStart exHeaderEnd -dw: exHeader
+
+exInitIP W@ exInitCS W@ 10 * + LABEL exEntry
+exHeaderStart 3C + L@   exHeaderStart + LABEL coffHeaderStart
+
+coffHeaderStart TARGET>HOST 2 "PE" $= 0 = "Fatal, not a windows header!" ?ABORT
+
+\ Coff File Header.
+14C LABEL IMAGE_FILE_MACHINE_I386
+coffHeaderStart   4 +
+DUP LABEL fhMachine                  2 +
+DUP LABEL fhNumberOfSections         2 +
+DUP LABEL fhTimeDateStamp            4 +
+DUP LABEL fhPointerToSymbolTable     4 +
+DUP LABEL fhNumberOfSymbols          4 +
+DUP LABEL fhSizeOfOptionalHeader     2 +
+DUP LABEL fhCharacteristics          2 +
+    LABEL fhcoffHeaderEnd
+
+fhMachine W@ IMAGE_FILE_MACHINE_I386 <>
+    "Fatal, this is an Intel 386 Pentium disassembler only!" ?ABORT
+fhCharacteristics W@ 2000 AND "Fatal, cannot handle dll's yet!" ?ABORT
+
+exEntry         exEntry 0E +   -dc16-
+exEntry 0E +    exEntry 40 +   -d$-
+
+coffHeaderStart         fhMachine               -d$-
+fhMachine               fhTimeDateStamp         -dw-
+fhTimeDateStamp         fhSizeOfOptionalHeader  -dl-
+fhSizeOfOptionalHeader  fhcoffHeaderEnd         -dw-
+
+\ Crawl the exe header. In rare case it is ill-advised
+\ to do it automatically.
+\ : EXE-CRAWL   coffHeaderStart CRAWL ;
+\ EXE-CRAWL
