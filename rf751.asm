@@ -21,7 +21,7 @@ BITS-32
 ( 0804,8030 )   :e_shnum   dw 0000 
 ( 0804,8032 )   :e_shstrndx   dw 0000 
 
-( 0804,8034 )   :e_headerend   dl 1 
+( 0804,8034 )   :e_headerend :p_type   dl 1 
 ( 0804,8038 )   :p_offset   dl 54 
 ( 0804,803C )   :p_vaddr   dl p_headerend 
 ( 0804,8040 )   :p_paddr   dl p_headerend 
@@ -30,7 +30,7 @@ BITS-32
 ( 0804,804C )   :p_flags   dl 7 
 ( 0804,8050 )   :p_align   dl 1000 
 
-( 0804,8054 )   :p_headerend    CALL, L0804,8191 RL,
+( 0804,8054 )   :p_headerend :filest :_start    CALL, L0804,8191 RL,
 ( 0804,8059 )                  CALL, L0804,81B0 RL,
 ( 0804,805E )   :H_emit   dl 0 X_emit 
 
@@ -73,11 +73,11 @@ BITS-32
 
 ( 0804,80BB )   :N_bye   d$  3  "bye"
 
-( 0804,80BF )   :X_bye    SUB, X| F| BX'| R| BX| 
+( 0804,80BF )   :X_bye :X_bye    SUB, X| F| BX'| R| BX| 
 ( 0804,80C1 )                  MOV, X| F| BX'| R| AX| 
 ( 0804,80C3 )                  INC|X, AX| 
 ( 0804,80C4 )                  INT, 80 IB, 
-( 0804,80C6 )   :H_syscall   dl H_bye X_syscall 
+( 0804,80C6 )   :H_syscall :H_syscall   dl H_bye X_syscall 
 
 ( 0804,80CE )   :N_syscall   d$  7  "syscall"
 
@@ -596,7 +596,7 @@ BITS-32
 ( 0804,85D4 )   :X_:    CALL, X_create RL,
 ( 0804,85D9 )                  SUBSI, MEM| V_h0 L, 5 IS, 
 ( 0804,85E0 )                  JMP, X_] RL,
-( 0804,85E5 )   :last_dea_macro   dl H_m; X_mliteral 
+( 0804,85E5 )   :last_dea_macro :H_mliteral   dl H_m; X_mliteral 
 
 ( 0804,85ED )   :N_mliteral   d$  7  "literal"
 
@@ -758,7 +758,7 @@ BITS-32
 ( 0804,8794 )   :X_d0    CALL, dovar RL,
 ( 0804,8799 )   :V_d0   dl d0 
 
-( 0804,879D )   :last_dea_forth   dl H_d0 X_base 
+( 0804,879D )   :last_dea_forth :H_base   dl H_d0 X_base 
 
 ( 0804,87A5 )   :N_base   d$  4  "base"
 
@@ -877,4 +877,4 @@ BITS-32
 ( 0804,9160 )                 d$  ": .version s"" RetroForth "" type" ^J
 ( 0804,9180 )                 d$  "  version# rot . del '. emit swap . del '. emit . cr ;" ^J
 
-( 0804,91B7 )   :tib 
+( 0804,91B7 )   :tib :_end 
