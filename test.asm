@@ -12,4 +12,5 @@ MOV, X| T| DI'| MEM| XXX X,
 MOV, X| T| DI'| MEM| QQQ X,
 JMP, XXX _AP_ 4 + - (RX,)
 JMP, XXX RX,
+JMP, XXX 1- RX,
 PREVIOUS

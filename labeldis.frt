@@ -85,7 +85,7 @@ VARIABLE C
 \D AAP 0 HOST>TARGET - ADORN-WITH-LABEL  CR
 
 ( ----------------------------------                                    )
-\ asi386 dependant part, doesn't belong here
+( asi386 dependant part, doesn't belong here                            )
 
 ALSO ASSEMBLER DEFINITIONS
 ( Print X as a symbolic label if possible, else as a number             )
@@ -99,9 +99,41 @@ ALSO ASSEMBLER DEFINITIONS
     %ID.                         ( DEA -- )
 ;
 
-\D NOOT 1- .LABEL/. CR
-\D NOOT .LABEL/. .S CR
+(  For DEA print the name without the surrounding brackets.             )
+: ID.-NO()   >NFA @ $@  2 - SWAP 1 + SWAP TYPE ;
+
+(  Assuming the disassembly sits at the offset of a relative branch     )
+(  assembled by commaer DEA , return the host space ADDRESS of the next )
+(  instruction.                                                         )
+: NEXT-INSTRUCTION  >CNT @ POINTER @ + ;
+
+(  Assuming the disassembly sits at the offset of a relative branch     )
+(  assembled by commaer DEA , return that OFFSET.                       )
+: GET-OFFSET   POINTER @ SWAP >CNT @ MC@ ;
+
+( For the commaer DEA return ADDRESS in host space that is the target   )
+( of the current relative jump.                                         )
+: GOAL-RB   DUP GET-OFFSET SWAP NEXT-INSTRUCTION + ;
+
+( For the relative branch commaer DEA print the target ADDRESS as a     )
+( symbolic label if possible else print the branch offset, followed     )
+( by an appropriate commaer for each case.                              )
+: .BRANCH/.
+  >LABEL DUP IF   ID. ID.-NO() ELSE   DROP DUP GET-OFFSET . %ID. THEN  ;
+
+( Print a disassembly for a relative branch DEA .                       )
+( This relies on the convention that the commaer that consumes an       )
+( absolute address has the name of that with a relative address         )
+( surrounded with brackets.                                             )
+: .COMMA-RX
+   DUP  DUP GOAL-RB HOST>TARGET  .BRANCH/.
+   >CNT @ POINTER +! ;
+
+\D NOOT .LABEL/. CR
+\D NOOT .LABEL/. CR
+\D '(RB,) ID.-NO() CR
 
 '.COMMA-LABEL   'X, >DIS !
+'.COMMA-RX      '(RX,) >DIS !
 
 PREVIOUS DEFINITIONS
