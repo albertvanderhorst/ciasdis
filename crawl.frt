@@ -309,6 +309,20 @@ NORMAL-DISASSEMBLY
 : CRAWL   DUP ?INSERT-EQU?   SECTION-LABELS SORT-LABELS
     STARTERS DUP !BAG BAG+!   (CRAWL) ;
 
+\ ------------------------ dl section  ------------------------------
+
+\ For ADDR create a label if it points in the target space.
+: NEW-LABEL?    DUP PLAUSIBLE-LABEL? IF ?INSERT-EQU? _ THEN DROP ;
+
+\ For dl-section from ADDR1 to ADDR2 add all plausible labels found in data.
+: ADD-L-LABELS   SWAP DO   I L@ NEW-LABEL?   0 CELL+ +LOOP ;
+
+\ For all dl-sections add all plausible labels.
+: ALL-L-LABELS
+    SECTION-LABELS DO-LAB   I CELL+ @ EXECUTE
+        DIS-XT 'DUMP-L =   IF   DIS-START DIS-END ADD-L-LABELS   THEN
+    LOOP-LAB ;
+
 \ ------------------------ INTEL 80386 ------------------------------
 \ Intel specific. There is a need to specify the disassembly xt.
 \ Crawl with normal disassembly (observing `` TALLY-BA '')

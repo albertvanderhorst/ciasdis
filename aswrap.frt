@@ -39,8 +39,11 @@ VARIABLE (TARGET-START)
 : TARGET-START (TARGET-START) @ ;
 
 \ Use only while disassembling.
-\ Return the END of the file as a target address.
+\ Return the END of the file as a target address (non-inclusive).
 : TARGET-END   TARGET-START   CP @ CODE-SPACE - + ;
+
+\ For ADDR return "it IS a pointing into the target space"
+: PLAUSIBLE-LABEL?    TARGET-START TARGET-END WITHIN ;
 
 \ Use only while disassembling.
 \ The end of the code area while disassembling: a host address.

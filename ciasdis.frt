@@ -72,7 +72,7 @@ REQUIRE DUMP
 \ Using (only) information from file with NAME,
 \ disassemble the current program as stored in the ``CODE-BUFFER''.
 : CONSULTED   INIT-ALL   HEX INCLUDED ( file)   SORT-ALL
-    PLUG-HOLES DISASSEMBLE-TARGET DECIMAL ;
+    PLUG-HOLES ALL-L-LABELS DISASSEMBLE-TARGET DECIMAL ;
 
 \ Consult "file" as per ``CONSULT''
 : CONSULT   (WORD) CONSULTED ;
