@@ -6,10 +6,10 @@ HEX INIT-ALL
 INCLUDE elf.cul
 
 0804,A0DC EQU semis
-0804,F82C EQU last_dea
+0804,B7AC EQU semiscode
 0804,A664 EQU docol
-
-docol CRAWL
+0804,F82C EQU last_dea          \ TASK
+0804,95C4 EQU last_dea_envir
 
 \ Align an address in the host space.
 : hALIGN 1- 3 OR 1+ ;
@@ -22,11 +22,14 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 : >N_  "N_" PRE-PEND ;
 
 \ ADDRESS points to a valid name. Add a label to address the name.
-: ADD-NAME-LABEL   DUP th $@ >N_ LABELED ;
+: ADD-NAME-LABEL   DUP th $@ >N_ 2DUP TYPE LABELED ;
 
-\ ADDRESS points to a valid dea. Add a label to address the dea.
+\ ADDRESS points to a valid dea. Add a label to address the dea(xt)
+\ and the datafield.
 \ Assume that just before the dea's name has been analysed.
-: ADD-DEA-LABEL   &D NAME-BUFFER CELL+ C!  NAME-BUFFER $@ LABELED ;
+: ADD-DEA-LABEL   &X NAME-BUFFER CELL+ C!   DUP NAME-BUFFER $@ LABELED
+                   &H NAME-BUFFER CELL+ C!
+      4 + L@ NAME-BUFFER $@ LABELED ;
 
 \ ADDRESS points to a valid name.
 \ Add an anonymous section to disassemble the name.
@@ -39,25 +42,31 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 \ Add the information that ADDRESS is a nfa.
 : IS-A-NAME L@ DUP IF DUP ADD-NAME-LABEL ADD-NAME-SECTION _ THEN DROP ;
 
+\ The CONTENT of address indicates : "This IS not yet the end of
+\ high level code".
+: STILL-CODE?   >R   R@ semis <>  R@ semiscode <>   AND RDROP ;
+
 \ Add the information that ADDRESS points to high level code.
-: IS-HIGH-LEVEL DUP BEGIN DUP L@ semis <> WHILE 4 + REPEAT 4 + -dl- ;
+: IS-HIGH-LEVEL DUP BEGIN DUP L@ STILL-CODE? WHILE 4 + REPEAT 4 + -dl- ;
 
 \ For CFA : "it POINTS to the high level interpreter"
 : IS-DOCOL?   L@ docol = ;
 
 \ Accumulate the information that ADDRESS contains a code field address.
-: IS-A-CFA   DUP IS-DOCOL? IF 4 + L@ IS-HIGH-LEVEL ELSE L@ CRAWL THEN ;
+: IS-A-CFA   DUP L@ CRAWL   DUP IS-DOCOL? IF 4 + L@ IS-HIGH-LEVEL _ THEN DROP ;
 
 \ Accumulate the information that DEA is a dea.
 : IS-A-DEA   DUP 8 + L@ 1 AND IF DROP EXIT THEN \ Dummy field
              DUP IS-A-CFA   DUP 10 + IS-A-NAME
              DUP ADD-DEA-SECTION   ADD-DEA-LABEL ;
 
-
 \ Accumulate the information from DEA as a wid, follow the link field.
-: IS-A-WID BEGIN DUP IS-A-DEA 0C + L@ DUP 0= UNTIL DROP ;
-\ EXIT
-last_dea IS-A-WID
+: CRAWL-WID BEGIN DUP IS-A-DEA 0C + L@ DUP 0= UNTIL DROP ;
 
-\ MAKE-CUL
-\ DISASSEMBLE-ALL
+last_dea_envir CRAWL-WID
+last_dea CRAWL-WID
+
+SORT-ALL
+PLUG-HOLES
+MAKE-CUL
+DISASSEMBLE-ALL
