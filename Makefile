@@ -635,22 +635,25 @@ test.bin : cidis cias test.asm test.cul
 	rcsdiff -r$(RCSVERSION) test.bin
 	rcsdiff -b -B -r$(RCSVERSION) test2.asm
 
-lina405.asm : cidis lina405 lina405equ.cul lina405.cul
+lina405.asm : cidis lina405equ.cul lina405.cul
+	make lina405
 	cidis lina405 lina405.cul| sed -e 's/. DROP-THIS//' >$@
 	cias lina405.asm lina405
 	rcsdiff -r$(RCSVERSION) lina405
 	rcsdiff -b -B -r$(RCSVERSION) lina405.asm
 
 # Test case, reverse engineer retroforth version 7.5.1.
-rf751.cul : cidis rf751 rf751equ.cul rfcrawl.cul
+rf751.cul : cidis rf751equ.cul rfcrawl.cul elf.cul
+	make rf751
 	echo FETCH rf751 INCLUDE rfcrawl.cul | cidis >$@
 	rcsdiff -bBw -r$(RCSVERSION) $@
 
 rf751.asm : cidis rf751 rf751equ.cul rf751.cul
+	make rf751
 	cidis rf751 rf751.cul| sed -e 's/. DROP-THIS//' >$@
+	rcsdiff -bBw -r$(RCSVERSION) rf751.asm
 	cias rf751.asm rf751
 	rcsdiff -r$(RCSVERSION) rf751
-	rcsdiff -bBw -r$(RCSVERSION) rf751.asm
 
 %.bin : %.asm ; cias $< $@
 
