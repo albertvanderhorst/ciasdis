@@ -44,8 +44,8 @@ ES:,
 JMPS, 8 (RB,)
 JMP, 8 (RX,)
 CALL, 8 (RX,)
-RETFAR+, 8 W,
-RET+, 8 W,
+RETFAR+, 8 OW,
+RET+, 8 OW,
 JMPFAR, 8 X, C SG,
 CALLFAR, 8 X, C SG,
 INT, 8 IB,

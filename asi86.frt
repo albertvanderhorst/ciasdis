@@ -7,10 +7,8 @@
 ( ############## 8086 ASSEMBLER ADDITIONS ############################# )
 ( The patch for the assembler doesn't belong in the generic part        )
 ( To be used when overruling, e.g. prefix)
-: lsbyte, DUP AS-C, 0008 RSHIFT ;
 : W, lsbyte, lsbyte, DROP ;
 : L, lsbyte, lsbyte, lsbyte, lsbyte, DROP ;
-: IS, AS-C, ;
 ( There are some fixups-from-reverse that are larger than 2 l bytes.    )
 ( Using the out of mask bit trick, that has to be eliminated.           )
 ." This 8086 assembler runs only on 32 bits systems!" CR
@@ -18,16 +16,16 @@
 ( ############## 8086 ASSEMBLER PROPER ################################ )
 ( The decreasing order means that a decompiler hits them in the         )
 ( right order                                                           )
-0 0 CELL+  0 8000 ' AS-,  >CFA  COMMAER (RX,) ( cell relative to IP )
+0 0 CELL+  0 8000 ' L,  >CFA  COMMAER (RX,) ( cell relative to IP )
 0 1        0 4000 ' AS-C, >CFA  COMMAER (RB,) ( byte relative to IP )
 0 2        0 2000 ' W, >CFA  COMMAER SG,   (  Segment: WORD      )
 0 1        0 1000 ' AS-C, >CFA  COMMAER P,    ( port number ; byte     )
 0 1        0  800 ' AS-C, >CFA  COMMAER IS,   ( immediate byte data, obligatory size)
-0 0 CELL+  2  400 ' AS-,  >CFA  COMMAER IX,   ( immediate data : cell)
+0 0 CELL+  2  400 ' L,  >CFA  COMMAER IX,   ( immediate data : cell)
 0 1        1  400 ' AS-C, >CFA  COMMAER IB,   ( immediate byte data)
 0 0 CELL+  8  200 ' AS-,  >CFA  COMMAER X,    ( immediate data : address/offset )
 0 1        4  200 ' AS-C, >CFA  COMMAER B,    ( immediate byte : address/offset )
-0 2        0  100 ' W, >CFA  COMMAER W,    ( obligatory word     )
+0 2        0  100 ' W, >CFA  COMMAER OW,    ( obligatory word     )
 ( Bits in TALLY  1 OPERAND IS BYTE     2 OPERAND IS CELL                )
 (                4 OFFSET   DB|        8 ADDRESS      DW|               )
 ( By setting 20 an opcode can force a memory reference, e.g. CALLFARO  )
@@ -137,9 +135,6 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 ( You may always want to use these instead of (RB,)
     : RB, ISS @ - (RB,) ;      : RX, ISS @ - (RX,) ;
 (   : RW, ISS @ - (RW,} ;      : RL, ISS @ - (RL,} ;                    )
-(   : D0|  ' [BP] REJECT D0|  ;                                         )
-(   : [BP] ' D0|  REJECT [BP] ;                                         )
-(   : R| ' LES, REJECT 'O LDS REJECT R| ;                               )
 (   : NEXT                                                              )
 (        LODS, W'|                                                      )
 (        MOV, W| F| AX'| R| BX|                                         )

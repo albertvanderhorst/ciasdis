@@ -93,6 +93,7 @@
 ( ############### PART I ASSEMBLER #################################### )
 ( MAYBE NOT PRESENT UTILITIES                                           )
 REQUIRE !CSP         \ To counter design error to eliminate it.
+REQUIRE ALIAS  ( Error in library around @+ )
 REQUIRE @+ ( Fetch from ADDRES. Leave incremented ADDRESS and DATA )
 : !+ >R R@ ! R> CELL+ ; ( Store DATA to ADDRES. Leave incremented ADDRESS)
 ( Fetch from decremented ADDRES. Leave DATA and ADDRESS)
@@ -150,6 +151,7 @@ CREATE TABLE 0 , FF , FFFF , FFFFFF , FFFFFFFF ,
 ( From a MASK leave only SOME first bytes up, return IT                 )
 ( First means lower in memory, this relies on big endian.               )
 : FIRSTBYTES CELLS TABLE + @ AND ;
+: lsbyte, DUP AS-C, 0008 RSHIFT ;
 
 ( ------------- ASSEMBLER, BOOKKEEPING -------------------------------- )
 ( The bookkeeping is needed for error detection and disassembly.        )
@@ -633,9 +635,6 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 : DISASSEMBLE-RANGE
     SWAP   BEGIN (DISASSEMBLE) CR 2DUP > 0= UNTIL   2DROP
 ;
-(   : M| ['] xxx  REJECT M| ;  To forbid M| xxx  in combination      )
-( xxx must be PI or FI not FIR )
-: REJECT> DUP >BI ISS @ @ AND SWAP >DATA @ = 27 ?ERROR ;
 
 ( ********************* DEFINING WORDS FRAMEWORK ********************** )
 ( Close an assembly definition: restore and check.)
