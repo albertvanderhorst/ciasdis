@@ -269,11 +269,11 @@ VARIABLE COMMENT:-TO-BE
 
 \ Print comment at the end of previous instruction.
 : PRINT-OLD-COMMENT:   COMMENT:-TO-BE @ DUP IF
-    "\ " TYPE   $@ TYPE _ THEN DROP ;
+    "\ " TYPE   $@ TYPE _ THEN DROP    INIT-COMMENT: ;
 
 \ Remember what comment to put after the disassembly of ADDRESS .
 : REMEMBER-COMMENT:   COMMENT:-LABELS   HOST>TARGET >LABEL
-    DUP IF CELL+ @ THEN   COMMENT:-TO-BE ! ;
+    DUP IF CELL+ @ COMMENT:-TO-BE ! _ THEN DROP  ;
 
 \D 12 COMMENT: AAP
 \D 115 COMMENT: NOOTJE
@@ -403,9 +403,6 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
     ADORN-WITH-LABEL ;
 
 
-\ Initialise to the start of the code space.
-: NEXT-CUT!   CODE-SPACE NEXT-CUT ! ;
-
 \ For ADDRESS: "it IS at next cut." If so, advance.
 : NEXT-CUT?   NEXT-CUT @ =  DUP IF 16 NEXT-CUT +! THEN ;
 
@@ -424,7 +421,6 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 : CR+dw   "  dw" CR+GENERIC ;
 : CR+dl   "  dl" CR+GENERIC ;
 : CR+d$   "  d$" CR+$ ;
-: CR+LABEL   CR-ADORNED ;
 
 
 \ ---------------- Specifiers of disassembly ranges ----------------------
@@ -446,11 +442,7 @@ class DIS-STRUCT
    M: DIS-RANGE   @ >R DIS-START DIS-END R> EXECUTE M; R> ,       \ End of range
 endclass
 
-\ To be shown at the end of each range.
-        ASSEMBLER
-: SHOW-END AS-POINTER @ CR-ADORNED CR ;
-        PREVIOUS
-
+\ Print the section LAB as a matter of testing.
 : .PAY-SECTION CELL+ @ DUP EXECUTE
    DIS-START H.  SPACE DIS-END H.  " BY " TYPE DIS-XT %ID.  %ID. ;
 
@@ -477,7 +469,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 : ANON-SECTION   NONAME$ SECTION ;
 
 \ Disassemble from target ADDRESS1 to ADDRESS2.
-: D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R SHOW-END ;
+: D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R ;
 
 \ Section ADDRESS1 .. ADDRESS2 is code with name NAME.
 : -dc    2>R 'D-R-T   2R> SECTION ;
@@ -491,7 +483,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 'D-R-T     '-dc:   ARE-COUPLED
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 plain.
-: (DUMP-B)   DO I DUP CR+db C@ 3 .R LOOP CR ;
+: (DUMP-B)   DO I DUP CR+db C@ 3 .R LOOP   PRINT-OLD-COMMENT: CR ;
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-B   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-B) ;
@@ -511,7 +503,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 : W. 0 4 (DH.) TYPE ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2, plain.
-: (DUMP-W)   DO I DUP CR+dw @ SPACE W. 2 +LOOP CR ;
+: (DUMP-W)   DO I DUP CR+dw @ SPACE W. 2 +LOOP   PRINT-OLD-COMMENT: CR ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-W   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-W) ;
@@ -528,7 +520,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 'DUMP-W    '-dw:   ARE-COUPLED
 
 \ Dump words from target ADDRESS1 to ADDRESS2.
-: (DUMP-L)   DO I DUP CR+dl @ SPACE .LABEL/. 4 +LOOP CR ;
+: (DUMP-L)   DO I DUP CR+dl @ SPACE .LABEL/. 4 +LOOP PRINT-OLD-COMMENT: CR   ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-L) ;
@@ -549,7 +541,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 : (DUMP-$)
     DO  I CR+d$
         I C@ IS-PRINT   IF I ACCU-$C+ ELSE I C@ .C THEN
-    LOOP  .ACCU ;
+    LOOP  .ACCU   PRINT-OLD-COMMENT: CR ;
 
 \D "AAP" $, ^J C, ^M C, &A C, &A C, BL C, &P C, 0 C, 1 C, BL C, 2 C, 3 C,
 \D HERE
@@ -584,10 +576,12 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ the end of the input file.
 : HOW-FIT-END    TARGET-END .HOW-FIT ;
 
-\ Disassemble all those sectors as if they were code.
-: DISASSEMBLE-ALL   NEXT-CUT!   TARGET-START
+\ Disassemble all those sectors with their own disassemblers.
+\ No section will print their end labels, which is no problem if everything
+\ fits, except for the last section. Do that expressly.
+: DISASSEMBLE-ALL   TARGET-START
     SECTION-LABELS DO-LAB I CELL+ @ EXECUTE   HOW-FIT DIS-RANGE LOOP-LAB
-    HOW-FIT-END ;
+    HOW-FIT-END   HOST-END CR-ADORNED ;
 
 \ ------------------- Generic again -------------------
 
@@ -596,7 +590,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 : (ADORN-ADDRESS)       DUP CR-ADORNED   REMEMBER-COMMENT: ;
 
 \ Revector ``ADORN-ADDRESS'' used in "asgen.frt".
-'CR-ADORNED >DFA @   'ADORN-ADDRESS >DFA !
+'(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !
 
 \ Initialise all registered labelclasses.
 : INIT-ALL   THE-REGISTER DO-BAG   I @ EXECUTE LABELS !BAG   LOOP-BAG
@@ -636,7 +630,7 @@ ASSEMBLER
 (                       SECTIONS                                        )
 
 \ Disassemble from target ADDRESS1 to ADDRESS2 as 16 bit.
-: D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" TYPE SHOW-END ;
+: D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" TYPE ;
 
 \ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name NAME.
 : -dc16    2>R 'D-R-T-16   2R> SECTION ;
