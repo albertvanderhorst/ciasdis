@@ -649,11 +649,13 @@ ciasdis : $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
 cias : ciasdis ; ln -f ciasdis cias
 cidis : ciasdis ; ln -f ciasdis cidis
 
-test.bin : cidis cias test.asm test.cul  ;
-	cias test.asm test.bin;
-	cidis test.bin test.cul > test2.asm;
-	cias test2.asm test2.bin;
-	cmp test.bin test2.bin && cmp test.bin testresults/test.bin
+test.bin : cidis cias test.asm test.cul
+	cias test.asm test.bin
+	cidis test.bin test.cul > test2.asm
+	cias test2.asm test2.bin
+	diff test2.bin test.bin
+	rcsdiff -r$(RCSVERSION) test.bin
+	rcsdiff -r$(RCSVERSION) test2.asm
 
 lina405.asm : cidis lina405 lina405equ.cul lina405.cul lina405.asm.cmp
 	cidis lina405 lina405.cul| sed -e 's/. DROP-THIS//' >$@
@@ -668,4 +670,4 @@ cidis386.zip : $(ASSRC) asi386.frt asipentium.frt ;  zip $@ $+
 testciasdis : test.bin lina405.asm
 
 # -----------------
-regressiontest : testasses testciasdis
+regressiontest : testasses testciasdis l
