@@ -9,7 +9,7 @@
 REQUIRE H.
 REQUIRE BAG
 
-: \D ;
+\ : \D ;
 
 \ Insert the equ-label ADDRESS1 with an NAME.
 \ If equ labels was sorted, it remains so.
@@ -285,7 +285,7 @@ NORMAL-DISASSEMBLY
 \ Add the information that ADDRESS1 to ADDRESS2 is a code section.
 \ If section labels was sorted, it remains so.
 : INSERT-SECTION   OVER SECTION-LABELS WHERE-LABEL >R
-    REQUIRED-XT 'CR+LABEL ANON-SECTION   R@ ROLL-LABEL   R> COLLAPSE(I1) ;
+    REQUIRED-XT ANON-SECTION   R@ ROLL-LABEL   R> COLLAPSE(I1) ;
 
 \ Analyse the code range from ADDRESS up to an unconditional transfer.
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.
