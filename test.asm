@@ -2,7 +2,7 @@
 
 ASSEMBLER
 1278 ORG
-    CLD,
+    CLD,                  \ First instruction
     MOV, X| T| DI'| MEM| XXX X,
 :QQQ
     POP|ES,

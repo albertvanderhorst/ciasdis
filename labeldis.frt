@@ -28,15 +28,16 @@ struct LABELSTRUCT
   F: LABELS HERE CELL+ , 2* CELLS ALLOT FDOES> ;
 endstruct
 
-\ For I return the ith LABEL . 1 returns the first label.
+\ For I return the ith label . 1 returns the first label.
 \ All indices are compatible with this.
 : LABELS[]   1- 2* CELLS LABELS CELL+ + ;
 
-\ Print the name of the LABEL at address.
+\ Print the name of the label at ADDRESS.
 : .LAB     CELL+ @ $@ TYPE   3 SPACES ;
 
-\ Print the names and values of the LABELS ( a bag as ``LABELS'').
-: .LABELS @+ SWAP ?DO I @ .  I .LAB CR 2 CELLS +LOOP ;
+\ Print the addresses and values of the labels, provided the
+\ payloads are strings.
+: .LABELS  LABELS @+ SWAP ?DO I @ .  I .LAB CR 2 CELLS +LOOP ;
 
 \ For return LOWER and UPPER indices of the labels , inclusive.
 \ The lower index is 1 and the upper index is corresponding.
@@ -84,7 +85,7 @@ VARIABLE C
 
 \ Adorn the ADDRESS we are currently disassembling with a named label
 \ if any.
-: ADORN-WITH-LABEL   HOST>TARGET  >LABEL DUP IF
+: ADORN-WITH-LABEL   PLAIN-LABELS HOST>TARGET  >LABEL DUP IF
     &: EMIT .LAB CR _   THEN DROP ;
 
 \D 12 LABEL AAP
@@ -92,9 +93,9 @@ VARIABLE C
 \D 2 LABEL MIES
 \D 123 LABEL POPI
 
-\D LABELS .LABELS CR
+\D .LABELS CR
 \D SORT-LABELS
-\D LABELS .LABELS CR
+\D .LABELS CR
 
 \D 200 FIND-LABEL . CR
 \D 12 FIND-LABEL  LABELS[] .LAB CR
@@ -104,12 +105,56 @@ VARIABLE C
 \D 12 ADORN-WITH-LABEL  .S CR  \ Should give zero, not found!
 \D 12 0 HOST>TARGET - ADORN-WITH-LABEL  CR
 
+\ ---------------- Comment till remainder of line ------------------------------
+
+\ Contains comment labels, i.e. structs as associate with ``LABEL''
+1000 LABELSTRUCT COMMENT:-LABELS LABELS !SET
+
+\ Generate a comment label at ADDRESS. A pointer to the
+\ remainder of the line is the payload.
+: COMMENT:   COMMENT:-LABELS   LABELS SET+!  ^J (PARSE) $, LABELS SET+! ;
+
+\ Remember the comment at the end of this instruction.
+\ Zero means no comment.
+VARIABLE COMMENT:-TO-BE
+
+\ Initialise to no comment.
+: INIT-COMMENT:   0 COMMENT:-TO-BE ! ;
+
+  INIT-COMMENT:
+
+\ Print comment at the end of previous instruction.
+: PRINT-OLD-COMMENT:   COMMENT:-TO-BE @ DUP IF
+    "\ " TYPE   $@ TYPE _ THEN DROP ;
+
+\ Remember what comment to put after the disassembly of ADDRESS .
+: REMEMBER-COMMENT:   COMMENT:-LABELS   HOST>TARGET >LABEL
+    DUP IF CELL+ @ THEN   COMMENT:-TO-BE ! ;
+
+\D 12 COMMENT: AAP
+\D 115 COMMENT: NOOTJE
+\D 2 COMMENT: MIES
+\D 123 COMMENT: POPI
+
+\D .LABELS CR
+\D SORT-LABELS
+\D .LABELS CR
+
+\D 200 FIND-LABEL . CR
+\D 12 FIND-LABEL  LABELS[] .LAB CR
+\D 12 1- FIND-LABEL  LABELS[] .LAB CR
+\D 12 >LABEL .LAB CR
+\D 12 1- >LABEL H. CR
+
+\D 12 REMEMBER-COMMENT: PRINT-OLD-COMMENT: CR  \ Should give nothing, not found!
+\D 12 0 HOST>TARGET - REMEMBER-COMMENT: PRINT-OLD-COMMENT: CR
+
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
 
 ALSO ASSEMBLER DEFINITIONS
 ( Print X as a symbolic label if possible, else as a number             )
-: .LABEL/.   DUP >LABEL DUP IF .LAB DROP ELSE DROP U. THEN ;
+: .LABEL/.   PLAIN-LABELS DUP >LABEL DUP IF .LAB DROP ELSE DROP U. THEN ;
 
 ( Print a disassembly, for a commaer DEA , taking into account labels,  )
 ( {suitable for e.g. the commaer ``IX,''}                               )
@@ -138,7 +183,7 @@ ALSO ASSEMBLER DEFINITIONS
 ( For the relative branch commaer DEA print the target ADDRESS as a     )
 ( symbolic label if possible else print the branch offset, followed     )
 ( by an appropriate commaer for each case.                              )
-: .BRANCH/.
+: .BRANCH/.  PLAIN-LABELS
   >LABEL DUP IF   .LAB ID.-NO() ELSE   DROP DUP GET-OFFSET . %ID. THEN  ;
 
 ( Print a disassembly for a relative branch DEA .                       )
@@ -170,13 +215,17 @@ PREVIOUS DEFINITIONS
 
 
 \ Print out everything we know about ADDRESS.
-: (ADORN-ADDRESS) ADORN-WITH-LABEL ( .. ADORN-THIS ADORN-THAT ) ;
+: (ADORN-ADDRESS)
+    PRINT-OLD-COMMENT:
+    DUP REMEMBER-COMMENT:
+    CR ADORN-WITH-LABEL ;
 
 \ Revector ``ADORN-ADDRESS'' used in "asgen.frt".
 '(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !
 
 \ Disassemble the current program as stored in the ``CODE-BUFFER''.
 : DISASSEMBLE-TARGET
+    INIT-COMMENT:
     TARGET-START @ .  " ORG" TYPE CR
     CODE-SPACE CP @ D-R
     CP @ ADORN-ADDRESS ;
