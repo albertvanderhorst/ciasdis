@@ -15,23 +15,18 @@
 VARIABLE ISS ( Instruction start )
 
 ( --assembler_postit_fixup_2 ) \ A2oct21 AvdH
-: <POST HERE ISS ! ;
- VARIABLE IDP
-: <FIX HERE IDP ! ; : IHERE IDP @ ;
-: C|, -1 IDP +! IHERE C@ OR IHERE C! ;  ( c.f. C, )
-: C@+ COUNT ;  : C@- 1 - DUP C@ ; ( : C!+ >R R@ ! R> 1+ ;)
-: POST, C@+ C, ;       : FIX| C@- C|, ;
+: C| HERE 1-   DUP >R   C@ OR   R> C! ;  ( c.f. C, )
+' COUNT ALIAS C@+
+: POST, C@+ C, ;
 
 \ If the input is "--" skip it, leave " there WAS no skip".
 : NO--? SOURCE DROP >IN @ + C@ &- = DUP
     IF BL WORD DROP THEN INVERT ;
 
-: 1PI CREATE C, DOES> <POST POST, DROP ;
-: 2PI CREATE C, C, DOES> <POST POST, POST, DROP ;
+: 1PI CREATE C, DOES> POST, DROP ;
+: 2PI CREATE C, C, DOES> POST, POST, DROP ;
 
-: 1FI CREATE C, DOES> 1+ <FIX FIX| DROP ;
-
-: DFI ( 0 LSHIFT) <FIX C|, ;
+: 1FI CREATE C, DOES> C@ C| ;
 
 ( --assembler_postit_fixup_3 ) \ A2oct21 AvdH
 : SPLIT DUP 8 RSHIFT ; ( To handle two bytes at once )
@@ -74,7 +69,9 @@ VARIABLE ISS ( Instruction start )
 
 ( --------------- Handling of the index byte. ------------------------- )
 
-' DFI ALIAS (|#,)    \ Incorporate 5 bit unsigned DATA.
+
+\ This is in fact DFI with a shift of 0.
+' C| ALIAS |#,    \ Incorporate 5 bit unsigned DATA.
 
 20 0 4 1FAMILY| X Y U S
 ( FF ) 9F 1FI [##]
@@ -163,7 +160,7 @@ VARIABLE ISS ( Instruction start )
 
 ( ############## REDEFINITION FOR SAFETY/CONVENIENCE ################# )
 
-: |#, DUP -10 +10 WITHIN 0= ABORT" offset > 5 bits"  1F AND   (|#,) ;
+: |#, DUP -10 +10 WITHIN 0= ABORT" offset > 5 bits"  1F AND   |#, ;
 
 ( ############## ACTUAL GENERATION OF CODE ############################ )
 
