@@ -43,6 +43,7 @@ DUP LABEL fhPointerToSymbolTable        4 +
 DUP LABEL fhNumberOfSymbols             4 +
 DUP LABEL fhSizeOfOptionalHeader        2 +
 DUP LABEL fhCharacteristics             2 +
+DUP LABEL coffOptionalHeaderStart
 DUP LABEL fhMagic                       2 +
 DUP LABEL fhMajorLinkerVersion          1 +
 DUP LABEL fhMinorLinkerVersion          1 +
@@ -51,12 +52,41 @@ DUP LABEL fhSizeOfInitializedData       4 +
 DUP LABEL fhSizeOfUninitializedData     4 +
 DUP LABEL fhAddressOfEntryPoint         4 +
 DUP LABEL fhBaseOfCode                  4 +
-    LABEL coffHeaderEnd
+DUP LABEL coffHeaderEnd
 
 fhMachine W@ IMAGE_FILE_MACHINE_I386 <>
     "Fatal, this is an Intel 86..Pentium disassembler only!" ?ABORT
 fhCharacteristics W@ 2000 AND "Fatal, cannot handle dll's yet!" ?ABORT
 fhMagic W@ 10B <> "Fatal, cannot handle 64 bits address spaces yet!" ?ABORT
+
+\ MS names these thingies "optional file header" though there is nothing
+\ optional about it.
+DUP LABEL ofhBaseOfData                    4 +
+DUP LABEL ofhImageBase                     4 +
+DUP LABEL ofhSectionAlignment              4 +
+DUP LABEL ofhFileAlignment                 4 +
+DUP LABEL ofhMajorOperatingSystemVersion   2 +
+DUP LABEL ofhMinorOperatingSystemVersion   2 +
+DUP LABEL ofhMajorImageVersion             2 +
+DUP LABEL ofhMinorImageVersion             2 +
+DUP LABEL ofhMajorSubsystemVersion         2 +
+DUP LABEL ofhMinorSubsystemVersion         2 +
+DUP LABEL ofhReserved                      4 +
+DUP LABEL ofhSizeOfImage                   4 +
+DUP LABEL ofhSizeOfHeaders                 4 +
+DUP LABEL ofhCheckSum                      4 +
+DUP LABEL ofhSubsystem                     2 +
+DUP LABEL ofhDLL_Characteristics           2 +
+DUP LABEL ofhSizeOfStackReserve            4 +
+DUP LABEL ofhSizeOfStackCommit             4 +
+DUP LABEL ofhSizeOfHeapReserve             4 +
+DUP LABEL ofhSizeOfHeapCommit              4 +
+DUP LABEL ofhLoaderFlags                   4 +
+DUP LABEL ofhNumberOfRvaAndSizes           4 +
+    LABEL coffOptionalHeaderEnd
+
+fhNumberOfSections      W@ CONSTANT NUMBER_OF_SECTIONS
+fhSizeOfOptionalHeader  W@ CONSTANT OPTIONAL_HEADER_SIZE
 
 exEntry 0E +   LABEL NoDosMode$
 exEntry         NoDosMode$      -dc16-
@@ -65,9 +95,15 @@ NoDosMode$      exEntry 40 +    -d$-
 coffHeaderStart         fhMachine               -d$-
 fhMachine               fhTimeDateStamp         -dw-
 fhTimeDateStamp         fhSizeOfOptionalHeader  -dl-
-fhSizeOfOptionalHeader  fhMajorLinkerVersion          -dw-
+fhSizeOfOptionalHeader  fhMajorLinkerVersion    -dw-
 fhMajorLinkerVersion    fhSizeOfCode            -db-
-fhSizeOfCode            coffHeaderEnd           -dl-
+fhSizeOfCode            ofhMajorOperatingSystemVersion     -dl-
+ofhMajorOperatingSystemVersion ofhReserved                 -dw-
+ofhReserved             ofhSubsystem                       -dl-
+ofhSubsystem            ofhSizeOfStackReserve              -dw-
+ofhSizeOfStackReserve   coffOptionalHeaderEnd              -dl-
+
+
 
 \ Crawl the exe header. In rare case it is ill-advised
 \ to do it automatically.
