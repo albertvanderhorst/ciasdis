@@ -54,10 +54,10 @@ testclean: ; rm -f $(TESTTARGETS)
     sed '/SI[MB]/d' |\
     sed '/OK/d' >p$(PREFIX).$@
 
-qr8080.ps  : lina forth.lab ; make as80.ps ; mv p0.as80.ps $@
-qr8086.ps  : lina forth.lab ; make asi86.ps ; mv p0.asi86.ps $@
-p0.asi586.ps  : lina forth.lab  ; make asi586.ps PREFIX=0 MASK=FF
-p0F.asi586.ps : lina forth.lab  ; make asi586.ps PREFIX=0F MASK=FFFF
+qr8080.ps       :; make as80.ps ; mv p0.as80.ps $@
+qr8086.ps       :; make asi86.ps ; mv p0.asi86.ps $@
+p0.asi586.ps    :; make asi586.ps PREFIX=0 MASK=FF
+p0F.asi586.ps   :; make asi586.ps PREFIX=0F MASK=FFFF
 
 do : ci86.mina.msm
 		diff -w ci86.mina.msm orig/FORTH > masm.dif ||true
