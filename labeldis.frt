@@ -529,7 +529,7 @@ endstruct
 : SORT-ALL   THE-REGISTER DO-BAG   I @ EXECUTE SORT-LABELS   LOOP-BAG ;
 
 \ Decompile all labels of current labelstruct.
-: DECOMP-ONE  LAB-UPB 1+ 1 ?DO I DECOMP CR LOOP ;
+: DECOMP-ONE  LAB-UPB 1+ 1 ?DO I DECOMP LOOP ;
 
 \ Generate the source of all labelstructs.
 : DECOMP-ALL THE-REGISTER DO-BAG   I @ EXECUTE DECOMP-ONE   LOOP-BAG ;
