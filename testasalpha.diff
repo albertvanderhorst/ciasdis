@@ -1,4 +1,4 @@
-1,2542d0
+1,2542c1,10
 <  0044 0060 00F8 1F60 00F8 0760 00F8 0060 |.D.`...`...`...`|
 <  0000 0060 00F0 E063 00F0 E060 00F0 0060 |...`...c...`...`|
 <  00C0 E063 00C0 E060 00C0 0060 00E0 E063 |...c...`...`...c|
@@ -2541,3 +2541,25 @@
 <  0000 E040 1F00 1F40 0700 1F40 0000 1F40 |...@...@...@...@|
 <  1F00 0740 0700 0740 0000 0740 1F00 0040 |...@...@...@...@|
 <  0700 0040 0000 0040 0000 0000 0000 0000 |...@...@........|
+---
+> \ Testing the DEC Alpha assembler/disassembler
+> REQUIRE DUMP
+> REQUIRE ALIAS
+> '$@ ALIAS @+
+> 
+> ASSEMBLER
+> !TALLY
+> HEX
+> 10 HERE 10 MOD - ALLOT ( To get a nice DUMP)
+> HERE
+12708a10177,10186
+> 
+> 
+> HERE
+> 0 , 0 , 0 , 0 ,
+> ." Padding"
+> ." TEST STARTS HERE"
+> 2DUP OVER - DUMP
+> 2DUP OVER - "testsetalpha.bin" PUT-FILE
+> DISASSEMBLE-RANGE
+> BYE
