@@ -34,13 +34,13 @@ AS:, JMP, XXX RW,
 OS:,
     LEA, AX'| XO| [AX +4* AX] #13 L,
 AS:,
-    LEA, AX'| XO| [BX+SI]' #14 W,
+    LEA, AX'| XO| [BX+SI]% #14 W,
 AS:,
 OS:,
-    LEA, AX'| XO| [BX+SI]'   #15    W,
+    LEA, AX'| XO| [BX+SI]%   #15    W,
 OS:,
 AS:,
-    LEA, AX'| XO| [BX+SI]'   #16 W,
+    LEA, AX'| XO| [BX+SI]%   #16 W,
     RET,
 BITS-32
 INC|X,  AX|
@@ -50,9 +50,9 @@ OS:,
     MOVI,   X|   XO|   [BX]   #14 L,   #18 IW,
 INC|X,  AX|
 AS:,
-    MOVI,   X|   XO|   [BX]'   #20 W,   #24 IL,
+    MOVI,   X|   XO|   [BX]%   #20 W,   #24 IL,
 AS:, OS:,
-    MOVI,   X|   XO|   [BX]'   #20 W,   #24 IW,
+    MOVI,   X|   XO|   [BX]%   #20 W,   #24 IW,
     RET,
 BITS-16
 INC|X,  AX|
@@ -63,8 +63,8 @@ AS:,
     MOVI,   X|   XO|   [BX]   #14 L,   #18 IW,
 INC|X,  AX|
 OS:,
-    MOVI,   X|   XO|   [BX]'   #20 W,   #24 IL,
-    MOVI,   X|   XO|   [BX]'   #20 W,   #24 IW,
+    MOVI,   X|   XO|   [BX]%   #20 W,   #24 IL,
+    MOVI,   X|   XO|   [BX]%   #20 W,   #24 IW,
     RET,
 BITS-32
 \ YYY is a target for forward jumps:
