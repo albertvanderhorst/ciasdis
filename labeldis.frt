@@ -149,6 +149,40 @@ VARIABLE COMMENT:-TO-BE
 \D 12 REMEMBER-COMMENT: PRINT-OLD-COMMENT: CR  \ Should give nothing, not found!
 \D 12 0 HOST>TARGET - REMEMBER-COMMENT: PRINT-OLD-COMMENT: CR
 
+\ ---------------- Multiple line comment in front ----------------------------
+
+\ Contains comment labels, i.e. structs as associate with ``LABEL''
+1000 LABELSTRUCT MCOMMENT-LABELS LABELS !SET
+
+\ Make STRING the comment in front of label at ADDRESS. A pointer to this
+\ string the payload.
+: COMMENT   MCOMMENT-LABELS   LABELS SET+!  $, LABELS SET+! ;
+
+\ Print comment for instruction at ADDRESS , if any.
+: PRINT-COMMENT MCOMMENT-LABELS  HOST>TARGET  >LABEL DUP IF
+   CR   "\ " TYPE   .LAB _ THEN DROP ;
+
+\D "AAP" 12 COMMENT
+\D "NOOT" 5 COMMENT
+\D "MIES" 2 COMMENT
+\D "POPI
+JOPI"
+123 COMMENT
+
+\D .LABELS CR
+\D SORT-LABELS
+\D .LABELS CR
+
+\D 200 FIND-LABEL . CR
+\D 12 FIND-LABEL  LABELS[] .LAB CR
+\D 12 1- FIND-LABEL  LABELS[] .LAB CR
+\D 12 >LABEL .LAB CR
+\D 12 1- >LABEL H. CR
+
+\D 12 PRINT-COMMENT CR  \ Should give nothing, not found!
+\D 12 0 HOST>TARGET - PRINT-COMMENT CR
+
+
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
 
@@ -217,6 +251,7 @@ PREVIOUS DEFINITIONS
 \ Print out everything we know about ADDRESS.
 : (ADORN-ADDRESS)
     PRINT-OLD-COMMENT:
+    DUP PRINT-COMMENT
     DUP REMEMBER-COMMENT:
     CR ADORN-WITH-LABEL ;
 

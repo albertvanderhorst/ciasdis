@@ -1,5 +1,11 @@
 \ 1278 ORG
+"Here it all starts
+\ Fasten Your Seat Belts (tm)"   
+1278 COMMENT
+
 1278 COMMENT: First instruction
 1285  LABEL QQQ
+"XXX is a target for backward jumps:" 1294 COMMENT
 1294  LABEL XXX
+"YYY is a target for forward jumps:" 1337 COMMENT 
 1337  LABEL YYY
