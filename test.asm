@@ -40,6 +40,15 @@ OS:,
 AS:,
     LEA, AX'| DW| [BX+SI]'   16 W,
 INC|X,  AX|
+    MOVI,   X|   DW|   [BX]   14 L,   18 IL,
+INC|X,  AX|
+OS:,
+    MOVI,   X|   DW|   [BX]   14 L,   18 IW,
+INC|X,  AX|
+AS:,
+    MOVI,   X|   DW|   [BX]'   20 W,   24 IL,
+AS:, OS:,
+    MOVI,   X|   DW|   [BX]'   20 W,   24 IW,
 \ YYY is a target for forward jumps:
 :YYY
 
