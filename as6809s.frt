@@ -164,3 +164,9 @@ HEX
 : CODE CREATE -3 ALLOT HIDE ( ALSO ASSEMBLER) ;
 
 : END-CODE REVEAL ( PREVIOUS ) ;
+
+: ;CODE REVEAL POSTPONE (DOES>)   POSTPONE [   ; IMMEDIATE
+
+\ Example of usage
+\ : var  CREATE 0 ,
+\     ;CODE LDX, [] ,R S   STD, [] ,R S   TFR, X== =>D   NEXT, ;
