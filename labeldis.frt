@@ -136,7 +136,7 @@ VARIABLE LABEL-CACHE    \ Index of next label.
 : .EQU    LABELS[] DUP @ H. " EQU " TYPE  CELL+ @ %ID. CR ;
 
 \ Contains equ labels, i.e. structs as associate with ``LABEL''
-1000 '.PAY-DEA '.EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
+MAX-LABEL '.PAY-DEA '.EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
 
 \ Generate a equ label at (target) ADDRESS with "NAME", this can be
 \ any symbolic constant in fact.
