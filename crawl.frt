@@ -192,7 +192,8 @@ NORMAL-DISASSEMBLY
 \ DISS LATEST-INSTRUCTION ISS ISL are all valid.
 
 : ANALYSE-INSTRUCTION   LATEST-INSTRUCTION @ JUMPS IN-BAG? IF
-     JUMP-TARGET STARTER? IF JUMP-TARGET STARTERS BAG+! THEN THEN ;
+    JUMP-TARGET DUP INVENT-LABEL
+    STARTER? IF JUMP-TARGET STARTERS BAG+! THEN THEN ;
 
 \ Analyse the code range from ADDRESS up to an unconditional transfer.
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.
