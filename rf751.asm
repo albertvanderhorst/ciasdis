@@ -39,11 +39,11 @@ BITS-32
 ( 0804,806B )   :X_emit    PUSH|X, BX| 
 ( 0804,806C )                  PUSH|X, CX| 
 ( 0804,806D )                  PUSH|X, DX| 
-( 0804,806E )                  MOVI|XR, BX| 1 IL, 
+( 0804,806E )                  MOVI|X, BX| 1 IL, 
 ( 0804,8073 )                  MOV, X| F| BX'| R| DX| 
 ( 0804,8075 )                  LEA, CX'| BO|    [SP +1* 0] 0FC B, 
 ( 0804,8079 )                  MOV, X| F| AX'| ZO| [CX] 
-( 0804,807B )                  MOVI|XR, AX| 4 IL, 
+( 0804,807B )                  MOVI|X, AX| 4 IL, 
 ( 0804,8080 )                  INT, 80 IB, 
 ( 0804,8082 )                  POP|X, DX| 
 ( 0804,8083 )                  POP|X, CX| 
@@ -60,9 +60,9 @@ BITS-32
 ( 0804,8099 )                  PUSH|X, CX| 
 ( 0804,809A )                  PUSH|X, DX| 
 ( 0804,809B )                  SUB, X| F| BX'| R| BX| 
-( 0804,809D )                  MOVI|XR, DX| 1 IL, 
+( 0804,809D )                  MOVI|X, DX| 1 IL, 
 ( 0804,80A2 )                  LEA, CX'| BO|    [SP +1* 0] 0FC B, 
-( 0804,80A6 )                  MOVI|XR, AX| 3 IL, 
+( 0804,80A6 )                  MOVI|X, AX| 3 IL, 
 ( 0804,80AB )                  INT, 80 IB, 
 ( 0804,80AD )                  MOV, X| T| AX'| ZO| [CX] 
 ( 0804,80AF )                  POP|X, DX| 
@@ -216,19 +216,19 @@ BITS-32
 ( 0804,818E )                  POP|X, CX| 
 ( 0804,818F )                  POP|X, BX| 
 ( 0804,8190 )                  RET, 
-( 0804,8191 )   :L0804,8191    MOVI|XR, SI| s0 IL, 
+( 0804,8191 )   :L0804,8191    MOVI|X, SI| s0 IL, 
 ( 0804,8196 )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8199 )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,819B )                  MOVI|XR, AX| retroforth_f IL, 
+( 0804,819B )                  MOVI|X, AX| retroforth_f IL, 
 ( 0804,81A0 )                  SUBSI, R| SI| 4 IS, 
 ( 0804,81A3 )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,81A5 )                  MOVI|XR, AX| retrofilesz IL, 
+( 0804,81A5 )                  MOVI|X, AX| retrofilesz IL, 
 ( 0804,81AA )                  CALL, X_eval RL,
 ( 0804,81AF )                  RET, 
 ( 0804,81B0 )   :L0804,81B0    CALL, L0804,82DA RL,
 ( 0804,81B5 )   :L0804,81B5    SUBSI, R| SI| 4 IS, 
 ( 0804,81B8 )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,81BA )                  MOVI|XR, AX| 20 IL, 
+( 0804,81BA )                  MOVI|X, AX| 20 IL, 
 ( 0804,81BF )                  CALL, X_parse RL,
 ( 0804,81C4 )                  J, Z| N| L0804,81CA RB,
 ( 0804,81C6 )                  LODS, X'| 
@@ -251,14 +251,14 @@ BITS-32
 ( 0804,81EF )   :N_mfind   d$  5  "mfind"
 
 ( 0804,81F5 )   :X_mfind    PUSH|X, BX| 
-( 0804,81F6 )                  MOVI|XR, BX| mlast IL, 
+( 0804,81F6 )                  MOVI|X, BX| mlast IL, 
 ( 0804,81FB )                  JMPS, L0804,8210 RB,
 ( 0804,81FD )   :H_find   dl H_mfind X_find 
 
 ( 0804,8205 )   :N_find   d$  4  "find"
 
 ( 0804,820A )   :X_find    PUSH|X, BX| 
-( 0804,820B )                  MOVI|XR, BX| flast IL, 
+( 0804,820B )                  MOVI|X, BX| flast IL, 
 ( 0804,8210 )   :L0804,8210    PUSH|X, CX| 
 ( 0804,8211 )                  MOV, X| F| AX'| R| CX| 
 ( 0804,8213 )                  LODS, X'| 
@@ -418,7 +418,7 @@ BITS-32
 
 ( 0804,83AB )   :N_,   d$  1  &,
 
-( 0804,83AD )   :X_,    MOVI|XR, CX| 4 IL, 
+( 0804,83AD )   :X_,    MOVI|X, CX| 4 IL, 
 ( 0804,83B2 )   :L0804,83B2    MOV, X| T| DX'| MEM| V_h0 L, 
 ( 0804,83B8 )                  MOV, X| F| AX'| ZO| [DX] 
 ( 0804,83BA )                  LODS, X'| 
@@ -430,19 +430,19 @@ BITS-32
 
 ( 0804,83D6 )   :N_1,   d$  2  "1,"
 
-( 0804,83D9 )   :X_1,    MOVI|XR, CX| 1 IL, 
+( 0804,83D9 )   :X_1,    MOVI|X, CX| 1 IL, 
 ( 0804,83DE )                  JMPS, L0804,83B2 RB,
 ( 0804,83E0 )   :H_2,   dl H_1, X_2, 
 
 ( 0804,83E8 )   :N_2,   d$  2  "2,"
 
-( 0804,83EB )   :X_2,    MOVI|XR, CX| 2 IL, 
+( 0804,83EB )   :X_2,    MOVI|X, CX| 2 IL, 
 ( 0804,83F0 )                  JMPS, L0804,83B2 RB,
 ( 0804,83F2 )   :H_3,   dl H_2, X_3, 
 
 ( 0804,83FA )   :N_3,   d$  2  "3,"
 
-( 0804,83FD )   :X_3,    MOVI|XR, CX| 3 IL, 
+( 0804,83FD )   :X_3,    MOVI|X, CX| 3 IL, 
 ( 0804,8402 )                  JMPS, L0804,83B2 RB,
 ( 0804,8404 )   :L0804,8404    SUBSI, R| SI| 4 IS, 
 ( 0804,8407 )                  MOV, X| F| AX'| ZO| [SI] 
@@ -461,7 +461,7 @@ BITS-32
 
 ( 0804,842C )   :X_create    SUBSI, R| SI| 4 IS, 
 ( 0804,842F )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,8431 )                  MOVI|XR, AX| 20 IL, 
+( 0804,8431 )                  MOVI|X, AX| 20 IL, 
 ( 0804,8436 )                  CALL, X_parse RL,
 ( 0804,843B )                  JMPS, X_(create) RB,
 ( 0804,843D )   :H_(create)   dl H_create X_(create) 
@@ -487,7 +487,7 @@ BITS-32
 ( 0804,8478 )                  MOV, X| F| DI'| MEM| V_d0 L, 
 ( 0804,847E )                  POP|X, SI| 
 ( 0804,847F )                  POP|X, CX| 
-( 0804,8480 )                  MOVI|XR, AX| dovar IL, 
+( 0804,8480 )                  MOVI|X, AX| dovar IL, 
 ( 0804,8485 )                  JMP, X_compile RL,
 ( 0804,848A )   :H_mdoes>   dl 0 X_mdoes> 
 
@@ -495,11 +495,11 @@ BITS-32
 
 ( 0804,8498 )   :X_mdoes>    SUBSI, R| SI| 4 IS, 
 ( 0804,849B )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,849D )                  MOVI|XR, AX| L0804,84B6 IL, 
+( 0804,849D )                  MOVI|X, AX| L0804,84B6 IL, 
 ( 0804,84A2 )                  CALL, X_compile RL,
 ( 0804,84A7 )                  SUBSI, R| SI| 4 IS, 
 ( 0804,84AA )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,84AC )                  MOVI|XR, AX| L0804,8404 IL, 
+( 0804,84AC )                  MOVI|X, AX| L0804,8404 IL, 
 ( 0804,84B1 )                  JMP, X_compile RL,
 ( 0804,84B6 )   :L0804,84B6    SUBSI, R| SI| 4 IS, 
 ( 0804,84B9 )                  MOV, X| F| AX'| ZO| [SI] 
@@ -518,7 +518,7 @@ BITS-32
 
 ( 0804,84DA )   :X_]    SUBSI, R| SI| 4 IS, 
 ( 0804,84DD )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,84DF )                  MOVI|XR, AX| 20 IL, 
+( 0804,84DF )                  MOVI|X, AX| 20 IL, 
 ( 0804,84E4 )                  CALL, X_parse RL,
 ( 0804,84E9 )                  J, Z| N| L0804,84F4 RB,
 ( 0804,84EB )                  LODS, X'| 
@@ -534,7 +534,7 @@ BITS-32
 ( 0804,8509 )                  CALL, L0804,8739 RL,
 ( 0804,850E )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8511 )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,8513 )                  MOVI|XR, AX| 0C3 IL, 
+( 0804,8513 )                  MOVI|X, AX| 0C3 IL, 
 ( 0804,8518 )                  CALL, X_1, RL,
 ( 0804,851D )                  JMPS, X_] RB,
 ( 0804,851F )   :L0804,851F    MOV, X| F| AX'| R| DI| 
@@ -545,7 +545,7 @@ BITS-32
 ( 0804,852B )                  JMPS, X_] RB,
 ( 0804,852D )   :L0804,852D    SUBSI, R| SI| 4 IS, 
 ( 0804,8530 )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,8532 )                  MOVI|XR, AX| L0804,840E IL, 
+( 0804,8532 )                  MOVI|X, AX| L0804,840E IL, 
 ( 0804,8537 )                  CALL, X_compile RL,
 ( 0804,853C )                  CALL, X_, RL,
 ( 0804,8541 )                  JMPS, X_] RB,
@@ -557,7 +557,7 @@ BITS-32
 ( 0804,8559 )                  SUBSI, R| AX| 5 IS, 
 ( 0804,855C )                  SUBSI, R| SI| 4 IS, 
 ( 0804,855F )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,8561 )                  MOVI|XR, AX| 0E8 IL, 
+( 0804,8561 )                  MOVI|X, AX| 0E8 IL, 
 ( 0804,8566 )                  CALL, X_1, RL,
 ( 0804,856B )                  CALL, X_, RL,
 ( 0804,8570 )                  MOVI, X| MEM| tail L, 0 IL, 
@@ -602,7 +602,7 @@ BITS-32
 
 ( 0804,85F5 )   :X_mliteral    SUBSI, R| SI| 4 IS, 
 ( 0804,85F8 )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,85FA )                  MOVI|XR, AX| L0804,840E IL, 
+( 0804,85FA )                  MOVI|X, AX| L0804,840E IL, 
 ( 0804,85FF )                  CALL, X_compile RL,
 ( 0804,8604 )                  CALL, X_, RL,
 ( 0804,8609 )                  RET, 
@@ -631,7 +631,7 @@ BITS-32
 ( 0804,8651 )                  NEG, X| R| AX| 
 ( 0804,8653 )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8656 )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,8658 )                  MOVI|XR, AX| 2D IL, 
+( 0804,8658 )                  MOVI|X, AX| 2D IL, 
 ( 0804,865D )                  CALL, X_emit RL,
 ( 0804,8662 )   :L0804,8662    XOR, X| F| DX'| R| DX| 
 ( 0804,8664 )                  DIV|AD, X| MEM| V_base L, 
@@ -653,7 +653,7 @@ BITS-32
 ( 0804,868D )                  POP|X, DX| 
 ( 0804,868E )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8691 )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,8693 )                  MOVI|XR, AX| 20 IL, 
+( 0804,8693 )                  MOVI|X, AX| 20 IL, 
 ( 0804,8698 )                  CALL, X_emit RL,
 ( 0804,869D )                  RET, 
 ( 0804,869E )   :H_type   dl H_. X_type 
@@ -706,7 +706,7 @@ BITS-32
 
 ( 0804,870B )   :N_reset   d$  5  "reset"
 
-( 0804,8711 )   :X_reset    MOVI|XR, SI| s0 IL, 
+( 0804,8711 )   :X_reset    MOVI|X, SI| s0 IL, 
 ( 0804,8716 )                  RET, 
 ( 0804,8717 )   :H_cmove   dl H_reset X_cmove 
 
@@ -729,11 +729,11 @@ BITS-32
 ( 0804,8739 )   :L0804,8739    CALL, X_type RL,
 ( 0804,873E )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8741 )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,8743 )                  MOVI|XR, AX| 3F IL, 
+( 0804,8743 )                  MOVI|X, AX| 3F IL, 
 ( 0804,8748 )                  CALL, X_emit RL,
 ( 0804,874D )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8750 )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,8752 )                  MOVI|XR, AX| 0A IL, 
+( 0804,8752 )                  MOVI|X, AX| 0A IL, 
 ( 0804,8757 )                  CALL, X_emit RL,
 ( 0804,875C )                  RET, 
 ( 0804,875D )   :H_last   dl H_cmove X_last 
@@ -742,7 +742,7 @@ BITS-32
 
 ( 0804,876A )   :X_last    SUBSI, R| SI| 4 IS, 
 ( 0804,876D )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,876F )                  MOVI|XR, AX| last IL, 
+( 0804,876F )                  MOVI|X, AX| last IL, 
 ( 0804,8774 )                  RET, 
 ( 0804,8775 )   :H_h0   dl H_last X_h0 
 
