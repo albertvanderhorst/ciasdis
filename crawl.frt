@@ -1,6 +1,8 @@
+( $Id$ )
+( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
+( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
 \ Crawling is the process of following jumps to determine code space.
-
 
 ASSEMBLER
 
@@ -54,8 +56,14 @@ NORMAL-DISASSEMBLY
             DUP 1 = IF 2DROP 0 ELSE
             1- IN-CODE-N? THEN THEN ;
 
-\ For ADDRESS" "It IS known code, according to ``SECTION-LABELS''".
+\ For ADDRESS: "It IS known code, according to ``SECTION-LABELS''".
 : KNOWN-CODE?   SECTION-LABELS DUP FIND-LABEL DUP IF IN-CODE? ELSE 2DROP 0 THEN ;
+
+\ For ADDRESS : "it IS in a current code section"
+: IN-CODE-SPACE?   TARGET-START @ END-HOST WITHIN ;
+
+\ For ADDRESS: "It IS usable as a new starter"
+: STARTER?    DUP KNOWN-CODE? 0=  SWAP IN-CODE-SPACE? AND ;
 
 \ Return the target ADDRESS of the current instruction.
 \ (It must be a jump of course.
@@ -64,13 +72,14 @@ NORMAL-DISASSEMBLY
 \ Analyse current instruction after disassembly.
 \ DISS LATEST-INSTRUCTION ISS ISL are all valid.
 : ANALYSE-INSTRUCTION   LATEST-INSTRUCTION @ JUMPS IN-BAG? IF
-    JUMP-TARGET KNOWN-CODE? 0= IF JUMP-TARGET STARTERS BAG+! THEN THEN ;
+    JUMP-TARGET STARTER? IF JUMP-TARGET STARTERS BAG+! THEN THEN ;
 
 \ Analyse the code range from ADDRESS up to an unconditional transfer.
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.
 : CRAWL-ONE  DUP >R TARGET>HOST BEGIN (DISASSEMBLE) ANALYSE-INSTRUCTION
     DUP END-HOST >=   LATEST-INSTRUCTION @ UNCONDITIONAL-TRANSFERS IN-BAG?   OR
-  UNTIL     R> SWAP HOST>TARGET ADD-SECTION ;
+  UNTIL     R> SWAP HOST>TARGET ADD-SECTION
+  CR ." STARTERS:" STARTERS .BAG CR ;
 
 \ Analyse code from ADDRESS , unless already known.
 : ?CRAWL-ONE? DUP KNOWN-CODE? 0= IF CRAWL-ONE _ THEN DROP ;
@@ -87,8 +96,6 @@ NORMAL-DISASSEMBLY
 \ Crawl with normal disassembly (observing `` TALLY-BA '')
 \ resp. crawl through 16 / 32 bits code.
 \ The other owns change it all the time.
-: CRAWL    NORMAL-DISASSEMBLY CRAWL ;
-: CRAWL16  'D-R-T-16 (R-XT) ! CRAWL ;
-: CRAWL32  'D-R-T-32 (R-XT) ! CRAWL ;
+: CRAWL16  'D-R-T-16 (R-XT) ! CRAWL NORMAL-DISASSEMBLY ;
 
 PREVIOUS

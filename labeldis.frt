@@ -326,6 +326,9 @@ endstruct
 : DISASSEMBLE-TARGET
     TARGET-START @ . " ORG" TYPE CR   DISASSEMBLE-ALL   CP @ ADORN-ADDRESS CR ;
 
+\ i386 dependant, should somehow be separated out.
+: DISASSEMBLE-TARGET "BITS-32" TYPE CR  DISASSEMBLE-TARGET ;
+
 \ Using (only) information from file with NAME,
 \ disassemble the current program as stored in the ``CODE-BUFFER''.
 : CONSULTED   INIT-ALL   HEX INCLUDED ( file)   SORT-ALL
@@ -337,6 +340,7 @@ endstruct
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
 
+
 ASSEMBLER
 ( Not yet definitions, these thingies must be visible in the            )
 ( disassembler.                                                         )
@@ -344,22 +348,13 @@ ASSEMBLER
 (                       SECTIONS                                        )
 
 \ Disassemble from target ADDRESS1 to ADDRESS2 as 16 bit.
-: D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T ;
-
-\ Disassemble from target ADDRESS1 to ADDRESS2 as 32 bit.
-: D-R-T-32 BITS-32 CR "BITS-32" TYPE D-R-T ;
+: D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" ;
 
 \ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
 : -DC16:    'D-R-T-16   SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-section.
 : -DC16-    'D-R-T-16   ANON-SECTION ;
-
-\ Section ADDRESS1 .. ADDRESS2 is 32-bit code with name "name".
-: -DC32:    'D-R-T-32   SECTION ;
-
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous 32-bit code-section.
-: -DC32-    'D-R-T-32   ANON-SECTION ;
 
 DEFINITIONS
 
