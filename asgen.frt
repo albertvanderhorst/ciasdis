@@ -113,6 +113,9 @@
 ( These are hot patched for reverse engineering.                        )
 
 REQUIRE ALIAS
+REQUIRE @+ ( Fetch from ADDRES. Leave incremented ADDRESS and DATA )
+REQUIRE BAG
+REQUIRE POSTFIX
 
 'HERE  ALIAS AS-HERE
 'C,    ALIAS AS-C,
@@ -122,8 +125,7 @@ REQUIRE ALIAS
 
 ( ############### PART I ASSEMBLER #################################### )
 ( MAYBE NOT PRESENT UTILITIES                                           )
-REQUIRE !CSP         \ To counter design error to eliminate it.
-REQUIRE @+ ( Fetch from ADDRES. Leave incremented ADDRESS and DATA )
+
 : !+ >R R@ ! R> CELL+ ; ( Store DATA to ADDRES. Leave incremented ADDRESS)
 ( Fetch from decremented ADDRES. Leave DATA and ADDRESS)
 : @- 0 CELL+ - >R R@ @ R>  ;
@@ -174,7 +176,6 @@ CONTEXT @ CURRENT !     \ Restore current.
 
 ( Behaves as ``CREATE'' except, if the word to be created has name "--" )
 ( it is ignored, by making the header unfindable. Not strictly needed.  )
-REQUIRE POSTFIX
 : CREATE--   (WORD) 2DUP POSTFIX CREATE
     2 = SWAP "--" CORA 0= AND IF LATEST HIDDEN THEN ;
 
@@ -410,15 +411,15 @@ CREATE PRO-TALLY 3 CELLS ALLOT  ( Prototype for TALLY-BI BY BA )
 ( into account, a piece of actual code. They do not backtrack but fail. )
 
 ( ------------- DATA STRUCTURES -----------------------------------------)
-12 SET DISS          ( A row of dea's representing a disassembly. )
-: !DISS DISS !SET ;
+12 BAG DISS          ( A row of dea's representing a disassembly. )
+: !DISS DISS !BAG ;
 : .DISS-AUX DISS @+ SWAP DO
     I @ DUP IS-COMMA OVER IS-DFI OR OVER IS-DFIs OR IF I DISS - . THEN ID.
  0 CELL+ +LOOP CR ;
 ( DISS-VECTOR can be redefined to generate testsets)
 VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
-: +DISS DISS SET+! ;
-: DISS? DISS SET? ;
+: +DISS DISS BAG+! ;
+: DISS? DISS BAG? ;
 : DISS- 0 CELL+ NEGATE DISS +! ; ( Discard last item of `DISS' )
 
 ( ------------- TRYERS --------------------------------------------------)
