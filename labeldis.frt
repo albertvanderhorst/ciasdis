@@ -13,6 +13,7 @@ REQUIRE @+
 REQUIRE QSORT
 REQUIRE EXCHANGE
 REQUIRE BIN-SEARCH
+REQUIRE POSTFIX
 
 : \D ;
 
@@ -224,6 +225,11 @@ endstruct
 
 \ ---------------- Specifiers of disassembly ranges ----------------------
 
+\ A section, as we all know, is a range of addresses that is kept
+\ together, even during relocation and such.
+\ Section ADDRESS1 .. ADDRESS2 always refers to a target range,
+\ where address2 is exclusive.
+
 \ Contains sector specification, range plus type.
 1000 '.PAY-DEA LABELSTRUCT SECTION-LABELS   LABELS !BAG
 
@@ -233,9 +239,11 @@ endstruct
 \ Disassemble from target ADDRESS1 to ADDRESS2.
 : D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R ;
 
-\ Target ADDRESS1 through ADDRESS2 (exclusive) is to be treated as
-\ code with name "name".
-: -DC-    'D-R-T   SECTION ;
+\ Section ADDRESS1 .. ADDRESS2 is code with name "name".
+: -DC:    'D-R-T   SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous code section.
+: -DC-    'D-R-T   "NONAME" POSTFIX SECTION ;
 
 \ Disassemble all those sectors as if they were code.
 : DISASSEMBLE-ALL

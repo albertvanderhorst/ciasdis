@@ -1,6 +1,7 @@
 1278 EQU START
 1337 EQU END
 \ ciforth allows multiple line strings in files
+\ and double quotes in strings.
 
 "
 
@@ -11,10 +12,9 @@
 
 START -ORG-
 1285  LABEL QQQ
-START QQQ -DC- poep1
-QQQ END -DC-   poep2
+START QQQ -DC: poo      \ Named section
+QQQ END -DC-            \ Unnamed section
 
-1285  LABEL QQQ
 "XXX is a target for backward jumps:" 1294 COMMENT
 1294  LABEL XXX
 \ From now on the label ``XXXX'' can be used: like this
