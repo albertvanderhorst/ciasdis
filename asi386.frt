@@ -223,9 +223,9 @@ _ 1 0000 0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 ( Disassemble the sib byte where the disassembler sits now.             )
 ( [ `FORCED-DISASSEMBLY' takes care itself of incrementing the          )
 (   disassembly pointer. ]                                              )
-: DIS-SIB [ % ~SIB, ] LITERAL FORCED-DISASSEMBLY ;
+: DIS-SIB DROP [ % ~SIB, ] LITERAL FORCED-DISASSEMBLY ;
 ( Fill in deferred disassembler action.                                 )
- ' DIS-SIB    % SIB,, >DIS !    0000   % SIB,, >CNT !
+ ' DIS-SIB    % SIB,, >DIS !
 
 ( Redefine some fixups, such that the user may say                      )
 ( "[AX" instead of " ~SIB| SIB,, [AX"                                   )
@@ -240,8 +240,8 @@ _ 1 0000 0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 ( ############## 80386 ASSEMBLER PROPER END ########################### )
 ( You may want to use these always instead of (RB,)
     : RB, _AP_ 1 + - (RB,) ;      : RX, _AP_ 4 + - (RX,) ;
-' .COMMA-SIGNED   % (RB,) >DIS !     
-' .COMMA-SIGNED   % (RX,) >DIS !     
+' .COMMA-SIGNED   % (RB,) >DIS !
+' .COMMA-SIGNED   % (RX,) >DIS !
 
 PREVIOUS DEFINITIONS DECIMAL
 ( ############## 8086 ASSEMBLER POST ################################## )
