@@ -63,6 +63,9 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 \ This applies to plain labels that are in fact fact constants.
 : .PAY-DEA  CELL+ @ %ID. ;
 
+\ Make section I current, provided the payload is a dea.
+: MAKE-CURRENT LABELS[] CELL+ @ EXECUTE ;
+
 \ For label INDEX return the label NAME, provided it is a dea.
 : LABEL-NAME   LABELS[] CELL+ @ >NFA @ $@ ;
 
@@ -371,8 +374,20 @@ endstruct
 : .PAY-SECTION CELL+ @ DUP EXECUTE
    DIS-START H.  SPACE DIS-END H.  " BY " TYPE DIS-XT %ID.  %ID. ;
 
+20 BAG SECTION-TYPES  \ Contains dea of dumper, creator, alternating.
+
+\ DEA of dump belongs to DEA of creator. Add to ``SECTION-TYPES''.
+: BELONGS-TO-CREATOR SWAP SECTION-TYPES BAG+! SECTION-TYPES BAG+! ;
+
+\ For current section, return the XT of a proper defining word.
+: CREATOR-XT   DIS-XT SECTION-TYPES BAG-WHERE CELL+ @ ;
+
+\ Display section INDEX in a reconsumable form.
+: DECOMP-SECTION   DUP MAKE-CURRENT DIS-START H. SPACE DIS-END H. SPACE
+    CREATOR-XT ID. LABEL-NAME TYPE CR ;
+
 \ Contains sector specification, range plus type.
-1000 '.PAY-SECTION 'H. LABELSTRUCT SECTION-LABELS   LABELS !BAG
+1000 '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !BAG
 
 \ Specify that section "name" from AD1 to AD2 uses dis-assembler DEA
 : SECTION   SECTION-LABELS DIS-STRUCT DIS-START LAB+!  LATEST LAB+!  ;
@@ -391,6 +406,8 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous code section.
 : -dc-    'D-R-T   'CR+LABEL ANON-SECTION ;
 
+'D-R-T     '-dc:   BELONGS-TO-CREATOR
+
 \ Dump bytes from target ADDRESS1 to ADDRESS2 plain.
 : (DUMP-B)   DO I DUP ADORN-ADDRESS C@ 3 .R LOOP CR ;
 
@@ -406,6 +423,7 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous byte section.
 : -db-    'DUMP-B   'CR+db ANON-SECTION ;
 
+'DUMP-B    '-db:   BELONGS-TO-CREATOR  \ Register the decompiler.
 
 \ Print X as a word (4 hex digits).
 : W. 0 4 (DH.) TYPE ;
@@ -425,6 +443,8 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous word section.
 : -dw-    'DUMP-W   'CR+dw ANON-SECTION ;
 
+'DUMP-W    '-dw:   BELONGS-TO-CREATOR
+
 \ Dump words from target ADDRESS1 to ADDRESS2.
 : (DUMP-L)   DO I DUP ADORN-ADDRESS @ SPACE H. 4 +LOOP CR ;
 
@@ -440,6 +460,8 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
 : -dl-    'DUMP-L   'CR+dl ANON-SECTION ;
 
+'DUMP-L    '-dl:   BELONGS-TO-CREATOR
+
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-$   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-$) ;
 
@@ -451,6 +473,8 @@ endstruct
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
 : -d$-    'DUMP-$   'CR+d$ ANON-SECTION ;
+
+'DUMP-$    '-d$:   BELONGS-TO-CREATOR
 
 \ Print a remark about whether START and END fit.
 : .HOW-FIT   2DUP = IF 2DROP ELSE
@@ -550,6 +574,8 @@ ASSEMBLER
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-section.
 : -dc16-    'D-R-T-16   'CR+LABEL ANON-SECTION ;
+
+'D-R-T-16   '-dc16:   BELONGS-TO-CREATOR
 
 DEFINITIONS
 
