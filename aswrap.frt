@@ -2,8 +2,6 @@
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
-\ Where the code is to be located during execution.
-VARIABLE CODE-START
 
 \ Length of the code buffer.
 VARIABLE CODE-LENGTH
@@ -18,13 +16,14 @@ VARIABLE CP                 CODE-SPACE CP !
 : AS-HERE  CP @ ;
 
 \ Address in target associated with the start of ``CODE-SPACE''.
+\ Where the code is to be located during execution.
 VARIABLE TARGET-START
 
 \ Associate ADDRESS with the start of ``CODE-SPACE''.
 : ORG      TARGET-START !   CODE-SPACE CP ! ;
 
 \ Instruction pointer in assembly. View used in branches etc.
-: _AP_    AS-HERE   TARGET-START @ + ;
+: _AP_    CP @ CODE-SPACE - TARGET-START @ + ;
 
 \ Swap dictionary pointer back and forth to assembler area.
 : SWAP-AS CP @ DP @    CP ! DP !  ;
