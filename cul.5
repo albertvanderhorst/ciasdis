@@ -1,0 +1,268 @@
+.\" $Id$
+.TH cul "5" "May 2004" "cul 0.1.0" DFW
+.SH "NAME"
+cul \- consult file format for
+computer intelligence
+disassembler 386
+.SH "DESCRIPTION"
+\fBcul\fR files are generally used as the second argument for \fB\cidis\fR\.
+.br
+On top of the user commands described in this page,
+the full assembler is available after the command ASSEMBLER and
+the full Forth language is available after the command FORTH .
+
+.SH "SYNTAX"
+The syntax in the following applies to the cul file,
+but these commands can be used interactively.
+
+.SH "COMMENT"
+A backslash \\ followed by a space ignores the remainder of a line.
+A open bracket ( followed by a space ignores the remainder of the file
+until a closing bracket (so don't use in expressions!).
+
+.SH "EXPRESSIONS"
+An arithmetic atom can be a number, a character or a label.
+The default number base is hexadecimal,
+but this can be overruled by the # prefix for decimal.
+A character is denoted by a & prefix.
+A label must be previously defined by an EQU or LABEL statement.
+Hexadecimal numbers can start in a letter,
+and labels can be fully numeric,
+but both practices are discouraged.
+.br
+An arithmetic expression combines atom's and the operators
++ - / * MOD in a postfix fashion.
+Brackets are not allowed (nor needed).
+.br
+A string is delimited by double quotes: " .
+It may contain embedded new lines.
+It can contain double quotes,
+by doubling them.
+.br
+A range consist of two atoms, representing addressing in the
+host space, i.e. such as seen during execution.
+Ranges are exclusive, but they are always expanded to contain
+at least one byte.
+.br
+A name cannot contains spaces.
+.SH "KEYWORDS"
+Keywords (or words in Forth parlance) apply to one or more
+preceeding expressions.
+They may also scan ahead,
+mostly for a name that is hence-to-forth known, e.g. as a label.
+.TP
+<expr> LABEL "name"
+.br
+Add "name" to the plain labels with value <expr>.
+.TP
+<expr> EQU "name"
+.br
+Add "name" to the plain labels with value <expr>.
+.TP
+<expr1> <expr2> -DB: "name"
+.br
+The range <expr1> <expr2> is hence-to-forth known by
+"name" and is a section to be disassembled as byte values.
+.TP
+<expr1> <expr2> -DW: "name"
+.br
+The range <expr1> <expr2> is hence-to-forth known by
+"name" and is a section to be disassembled as word (16-bit)
+values.
+.TP
+<expr1> <expr2> -DL: "name"
+.br
+The range <expr1> <expr2> is hence-to-forth known by
+"name" and is a section to be disassembled as long (32-bit) values.
+.TP
+<expr1> <expr2> -DC16: "name"
+.br
+The range <expr1> <expr2> is hence-to-forth known by
+"name" and is a section to be disassembled as a 16-bit code section.
+This command is specific to the Intel 80386.
+.TP
+<expr1> <expr2> -DC: "name"
+.br
+The range <expr1> <expr2> is hence-to-forth known by
+"name" and is a section to be disassembled as a normal code section.
+For the Intel 80386 this means a 32-bit code section.
+.TP
+<expr1> <expr2> [-DB-|-BW-|-DL-|-DC-|-DC16-]
+These commands are equivalent to -DB: -DW: -DL: -DC: -DC16: but the
+sections are anonymous.
+.TP
+<expr> -ORG-
+.br
+The start of the code buffer is associated with the target address
+<expr>.
+.TP
+<string> COMMENT
+.br
+The string is a comment associated with the target address
+<expr>.
+It will be a separate line or lines in front of the disassembly.
+.TP
+<expr> COMMENT: "comment"
+.br
+The remainder of the line is a comment associated with the target address
+<expr>.
+It will be printed after the disassembly on the same line.
+.TP
+DISASSEMBLE-ALL
+.br
+Disassemble the code buffer using all available information.
+.TP
+SORT-ALL
+.br
+Sort all available information on the addresses it applies to.
+This is mandatory for DISASSEMBLE-ALL and recommended for DUMP-ALL .
+.TP
+DUMP-ALL
+.br
+Output all available information to standard output.
+This includes all information added interactively.
+
+
+.SH "ADVANCED"
+With the Forth commands DUP SWAP OVER 2DUP 2SWAP 2OVER it can be
+avoided to write down the same <expr> repeatedly.
+See lina(1) if installed.
+.br
+A sequence of commands can be combined into a macro in the following
+fashion (which is regular Forth practice):
+.br
+\fB : "name" <sequence> ;\fR
+.br
+Using "name" will result in the execution of the commands in <sequence>.
+If <sequence> contains commands that scan ahead,
+the scanning will be done when "name" is invoked;
+this can be confusing for novices.
+.TP
+SHOW-REGISTER
+.br
+List the names of all registered objects of the class labels.
+A class can be made current by typing its name
+and then its content can be
+printed using .LABELS .
+
+.SH "COMMAND"
+\fIcias\fR has no options but there is a wealth of commands
+in interactive mode.
+
+If called with two parameters,
+\fIcias\fR assembles the \fI<source-file>\fR to \fI<bin-file>\fR .
+
+If \fB<bin-file>\fR is missing,
+the extension \fB.frt\fR removed from   \fI<source-file>\fR ,
+for other extensions
+the output is in \fIa.out\fR .
+
+The interactive mode is started if there is no parameter.
+
+All \fBASSEMBLER\fR commands can now we tried
+out interactively (see lina(1)).
+A \fBBYE\fR command ends an interactive session.
+
+After the command \fBFORTH\fR
+you have a full Forth environment available (see lina(1))
+
+\fIdisas\fR has no options but there is a wealth of commands
+in interactive mode.
+If there is a \fibin-files\fR parameter,
+it is loaded into the code-buffer.
+If there is a \ficonsult\fR parameter,
+it is consulted.
+Then the interactive mode is entered,
+unless the \ficonsult\fR ends in a \fiBYE\fR command.
+A disassembly is always generated on standard output
+and must be captured by redirection.
+
+All commands acceptable in a
+consult file (see cul(5))
+may be used interactively.
+
+After the command \fBASSEMBLER\fR
+proposed modification for the
+assembler source can be tried out interactively (see lina(1))
+
+After the command \fBFORTH\fR
+you have a full Forth environment available (see lina(1))
+
+.\"\ficias/cdis\fR without options starts an interactive system.
+.\"If used as a filter, \ficias/cdis\fR doesn't reflect its input and exits
+.\"at end of input.
+.\"Options are implemented by a simple mechanism through
+.\"the source library, and hence are configurable.
+.\"The first letter after the \- (or DEC-style /)
+.\"determines the option.
+.\"It is case insensitive and further letters are ignored.
+.\"Usually one option only is processed.
+.\"If the interactive interpreter is started, that is indicated.
+.\"
+.\".TP
+.\"\fB\-A\fR, \fB\-R\fR
+.\"
+.\"Make the word \fIREQUIRE\fR available.
+.\"Then start the interpreter.
+.\".TP
+.\"\fB\-C\fR \fIfile.frt\fR
+.\"Compile \fIfile.frt\fR to the binary \fIfile\fR.
+.\".TP
+.TP
+\fB\-H\fR
+Print help, i.e. the option summary.
+.\".TP
+.\"\fB\-M\fR, \fB\--\fR, \fB\-\-help\fR, \fB\-\-version\fR
+.\"print help, version and copyright information.
+.\".TP
+.TP
+\fB\-V\fR
+Print version and copyright information.
+.SH "AVAILABILITY"
+\ficias/cdis\fR is based on \fBciforth\fR.
+.br
+The generic system can be fetched from
+.IP
+\fI http://home.hccnet.nl/a.w.m.van.der.horst/ciforth.html\fR
+.PP
+MS-DOS, "windows" , stand alone and Alpha Linux
+binary versions are available.
+
+.SH "EXAMPLE"
+A typical consult file to disassemble
+a c-program could contain:
+.br
+ \ \ \ 100 148 -   -ORG-
+.br
+ \ \ \ 0 148 -DB: header
+.br
+ \ \ \ 148 COMMENT: entry point
+.br
+ \ \ \ 148 2008 -DB : text
+.br
+ \ \ \ 2008 4804 -DC: data
+.br
+ \ \ \ DISASSEMBLE-ALL
+.br
+ \ \ \ BYE
+.br
+The actual command to disassemble is:
+.br
+ \ \ \ cidis freecell.exe freecell.cul > freecell.asm
+
+.SH "SEE ALSO"
+
+cias(1) computer_intelligence_assembler_386
+.br
+cidis(1) computer_intelligence_disassembler_386
+.br
+lina(1) Linux Native version of ciforth.
+
+.SH "CAVEAT"
+Mistakes in Forth mode can easily crash \ficias/cdis\fR.
+
+\ficias/cdis\fR is case sensitive.
+
+.SH "AUTHOR"
+Copyright \(co 2004
+Albert van der Horst \fI albert@spenarnc.xs4all.nl\fR.
