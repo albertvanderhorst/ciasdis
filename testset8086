@@ -1,8 +1,8 @@
 ASSEMBLER
 !TALLY
 HEX
-10 HERE 10 MOD - ALLOT ( To get a nice DUMP)
-HERE
+10 AS-HERE 10 MOD - AS-ALLOT ( To get a nice DUMP)
+AS-HERE
 STD,
 CLD,
 STI,
@@ -13753,7 +13753,7 @@ ADD, B| F| AL'| D0| [BP+DI]
 ADD, B| F| AL'| D0| [BP+SI]
 ADD, B| F| AL'| D0| [BX+DI]
 ADD, B| F| AL'| D0| [BX+SI]
-HERE
+AS-HERE
 0 , 0 , 0 , 0 ,
 ." Padding"
 ." TEST STARTS HERE"

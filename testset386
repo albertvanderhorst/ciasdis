@@ -2,8 +2,8 @@ ASSEMBLER
 : firstset ." First set" ;
 !TALLY
 HEX
-10 HERE 10 MOD - ALLOT ( To get a nice DUMP)
-HERE
+10 AS-HERE 10 MOD - AS-ALLOT ( To get a nice DUMP)
+AS-HERE
 CLTS,
 XLAT,
 LEAVE,
@@ -20848,8 +20848,8 @@ ADD, B| F| AL'| D0| [CX]
 ADD, B| F| AL'| D0| [AX]
 
 ( PADDING)
-0 ,
-HERE
+\ 0 ,
+AS-HERE
 ." TEST STARTS HERE"
 2DUP OVER - DUMP
 DISASSEMBLE-RANGE

@@ -1,4 +1,4 @@
-ASSEMBLER 
+ASSEMBLER
 !TALLY
 HEX
 ( As `DISASSEMBLE-RANGE' but forces an instruction to be SIB )
@@ -21,8 +21,8 @@ HIDE [DI
 HIDE [MEM
 : ~SIB, !TALLY ~SIB, ;
 
-10 HERE 10 MOD - ALLOT ( To get a nice DUMP)
-HERE
+10 AS-HERE 10 MOD - AS-ALLOT ( To get a nice DUMP)
+AS-HERE
 ~SIB, [MEM +8* DI]    0 B,
 ~SIB, [MEM +8* SI]    0 B,
 ~SIB, [MEM +8* BP]    0 B,
@@ -279,7 +279,7 @@ HERE
 ~SIB, [AX +1* DX]
 ~SIB, [AX +1* CX]
 ~SIB, [AX +1* AX]
-HERE
+AS-HERE
 ." TEST STARTS HERE"
 2DUP OVER - DUMP
 MY-DISASSEMBLE-RANGE
