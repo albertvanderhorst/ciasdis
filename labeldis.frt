@@ -534,6 +534,9 @@ endstruct
 \ Generate the source of all labelstructs.
 : DECOMP-ALL THE-REGISTER DO-BAG   I @ EXECUTE DECOMP-ONE   LOOP-BAG ;
 
+\ Make a full blown cul file from the internal data.
+: MAKE-CUL  TARGET-START H. " -ORG-" TYPE CR DECOMP-ALL ;
+
 \ Show what type of labels there are.
 : SHOW-REGISTER   THE-REGISTER DO-BAG I @ %ID. LOOP-BAG ;
 
