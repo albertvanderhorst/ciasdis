@@ -16,7 +16,7 @@ REQUIRE 2>R
 REQUIRE BAG             \ Simple bag facility
 REQUIRE struct
 
-10000 CONSTANT MAX-LABEL
+1000 CONSTANT MAX-LABEL
 
 : \D POSTPONE \ ;
 
@@ -32,14 +32,41 @@ REQUIRE struct
 \ to the payload (mostly a string).
 \ They are sorted on target address for convenience.
 
+\ Realloc ADDRESS to new LENGTH, return new ADDRESS.
+\ Ignoring old length, we may copy garbage, too bad.
+: REALLOC   HERE >R   DUP ALLOT   R@ SWAP MOVE   R> ;
+
+\ Realloc POINTER to old buffer to new LENGTH. Afterwards pointer points to
+\ new buffer.
+: REALLOC-POINTER   >R    DUP @ R> REALLOC   SWAP ! ;
+
 \ Define a structure for label-like things of length N.
 \ A label-like thing is two cells: address and a payload.
-1 'DROP 'DROP \ Dummy decompiler, printer, length.
+1 'DROP 'DROP \ Reverse of: Dummy decompiler, printer, length.
 struct LABELSTRUCT
+\ Return the DEA of the current label struct.
+  F: CURRENT-LABEL LATEST DUP ,   THE-REGISTER BAG+! FDOES> @ ;
+
   F: DECOMP , FDOES> @ EXECUTE ;        \ (Re)generate source for INDEX.
   F: .PAY , FDOES> @ EXECUTE ;          \ Print payload
-  F: LAB+!  FDOES> SET+! ;              \ Add to ``LABELS''
-  F: LABELS   2* BUILD-BAG   LATEST THE-REGISTER BAG+! FDOES> ;
+
+\ Remember that from now on two times as much labels are allowed.
+  F: DOUBLE-SIZE FDOES> DUP @ 2* SWAP ! ;
+\ Return a VARIABLE containing the max labels allowed.
+  F: MAX-LAB DUP , FDOES> @ ;
+
+  F: LABELS   FDOES> ;   \ Return ADDRESS
+  F: >RELOCATABLE FDOES> DUP @   OVER - SWAP ! ; \ Make labelstruct relocatable
+  F: RELOCATABLE> FDOES> DUP +! ;           \    and back. Don't use in between!
+
+\ Return largest INDEX of labels present.
+  F: LAB-UPB FDOES> |BAG| 2/ ;
+\ Reallocate if the structure is full. 6 cells : does> pointer, 4 fields and
+\ upperbound of bag.
+  F: ?REALLOC? FDOES>   DROP MAX-LAB LAB-UPB = IF DOUBLE-SIZE
+     >RELOCATABLE   CURRENT-LABEL >DFA MAX-LAB 2* 6 + CELLS REALLOC-POINTER
+     CURRENT-LABEL EXECUTE   RELOCATABLE> THEN ;
+  F: LAB+!   2* BUILD-BAG   FDOES> BAG+! ?REALLOC? ;              \ Add to ``LABELS''
 endstruct
 
 THE-REGISTER !BAG       \ Get rid of dummy registration.
@@ -76,8 +103,6 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 \ Print the addresses and payloads of the labels.
 : .LABELS  DO-LAB I @ .  I .PAY CR LOOP-LAB ;
 
-\ Return highest INDEX allowed in labels.
-: LAB-UPB   LABELS |BAG| 2/ ;
 
 \ Return LOWER and UPPER indices of the labels , inclusive.
 \ The lower index is 1 and the upper index is corresponding.
