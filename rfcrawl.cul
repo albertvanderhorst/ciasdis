@@ -2,9 +2,9 @@
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
+: \D POSTPONE \ ;   \ Get rid of debug
 HEX INIT-ALL
 INCLUDE elf.cul
-
 
 0804,839C  LABEL dovar
 0804,879D EQU last_dea_forth
@@ -91,6 +91,8 @@ dovar CRAWL
 
 \ The following surely is some manual work.
 
+"DROP-THIS INCLUDE rf751equ.cul" 0804,8000 COMMENT
+
 V_base
 4 + DUP EQU  tail               DUP COMMENT:   Allow tail-calls?
 4 + DUP EQU  buffer             DUP COMMENT:   Buffer (for ports to use as needed)
@@ -107,36 +109,23 @@ V_base
 4 + DUP EQU  retroforth_f
 DROP
 
-\ start of INCLUDE rf751equ.cul
-\ Manual addition
-
-_end filest - EQU filesz
-_end retroforth_f - EQU retrofilesz
-
-_end       DUP EQU tib
-   400 +
-   800 +   DUP EQU s0
-   800 +   DUP EQU d0
-2,0000 +   DUP EQU dictend
-DROP
-\ end of INCLUDE rf751equ.cul
+INCLUDE rf751equ.cul
 
 tail bases -dl-
 bases last -db-
 last retroforth_f -dl-
 
-MAKE-CUL
-"----------------" TYPE CR
+\D MAKE-CUL
+\D "----------------" TYPE CR
 SORT-LABELS
 CLEAN-LABELS
-MAKE-CUL
-
-"----------------" TYPE CR
-\ DISASSEMBLE-ALL
-EXIT
+\ MAKE-CUL
+\D
+\D "----------------" TYPE CR
+\D DISASSEMBLE-ALL
 
 CLEANUP-SECTIONS
-MAKE-CUL
+\ MAKE-CUL
 PLUG-HOLES
 MAKE-CUL
-DISASSEMBLE-ALL
+\ DISASSEMBLE-ALL
