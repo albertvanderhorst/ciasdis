@@ -220,6 +220,7 @@ JOPI"
 struct DIS-STRUCT
    F: START ROT , FDOES> @ ;     \ Start of range
    F: END SWAP , FDOES> @ ;       \ End of range
+   F: DIS-XT FDOES> @ ;       \ Which xt?
    F: DIS-RANGE , FDOES> @ >R START END R> EXECUTE ;       \ End of range
 endstruct
 
@@ -235,12 +236,17 @@ endstruct
 
 \ Specify that section "name" from AD1 to AD2 uses dis-assembler DEA
 : SECTION   SECTION-LABELS DIS-STRUCT START LAB+!  LATEST LAB+!  ;
+\ Specify that from AD1 to AD2 dis-assembler DEA is used. (anonymous).
+: ANON-SECTION "NONAME" POSTFIX SECTION ;
 
 \ Disassemble from target ADDRESS1 to ADDRESS2.
 : D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R ;
 
 \ Section ADDRESS1 .. ADDRESS2 is code with name "name".
 : -DC:    'D-R-T   SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous code section.
+: -DC-    'D-R-T   ANON-SECTION ;
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2.
 : DUMP-B
@@ -251,7 +257,7 @@ endstruct
 : -DB:    'DUMP-B   SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous byte section.
-: -DB-    'DUMP-B   "NONAME" POSTFIX SECTION ;
+: -DB-    'DUMP-B   ANON-SECTION ;
 
 
 \ Print X as a word (4 hex digits).
@@ -266,7 +272,7 @@ endstruct
 : -DW:    'DUMP-W   SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous word section.
-: -DW-    'DUMP-W   "NONAME" POSTFIX SECTION ;
+: -DW-    'DUMP-W   ANON-SECTION ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2.
 : DUMP-L
@@ -277,7 +283,7 @@ endstruct
 : -DL:    'DUMP-L   SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
-: -DL-    'DUMP-L   "NONAME" POSTFIX SECTION ;
+: -DL-    'DUMP-L   ANON-SECTION ;
 
 \ Disassemble all those sectors as if they were code.
 : DISASSEMBLE-ALL
@@ -333,17 +339,21 @@ ASSEMBLER
 : -DC16:    'D-R-T-16   SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-section.
-: -DC16-    'D-R-T-16   "NONAME" POSTFIX SECTION ;
+: -DC16-    'D-R-T-16   ANON-SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is 32-bit code with name "name".
 : -DC32:    'D-R-T-32   SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous 32-bit code-section.
-: -DC32-    'D-R-T-32   "NONAME" POSTFIX SECTION ;
+: -DC32-    'D-R-T-32   ANON-SECTION ;
 
 DEFINITIONS
 
 (                       INSTRUCTIONS                                    )
+
+\ This is kept up to date during disassembly.
+\ It is useful for the code crawler.
+VARIABLE LATEST-OFFSET
 
 ( Print X as a symbolic label if possible, else as a number             )
 : .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP H. SPACE THEN ;
@@ -366,7 +376,7 @@ DEFINITIONS
 
 (  Assuming the disassembly sits at the offset of a relative branch     )
 (  assembled by commaer DEA , return that OFFSET.                       )
-: GET-OFFSET   POINTER @ SWAP >CNT @ MC@-S ;
+: GET-OFFSET   POINTER @ SWAP >CNT @ MC@-S DUP LATEST-OFFSET ! ;
 
 ( For the commaer DEA return ADDRESS in host space that is the target   )
 ( of the current relative jump.                                         )
@@ -407,10 +417,16 @@ DEFINITIONS
 
 \ Contains all instruction that represent an unconditional transfer
 \ of control. It may be followed by data instead of code.
-0 BAG UNCONDITIONAL-TRANSFER
+0 BAG UNCONDITIONAL-TRANSFERS
   'CALL, , 'CALLFAR, , 'CALLFARO, , 'CALLO, , 'INT, , 'INT3, , 'INTO, ,
   'IRET, , 'JMP, , 'JMPFAR, , 'JMPFARO, , 'JMPO, , 'JMPS, , 'RET+, ,
   'RET, , 'RETFAR+, , 'RETFAR, ,
-HERE UNCONDITIONAL-TRANSFER !
+HERE UNCONDITIONAL-TRANSFERS !
+
+\ Contains all instruction that represent intra-segment jumps.
+0 BAG JUMPS
+   'CALL, , 'J, , 'JCXZ, , 'JMP, , 'JMPS, , 'J|X, , 'LOOP, , 'LOOPNZ,
+   , 'LOOPZ, ,
+HERE JUMPS !
 
 PREVIOUS DEFINITIONS
