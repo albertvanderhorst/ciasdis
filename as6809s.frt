@@ -162,6 +162,40 @@ VARIABLE ISF ( Fixup position )
 
 : |#, DUP -10 +10 WITHIN 0= ABORT" offset > 5 bits"  1F AND   |#, ;
 
+( ############## STRUCTURED ASSEMBLER WORDS ########################### )
+
+\ A BR, has to be followed by a condition : one of
+\ Y| N| U>| U<=| U>=| U<| =| <>| VC| VS| 0>=| 0<| >=| <| >|
+\ IF, WHILE, UNTIL, inherit that requirement.
+
+\ Leave BACK-BRANCH-INFORMATION for the current position.
+: (BACK HERE ;
+
+\ Assemble offset after a BR, assembly instruction.
+\ Resolve BACK-BRANCH-INFORMATION.
+: BACK) HERE 1+ - C, ;
+
+\ Leave hole for offset after a BR, assembly instruction.
+\ Leave FORWARD-BRANCH-INFORMATION for the current position.
+: (FORWARD HERE 0 C, ;
+
+\ Resolve FORWARD-BRANCH-INFORMATION.
+: FORWARD) HERE OVER 1+ - SWAP C! ;
+
+\ The micro specifications entitle you to use (BACK BACK)
+\ (FORWARD FORWARD) in pairs only.
+
+\ The N| is used to negated the condition.
+: IF, BR, N| (FORWARD ( 2) ;
+: ELSE, ( 2 ?PAIRS ) BR, Y| (FORWARD SWAP FORWARD) ( 2) ;
+: THEN, ( 2 ?PAIRS ) FORWARD) ;
+
+: BEGIN, (BACK ( 1 ) ;
+: UNTIL, ( 1 ?PAIRS ) BR, N| BACK) ;
+: AGAIN, ( 1 ?PAIRS ) BR, Y| BACK) ;
+: WHILE, ( >R) >R BR, N| (FORWARD ( 4) R> ( R>) ;
+: REPEAT, ( 1 ?PAIRS ) BR, Y| BACK) ( 4 ?PAIRS ) FORWARD) ;
+
 ( ############## ACTUAL GENERATION OF CODE ############################ )
 
 : NEXT,   JMP, [] [,R++] Y   ;
