@@ -155,4 +155,12 @@ HEX
 : [] []| 0 C, ;
 
 \ None of the essential
-: LSL,   ASL, ;         \ Do not use an alias, then the disassembler will use it! l
+' ASL, ALIAS LSL,
+
+( ############## ACTUAL GENERATION OF CODE ############################# )
+
+: NEXT,   JMP, [] [,R++] Y   ;
+
+: CODE CREATE -3 ALLOT HIDE ( ALSO ASSEMBLER) ;
+
+: END-CODE REVEAL ( PREVIOUS ) ;
