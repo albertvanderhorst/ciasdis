@@ -308,3 +308,7 @@ testlinux : $(TESTLINUX) ci86.linux.rawtest ciforthc forth.lab ;
 	sed $(TEMPFILE) -e '/Split here for test/,$$d' >$@.1
 	sed $(TEMPFILE) -e '1,/Split here for test/d' >$@.2
 	rm $(TEMPFILE)
+
+testdis : labeltest.frt test.asm aswrap.frt asgen.frt asi586.frt testset386 label.frt ;
+	cat labeltest.frt | lina -e > $@
+	diff -b -B $@ testresults
