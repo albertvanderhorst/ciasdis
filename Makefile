@@ -1,9 +1,13 @@
 # $Id$
 # Copyright(2000): Albert van der Horst, HCC FIG Holland by GNU Public License
 #
-# This defines the transformation from the generic file ci86.gnr
-# into a diversity of Intel 86 assembly sources, and further into
-# one of the $(TARGETS) Forth's.
+# This defines the usage of ciforth to build assemblers and reverse
+# engineering tools.
+
+# FIXME: Bear with me. This was adapted from the Makefile of ciforth
+# and contains a lot of stuff that has to be cleaned out.
+# It distracts but does no harm, other than that non-assembler targets
+# don't build.
 
 #.SUFFIXES:
 #.SUFFIXES:.bin.asm.m4.v.o.c
@@ -83,14 +87,16 @@ CSRC= $(CSRCAUX) $(CSRCFORTH)
 # Texinfo files still to be processed by m4.
 SRCMI= \
 assembler.mi    \
-cifgen.mi \
-ciforth.mi \
-intro.mi    \
-manual.mi   \
-rational.mi  \
+# That's all folks!
+# cifgen.mi \
+# ciforth.mi \
+# intro.mi    \
+# manual.mi   \
+# rational.mi  \
 # That's all folks!
 
-# Source for stand alone assembler
+# Generic source for assembler
+# Include two pass, reverse engineering.
 ASSRC= \
 access.frt   \
 aswrap.frt   \
@@ -101,13 +107,80 @@ labelas.frt  \
 labeldis.frt \
 # That's all folks!
 
+# Plug ins for stand alone assembler
+PGSRC= \
+as6809s.frt \
+as80.frt        \
+asi86.frt       \
+asi386.frt      \
+asalpha.frt     \
+# That's all folks!
+
+# Other Forth source.
+#   Quick reference sheet generator
+#   Complete small, stand alone assemblers
+UNPSRC= \
+ps.frt    \
+ass.frt  \
+#as6809s.frt \
+# That's all folks!
+
+# Consult files for general use
+CUL= \
+elf.cul \
+exeheader.cul \
+# That's all folks!
+
 # Documentation files and archives
 DOC = \
 COPYING   \
-README.ciforth      \
-testreport.txt     \
-$(SRCMI) \
+cul.5           \
+cias.1          \
+README.assembler \
+assembler.itxt  \
+p0.asi386.ps    \
+p0F.asi386.ps   \
+qr8086.ps       \
+qr8080.ps       \
 # That's all folks!
+# $(SRCMI)
+
+# Test files for assemblers.
+TESTAS= \
+testset8080     \
+testset8086     \
+testset386      \
+testset386a     \
+testset6809     \
+testsetalpha    \
+asm386endtest   \
+# That's all folks!
+
+# Test files for reverse engineering and two pass.
+TESTRV= \
+test.asm        \
+test.cul        \
+lina405         \
+linacrawl.cul   \
+lina405equ.cul  \
+lina405.cul     \
+# That's all folks!
+
+# Test output references
+TESTREF=        \
+lina405.asm     \
+# That's all folks!
+
+RELEASEASSEMBLER=      \
+$(ASSRC)        \
+$(PGSRC)        \
+$(UNPSRC)       \
+$(CUL)          \
+$(DOC)          \
+$(TESTRV)         \
+# That's all folks!
+
+
 
 # The following must be updated on the website, whenever
 # any typo's are fixed. Unfortunately, it has become a separate
@@ -467,27 +540,8 @@ testas6809a: asgen.frt as6809.frt testset6809a ; \
     diff -w $@ testset6809a >$@.diff ;\
     diff $@.diff testresults
 
-RELEASEASSEMBLER=      \
-as80.frt        \
-assembler.txt   \
-asgen.frt       \
-asi386.frt      \
-asi86.frt       \
-asm386endtest   \
-ass.frt  \
-p0.asi386.ps    \
-p0F.asi386.ps   \
-ps.frt    \
-qr8086.ps       \
-qr8080.ps       \
-testset386      \
-testset8080     \
-testset8086     \
-test.mak        \
-# That's all folks!
-# testset386a    (fails)
-
-as.zip : $(RELEASEASSEMBLER) ; echo as$(VERSION) $+ | xargs zip
+as.tgz : $(RELEASEASSEMBLER) cias ciasdis cidis ; echo as$(VERSION).tgz $+ |\
+ xargs tar cfz
 
 msdos32.zip : forth32.asm forth32.com msdos32.txt msdos9.cfg config.sys ; \
     make mslinks ; \
