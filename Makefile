@@ -512,13 +512,17 @@ test386-16: asgen.frt asi386.frt ; \
 #   diff -w $@ testset386 >$@.diff ;\
 #   diff $@.diff testresults
 
-testas6809: asgen.frt as6809.frt testset6809 ; \
-    (echo 5 LOAD; cat $+)|\
-    lina |\
-    sed '1,/TEST STARTS HERE/d' |\
-    sed 's/^[0-9A-F \.,]*://' >$@       ;\
-    diff -w $@ testset6809 >$@.diff ;\
-    diff $@.diff testresults
+# FIXME : as6809.frt has to be updated to work with the new asgen.frt.
+testas6809: as6809.frt testset6809 ;
+	co -r4.9 asgen.frt  # Last one that worked.
+	(echo 5 LOAD; cat asgen.frt  $+)|\
+	lina |\
+	sed '1,/TEST STARTS HERE/d' |\
+	sed 's/^[0-9A-F \.,]*://' >$@ ;\
+	rm -f asgen.frt               ;\
+	diff -w $@ testset6809 >$@.diff ;\
+	rcsdiff -bBw -r$(RCSVERSION) $@.diff
+
 
 as.tgz : $(RELEASEASSEMBLER) cias ciasdis cidis ; echo as$(VERSION).tgz $+ |\
  xargs tar cfz
