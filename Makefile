@@ -419,8 +419,8 @@ lina2 : ci86.lina.s ; gcc $+ -l 2>aap
 ci86.lina.s :
 
 
-# co -r4.9.1.1 asgen.frt  # Last one that worked for alpha.
 testasalpha: asalpha.frt testsetalpha ; \
+	co -r4.9.1.1 asgen.frt  # Last one that worked for alpha.
 	echo INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testsetalpha |\
 	lina -e |\
 	sed '1,/TEST STARTS HERE/d' |\
@@ -514,7 +514,7 @@ test386-16: asgen.frt asi386.frt ; \
 
 # FIXME : as6809.frt has to be updated to work with the new asgen.frt.
 testas6809: as6809.frt testset6809 ;
-	co -r4.9 asgen.frt  # Last one that worked.
+	co -r4.9.1.1 asgen.frt  # Last one that worked for alpha.
 	(echo 5 LOAD; cat asgen.frt  $+)|\
 	lina |\
 	sed '1,/TEST STARTS HERE/d' |\
