@@ -5,24 +5,11 @@
 HEX INIT-ALL
 INCLUDE elf.cul
 
-MAKE-CUL
-EXIT
-0804,A0DC EQU semis
-0804,B7AC EQU semiscode
 
-0804,A664 EQU docol
-0804,BE3C  LABEL donumber
-0804,A6EC  LABEL doconstant
-0804,A72C  LABEL dovar
-0804,A75C  LABEL douse
-0804,B814  LABEL dodoes
-0804,C828  LABEL DOVOC          \ High level code.
-0804,9968 LABEL init_user
-0804,F82C EQU last_dea          \ TASK
-0804,95C4 EQU last_dea_envir
+0804,839C  LABEL dovar
+0804,879D EQU last_dea_base
+0804,85E5 EQU last_dea_literal
 
-\ Align an address in the host space.
-: hALIGN 1- 3 OR 1+ ;
 
 CREATE NAME-BUFFER 0 , 256 ALLOT
 \ Prepend to NAME a PREFIX, return prefixed NAME in a static buffer.
@@ -32,57 +19,103 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 : >N_  "N_" PRE-PEND ;
 
 \ ADDRESS points to a valid name. Add a label to address the name.
-: ADD-NAME-LABEL   DUP th $@ >N_ INSERT-EQU ;
+: ADD-NAME-LABEL   DUP th COUNT >N_ INSERT-EQU ;
 
-\ Generate a equ label at (target) ADDRESS with NAME,
-\ unless address is already labeled.
-: ?LABELED?  2>R DUP >LABEL 0= IF 2R> INSERT-EQU ELSE 2R> 2DROP DROP THEN ;
-
-\ ADDRESS points to a valid dea. Add a label to address the dea(xt)
-\ and the datafield.
+\ ADDRESS points to a valid dea. Add a label to address the dea(header).
 \ Assume that just before the dea's name has been analysed.
-: ADD-DEA-LABEL   &X NAME-BUFFER CELL+ C!   DUP NAME-BUFFER $@ ?LABELED?
-    &H NAME-BUFFER CELL+ C!   4 + L@ NAME-BUFFER $@ ?LABELED? ;
+: ADD-DEA-LABEL   &H NAME-BUFFER CELL+ C!   NAME-BUFFER $@ INSERT-EQU ;
+
+\ ADDRESS points to a valid code address. Lets call that an execution token.
+\ Assume that just before the dea's name has been analysed.
+: ADD-CODE-LABEL   &X NAME-BUFFER CELL+ C!   NAME-BUFFER $@ INSERT-EQU ;
 
 \ ADDRESS points to a valid name.
 \ Add an anonymous section to disassemble the name.
-: ADD-NAME-SECTION   DUP L@ hALIGN OVER + 4 + -d$- ;
+: ADD-NAME-SECTION   DUP B@ OVER + 1 + -d$- ;
 
 \ ADDRESS points to a dea.
 \ Add an anonymous section to disassemble the dea.
-: ADD-DEA-SECTION   DUP 18 + -dl- ;
+: ADD-DEA-SECTION   DUP 8 + -dl- ;
+
+\ Add an anonymous section to disassemble the code (5 byte call) of a
+\ variable whose code ADDRESS is given. And a 4 byte section for the
+\ content.
+: ADD-VAR-SECTIONS   >R   R@ R@ 5 + -dc-   R@ 5 + R@ 9 + -dl-   RDROP ;
 
 \ Add the information that ADDRESS is a nfa.
-: IS-A-NAME L@ DUP IF DUP ADD-NAME-LABEL ADD-NAME-SECTION _ THEN DROP ;
-
-\ The CONTENT of address indicates : "This IS not yet the end of
-\ high level code".
-: STILL-CODE?   >R   R@ semis <>  R@ semiscode <>   AND RDROP ;
-
-\ Add the information that ADDRESS points to high level code.
-: IS-HIGH-LEVEL DUP BEGIN DUP L@ STILL-CODE? WHILE 4 + REPEAT 4 + -dl- ;
-
-\ For CFA : "it POINTS to the high level interpreter"
-: IS-DOCOL?   L@ docol = ;
+: IS-A-NAME DUP B@ 0 31 WITHIN 0= ABORT" UNPLAUSIBLE LENGTH"
+    DUP ADD-NAME-LABEL ADD-NAME-SECTION ;
 
 \ Accumulate the information that ADDRESS contains a code field address.
-: IS-A-CFA   DUP L@ CRAWL   DUP IS-DOCOL? IF 4 + L@ IS-HIGH-LEVEL _ THEN DROP ;
+\ For variables the code ends after the call, so we don't want to crawl.
+: IS-A-CFA   L@ DUP ADD-CODE-LABEL
+    DUP 1+ L@ OVER 5 + + dovar = IF ADD-VAR-SECTIONS ELSE CRAWL THEN ;
 
 \ Accumulate the information that DEA is a dea.
-: IS-A-DEA   DUP 8 + L@ 1 AND IF DROP EXIT THEN \ Dummy field
-             DUP 10 + IS-A-NAME  DUP ADD-DEA-LABEL
-             DUP IS-A-CFA   DUP ADD-DEA-SECTION
+: IS-A-DEA   DUP 8 + IS-A-NAME  DUP ADD-DEA-LABEL
+             DUP 4 + IS-A-CFA   DUP ADD-DEA-SECTION
 DROP ;
 
-\ Accumulate the information from DEA as a wid, follow the link field.
-: CRAWL-WID BEGIN DUP IS-A-DEA 0C + L@ DUP 0= UNTIL DROP ;
-
+\ Accumulate the information from DEA, follow the link field.
+: CRAWL-DEA BEGIN DUP IS-A-DEA L@ DUP PLAUSIBLE-LABEL? 0= UNTIL DROP ;
 
 SORT-ALL
 
-last_dea_envir CRAWL-WID
-last_dea CRAWL-WID
-SORT-ALL
+last_dea_base CRAWL-DEA
+last_dea_literal CRAWL-DEA
+dovar CRAWL
+ELF-CRAWL
+
+\ Code addresses after CALL's (by hand)
+0804,84C8 CRAWL
+0804,84B6 CRAWL
+0804,840E CRAWL
+0804,8404 CRAWL
+0804,839B CRAWL
+
+0804,87AF 0804,87D7 -dl-
+
+\ 0804,81E4 CRAWL
+\ 0804,81D6 CRAWL
+\ 0804,818A CRAWL
+\ 0804,8165 CRAWL
+\ 0804,8145 CRAWL
+\ 0804,812C CRAWL
+\ 0804,811A CRAWL
+\ 0804,810D CRAWL
+\ 0804,8105 CRAWL
+\ 0804,80AD CRAWL
+\ 0804,8082 CRAWL
+\
+\ 0804,8604 CRAWL
+\ 0804,85C8 CRAWL
+\ 0804,8524 CRAWL
+\ 0804,8500 CRAWL
+\ 0804,81CF CRAWL
+\
+\ 0804,869D CRAWL
+\ 0804,8570 CRAWL
+\ 0804,84F9 CRAWL
+\ 0804,84F2 CRAWL
+\ 0804,81C4 CRAWL
+\
+\ 0804,86C7 CRAWL
+\ 0804,868C CRAWL
+\ 0804,85D9 CRAWL
+\ 0804,856B CRAWL
+\ 0804,84E9 CRAWL
+\ 0804,84A7 CRAWL
+\ 0804,843B CRAWL
+\ 0804,82FD CRAWL
+\ 0804,828C CRAWL
+\ 0804,81B5 CRAWL
+\ 0804,81AF CRAWL
+\ 0804,8059 CRAWL
+
+MAKE-CUL
+"----------------" TYPE CR
+\ DISASSEMBLE-ALL
+EXIT
 
 \ User area contains longs
 init_user       DUP 100 + -dl-
