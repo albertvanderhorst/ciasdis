@@ -2102,518 +2102,518 @@ XADD,   B|   AL'|   ZO|   [BX]
 XADD,   B|   AL'|   ZO|   [DX]
 XADD,   B|   AL'|   ZO|   [CX]
 XADD,   B|   AL'|   ZO|   [AX]
-CMPXCH,   X|   DI'|   MEM|   14 L,
-CMPXCH,   X|   DI'|   R|   DI|
-CMPXCH,   X|   DI'|   R|   SI|
-CMPXCH,   X|   DI'|   R|   BP|
-CMPXCH,   X|   DI'|   R|   SP|
-CMPXCH,   X|   DI'|   R|   BX|
-CMPXCH,   X|   DI'|   R|   DX|
-CMPXCH,   X|   DI'|   R|   CX|
-CMPXCH,   X|   DI'|   R|   AX|
-CMPXCH,   X|   DI'|   XO|   [DI]   18 L,
-CMPXCH,   X|   DI'|   XO|   [SI]   18 L,
-CMPXCH,   X|   DI'|   XO|   [BP]   18 L,
-CMPXCH,   X|   DI'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   X|   DI'|   XO|   [BX]   18 L,
-CMPXCH,   X|   DI'|   XO|   [DX]   18 L,
-CMPXCH,   X|   DI'|   XO|   [CX]   18 L,
-CMPXCH,   X|   DI'|   XO|   [AX]   18 L,
-CMPXCH,   X|   DI'|   BO|   [DI]   18 B,
-CMPXCH,   X|   DI'|   BO|   [SI]   18 B,
-CMPXCH,   X|   DI'|   BO|   [BP]   18 B,
-CMPXCH,   X|   DI'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   X|   DI'|   BO|   [BX]   18 B,
-CMPXCH,   X|   DI'|   BO|   [DX]   18 B,
-CMPXCH,   X|   DI'|   BO|   [CX]   18 B,
-CMPXCH,   X|   DI'|   BO|   [AX]   18 B,
-CMPXCH,   X|   DI'|   ZO|   [DI]
-CMPXCH,   X|   DI'|   ZO|   [SI]
-CMPXCH,   X|   DI'|   ZO|   [DX +1* BX]
-CMPXCH,   X|   DI'|   ZO|   [BX]
-CMPXCH,   X|   DI'|   ZO|   [DX]
-CMPXCH,   X|   DI'|   ZO|   [CX]
-CMPXCH,   X|   DI'|   ZO|   [AX]
-CMPXCH,   X|   SI'|   MEM|   14 L,
-CMPXCH,   X|   SI'|   R|   DI|
-CMPXCH,   X|   SI'|   R|   SI|
-CMPXCH,   X|   SI'|   R|   BP|
-CMPXCH,   X|   SI'|   R|   SP|
-CMPXCH,   X|   SI'|   R|   BX|
-CMPXCH,   X|   SI'|   R|   DX|
-CMPXCH,   X|   SI'|   R|   CX|
-CMPXCH,   X|   SI'|   R|   AX|
-CMPXCH,   X|   SI'|   XO|   [DI]   18 L,
-CMPXCH,   X|   SI'|   XO|   [SI]   18 L,
-CMPXCH,   X|   SI'|   XO|   [BP]   18 L,
-CMPXCH,   X|   SI'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   X|   SI'|   XO|   [BX]   18 L,
-CMPXCH,   X|   SI'|   XO|   [DX]   18 L,
-CMPXCH,   X|   SI'|   XO|   [CX]   18 L,
-CMPXCH,   X|   SI'|   XO|   [AX]   18 L,
-CMPXCH,   X|   SI'|   BO|   [DI]   18 B,
-CMPXCH,   X|   SI'|   BO|   [SI]   18 B,
-CMPXCH,   X|   SI'|   BO|   [BP]   18 B,
-CMPXCH,   X|   SI'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   X|   SI'|   BO|   [BX]   18 B,
-CMPXCH,   X|   SI'|   BO|   [DX]   18 B,
-CMPXCH,   X|   SI'|   BO|   [CX]   18 B,
-CMPXCH,   X|   SI'|   BO|   [AX]   18 B,
-CMPXCH,   X|   SI'|   ZO|   [DI]
-CMPXCH,   X|   SI'|   ZO|   [SI]
-CMPXCH,   X|   SI'|   ZO|   [DX +1* BX]
-CMPXCH,   X|   SI'|   ZO|   [BX]
-CMPXCH,   X|   SI'|   ZO|   [DX]
-CMPXCH,   X|   SI'|   ZO|   [CX]
-CMPXCH,   X|   SI'|   ZO|   [AX]
-CMPXCH,   X|   BP'|   MEM|   14 L,
-CMPXCH,   X|   BP'|   R|   DI|
-CMPXCH,   X|   BP'|   R|   SI|
-CMPXCH,   X|   BP'|   R|   BP|
-CMPXCH,   X|   BP'|   R|   SP|
-CMPXCH,   X|   BP'|   R|   BX|
-CMPXCH,   X|   BP'|   R|   DX|
-CMPXCH,   X|   BP'|   R|   CX|
-CMPXCH,   X|   BP'|   R|   AX|
-CMPXCH,   X|   BP'|   XO|   [DI]   18 L,
-CMPXCH,   X|   BP'|   XO|   [SI]   18 L,
-CMPXCH,   X|   BP'|   XO|   [BP]   18 L,
-CMPXCH,   X|   BP'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   X|   BP'|   XO|   [BX]   18 L,
-CMPXCH,   X|   BP'|   XO|   [DX]   18 L,
-CMPXCH,   X|   BP'|   XO|   [CX]   18 L,
-CMPXCH,   X|   BP'|   XO|   [AX]   18 L,
-CMPXCH,   X|   BP'|   BO|   [DI]   18 B,
-CMPXCH,   X|   BP'|   BO|   [SI]   18 B,
-CMPXCH,   X|   BP'|   BO|   [BP]   18 B,
-CMPXCH,   X|   BP'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   X|   BP'|   BO|   [BX]   18 B,
-CMPXCH,   X|   BP'|   BO|   [DX]   18 B,
-CMPXCH,   X|   BP'|   BO|   [CX]   18 B,
-CMPXCH,   X|   BP'|   BO|   [AX]   18 B,
-CMPXCH,   X|   BP'|   ZO|   [DI]
-CMPXCH,   X|   BP'|   ZO|   [SI]
-CMPXCH,   X|   BP'|   ZO|   [DX +1* BX]
-CMPXCH,   X|   BP'|   ZO|   [BX]
-CMPXCH,   X|   BP'|   ZO|   [DX]
-CMPXCH,   X|   BP'|   ZO|   [CX]
-CMPXCH,   X|   BP'|   ZO|   [AX]
-CMPXCH,   X|   SP'|   MEM|   14 L,
-CMPXCH,   X|   SP'|   R|   DI|
-CMPXCH,   X|   SP'|   R|   SI|
-CMPXCH,   X|   SP'|   R|   BP|
-CMPXCH,   X|   SP'|   R|   SP|
-CMPXCH,   X|   SP'|   R|   BX|
-CMPXCH,   X|   SP'|   R|   DX|
-CMPXCH,   X|   SP'|   R|   CX|
-CMPXCH,   X|   SP'|   R|   AX|
-CMPXCH,   X|   SP'|   XO|   [DI]   18 L,
-CMPXCH,   X|   SP'|   XO|   [SI]   18 L,
-CMPXCH,   X|   SP'|   XO|   [BP]   18 L,
-CMPXCH,   X|   SP'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   X|   SP'|   XO|   [BX]   18 L,
-CMPXCH,   X|   SP'|   XO|   [DX]   18 L,
-CMPXCH,   X|   SP'|   XO|   [CX]   18 L,
-CMPXCH,   X|   SP'|   XO|   [AX]   18 L,
-CMPXCH,   X|   SP'|   BO|   [DI]   18 B,
-CMPXCH,   X|   SP'|   BO|   [SI]   18 B,
-CMPXCH,   X|   SP'|   BO|   [BP]   18 B,
-CMPXCH,   X|   SP'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   X|   SP'|   BO|   [BX]   18 B,
-CMPXCH,   X|   SP'|   BO|   [DX]   18 B,
-CMPXCH,   X|   SP'|   BO|   [CX]   18 B,
-CMPXCH,   X|   SP'|   BO|   [AX]   18 B,
-CMPXCH,   X|   SP'|   ZO|   [DI]
-CMPXCH,   X|   SP'|   ZO|   [SI]
-CMPXCH,   X|   SP'|   ZO|   [DX +1* BX]
-CMPXCH,   X|   SP'|   ZO|   [BX]
-CMPXCH,   X|   SP'|   ZO|   [DX]
-CMPXCH,   X|   SP'|   ZO|   [CX]
-CMPXCH,   X|   SP'|   ZO|   [AX]
-CMPXCH,   X|   BX'|   MEM|   14 L,
-CMPXCH,   X|   BX'|   R|   DI|
-CMPXCH,   X|   BX'|   R|   SI|
-CMPXCH,   X|   BX'|   R|   BP|
-CMPXCH,   X|   BX'|   R|   SP|
-CMPXCH,   X|   BX'|   R|   BX|
-CMPXCH,   X|   BX'|   R|   DX|
-CMPXCH,   X|   BX'|   R|   CX|
-CMPXCH,   X|   BX'|   R|   AX|
-CMPXCH,   X|   BX'|   XO|   [DI]   18 L,
-CMPXCH,   X|   BX'|   XO|   [SI]   18 L,
-CMPXCH,   X|   BX'|   XO|   [BP]   18 L,
-CMPXCH,   X|   BX'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   X|   BX'|   XO|   [BX]   18 L,
-CMPXCH,   X|   BX'|   XO|   [DX]   18 L,
-CMPXCH,   X|   BX'|   XO|   [CX]   18 L,
-CMPXCH,   X|   BX'|   XO|   [AX]   18 L,
-CMPXCH,   X|   BX'|   BO|   [DI]   18 B,
-CMPXCH,   X|   BX'|   BO|   [SI]   18 B,
-CMPXCH,   X|   BX'|   BO|   [BP]   18 B,
-CMPXCH,   X|   BX'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   X|   BX'|   BO|   [BX]   18 B,
-CMPXCH,   X|   BX'|   BO|   [DX]   18 B,
-CMPXCH,   X|   BX'|   BO|   [CX]   18 B,
-CMPXCH,   X|   BX'|   BO|   [AX]   18 B,
-CMPXCH,   X|   BX'|   ZO|   [DI]
-CMPXCH,   X|   BX'|   ZO|   [SI]
-CMPXCH,   X|   BX'|   ZO|   [DX +1* BX]
-CMPXCH,   X|   BX'|   ZO|   [BX]
-CMPXCH,   X|   BX'|   ZO|   [DX]
-CMPXCH,   X|   BX'|   ZO|   [CX]
-CMPXCH,   X|   BX'|   ZO|   [AX]
-CMPXCH,   X|   DX'|   MEM|   14 L,
-CMPXCH,   X|   DX'|   R|   DI|
-CMPXCH,   X|   DX'|   R|   SI|
-CMPXCH,   X|   DX'|   R|   BP|
-CMPXCH,   X|   DX'|   R|   SP|
-CMPXCH,   X|   DX'|   R|   BX|
-CMPXCH,   X|   DX'|   R|   DX|
-CMPXCH,   X|   DX'|   R|   CX|
-CMPXCH,   X|   DX'|   R|   AX|
-CMPXCH,   X|   DX'|   XO|   [DI]   18 L,
-CMPXCH,   X|   DX'|   XO|   [SI]   18 L,
-CMPXCH,   X|   DX'|   XO|   [BP]   18 L,
-CMPXCH,   X|   DX'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   X|   DX'|   XO|   [BX]   18 L,
-CMPXCH,   X|   DX'|   XO|   [DX]   18 L,
-CMPXCH,   X|   DX'|   XO|   [CX]   18 L,
-CMPXCH,   X|   DX'|   XO|   [AX]   18 L,
-CMPXCH,   X|   DX'|   BO|   [DI]   18 B,
-CMPXCH,   X|   DX'|   BO|   [SI]   18 B,
-CMPXCH,   X|   DX'|   BO|   [BP]   18 B,
-CMPXCH,   X|   DX'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   X|   DX'|   BO|   [BX]   18 B,
-CMPXCH,   X|   DX'|   BO|   [DX]   18 B,
-CMPXCH,   X|   DX'|   BO|   [CX]   18 B,
-CMPXCH,   X|   DX'|   BO|   [AX]   18 B,
-CMPXCH,   X|   DX'|   ZO|   [DI]
-CMPXCH,   X|   DX'|   ZO|   [SI]
-CMPXCH,   X|   DX'|   ZO|   [DX +1* BX]
-CMPXCH,   X|   DX'|   ZO|   [BX]
-CMPXCH,   X|   DX'|   ZO|   [DX]
-CMPXCH,   X|   DX'|   ZO|   [CX]
-CMPXCH,   X|   DX'|   ZO|   [AX]
-CMPXCH,   X|   CX'|   MEM|   14 L,
-CMPXCH,   X|   CX'|   R|   DI|
-CMPXCH,   X|   CX'|   R|   SI|
-CMPXCH,   X|   CX'|   R|   BP|
-CMPXCH,   X|   CX'|   R|   SP|
-CMPXCH,   X|   CX'|   R|   BX|
-CMPXCH,   X|   CX'|   R|   DX|
-CMPXCH,   X|   CX'|   R|   CX|
-CMPXCH,   X|   CX'|   R|   AX|
-CMPXCH,   X|   CX'|   XO|   [DI]   18 L,
-CMPXCH,   X|   CX'|   XO|   [SI]   18 L,
-CMPXCH,   X|   CX'|   XO|   [BP]   18 L,
-CMPXCH,   X|   CX'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   X|   CX'|   XO|   [BX]   18 L,
-CMPXCH,   X|   CX'|   XO|   [DX]   18 L,
-CMPXCH,   X|   CX'|   XO|   [CX]   18 L,
-CMPXCH,   X|   CX'|   XO|   [AX]   18 L,
-CMPXCH,   X|   CX'|   BO|   [DI]   18 B,
-CMPXCH,   X|   CX'|   BO|   [SI]   18 B,
-CMPXCH,   X|   CX'|   BO|   [BP]   18 B,
-CMPXCH,   X|   CX'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   X|   CX'|   BO|   [BX]   18 B,
-CMPXCH,   X|   CX'|   BO|   [DX]   18 B,
-CMPXCH,   X|   CX'|   BO|   [CX]   18 B,
-CMPXCH,   X|   CX'|   BO|   [AX]   18 B,
-CMPXCH,   X|   CX'|   ZO|   [DI]
-CMPXCH,   X|   CX'|   ZO|   [SI]
-CMPXCH,   X|   CX'|   ZO|   [DX +1* BX]
-CMPXCH,   X|   CX'|   ZO|   [BX]
-CMPXCH,   X|   CX'|   ZO|   [DX]
-CMPXCH,   X|   CX'|   ZO|   [CX]
-CMPXCH,   X|   CX'|   ZO|   [AX]
-CMPXCH,   X|   AX'|   MEM|   14 L,
-CMPXCH,   X|   AX'|   R|   DI|
-CMPXCH,   X|   AX'|   R|   SI|
-CMPXCH,   X|   AX'|   R|   BP|
-CMPXCH,   X|   AX'|   R|   SP|
-CMPXCH,   X|   AX'|   R|   BX|
-CMPXCH,   X|   AX'|   R|   DX|
-CMPXCH,   X|   AX'|   R|   CX|
-CMPXCH,   X|   AX'|   R|   AX|
-CMPXCH,   X|   AX'|   XO|   [DI]   18 L,
-CMPXCH,   X|   AX'|   XO|   [SI]   18 L,
-CMPXCH,   X|   AX'|   XO|   [BP]   18 L,
-CMPXCH,   X|   AX'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   X|   AX'|   XO|   [BX]   18 L,
-CMPXCH,   X|   AX'|   XO|   [DX]   18 L,
-CMPXCH,   X|   AX'|   XO|   [CX]   18 L,
-CMPXCH,   X|   AX'|   XO|   [AX]   18 L,
-CMPXCH,   X|   AX'|   BO|   [DI]   18 B,
-CMPXCH,   X|   AX'|   BO|   [SI]   18 B,
-CMPXCH,   X|   AX'|   BO|   [BP]   18 B,
-CMPXCH,   X|   AX'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   X|   AX'|   BO|   [BX]   18 B,
-CMPXCH,   X|   AX'|   BO|   [DX]   18 B,
-CMPXCH,   X|   AX'|   BO|   [CX]   18 B,
-CMPXCH,   X|   AX'|   BO|   [AX]   18 B,
-CMPXCH,   X|   AX'|   ZO|   [DI]
-CMPXCH,   X|   AX'|   ZO|   [SI]
-CMPXCH,   X|   AX'|   ZO|   [DX +1* BX]
-CMPXCH,   X|   AX'|   ZO|   [BX]
-CMPXCH,   X|   AX'|   ZO|   [DX]
-CMPXCH,   X|   AX'|   ZO|   [CX]
-CMPXCH,   X|   AX'|   ZO|   [AX]
-CMPXCH,   B|   BH'|   MEM|   14 L,
-CMPXCH,   B|   BH'|   R|   BH|
-CMPXCH,   B|   BH'|   R|   DH|
-CMPXCH,   B|   BH'|   R|   CH|
-CMPXCH,   B|   BH'|   R|   AH|
-CMPXCH,   B|   BH'|   R|   BL|
-CMPXCH,   B|   BH'|   R|   DL|
-CMPXCH,   B|   BH'|   R|   CL|
-CMPXCH,   B|   BH'|   R|   AL|
-CMPXCH,   B|   BH'|   XO|   [DI]   18 L,
-CMPXCH,   B|   BH'|   XO|   [SI]   18 L,
-CMPXCH,   B|   BH'|   XO|   [BP]   18 L,
-CMPXCH,   B|   BH'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   B|   BH'|   XO|   [BX]   18 L,
-CMPXCH,   B|   BH'|   XO|   [DX]   18 L,
-CMPXCH,   B|   BH'|   XO|   [CX]   18 L,
-CMPXCH,   B|   BH'|   XO|   [AX]   18 L,
-CMPXCH,   B|   BH'|   BO|   [DI]   18 B,
-CMPXCH,   B|   BH'|   BO|   [SI]   18 B,
-CMPXCH,   B|   BH'|   BO|   [BP]   18 B,
-CMPXCH,   B|   BH'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   B|   BH'|   BO|   [BX]   18 B,
-CMPXCH,   B|   BH'|   BO|   [DX]   18 B,
-CMPXCH,   B|   BH'|   BO|   [CX]   18 B,
-CMPXCH,   B|   BH'|   BO|   [AX]   18 B,
-CMPXCH,   B|   BH'|   ZO|   [DI]
-CMPXCH,   B|   BH'|   ZO|   [SI]
-CMPXCH,   B|   BH'|   ZO|   [DX +1* BX]
-CMPXCH,   B|   BH'|   ZO|   [BX]
-CMPXCH,   B|   BH'|   ZO|   [DX]
-CMPXCH,   B|   BH'|   ZO|   [CX]
-CMPXCH,   B|   BH'|   ZO|   [AX]
-CMPXCH,   B|   DH'|   MEM|   14 L,
-CMPXCH,   B|   DH'|   R|   BH|
-CMPXCH,   B|   DH'|   R|   DH|
-CMPXCH,   B|   DH'|   R|   CH|
-CMPXCH,   B|   DH'|   R|   AH|
-CMPXCH,   B|   DH'|   R|   BL|
-CMPXCH,   B|   DH'|   R|   DL|
-CMPXCH,   B|   DH'|   R|   CL|
-CMPXCH,   B|   DH'|   R|   AL|
-CMPXCH,   B|   DH'|   XO|   [DI]   18 L,
-CMPXCH,   B|   DH'|   XO|   [SI]   18 L,
-CMPXCH,   B|   DH'|   XO|   [BP]   18 L,
-CMPXCH,   B|   DH'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   B|   DH'|   XO|   [BX]   18 L,
-CMPXCH,   B|   DH'|   XO|   [DX]   18 L,
-CMPXCH,   B|   DH'|   XO|   [CX]   18 L,
-CMPXCH,   B|   DH'|   XO|   [AX]   18 L,
-CMPXCH,   B|   DH'|   BO|   [DI]   18 B,
-CMPXCH,   B|   DH'|   BO|   [SI]   18 B,
-CMPXCH,   B|   DH'|   BO|   [BP]   18 B,
-CMPXCH,   B|   DH'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   B|   DH'|   BO|   [BX]   18 B,
-CMPXCH,   B|   DH'|   BO|   [DX]   18 B,
-CMPXCH,   B|   DH'|   BO|   [CX]   18 B,
-CMPXCH,   B|   DH'|   BO|   [AX]   18 B,
-CMPXCH,   B|   DH'|   ZO|   [DI]
-CMPXCH,   B|   DH'|   ZO|   [SI]
-CMPXCH,   B|   DH'|   ZO|   [DX +1* BX]
-CMPXCH,   B|   DH'|   ZO|   [BX]
-CMPXCH,   B|   DH'|   ZO|   [DX]
-CMPXCH,   B|   DH'|   ZO|   [CX]
-CMPXCH,   B|   DH'|   ZO|   [AX]
-CMPXCH,   B|   CH'|   MEM|   14 L,
-CMPXCH,   B|   CH'|   R|   BH|
-CMPXCH,   B|   CH'|   R|   DH|
-CMPXCH,   B|   CH'|   R|   CH|
-CMPXCH,   B|   CH'|   R|   AH|
-CMPXCH,   B|   CH'|   R|   BL|
-CMPXCH,   B|   CH'|   R|   DL|
-CMPXCH,   B|   CH'|   R|   CL|
-CMPXCH,   B|   CH'|   R|   AL|
-CMPXCH,   B|   CH'|   XO|   [DI]   18 L,
-CMPXCH,   B|   CH'|   XO|   [SI]   18 L,
-CMPXCH,   B|   CH'|   XO|   [BP]   18 L,
-CMPXCH,   B|   CH'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   B|   CH'|   XO|   [BX]   18 L,
-CMPXCH,   B|   CH'|   XO|   [DX]   18 L,
-CMPXCH,   B|   CH'|   XO|   [CX]   18 L,
-CMPXCH,   B|   CH'|   XO|   [AX]   18 L,
-CMPXCH,   B|   CH'|   BO|   [DI]   18 B,
-CMPXCH,   B|   CH'|   BO|   [SI]   18 B,
-CMPXCH,   B|   CH'|   BO|   [BP]   18 B,
-CMPXCH,   B|   CH'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   B|   CH'|   BO|   [BX]   18 B,
-CMPXCH,   B|   CH'|   BO|   [DX]   18 B,
-CMPXCH,   B|   CH'|   BO|   [CX]   18 B,
-CMPXCH,   B|   CH'|   BO|   [AX]   18 B,
-CMPXCH,   B|   CH'|   ZO|   [DI]
-CMPXCH,   B|   CH'|   ZO|   [SI]
-CMPXCH,   B|   CH'|   ZO|   [DX +1* BX]
-CMPXCH,   B|   CH'|   ZO|   [BX]
-CMPXCH,   B|   CH'|   ZO|   [DX]
-CMPXCH,   B|   CH'|   ZO|   [CX]
-CMPXCH,   B|   CH'|   ZO|   [AX]
-CMPXCH,   B|   AH'|   MEM|   14 L,
-CMPXCH,   B|   AH'|   R|   BH|
-CMPXCH,   B|   AH'|   R|   DH|
-CMPXCH,   B|   AH'|   R|   CH|
-CMPXCH,   B|   AH'|   R|   AH|
-CMPXCH,   B|   AH'|   R|   BL|
-CMPXCH,   B|   AH'|   R|   DL|
-CMPXCH,   B|   AH'|   R|   CL|
-CMPXCH,   B|   AH'|   R|   AL|
-CMPXCH,   B|   AH'|   XO|   [DI]   18 L,
-CMPXCH,   B|   AH'|   XO|   [SI]   18 L,
-CMPXCH,   B|   AH'|   XO|   [BP]   18 L,
-CMPXCH,   B|   AH'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   B|   AH'|   XO|   [BX]   18 L,
-CMPXCH,   B|   AH'|   XO|   [DX]   18 L,
-CMPXCH,   B|   AH'|   XO|   [CX]   18 L,
-CMPXCH,   B|   AH'|   XO|   [AX]   18 L,
-CMPXCH,   B|   AH'|   BO|   [DI]   18 B,
-CMPXCH,   B|   AH'|   BO|   [SI]   18 B,
-CMPXCH,   B|   AH'|   BO|   [BP]   18 B,
-CMPXCH,   B|   AH'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   B|   AH'|   BO|   [BX]   18 B,
-CMPXCH,   B|   AH'|   BO|   [DX]   18 B,
-CMPXCH,   B|   AH'|   BO|   [CX]   18 B,
-CMPXCH,   B|   AH'|   BO|   [AX]   18 B,
-CMPXCH,   B|   AH'|   ZO|   [DI]
-CMPXCH,   B|   AH'|   ZO|   [SI]
-CMPXCH,   B|   AH'|   ZO|   [DX +1* BX]
-CMPXCH,   B|   AH'|   ZO|   [BX]
-CMPXCH,   B|   AH'|   ZO|   [DX]
-CMPXCH,   B|   AH'|   ZO|   [CX]
-CMPXCH,   B|   AH'|   ZO|   [AX]
-CMPXCH,   B|   BL'|   MEM|   14 L,
-CMPXCH,   B|   BL'|   R|   BH|
-CMPXCH,   B|   BL'|   R|   DH|
-CMPXCH,   B|   BL'|   R|   CH|
-CMPXCH,   B|   BL'|   R|   AH|
-CMPXCH,   B|   BL'|   R|   BL|
-CMPXCH,   B|   BL'|   R|   DL|
-CMPXCH,   B|   BL'|   R|   CL|
-CMPXCH,   B|   BL'|   R|   AL|
-CMPXCH,   B|   BL'|   XO|   [DI]   18 L,
-CMPXCH,   B|   BL'|   XO|   [SI]   18 L,
-CMPXCH,   B|   BL'|   XO|   [BP]   18 L,
-CMPXCH,   B|   BL'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   B|   BL'|   XO|   [BX]   18 L,
-CMPXCH,   B|   BL'|   XO|   [DX]   18 L,
-CMPXCH,   B|   BL'|   XO|   [CX]   18 L,
-CMPXCH,   B|   BL'|   XO|   [AX]   18 L,
-CMPXCH,   B|   BL'|   BO|   [DI]   18 B,
-CMPXCH,   B|   BL'|   BO|   [SI]   18 B,
-CMPXCH,   B|   BL'|   BO|   [BP]   18 B,
-CMPXCH,   B|   BL'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   B|   BL'|   BO|   [BX]   18 B,
-CMPXCH,   B|   BL'|   BO|   [DX]   18 B,
-CMPXCH,   B|   BL'|   BO|   [CX]   18 B,
-CMPXCH,   B|   BL'|   BO|   [AX]   18 B,
-CMPXCH,   B|   BL'|   ZO|   [DI]
-CMPXCH,   B|   BL'|   ZO|   [SI]
-CMPXCH,   B|   BL'|   ZO|   [DX +1* BX]
-CMPXCH,   B|   BL'|   ZO|   [BX]
-CMPXCH,   B|   BL'|   ZO|   [DX]
-CMPXCH,   B|   BL'|   ZO|   [CX]
-CMPXCH,   B|   BL'|   ZO|   [AX]
-CMPXCH,   B|   DL'|   MEM|   14 L,
-CMPXCH,   B|   DL'|   R|   BH|
-CMPXCH,   B|   DL'|   R|   DH|
-CMPXCH,   B|   DL'|   R|   CH|
-CMPXCH,   B|   DL'|   R|   AH|
-CMPXCH,   B|   DL'|   R|   BL|
-CMPXCH,   B|   DL'|   R|   DL|
-CMPXCH,   B|   DL'|   R|   CL|
-CMPXCH,   B|   DL'|   R|   AL|
-CMPXCH,   B|   DL'|   XO|   [DI]   18 L,
-CMPXCH,   B|   DL'|   XO|   [SI]   18 L,
-CMPXCH,   B|   DL'|   XO|   [BP]   18 L,
-CMPXCH,   B|   DL'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   B|   DL'|   XO|   [BX]   18 L,
-CMPXCH,   B|   DL'|   XO|   [DX]   18 L,
-CMPXCH,   B|   DL'|   XO|   [CX]   18 L,
-CMPXCH,   B|   DL'|   XO|   [AX]   18 L,
-CMPXCH,   B|   DL'|   BO|   [DI]   18 B,
-CMPXCH,   B|   DL'|   BO|   [SI]   18 B,
-CMPXCH,   B|   DL'|   BO|   [BP]   18 B,
-CMPXCH,   B|   DL'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   B|   DL'|   BO|   [BX]   18 B,
-CMPXCH,   B|   DL'|   BO|   [DX]   18 B,
-CMPXCH,   B|   DL'|   BO|   [CX]   18 B,
-CMPXCH,   B|   DL'|   BO|   [AX]   18 B,
-CMPXCH,   B|   DL'|   ZO|   [DI]
-CMPXCH,   B|   DL'|   ZO|   [SI]
-CMPXCH,   B|   DL'|   ZO|   [DX +1* BX]
-CMPXCH,   B|   DL'|   ZO|   [BX]
-CMPXCH,   B|   DL'|   ZO|   [DX]
-CMPXCH,   B|   DL'|   ZO|   [CX]
-CMPXCH,   B|   DL'|   ZO|   [AX]
-CMPXCH,   B|   CL'|   MEM|   14 L,
-CMPXCH,   B|   CL'|   R|   BH|
-CMPXCH,   B|   CL'|   R|   DH|
-CMPXCH,   B|   CL'|   R|   CH|
-CMPXCH,   B|   CL'|   R|   AH|
-CMPXCH,   B|   CL'|   R|   BL|
-CMPXCH,   B|   CL'|   R|   DL|
-CMPXCH,   B|   CL'|   R|   CL|
-CMPXCH,   B|   CL'|   R|   AL|
-CMPXCH,   B|   CL'|   XO|   [DI]   18 L,
-CMPXCH,   B|   CL'|   XO|   [SI]   18 L,
-CMPXCH,   B|   CL'|   XO|   [BP]   18 L,
-CMPXCH,   B|   CL'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   B|   CL'|   XO|   [BX]   18 L,
-CMPXCH,   B|   CL'|   XO|   [DX]   18 L,
-CMPXCH,   B|   CL'|   XO|   [CX]   18 L,
-CMPXCH,   B|   CL'|   XO|   [AX]   18 L,
-CMPXCH,   B|   CL'|   BO|   [DI]   18 B,
-CMPXCH,   B|   CL'|   BO|   [SI]   18 B,
-CMPXCH,   B|   CL'|   BO|   [BP]   18 B,
-CMPXCH,   B|   CL'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   B|   CL'|   BO|   [BX]   18 B,
-CMPXCH,   B|   CL'|   BO|   [DX]   18 B,
-CMPXCH,   B|   CL'|   BO|   [CX]   18 B,
-CMPXCH,   B|   CL'|   BO|   [AX]   18 B,
-CMPXCH,   B|   CL'|   ZO|   [DI]
-CMPXCH,   B|   CL'|   ZO|   [SI]
-CMPXCH,   B|   CL'|   ZO|   [DX +1* BX]
-CMPXCH,   B|   CL'|   ZO|   [BX]
-CMPXCH,   B|   CL'|   ZO|   [DX]
-CMPXCH,   B|   CL'|   ZO|   [CX]
-CMPXCH,   B|   CL'|   ZO|   [AX]
-CMPXCH,   B|   AL'|   MEM|   14 L,
-CMPXCH,   B|   AL'|   R|   BH|
-CMPXCH,   B|   AL'|   R|   DH|
-CMPXCH,   B|   AL'|   R|   CH|
-CMPXCH,   B|   AL'|   R|   AH|
-CMPXCH,   B|   AL'|   R|   BL|
-CMPXCH,   B|   AL'|   R|   DL|
-CMPXCH,   B|   AL'|   R|   CL|
-CMPXCH,   B|   AL'|   R|   AL|
-CMPXCH,   B|   AL'|   XO|   [DI]   18 L,
-CMPXCH,   B|   AL'|   XO|   [SI]   18 L,
-CMPXCH,   B|   AL'|   XO|   [BP]   18 L,
-CMPXCH,   B|   AL'|   XO|   [DX +1* BX]   1C L,
-CMPXCH,   B|   AL'|   XO|   [BX]   18 L,
-CMPXCH,   B|   AL'|   XO|   [DX]   18 L,
-CMPXCH,   B|   AL'|   XO|   [CX]   18 L,
-CMPXCH,   B|   AL'|   XO|   [AX]   18 L,
-CMPXCH,   B|   AL'|   BO|   [DI]   18 B,
-CMPXCH,   B|   AL'|   BO|   [SI]   18 B,
-CMPXCH,   B|   AL'|   BO|   [BP]   18 B,
-CMPXCH,   B|   AL'|   BO|   [DX +1* BX]   1C B,
-CMPXCH,   B|   AL'|   BO|   [BX]   18 B,
-CMPXCH,   B|   AL'|   BO|   [DX]   18 B,
-CMPXCH,   B|   AL'|   BO|   [CX]   18 B,
-CMPXCH,   B|   AL'|   BO|   [AX]   18 B,
-CMPXCH,   B|   AL'|   ZO|   [DI]
-CMPXCH,   B|   AL'|   ZO|   [SI]
-CMPXCH,   B|   AL'|   ZO|   [DX +1* BX]
-CMPXCH,   B|   AL'|   ZO|   [BX]
-CMPXCH,   B|   AL'|   ZO|   [DX]
-CMPXCH,   B|   AL'|   ZO|   [CX]
-CMPXCH,   B|   AL'|   ZO|   [AX]
+CMPXCHG,   X|   DI'|   MEM|   14 L,
+CMPXCHG,   X|   DI'|   R|   DI|
+CMPXCHG,   X|   DI'|   R|   SI|
+CMPXCHG,   X|   DI'|   R|   BP|
+CMPXCHG,   X|   DI'|   R|   SP|
+CMPXCHG,   X|   DI'|   R|   BX|
+CMPXCHG,   X|   DI'|   R|   DX|
+CMPXCHG,   X|   DI'|   R|   CX|
+CMPXCHG,   X|   DI'|   R|   AX|
+CMPXCHG,   X|   DI'|   XO|   [DI]   18 L,
+CMPXCHG,   X|   DI'|   XO|   [SI]   18 L,
+CMPXCHG,   X|   DI'|   XO|   [BP]   18 L,
+CMPXCHG,   X|   DI'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   X|   DI'|   XO|   [BX]   18 L,
+CMPXCHG,   X|   DI'|   XO|   [DX]   18 L,
+CMPXCHG,   X|   DI'|   XO|   [CX]   18 L,
+CMPXCHG,   X|   DI'|   XO|   [AX]   18 L,
+CMPXCHG,   X|   DI'|   BO|   [DI]   18 B,
+CMPXCHG,   X|   DI'|   BO|   [SI]   18 B,
+CMPXCHG,   X|   DI'|   BO|   [BP]   18 B,
+CMPXCHG,   X|   DI'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   X|   DI'|   BO|   [BX]   18 B,
+CMPXCHG,   X|   DI'|   BO|   [DX]   18 B,
+CMPXCHG,   X|   DI'|   BO|   [CX]   18 B,
+CMPXCHG,   X|   DI'|   BO|   [AX]   18 B,
+CMPXCHG,   X|   DI'|   ZO|   [DI]
+CMPXCHG,   X|   DI'|   ZO|   [SI]
+CMPXCHG,   X|   DI'|   ZO|   [DX +1* BX]
+CMPXCHG,   X|   DI'|   ZO|   [BX]
+CMPXCHG,   X|   DI'|   ZO|   [DX]
+CMPXCHG,   X|   DI'|   ZO|   [CX]
+CMPXCHG,   X|   DI'|   ZO|   [AX]
+CMPXCHG,   X|   SI'|   MEM|   14 L,
+CMPXCHG,   X|   SI'|   R|   DI|
+CMPXCHG,   X|   SI'|   R|   SI|
+CMPXCHG,   X|   SI'|   R|   BP|
+CMPXCHG,   X|   SI'|   R|   SP|
+CMPXCHG,   X|   SI'|   R|   BX|
+CMPXCHG,   X|   SI'|   R|   DX|
+CMPXCHG,   X|   SI'|   R|   CX|
+CMPXCHG,   X|   SI'|   R|   AX|
+CMPXCHG,   X|   SI'|   XO|   [DI]   18 L,
+CMPXCHG,   X|   SI'|   XO|   [SI]   18 L,
+CMPXCHG,   X|   SI'|   XO|   [BP]   18 L,
+CMPXCHG,   X|   SI'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   X|   SI'|   XO|   [BX]   18 L,
+CMPXCHG,   X|   SI'|   XO|   [DX]   18 L,
+CMPXCHG,   X|   SI'|   XO|   [CX]   18 L,
+CMPXCHG,   X|   SI'|   XO|   [AX]   18 L,
+CMPXCHG,   X|   SI'|   BO|   [DI]   18 B,
+CMPXCHG,   X|   SI'|   BO|   [SI]   18 B,
+CMPXCHG,   X|   SI'|   BO|   [BP]   18 B,
+CMPXCHG,   X|   SI'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   X|   SI'|   BO|   [BX]   18 B,
+CMPXCHG,   X|   SI'|   BO|   [DX]   18 B,
+CMPXCHG,   X|   SI'|   BO|   [CX]   18 B,
+CMPXCHG,   X|   SI'|   BO|   [AX]   18 B,
+CMPXCHG,   X|   SI'|   ZO|   [DI]
+CMPXCHG,   X|   SI'|   ZO|   [SI]
+CMPXCHG,   X|   SI'|   ZO|   [DX +1* BX]
+CMPXCHG,   X|   SI'|   ZO|   [BX]
+CMPXCHG,   X|   SI'|   ZO|   [DX]
+CMPXCHG,   X|   SI'|   ZO|   [CX]
+CMPXCHG,   X|   SI'|   ZO|   [AX]
+CMPXCHG,   X|   BP'|   MEM|   14 L,
+CMPXCHG,   X|   BP'|   R|   DI|
+CMPXCHG,   X|   BP'|   R|   SI|
+CMPXCHG,   X|   BP'|   R|   BP|
+CMPXCHG,   X|   BP'|   R|   SP|
+CMPXCHG,   X|   BP'|   R|   BX|
+CMPXCHG,   X|   BP'|   R|   DX|
+CMPXCHG,   X|   BP'|   R|   CX|
+CMPXCHG,   X|   BP'|   R|   AX|
+CMPXCHG,   X|   BP'|   XO|   [DI]   18 L,
+CMPXCHG,   X|   BP'|   XO|   [SI]   18 L,
+CMPXCHG,   X|   BP'|   XO|   [BP]   18 L,
+CMPXCHG,   X|   BP'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   X|   BP'|   XO|   [BX]   18 L,
+CMPXCHG,   X|   BP'|   XO|   [DX]   18 L,
+CMPXCHG,   X|   BP'|   XO|   [CX]   18 L,
+CMPXCHG,   X|   BP'|   XO|   [AX]   18 L,
+CMPXCHG,   X|   BP'|   BO|   [DI]   18 B,
+CMPXCHG,   X|   BP'|   BO|   [SI]   18 B,
+CMPXCHG,   X|   BP'|   BO|   [BP]   18 B,
+CMPXCHG,   X|   BP'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   X|   BP'|   BO|   [BX]   18 B,
+CMPXCHG,   X|   BP'|   BO|   [DX]   18 B,
+CMPXCHG,   X|   BP'|   BO|   [CX]   18 B,
+CMPXCHG,   X|   BP'|   BO|   [AX]   18 B,
+CMPXCHG,   X|   BP'|   ZO|   [DI]
+CMPXCHG,   X|   BP'|   ZO|   [SI]
+CMPXCHG,   X|   BP'|   ZO|   [DX +1* BX]
+CMPXCHG,   X|   BP'|   ZO|   [BX]
+CMPXCHG,   X|   BP'|   ZO|   [DX]
+CMPXCHG,   X|   BP'|   ZO|   [CX]
+CMPXCHG,   X|   BP'|   ZO|   [AX]
+CMPXCHG,   X|   SP'|   MEM|   14 L,
+CMPXCHG,   X|   SP'|   R|   DI|
+CMPXCHG,   X|   SP'|   R|   SI|
+CMPXCHG,   X|   SP'|   R|   BP|
+CMPXCHG,   X|   SP'|   R|   SP|
+CMPXCHG,   X|   SP'|   R|   BX|
+CMPXCHG,   X|   SP'|   R|   DX|
+CMPXCHG,   X|   SP'|   R|   CX|
+CMPXCHG,   X|   SP'|   R|   AX|
+CMPXCHG,   X|   SP'|   XO|   [DI]   18 L,
+CMPXCHG,   X|   SP'|   XO|   [SI]   18 L,
+CMPXCHG,   X|   SP'|   XO|   [BP]   18 L,
+CMPXCHG,   X|   SP'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   X|   SP'|   XO|   [BX]   18 L,
+CMPXCHG,   X|   SP'|   XO|   [DX]   18 L,
+CMPXCHG,   X|   SP'|   XO|   [CX]   18 L,
+CMPXCHG,   X|   SP'|   XO|   [AX]   18 L,
+CMPXCHG,   X|   SP'|   BO|   [DI]   18 B,
+CMPXCHG,   X|   SP'|   BO|   [SI]   18 B,
+CMPXCHG,   X|   SP'|   BO|   [BP]   18 B,
+CMPXCHG,   X|   SP'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   X|   SP'|   BO|   [BX]   18 B,
+CMPXCHG,   X|   SP'|   BO|   [DX]   18 B,
+CMPXCHG,   X|   SP'|   BO|   [CX]   18 B,
+CMPXCHG,   X|   SP'|   BO|   [AX]   18 B,
+CMPXCHG,   X|   SP'|   ZO|   [DI]
+CMPXCHG,   X|   SP'|   ZO|   [SI]
+CMPXCHG,   X|   SP'|   ZO|   [DX +1* BX]
+CMPXCHG,   X|   SP'|   ZO|   [BX]
+CMPXCHG,   X|   SP'|   ZO|   [DX]
+CMPXCHG,   X|   SP'|   ZO|   [CX]
+CMPXCHG,   X|   SP'|   ZO|   [AX]
+CMPXCHG,   X|   BX'|   MEM|   14 L,
+CMPXCHG,   X|   BX'|   R|   DI|
+CMPXCHG,   X|   BX'|   R|   SI|
+CMPXCHG,   X|   BX'|   R|   BP|
+CMPXCHG,   X|   BX'|   R|   SP|
+CMPXCHG,   X|   BX'|   R|   BX|
+CMPXCHG,   X|   BX'|   R|   DX|
+CMPXCHG,   X|   BX'|   R|   CX|
+CMPXCHG,   X|   BX'|   R|   AX|
+CMPXCHG,   X|   BX'|   XO|   [DI]   18 L,
+CMPXCHG,   X|   BX'|   XO|   [SI]   18 L,
+CMPXCHG,   X|   BX'|   XO|   [BP]   18 L,
+CMPXCHG,   X|   BX'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   X|   BX'|   XO|   [BX]   18 L,
+CMPXCHG,   X|   BX'|   XO|   [DX]   18 L,
+CMPXCHG,   X|   BX'|   XO|   [CX]   18 L,
+CMPXCHG,   X|   BX'|   XO|   [AX]   18 L,
+CMPXCHG,   X|   BX'|   BO|   [DI]   18 B,
+CMPXCHG,   X|   BX'|   BO|   [SI]   18 B,
+CMPXCHG,   X|   BX'|   BO|   [BP]   18 B,
+CMPXCHG,   X|   BX'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   X|   BX'|   BO|   [BX]   18 B,
+CMPXCHG,   X|   BX'|   BO|   [DX]   18 B,
+CMPXCHG,   X|   BX'|   BO|   [CX]   18 B,
+CMPXCHG,   X|   BX'|   BO|   [AX]   18 B,
+CMPXCHG,   X|   BX'|   ZO|   [DI]
+CMPXCHG,   X|   BX'|   ZO|   [SI]
+CMPXCHG,   X|   BX'|   ZO|   [DX +1* BX]
+CMPXCHG,   X|   BX'|   ZO|   [BX]
+CMPXCHG,   X|   BX'|   ZO|   [DX]
+CMPXCHG,   X|   BX'|   ZO|   [CX]
+CMPXCHG,   X|   BX'|   ZO|   [AX]
+CMPXCHG,   X|   DX'|   MEM|   14 L,
+CMPXCHG,   X|   DX'|   R|   DI|
+CMPXCHG,   X|   DX'|   R|   SI|
+CMPXCHG,   X|   DX'|   R|   BP|
+CMPXCHG,   X|   DX'|   R|   SP|
+CMPXCHG,   X|   DX'|   R|   BX|
+CMPXCHG,   X|   DX'|   R|   DX|
+CMPXCHG,   X|   DX'|   R|   CX|
+CMPXCHG,   X|   DX'|   R|   AX|
+CMPXCHG,   X|   DX'|   XO|   [DI]   18 L,
+CMPXCHG,   X|   DX'|   XO|   [SI]   18 L,
+CMPXCHG,   X|   DX'|   XO|   [BP]   18 L,
+CMPXCHG,   X|   DX'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   X|   DX'|   XO|   [BX]   18 L,
+CMPXCHG,   X|   DX'|   XO|   [DX]   18 L,
+CMPXCHG,   X|   DX'|   XO|   [CX]   18 L,
+CMPXCHG,   X|   DX'|   XO|   [AX]   18 L,
+CMPXCHG,   X|   DX'|   BO|   [DI]   18 B,
+CMPXCHG,   X|   DX'|   BO|   [SI]   18 B,
+CMPXCHG,   X|   DX'|   BO|   [BP]   18 B,
+CMPXCHG,   X|   DX'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   X|   DX'|   BO|   [BX]   18 B,
+CMPXCHG,   X|   DX'|   BO|   [DX]   18 B,
+CMPXCHG,   X|   DX'|   BO|   [CX]   18 B,
+CMPXCHG,   X|   DX'|   BO|   [AX]   18 B,
+CMPXCHG,   X|   DX'|   ZO|   [DI]
+CMPXCHG,   X|   DX'|   ZO|   [SI]
+CMPXCHG,   X|   DX'|   ZO|   [DX +1* BX]
+CMPXCHG,   X|   DX'|   ZO|   [BX]
+CMPXCHG,   X|   DX'|   ZO|   [DX]
+CMPXCHG,   X|   DX'|   ZO|   [CX]
+CMPXCHG,   X|   DX'|   ZO|   [AX]
+CMPXCHG,   X|   CX'|   MEM|   14 L,
+CMPXCHG,   X|   CX'|   R|   DI|
+CMPXCHG,   X|   CX'|   R|   SI|
+CMPXCHG,   X|   CX'|   R|   BP|
+CMPXCHG,   X|   CX'|   R|   SP|
+CMPXCHG,   X|   CX'|   R|   BX|
+CMPXCHG,   X|   CX'|   R|   DX|
+CMPXCHG,   X|   CX'|   R|   CX|
+CMPXCHG,   X|   CX'|   R|   AX|
+CMPXCHG,   X|   CX'|   XO|   [DI]   18 L,
+CMPXCHG,   X|   CX'|   XO|   [SI]   18 L,
+CMPXCHG,   X|   CX'|   XO|   [BP]   18 L,
+CMPXCHG,   X|   CX'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   X|   CX'|   XO|   [BX]   18 L,
+CMPXCHG,   X|   CX'|   XO|   [DX]   18 L,
+CMPXCHG,   X|   CX'|   XO|   [CX]   18 L,
+CMPXCHG,   X|   CX'|   XO|   [AX]   18 L,
+CMPXCHG,   X|   CX'|   BO|   [DI]   18 B,
+CMPXCHG,   X|   CX'|   BO|   [SI]   18 B,
+CMPXCHG,   X|   CX'|   BO|   [BP]   18 B,
+CMPXCHG,   X|   CX'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   X|   CX'|   BO|   [BX]   18 B,
+CMPXCHG,   X|   CX'|   BO|   [DX]   18 B,
+CMPXCHG,   X|   CX'|   BO|   [CX]   18 B,
+CMPXCHG,   X|   CX'|   BO|   [AX]   18 B,
+CMPXCHG,   X|   CX'|   ZO|   [DI]
+CMPXCHG,   X|   CX'|   ZO|   [SI]
+CMPXCHG,   X|   CX'|   ZO|   [DX +1* BX]
+CMPXCHG,   X|   CX'|   ZO|   [BX]
+CMPXCHG,   X|   CX'|   ZO|   [DX]
+CMPXCHG,   X|   CX'|   ZO|   [CX]
+CMPXCHG,   X|   CX'|   ZO|   [AX]
+CMPXCHG,   X|   AX'|   MEM|   14 L,
+CMPXCHG,   X|   AX'|   R|   DI|
+CMPXCHG,   X|   AX'|   R|   SI|
+CMPXCHG,   X|   AX'|   R|   BP|
+CMPXCHG,   X|   AX'|   R|   SP|
+CMPXCHG,   X|   AX'|   R|   BX|
+CMPXCHG,   X|   AX'|   R|   DX|
+CMPXCHG,   X|   AX'|   R|   CX|
+CMPXCHG,   X|   AX'|   R|   AX|
+CMPXCHG,   X|   AX'|   XO|   [DI]   18 L,
+CMPXCHG,   X|   AX'|   XO|   [SI]   18 L,
+CMPXCHG,   X|   AX'|   XO|   [BP]   18 L,
+CMPXCHG,   X|   AX'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   X|   AX'|   XO|   [BX]   18 L,
+CMPXCHG,   X|   AX'|   XO|   [DX]   18 L,
+CMPXCHG,   X|   AX'|   XO|   [CX]   18 L,
+CMPXCHG,   X|   AX'|   XO|   [AX]   18 L,
+CMPXCHG,   X|   AX'|   BO|   [DI]   18 B,
+CMPXCHG,   X|   AX'|   BO|   [SI]   18 B,
+CMPXCHG,   X|   AX'|   BO|   [BP]   18 B,
+CMPXCHG,   X|   AX'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   X|   AX'|   BO|   [BX]   18 B,
+CMPXCHG,   X|   AX'|   BO|   [DX]   18 B,
+CMPXCHG,   X|   AX'|   BO|   [CX]   18 B,
+CMPXCHG,   X|   AX'|   BO|   [AX]   18 B,
+CMPXCHG,   X|   AX'|   ZO|   [DI]
+CMPXCHG,   X|   AX'|   ZO|   [SI]
+CMPXCHG,   X|   AX'|   ZO|   [DX +1* BX]
+CMPXCHG,   X|   AX'|   ZO|   [BX]
+CMPXCHG,   X|   AX'|   ZO|   [DX]
+CMPXCHG,   X|   AX'|   ZO|   [CX]
+CMPXCHG,   X|   AX'|   ZO|   [AX]
+CMPXCHG,   B|   BH'|   MEM|   14 L,
+CMPXCHG,   B|   BH'|   R|   BH|
+CMPXCHG,   B|   BH'|   R|   DH|
+CMPXCHG,   B|   BH'|   R|   CH|
+CMPXCHG,   B|   BH'|   R|   AH|
+CMPXCHG,   B|   BH'|   R|   BL|
+CMPXCHG,   B|   BH'|   R|   DL|
+CMPXCHG,   B|   BH'|   R|   CL|
+CMPXCHG,   B|   BH'|   R|   AL|
+CMPXCHG,   B|   BH'|   XO|   [DI]   18 L,
+CMPXCHG,   B|   BH'|   XO|   [SI]   18 L,
+CMPXCHG,   B|   BH'|   XO|   [BP]   18 L,
+CMPXCHG,   B|   BH'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   B|   BH'|   XO|   [BX]   18 L,
+CMPXCHG,   B|   BH'|   XO|   [DX]   18 L,
+CMPXCHG,   B|   BH'|   XO|   [CX]   18 L,
+CMPXCHG,   B|   BH'|   XO|   [AX]   18 L,
+CMPXCHG,   B|   BH'|   BO|   [DI]   18 B,
+CMPXCHG,   B|   BH'|   BO|   [SI]   18 B,
+CMPXCHG,   B|   BH'|   BO|   [BP]   18 B,
+CMPXCHG,   B|   BH'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   B|   BH'|   BO|   [BX]   18 B,
+CMPXCHG,   B|   BH'|   BO|   [DX]   18 B,
+CMPXCHG,   B|   BH'|   BO|   [CX]   18 B,
+CMPXCHG,   B|   BH'|   BO|   [AX]   18 B,
+CMPXCHG,   B|   BH'|   ZO|   [DI]
+CMPXCHG,   B|   BH'|   ZO|   [SI]
+CMPXCHG,   B|   BH'|   ZO|   [DX +1* BX]
+CMPXCHG,   B|   BH'|   ZO|   [BX]
+CMPXCHG,   B|   BH'|   ZO|   [DX]
+CMPXCHG,   B|   BH'|   ZO|   [CX]
+CMPXCHG,   B|   BH'|   ZO|   [AX]
+CMPXCHG,   B|   DH'|   MEM|   14 L,
+CMPXCHG,   B|   DH'|   R|   BH|
+CMPXCHG,   B|   DH'|   R|   DH|
+CMPXCHG,   B|   DH'|   R|   CH|
+CMPXCHG,   B|   DH'|   R|   AH|
+CMPXCHG,   B|   DH'|   R|   BL|
+CMPXCHG,   B|   DH'|   R|   DL|
+CMPXCHG,   B|   DH'|   R|   CL|
+CMPXCHG,   B|   DH'|   R|   AL|
+CMPXCHG,   B|   DH'|   XO|   [DI]   18 L,
+CMPXCHG,   B|   DH'|   XO|   [SI]   18 L,
+CMPXCHG,   B|   DH'|   XO|   [BP]   18 L,
+CMPXCHG,   B|   DH'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   B|   DH'|   XO|   [BX]   18 L,
+CMPXCHG,   B|   DH'|   XO|   [DX]   18 L,
+CMPXCHG,   B|   DH'|   XO|   [CX]   18 L,
+CMPXCHG,   B|   DH'|   XO|   [AX]   18 L,
+CMPXCHG,   B|   DH'|   BO|   [DI]   18 B,
+CMPXCHG,   B|   DH'|   BO|   [SI]   18 B,
+CMPXCHG,   B|   DH'|   BO|   [BP]   18 B,
+CMPXCHG,   B|   DH'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   B|   DH'|   BO|   [BX]   18 B,
+CMPXCHG,   B|   DH'|   BO|   [DX]   18 B,
+CMPXCHG,   B|   DH'|   BO|   [CX]   18 B,
+CMPXCHG,   B|   DH'|   BO|   [AX]   18 B,
+CMPXCHG,   B|   DH'|   ZO|   [DI]
+CMPXCHG,   B|   DH'|   ZO|   [SI]
+CMPXCHG,   B|   DH'|   ZO|   [DX +1* BX]
+CMPXCHG,   B|   DH'|   ZO|   [BX]
+CMPXCHG,   B|   DH'|   ZO|   [DX]
+CMPXCHG,   B|   DH'|   ZO|   [CX]
+CMPXCHG,   B|   DH'|   ZO|   [AX]
+CMPXCHG,   B|   CH'|   MEM|   14 L,
+CMPXCHG,   B|   CH'|   R|   BH|
+CMPXCHG,   B|   CH'|   R|   DH|
+CMPXCHG,   B|   CH'|   R|   CH|
+CMPXCHG,   B|   CH'|   R|   AH|
+CMPXCHG,   B|   CH'|   R|   BL|
+CMPXCHG,   B|   CH'|   R|   DL|
+CMPXCHG,   B|   CH'|   R|   CL|
+CMPXCHG,   B|   CH'|   R|   AL|
+CMPXCHG,   B|   CH'|   XO|   [DI]   18 L,
+CMPXCHG,   B|   CH'|   XO|   [SI]   18 L,
+CMPXCHG,   B|   CH'|   XO|   [BP]   18 L,
+CMPXCHG,   B|   CH'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   B|   CH'|   XO|   [BX]   18 L,
+CMPXCHG,   B|   CH'|   XO|   [DX]   18 L,
+CMPXCHG,   B|   CH'|   XO|   [CX]   18 L,
+CMPXCHG,   B|   CH'|   XO|   [AX]   18 L,
+CMPXCHG,   B|   CH'|   BO|   [DI]   18 B,
+CMPXCHG,   B|   CH'|   BO|   [SI]   18 B,
+CMPXCHG,   B|   CH'|   BO|   [BP]   18 B,
+CMPXCHG,   B|   CH'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   B|   CH'|   BO|   [BX]   18 B,
+CMPXCHG,   B|   CH'|   BO|   [DX]   18 B,
+CMPXCHG,   B|   CH'|   BO|   [CX]   18 B,
+CMPXCHG,   B|   CH'|   BO|   [AX]   18 B,
+CMPXCHG,   B|   CH'|   ZO|   [DI]
+CMPXCHG,   B|   CH'|   ZO|   [SI]
+CMPXCHG,   B|   CH'|   ZO|   [DX +1* BX]
+CMPXCHG,   B|   CH'|   ZO|   [BX]
+CMPXCHG,   B|   CH'|   ZO|   [DX]
+CMPXCHG,   B|   CH'|   ZO|   [CX]
+CMPXCHG,   B|   CH'|   ZO|   [AX]
+CMPXCHG,   B|   AH'|   MEM|   14 L,
+CMPXCHG,   B|   AH'|   R|   BH|
+CMPXCHG,   B|   AH'|   R|   DH|
+CMPXCHG,   B|   AH'|   R|   CH|
+CMPXCHG,   B|   AH'|   R|   AH|
+CMPXCHG,   B|   AH'|   R|   BL|
+CMPXCHG,   B|   AH'|   R|   DL|
+CMPXCHG,   B|   AH'|   R|   CL|
+CMPXCHG,   B|   AH'|   R|   AL|
+CMPXCHG,   B|   AH'|   XO|   [DI]   18 L,
+CMPXCHG,   B|   AH'|   XO|   [SI]   18 L,
+CMPXCHG,   B|   AH'|   XO|   [BP]   18 L,
+CMPXCHG,   B|   AH'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   B|   AH'|   XO|   [BX]   18 L,
+CMPXCHG,   B|   AH'|   XO|   [DX]   18 L,
+CMPXCHG,   B|   AH'|   XO|   [CX]   18 L,
+CMPXCHG,   B|   AH'|   XO|   [AX]   18 L,
+CMPXCHG,   B|   AH'|   BO|   [DI]   18 B,
+CMPXCHG,   B|   AH'|   BO|   [SI]   18 B,
+CMPXCHG,   B|   AH'|   BO|   [BP]   18 B,
+CMPXCHG,   B|   AH'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   B|   AH'|   BO|   [BX]   18 B,
+CMPXCHG,   B|   AH'|   BO|   [DX]   18 B,
+CMPXCHG,   B|   AH'|   BO|   [CX]   18 B,
+CMPXCHG,   B|   AH'|   BO|   [AX]   18 B,
+CMPXCHG,   B|   AH'|   ZO|   [DI]
+CMPXCHG,   B|   AH'|   ZO|   [SI]
+CMPXCHG,   B|   AH'|   ZO|   [DX +1* BX]
+CMPXCHG,   B|   AH'|   ZO|   [BX]
+CMPXCHG,   B|   AH'|   ZO|   [DX]
+CMPXCHG,   B|   AH'|   ZO|   [CX]
+CMPXCHG,   B|   AH'|   ZO|   [AX]
+CMPXCHG,   B|   BL'|   MEM|   14 L,
+CMPXCHG,   B|   BL'|   R|   BH|
+CMPXCHG,   B|   BL'|   R|   DH|
+CMPXCHG,   B|   BL'|   R|   CH|
+CMPXCHG,   B|   BL'|   R|   AH|
+CMPXCHG,   B|   BL'|   R|   BL|
+CMPXCHG,   B|   BL'|   R|   DL|
+CMPXCHG,   B|   BL'|   R|   CL|
+CMPXCHG,   B|   BL'|   R|   AL|
+CMPXCHG,   B|   BL'|   XO|   [DI]   18 L,
+CMPXCHG,   B|   BL'|   XO|   [SI]   18 L,
+CMPXCHG,   B|   BL'|   XO|   [BP]   18 L,
+CMPXCHG,   B|   BL'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   B|   BL'|   XO|   [BX]   18 L,
+CMPXCHG,   B|   BL'|   XO|   [DX]   18 L,
+CMPXCHG,   B|   BL'|   XO|   [CX]   18 L,
+CMPXCHG,   B|   BL'|   XO|   [AX]   18 L,
+CMPXCHG,   B|   BL'|   BO|   [DI]   18 B,
+CMPXCHG,   B|   BL'|   BO|   [SI]   18 B,
+CMPXCHG,   B|   BL'|   BO|   [BP]   18 B,
+CMPXCHG,   B|   BL'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   B|   BL'|   BO|   [BX]   18 B,
+CMPXCHG,   B|   BL'|   BO|   [DX]   18 B,
+CMPXCHG,   B|   BL'|   BO|   [CX]   18 B,
+CMPXCHG,   B|   BL'|   BO|   [AX]   18 B,
+CMPXCHG,   B|   BL'|   ZO|   [DI]
+CMPXCHG,   B|   BL'|   ZO|   [SI]
+CMPXCHG,   B|   BL'|   ZO|   [DX +1* BX]
+CMPXCHG,   B|   BL'|   ZO|   [BX]
+CMPXCHG,   B|   BL'|   ZO|   [DX]
+CMPXCHG,   B|   BL'|   ZO|   [CX]
+CMPXCHG,   B|   BL'|   ZO|   [AX]
+CMPXCHG,   B|   DL'|   MEM|   14 L,
+CMPXCHG,   B|   DL'|   R|   BH|
+CMPXCHG,   B|   DL'|   R|   DH|
+CMPXCHG,   B|   DL'|   R|   CH|
+CMPXCHG,   B|   DL'|   R|   AH|
+CMPXCHG,   B|   DL'|   R|   BL|
+CMPXCHG,   B|   DL'|   R|   DL|
+CMPXCHG,   B|   DL'|   R|   CL|
+CMPXCHG,   B|   DL'|   R|   AL|
+CMPXCHG,   B|   DL'|   XO|   [DI]   18 L,
+CMPXCHG,   B|   DL'|   XO|   [SI]   18 L,
+CMPXCHG,   B|   DL'|   XO|   [BP]   18 L,
+CMPXCHG,   B|   DL'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   B|   DL'|   XO|   [BX]   18 L,
+CMPXCHG,   B|   DL'|   XO|   [DX]   18 L,
+CMPXCHG,   B|   DL'|   XO|   [CX]   18 L,
+CMPXCHG,   B|   DL'|   XO|   [AX]   18 L,
+CMPXCHG,   B|   DL'|   BO|   [DI]   18 B,
+CMPXCHG,   B|   DL'|   BO|   [SI]   18 B,
+CMPXCHG,   B|   DL'|   BO|   [BP]   18 B,
+CMPXCHG,   B|   DL'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   B|   DL'|   BO|   [BX]   18 B,
+CMPXCHG,   B|   DL'|   BO|   [DX]   18 B,
+CMPXCHG,   B|   DL'|   BO|   [CX]   18 B,
+CMPXCHG,   B|   DL'|   BO|   [AX]   18 B,
+CMPXCHG,   B|   DL'|   ZO|   [DI]
+CMPXCHG,   B|   DL'|   ZO|   [SI]
+CMPXCHG,   B|   DL'|   ZO|   [DX +1* BX]
+CMPXCHG,   B|   DL'|   ZO|   [BX]
+CMPXCHG,   B|   DL'|   ZO|   [DX]
+CMPXCHG,   B|   DL'|   ZO|   [CX]
+CMPXCHG,   B|   DL'|   ZO|   [AX]
+CMPXCHG,   B|   CL'|   MEM|   14 L,
+CMPXCHG,   B|   CL'|   R|   BH|
+CMPXCHG,   B|   CL'|   R|   DH|
+CMPXCHG,   B|   CL'|   R|   CH|
+CMPXCHG,   B|   CL'|   R|   AH|
+CMPXCHG,   B|   CL'|   R|   BL|
+CMPXCHG,   B|   CL'|   R|   DL|
+CMPXCHG,   B|   CL'|   R|   CL|
+CMPXCHG,   B|   CL'|   R|   AL|
+CMPXCHG,   B|   CL'|   XO|   [DI]   18 L,
+CMPXCHG,   B|   CL'|   XO|   [SI]   18 L,
+CMPXCHG,   B|   CL'|   XO|   [BP]   18 L,
+CMPXCHG,   B|   CL'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   B|   CL'|   XO|   [BX]   18 L,
+CMPXCHG,   B|   CL'|   XO|   [DX]   18 L,
+CMPXCHG,   B|   CL'|   XO|   [CX]   18 L,
+CMPXCHG,   B|   CL'|   XO|   [AX]   18 L,
+CMPXCHG,   B|   CL'|   BO|   [DI]   18 B,
+CMPXCHG,   B|   CL'|   BO|   [SI]   18 B,
+CMPXCHG,   B|   CL'|   BO|   [BP]   18 B,
+CMPXCHG,   B|   CL'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   B|   CL'|   BO|   [BX]   18 B,
+CMPXCHG,   B|   CL'|   BO|   [DX]   18 B,
+CMPXCHG,   B|   CL'|   BO|   [CX]   18 B,
+CMPXCHG,   B|   CL'|   BO|   [AX]   18 B,
+CMPXCHG,   B|   CL'|   ZO|   [DI]
+CMPXCHG,   B|   CL'|   ZO|   [SI]
+CMPXCHG,   B|   CL'|   ZO|   [DX +1* BX]
+CMPXCHG,   B|   CL'|   ZO|   [BX]
+CMPXCHG,   B|   CL'|   ZO|   [DX]
+CMPXCHG,   B|   CL'|   ZO|   [CX]
+CMPXCHG,   B|   CL'|   ZO|   [AX]
+CMPXCHG,   B|   AL'|   MEM|   14 L,
+CMPXCHG,   B|   AL'|   R|   BH|
+CMPXCHG,   B|   AL'|   R|   DH|
+CMPXCHG,   B|   AL'|   R|   CH|
+CMPXCHG,   B|   AL'|   R|   AH|
+CMPXCHG,   B|   AL'|   R|   BL|
+CMPXCHG,   B|   AL'|   R|   DL|
+CMPXCHG,   B|   AL'|   R|   CL|
+CMPXCHG,   B|   AL'|   R|   AL|
+CMPXCHG,   B|   AL'|   XO|   [DI]   18 L,
+CMPXCHG,   B|   AL'|   XO|   [SI]   18 L,
+CMPXCHG,   B|   AL'|   XO|   [BP]   18 L,
+CMPXCHG,   B|   AL'|   XO|   [DX +1* BX]   1C L,
+CMPXCHG,   B|   AL'|   XO|   [BX]   18 L,
+CMPXCHG,   B|   AL'|   XO|   [DX]   18 L,
+CMPXCHG,   B|   AL'|   XO|   [CX]   18 L,
+CMPXCHG,   B|   AL'|   XO|   [AX]   18 L,
+CMPXCHG,   B|   AL'|   BO|   [DI]   18 B,
+CMPXCHG,   B|   AL'|   BO|   [SI]   18 B,
+CMPXCHG,   B|   AL'|   BO|   [BP]   18 B,
+CMPXCHG,   B|   AL'|   BO|   [DX +1* BX]   1C B,
+CMPXCHG,   B|   AL'|   BO|   [BX]   18 B,
+CMPXCHG,   B|   AL'|   BO|   [DX]   18 B,
+CMPXCHG,   B|   AL'|   BO|   [CX]   18 B,
+CMPXCHG,   B|   AL'|   BO|   [AX]   18 B,
+CMPXCHG,   B|   AL'|   ZO|   [DI]
+CMPXCHG,   B|   AL'|   ZO|   [SI]
+CMPXCHG,   B|   AL'|   ZO|   [DX +1* BX]
+CMPXCHG,   B|   AL'|   ZO|   [BX]
+CMPXCHG,   B|   AL'|   ZO|   [DX]
+CMPXCHG,   B|   AL'|   ZO|   [CX]
+CMPXCHG,   B|   AL'|   ZO|   [AX]
 RDMSR,
 RDTSC,
 WRMSR,

@@ -6,6 +6,7 @@
 
 \ Morebad bits ...
 (  FP:        10,0000 FP-specific   20,0000 Not FP                      )
+(  second op 100,0000 integer op    20,0000 FP operand                  )
                                 HEX
 \ 0F prefix
 0 0 0 T!        0100 080F 2 2FAMILY, INVD, WBINVD,
@@ -14,7 +15,7 @@
 0 0 0 B90F 2PI Illegal-2,
 0112 0 0700 C80F 2PI BSWAP,
 0 0 0 T!        0100 300F 3 2FAMILY, WRMSR, RDTSC, RDMSR,
-04,1400 0 FF0100  T!  1000 B00F 2 3FAMILY, CMPXCH, XADD,
+04,1400 0 FF0100  T!  1000 B00F 2 3FAMILY, CMPXCHG, XADD,
 
 \ 0F prefix with mod r/m byte: 0F01 grp7 / 0FC7 grp 8
 0 0 0 38010F 3PI INVLPG,
