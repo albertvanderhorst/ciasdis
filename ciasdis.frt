@@ -13,7 +13,7 @@
 
 INCLUDE asgen.frt
 INCLUDE aswrap.frt
-INCLUDE asi586.frt
+INCLUDE asi386.frt
 
 \ Tools
 INCLUDE bag.frt

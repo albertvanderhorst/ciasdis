@@ -39,7 +39,7 @@
 (                0004 OFFSET  IS BYTE     0008 OFFSET  IS CELL  W/L
 ( By setting 0020 an opcode can force a memory reference, e.g. CALLFARO )
 (               0010 Register op         0020 Memory op                 )
-(               0040 D0|                 0080 [BP]' {16} [BP] [BP  {32} )
+(               0040 ZO|                 0080 [BP]' {16} [BP] [BP  {32} )
 (  sib:         0100 no ..             0200 [AX +8*| DI]                )
 (  logical      0400 no ..             0800 Y| Y'| Z| Z'|               )
 (  segment      1000 no ..             2000 ES| ..                      )
@@ -67,7 +67,7 @@
 8120 0 07 T!R
  01 00 4 FAMILY|R [AX] [CX] [DX] [BX]
 8120 01 07 04 FIR ~SIB|   ( Fits in the hole, but requires ~SIB, )
-81A0 00 07 05 FIR [BP]   ( Fits in the hole, but disallow D0| )
+81A0 00 07 05 FIR [BP]   ( Fits in the hole, but disallow ZO| )
 8120 0 07 T!R
  01 06 2 FAMILY|R [SI] [DI]
 
@@ -75,12 +75,12 @@
  01 00 8 FAMILY|R AL| CL| DL| BL| AH| CH| DH| BH|
 0112 0 07 T!R
  01 00 8 FAMILY|R AX| CX| DX| BX| SP| BP| SI| DI|
-0160 00 C0 00 FIR      D0|
-0124 02 C0 40 FIR      DB|
-0128 02 C0 80 FIR      DW|
+0160 00 C0 00 FIR      ZO|
+0124 02 C0 40 FIR      BO|
+0128 02 C0 80 FIR      XO|
 0110 00 C0 C0 FIR      R|
-4048 02 C7 06 FIR      MEM|' ( Overrules D0| [BP]')
-8108 02 C7 05 FIR      MEM| ( Overrules D0| [BP] )
+4048 02 C7 06 FIR      MEM|' ( Overrules ZO| [BP]')
+8108 02 C7 05 FIR      MEM| ( Overrules ZO| [BP] )
 
 04,1101 0000 38 T!R
  08 00 8 FAMILY|R AL'| CL'| DL'| BL'| AH'| CH'| DH'| BH'|

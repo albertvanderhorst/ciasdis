@@ -56,8 +56,8 @@ testclean: ; rm -f $(TESTTARGETS)
 
 qr8080.ps       :; make as80.ps ; mv p0.as80.ps $@
 qr8086.ps       :; make asi86.ps ; mv p0.asi86.ps $@
-p0.asi586.ps    :; make asi586.ps PREFIX=0 MASK=FF
-p0F.asi586.ps   :; make asi586.ps PREFIX=0F MASK=FFFF
+p0.asi386.ps    :; make asi386.ps PREFIX=0 MASK=FF
+p0F.asi386.ps   :; make asi386.ps PREFIX=0F MASK=FFFF
 
 do : ci86.mina.msm
 		diff -w ci86.mina.msm orig/FORTH > masm.dif ||true
@@ -161,7 +161,7 @@ testas86: asgen.frt asi86.frt testset8086 ; \
     diff -w $@ testset8086 >$@.diff ;\
     diff $@.diff testresults
 
-testas386: asgen.frt asi586.frt testset386 ; \
+testas386: asgen.frt asi386.frt testset386 ; \
     cat $+|\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
@@ -169,7 +169,7 @@ testas386: asgen.frt asi586.frt testset386 ; \
     diff -w $@ testset386 >$@.diff ;\
     diff $@.diff testresults
 
-test386: asgen.frt asi586.frt ; \
+test386: asgen.frt asi386.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-32   SHOW-ALL)|\
     lina -e|\
     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
@@ -179,14 +179,14 @@ test386: asgen.frt asi586.frt ; \
     diff -w $@ testset386 >$@.diff ;\
     diff $@.diff testresults
 
-test386-16: asgen.frt asi586.frt ; \
+test386-16: asgen.frt asi386.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
     lina -e >$@       ;
 #   diff -w $@ testset386 >$@.diff ;\
 #   diff $@.diff testresults
 
 # Special test to exercise otherwise hidden instructions.
-testas386a: asgen.frt asi586.frt testset386a ; \
+testas386a: asgen.frt asi386.frt testset386a ; \
     cat $+|\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
@@ -217,12 +217,12 @@ RELEASEASSEMBLER=      \
 as80.frt        \
 assembler.txt   \
 asgen.frt       \
-asi586.frt      \
+asi386.frt      \
 asi86.frt       \
 asm386endtest   \
 ass.frt  \
-p0.asi586.ps    \
-p0F.asi586.ps   \
+p0.asi386.ps    \
+p0F.asi386.ps   \
 ps.frt    \
 qr8086.ps       \
 qr8080.ps       \
@@ -339,7 +339,7 @@ testlinux : $(TESTLINUX) ci86.linux.rawtest ciforthc forth.lab ;
 	rm $(TEMPFILE)
 
 # Preliminary until it is clear whether we want other disassemblers.
-ciasdis : $(ASSRC) asi586.frt ; lina -c ciasdis.frt
+ciasdis : $(ASSRC) asi386.frt ; lina -c ciasdis.frt
 cias : ciasdis ; ln -f ciasdis cias
 cidis : ciasdis ; ln -f ciasdis cidis
 
@@ -349,4 +349,4 @@ test.bin : cidis cias test.asm test.cul  ;
 	cias test2.asm test2.bin;
 	cmp test.bin test2.bin && cmp test.bin testresults/test.bin
 
-cidis386.zip : $(ASSRC) asi586.frt ;  zip $@ $+
+cidis386.zip : $(ASSRC) asi386.frt ;  zip $@ $+
