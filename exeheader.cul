@@ -6,12 +6,13 @@
 
 REQUIRE  do                     \ Interpreted control structures
 
-28 CONSTANT SECTION_SIZE        \ Size of a section header.
+28 CONSTANT COFFSECTION_SIZE        \ Size of a section header.
 
 0 -ORG-         \ Preliminary, to find out.
 0 TARGET>HOST 2 "MZ" $= 0 = "Fatal, not an ex header!" ?ABORT
-08  W@  10 *    NEGATE DUP -ORG-
+3C L@ ( coffHeaderStart) 34 + L@  DUP CONSTANT IMAGE_BASE
 
+DUP -ORG-
 DUP LABEL exHeaderStart
 DUP LABEL exSignature        2 +
 DUP LABEL exExtrabytes       2 +
@@ -31,7 +32,9 @@ DUP LABEL exOverlay          2 +
 
 exHeaderStart exHeaderEnd -dw: exHeader
 
-exInitIP W@ exInitCS W@ 10 * + LABEL exEntry
+exHeaderStart   exInitIP W@ +  exHeaderSize W@ 10 * +   LABEL exEntry
+exHeaderEnd DUP 40 + -dl: exHeaderPreversity
+
 exHeaderStart 3C + L@   exHeaderStart + LABEL coffHeaderStart
 
 coffHeaderStart TARGET>HOST 2 "PE" $= 0 = "Fatal, not a windows header!" ?ABORT
@@ -58,7 +61,7 @@ DUP LABEL fhAddressOfEntryPoint         4 +
 DUP LABEL fhBaseOfCode                  4 +
 DUP LABEL coffHeaderEnd
 
-fhNumberOfSections      W@ CONSTANT NUMBER_OF_SECTIONS
+fhNumberOfSections      W@ CONSTANT NUMBER_OF_COFFSECTIONS
 
 fhMachine W@ IMAGE_FILE_MACHINE_I386 <>
     "Fatal, this is an Intel 86..Pentium disassembler only!" ?ABORT
@@ -92,7 +95,7 @@ DUP LABEL ofhNumberOfRvaAndSizes           4 +
 DUP LABEL coffOptionalHeaderEnd
 DUP LABEL RvaAndSizes     ofhNumberOfRvaAndSizes W@ 8 * +
 DUP LABEL RvaAndSizesEnd
-DUP LABEL Sections              NUMBER_OF_SECTIONS SECTION_SIZE * +
+DUP LABEL Sections              NUMBER_OF_COFFSECTIONS COFFSECTION_SIZE * +
 DUP LABEL SectionsEnd
 DROP
 
@@ -119,30 +122,26 @@ ofhSizeOfStackReserve   coffOptionalHeaderEnd              -dl-
 \ The following thingies have names, but those we don't need.
 RvaAndSizes             RvaAndSizesEnd                  -dl-
 
-\ For the ADDRESS of a sectionheader N, give it a label.
-: ADD-SECTION-HEADER
+\ For the TADDRESS of a sectionheader N, give it a label.
+: ADD-COFFSECTION-HEADER
     "_Section" PAD $!   0 <# #S #> PAD $+!   PAD $@   LABELED
 ;
 
-\ For the ADDRESS of a sectionheader, add the label of that section.
+\ For the TADDRESS of a sectionheader, add the label of that section.
 \ Fetch its name from the section header.
-: ADD-SECTION
+: ADD-COFFSECTION
     DUP 8 + L@   OVER TARGET>HOST 8 0 $S 2SWAP 2DROP   LABELED
 ;
 
-\ Given ADDRESS of first section header and number of sections,
-\ add all sections.
-: ADD-SECTIONS  0 DO
-    DUP I ADD-SECTION-HEADER
-    DUP ADD-SECTION
-    SECTION_SIZE + LOOP
-DROP ;
-
-Sections NUMBER_OF_SECTIONS ADD-SECTIONS
-
-\ NUMBER_OF_SECTIONS 0 do   I . loop
-EQU-LABELS .LABELS QUIT
-
+\ Add all sections.
+\ In the loop the section header address is incremented to the next one.
+Sections  NUMBER_OF_COFFSECTIONS 0 do
+    DUP I ADD-COFFSECTION-HEADER
+    DUP ADD-COFFSECTION
+    DUP 8 +   DUP >R -d$- R>
+    DUP COFFSECTION_SIZE 8 - +    DUP >R -dl- R>
+loop
+DROP
 
 \ Crawl the exe header. In rare case it is ill-advised
 \ to do it automatically.
