@@ -5,7 +5,8 @@ cul \- consult file format for
 computer intelligence
 disassembler 386
 .SH "DESCRIPTION"
-\fBcul\fR files are generally used as the second argument for \fB\cidis\fR\.
+\fBcul\fR files are generally used as the second argument for
+\fB\cidis\fR\.
 .br
 On top of the user commands described in this page,
 the full assembler is available after the command ASSEMBLER and
@@ -19,6 +20,8 @@ but these commands can be used interactively too.
 A backslash \\ followed by a space ignores the remainder of a line.
 A open bracket ( followed by a space ignores the remainder of the file
 until a closing bracket (so don't use in expressions!).
+Comment signs are not recognized within strings.
+The string symbol `` " '' is not recognized within comment.
 
 .SH "EXPRESSIONS"
 An arithmetic atom can be a number, a character or a label.
@@ -170,13 +173,14 @@ printed using .LABELS .
 
 .SH "COMMAND"
 
-After the command\fBASSEMBLER\fR ,
+After the command \fBASSEMBLER\fR ,
 all assembler commands can be tried
 out interactively (see lina(1)).
-A \fBBYE\fR command ends an interactive session.
 
 After the command \fBFORTH\fR
 you have a full Forth environment available (see lina(1))
+
+A \fBBYE\fR command ends an interactive session.
 
 .SH "AVAILABILITY"
 \ficias/cdis\fR is based on \fBciforth\fR.
@@ -226,3 +230,6 @@ Mistakes in Forth mode can easily crash \ficias/cdis\fR.
 .SH "AUTHOR"
 Copyright \(co 2004
 Albert van der Horst \fI albert@spenarnc.xs4all.nl\fR.
+\fIcias/cidis\fR
+are made available under the GNU Public License:
+quality, but NO warranty.
