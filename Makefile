@@ -100,6 +100,7 @@ access.frt   \
 aswrap.frt   \
 asgen.frt    \
 ciasdis.frt  \
+class.frt    \
 crawl.frt    \
 labelas.frt  \
 labeldis.frt \
