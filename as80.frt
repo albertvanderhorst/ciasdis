@@ -2,11 +2,14 @@
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( ############## 8080 ASSEMBLER PROPER ################################ )
 ASSEMBLER DEFINITIONS  HEX
+( This makes it usable as cross-assembler.                              )
+: W, lsbyte, lsbyte, DROP ;
+
 ( Note the decompiler hits them in the reverse order                    )
 ( ' CNT      BA BY DATA                                                )
   0 1        0 100 ' AS-C, >CFA   COMMAER IB, ( immediate byte data)
-  0 0 CELL+  0 200 ' AS-,  >CFA   COMMAER IX, ( immediate data : cell)
-  0 0 CELL+  0 400 ' AS-,  >CFA   COMMAER X,  ( immediate data : address)
+  0 2        0 200 ' W,  >CFA   COMMAER IX, ( immediate data : cell)
+  0 2        0 400 ' W,  >CFA   COMMAER X,  ( immediate data : address)
   0 1        0 800 ' AS-C, >CFA   COMMAER P,  ( port number ; byte     )
 
 00 00 00 T!

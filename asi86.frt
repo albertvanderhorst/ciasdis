@@ -1,14 +1,13 @@
 ( $Id$ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 
-                          HEX
  ASSEMBLER DEFINITIONS
+                          HEX
 
 ( ############## 8086 ASSEMBLER ADDITIONS ############################# )
-( The patch for the assembler doesn't belong in the generic part        )
-( To be used when overruling, e.g. prefix)
+( This should make the assembler such that it runs on 32 bit systems. )
 : W, lsbyte, lsbyte, DROP ;
-: L, lsbyte, lsbyte, lsbyte, lsbyte, DROP ;
+( FIXME: it is not clear whether this is still true.                    )
 ( There are some fixups-from-reverse that are larger than 2 l bytes.    )
 ( Using the out of mask bit trick, that has to be eliminated.           )
 ." This 8086 assembler runs only on 32 bits systems!" CR
@@ -16,14 +15,14 @@
 ( ############## 8086 ASSEMBLER PROPER ################################ )
 ( The decreasing order means that a decompiler hits them in the         )
 ( right order                                                           )
-0 0 CELL+  0 8000 ' L,  >CFA  COMMAER (RX,) ( cell relative to IP )
+0 2        0 8000 ' W,  >CFA  COMMAER (RX,) ( cell relative to IP )
 0 1        0 4000 ' AS-C, >CFA  COMMAER (RB,) ( byte relative to IP )
 0 2        0 2000 ' W, >CFA  COMMAER SG,   (  Segment: WORD      )
 0 1        0 1000 ' AS-C, >CFA  COMMAER P,    ( port number ; byte     )
 0 1        0  800 ' AS-C, >CFA  COMMAER IS,   ( immediate byte data, obligatory size)
-0 0 CELL+  2  400 ' L,  >CFA  COMMAER IX,   ( immediate data : cell)
+0 2        2  400 ' W,  >CFA  COMMAER IX,   ( immediate data : cell)
 0 1        1  400 ' AS-C, >CFA  COMMAER IB,   ( immediate byte data)
-0 0 CELL+  8  200 ' AS-,  >CFA  COMMAER X,    ( immediate data : address/offset )
+0 2        8  200 ' W,  >CFA  COMMAER X,    ( immediate data : address/offset )
 0 1        4  200 ' AS-C, >CFA  COMMAER B,    ( immediate byte : address/offset )
 0 2        0  100 ' W, >CFA  COMMAER OW,    ( obligatory word     )
 ( Bits in TALLY  1 OPERAND IS BYTE     2 OPERAND IS CELL                )
