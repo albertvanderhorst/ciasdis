@@ -18,7 +18,7 @@ VARIABLE (R-XT)        \ Required xt.
 \ Return the XT that is required for the current disassembly.
 : REQUIRED-XT (R-XT) @ ;
 \ Specify normal disassembly.
-: NORMAL-DISASSEMBLY 'D-R-T (R-XT) ! ;
+: NORMAL-DISASSEMBLY 'D-R-T (R-XT) ! BITS-32 ;
 NORMAL-DISASSEMBLY
 
 \ Where the code ends in the host space.
@@ -32,7 +32,8 @@ NORMAL-DISASSEMBLY
 
 \ Add the information that ADDRESS1 to ADDRESS2 is a code section.
 \ It is added to the end, then swapped to the right place.
-: ADD-SECTION   OVER FIND-LABEL >R   REQUIRED-XT ANON-SECTION
+: ADD-SECTION   SECTION-LABELS
+    OVER FIND-LABEL >R   REQUIRED-XT 'CR+LABEL ANON-SECTION
     R> DUP IF SWAP-LABEL _ THEN DROP ;
 
 \ Make section I current.
@@ -71,8 +72,9 @@ NORMAL-DISASSEMBLY
 
 \ Analyse current instruction after disassembly.
 \ DISS LATEST-INSTRUCTION ISS ISL are all valid.
+
 : ANALYSE-INSTRUCTION   LATEST-INSTRUCTION @ JUMPS IN-BAG? IF
-    JUMP-TARGET STARTER? IF JUMP-TARGET STARTERS BAG+! THEN THEN ;
+     JUMP-TARGET STARTER? IF JUMP-TARGET STARTERS BAG+! THEN THEN ;
 
 \ Analyse the code range from ADDRESS up to an unconditional transfer.
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.
@@ -96,6 +98,6 @@ NORMAL-DISASSEMBLY
 \ Crawl with normal disassembly (observing `` TALLY-BA '')
 \ resp. crawl through 16 / 32 bits code.
 \ The other owns change it all the time.
-: CRAWL16  'D-R-T-16 (R-XT) ! CRAWL NORMAL-DISASSEMBLY ;
+: CRAWL16  'D-R-T-16 (R-XT) ! BITS-16 CRAWL NORMAL-DISASSEMBLY ;
 
 PREVIOUS
