@@ -68,7 +68,7 @@ VARIABLE C
 
 \ Adorn the ADDRESS we are currently disassembling with a label
 \ if any.
-: ADORN-WITH-LABEL   HOST>TARGET  >LABEL DUP IF &: EMIT ID. _ THEN DROP ;
+: ADORN-WITH-LABEL   HOST>TARGET  >LABEL DUP IF &: EMIT ID. CR _ THEN DROP ;
 
 'ADORN-WITH-LABEL >DFA @   'ADORN-ADDRESS >DFA !
 
@@ -83,6 +83,11 @@ VARIABLE C
 \D AAP 1- >LABEL H. CR
 \D AAP ADORN-WITH-LABEL  .S CR  \ Should fail!
 \D AAP 0 HOST>TARGET - ADORN-WITH-LABEL  CR
+
+: DISASSEMBLE-TARGET
+    TARGET-START @ .  " ORG" TYPE CR
+    CODE-SPACE CP @ D-R
+    CP @ ADORN-WITH-LABEL ;
 
 ( ----------------------------------                                    )
 ( asi386 dependant part, doesn't belong here                            )
@@ -109,7 +114,7 @@ ALSO ASSEMBLER DEFINITIONS
 
 (  Assuming the disassembly sits at the offset of a relative branch     )
 (  assembled by commaer DEA , return that OFFSET.                       )
-: GET-OFFSET   POINTER @ SWAP >CNT @ MC@ ;
+: GET-OFFSET   POINTER @ SWAP >CNT @ MC@-S ;
 
 ( For the commaer DEA return ADDRESS in host space that is the target   )
 ( of the current relative jump.                                         )
@@ -125,7 +130,7 @@ ALSO ASSEMBLER DEFINITIONS
 ( This relies on the convention that the commaer that consumes an       )
 ( absolute address has the name of that with a relative address         )
 ( surrounded with brackets.                                             )
-: .COMMA-RX
+: .COMMA-REL
    DUP  DUP GOAL-RB HOST>TARGET  .BRANCH/.
    >CNT @ POINTER +! ;
 
@@ -133,7 +138,15 @@ ALSO ASSEMBLER DEFINITIONS
 \D NOOT .LABEL/. CR
 \D '(RB,) ID.-NO() CR
 
-'.COMMA-LABEL   'X, >DIS !
-'.COMMA-RX      '(RX,) >DIS !
+'.COMMA-LABEL  'OW,   >DIS ! ( obligatory word     )
+'.COMMA-REL    '(RX,) >DIS !  ( cell relative to IP )
+'.COMMA-REL    '(RB,) >DIS !  ( byte relative to IP )
+'.COMMA-LABEL  'SG,   >DIS !  (  Segment: WORD      )
+'.COMMA-LABEL  'P,    >DIS !  ( port number ; byte     )
+'.COMMA-LABEL  'IS,   >DIS !  ( Single -obl-  byte )
+'.COMMA-LABEL  'IX,   >DIS !  ( immediate data : cell)
+'.COMMA-LABEL  'IB,   >DIS !  ( immediate byte data)
+'.COMMA-LABEL  'X,    >DIS !  ( immediate data : address/offset )
+'.COMMA-LABEL  'B,    >DIS !  ( immediate byte : address/offset )
 
 PREVIOUS DEFINITIONS
