@@ -7,18 +7,19 @@ INCLUDE elf.cul
 
 
 0804,839C  LABEL dovar
-0804,879D EQU last_dea_base
-0804,85E5 EQU last_dea_literal
+0804,879D EQU last_dea_forth
+0804,85E5 EQU last_dea_macro
 0804,80BF EQU X_bye
 0804,80C6 EQU H_syscall
 
-
+\ Name buffer for words
 CREATE NAME-BUFFER 0 , 256 ALLOT
-\ Prepend to NAME a PREFIX, return prefixed NAME in a static buffer.
-: PRE-PEND NAME-BUFFER $! NAME-BUFFER $+! NAME-BUFFER $@ ;
 
-\ Transform NAME into: NAMELABEL (prepended "N_").
-: >N_  "N_" PRE-PEND ;
+\ Prefix: "N_" for forth words, "N_m" for macro words.
+CREATE N_PREFIX 10 ALLOT
+
+\ Prepend to NAME a from ``N_PREFIX'', return prefixed NAME in a static buffer.
+: >N_  N_PREFIX $@ NAME-BUFFER $!   NAME-BUFFER $+! NAME-BUFFER $@ ;
 
 \ ADDRESS points to a valid name. Add a label to address the name.
 : ADD-NAME-LABEL   DUP th COUNT >N_ INSERT-EQU ;
@@ -74,8 +75,8 @@ DROP ;
 SORT-ALL
 
 X_bye  H_syscall -dc-   \ !! Instead of CRAWL-DEA
-last_dea_base CRAWL-DEA
-last_dea_literal CRAWL-DEA
+"N_" N_PREFIX $!        last_dea_forth CRAWL-DEA
+"N_m" N_PREFIX $!       last_dea_macro CRAWL-DEA
 _start H_emit -dc-      \ !! Instead of ELF-CRAWL
 
 
@@ -88,11 +89,44 @@ dovar CRAWL
 0804,839B CRAWL
 0804,8191 CRAWL
 
-\ An as yet unidentified data area.
-0804,87B3 0804,87D7 -dl-
+\ The following surely is some manual work.
 
+V_base
+4 + DUP EQU  tail               DUP COMMENT:   Allow tail-calls?
+4 + DUP EQU  buffer             DUP COMMENT:   Buffer (for ports to use as needed)
+4 + DUP EQU  source             DUP COMMENT:   Evaluate from RAM or KBD
+4 + DUP EQU  tin                DUP COMMENT:   >IN
+4 + DUP EQU  tp                 DUP COMMENT:   TP (pointer to input buffer)
+4 + DUP EQU  bases              DUP COMMENT:   $hex %bin &oct 'ascii
+
+
+4 + DUP EQU  last               DUP COMMENT:   Last word in dictionary
+4 + DUP EQU  flast              DUP COMMENT:   Last word in 'forth'
+4 + DUP EQU  mlast              DUP COMMENT:   Last word in 'macro'
+
+4 + DUP EQU  retroforth_f
+DROP
+
+\ start of INCLUDE rf751equ.cul
+\ Manual addition
+
+_end filest - EQU filesz
+_end retroforth_f - EQU retrofilesz
+
+_end       DUP EQU tib
+   400 +
+   800 +   DUP EQU s0
+   800 +   DUP EQU d0
+2,0000 +   DUP EQU dictend
+DROP
+\ end of INCLUDE rf751equ.cul
+
+tail bases -dl-
+bases last -db-
+last retroforth_f -dl-
 
 MAKE-CUL
+"----------------" TYPE CR
 SORT-LABELS
 CLEAN-LABELS
 MAKE-CUL
