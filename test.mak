@@ -148,7 +148,7 @@ testas86: aswrap.frt asgen.frt asi86.frt testset8086 ; \
     diff -w $@ testset8086 >$@.diff ;\
     diff $@.diff testresults
 
-testas386: asgen.frt asi586.frt testset386 ; \
+testas386: aswrap.frt asgen.frt asi586.frt testset386 ; \
     (echo 5 LOAD; cat $+)|\
     lina |\
     sed '1,/TEST STARTS HERE/d' |\
@@ -157,7 +157,7 @@ testas386: asgen.frt asi586.frt testset386 ; \
     diff $@.diff testresults
 
 # Special test to exercise otherwise hidden instructions.
-testas386a: asgen.frt asi586.frt testset386a ; \
+testas386a: aswrap.frt asgen.frt asi586.frt testset386a ; \
     (echo 5 LOAD; cat $+)|\
     lina |\
     sed '1,/TEST STARTS HERE/d' |\
