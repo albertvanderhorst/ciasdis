@@ -86,7 +86,7 @@ VARIABLE C
 \ Adorn the ADDRESS we are currently disassembling with a named label
 \ if any.
 : ADORN-WITH-LABEL   PLAIN-LABELS HOST>TARGET  >LABEL DUP IF
-    &: EMIT .LAB CR _   THEN DROP ;
+    &: EMIT .LAB ELSE DROP 12 SPACES THEN  ;
 
 \D 12 LABEL AAP
 \D 5 LABEL NOOT
@@ -184,23 +184,47 @@ JOPI"
 
 \ ------------------- Generic again -------------------
 
+\ Start a new line, with printing the decompiled ADDRESS as seen
+: CR+ADDRESS CR "( " TYPE DUP HOST>TARGET 4 .R " )   " TYPE ;
 
 \ Print out everything we know about ADDRESS.
 : (ADORN-ADDRESS)
     PRINT-OLD-COMMENT:
     DUP PRINT-COMMENT
     DUP REMEMBER-COMMENT:
-    CR ADORN-WITH-LABEL ;
+    CR+ADDRESS ADORN-WITH-LABEL ;
 
 \ Revector ``ADORN-ADDRESS'' used in "asgen.frt".
 '(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !
 
-\ Disassemble the current program as stored in the ``CODE-BUFFER''.
-: DISASSEMBLE-TARGET
+\ Initialise all structs with labels.
+: INIT-ALL
+    PLAIN-LABELS LABELS !SET
+    COMMENT:-LABELS LABELS !SET
+    MCOMMENT-LABELS LABELS !SET
     INIT-COMMENT:
-    TARGET-START @ .  " ORG" TYPE CR
+;
+
+\ FIXME : this is what I want:
+\ REGISTERED-LABELS DO-BAG I @ EXECUTE  LABELS !SET LOOP-BAG
+
+\ Sort all structs with labels.
+: SORT-ALL
+    PLAIN-LABELS SORT-LABELS
+    COMMENT:-LABELS SORT-LABELS
+    MCOMMENT-LABELS SORT-LABELS
+;
+
+\ Disassemble the current program as stored in the ``CODE-BUFFER''.
+\ Using what is known about it.
+: DISASSEMBLE-TARGET
+    TARGET-START @ .  " ORG" TYPE CR    \ FIXME
     CODE-SPACE CP @ D-R
-    CP @ ADORN-ADDRESS ;
+    CP @ ADORN-ADDRESS CR ;
+
+\ Using (only) information from "file",
+\ disassemble the current program as stored in the ``CODE-BUFFER''.
+: CONSULT   INIT-ALL   INCLUDE ( file)   SORT-ALL   DISASSEMBLE-TARGET ;
 
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
@@ -214,7 +238,7 @@ ASSEMBLER DEFINITIONS
 : .COMMA-LABEL
     POINTER @ OVER >CNT @ MC@ .LABEL/.
     DUP >CNT @ POINTER +!
-    %ID.                         ( DEA -- )
+    %ID.                         ( DEA --)
 ;
 
 (  For DEA print the name without the surrounding brackets.             )

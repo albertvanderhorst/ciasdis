@@ -18,6 +18,4 @@ SECONDPASS
 INCLUDE test.asm
 
 \ Test of dis-assembly
-INCLUDE test.asm.dat
-
-DISASSEMBLE-TARGET
+CONSULT test.asm.dat
