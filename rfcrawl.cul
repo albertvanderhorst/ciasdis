@@ -23,13 +23,22 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 \ ADDRESS points to a valid name. Add a label to address the name.
 : ADD-NAME-LABEL   DUP th COUNT >N_ INSERT-EQU ;
 
+\  ADDRESS points in the target area. Assume that just before the dea's
+\  name has been analysed, change its first character to CHAR and add
+\  the address with that label name.
+: ADD-XXX-LABEL   NAME-BUFFER CELL+ C!   NAME-BUFFER $@ INSERT-EQU ;
+
 \ ADDRESS points to a valid dea. Add a label to address the dea(header).
 \ Assume that just before the dea's name has been analysed.
-: ADD-DEA-LABEL   &H NAME-BUFFER CELL+ C!   NAME-BUFFER $@ INSERT-EQU ;
+: ADD-DEA-LABEL   &H ADD-XXX-LABEL ;
 
 \ ADDRESS points to a valid code address. Lets call that an execution token.
 \ Assume that just before the dea's name has been analysed.
-: ADD-CODE-LABEL   &X NAME-BUFFER CELL+ C!   NAME-BUFFER $@ INSERT-EQU ;
+: ADD-CODE-LABEL   &X ADD-XXX-LABEL ;
+
+\ ADDRESS points to a variable's content. Lets call that an v-thing.
+\ Assume that just before the dea's name has been analysed.
+: ADD-VAR-LABEL   &V ADD-XXX-LABEL ;
 
 \ ADDRESS points to a valid name.
 \ Add an anonymous section to disassemble the name.
@@ -41,8 +50,9 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 
 \ Add an anonymous section to disassemble the code (5 byte call) of a
 \ variable whose code ADDRESS is given. And a 4 byte section for the
-\ content.
-: ADD-VAR-SECTIONS   >R   R@ R@ 5 + -dc-   R@ 5 + R@ 9 + -dl-   RDROP ;
+\ content. Add a symbolic name for the content.
+: ADD-VAR-INFO   DUP 5 + DUP >R -dc-   R>
+    DUP ADD-VAR-LABEL   DUP 4 + -dl- ;
 
 \ Add the information that ADDRESS is a nfa.
 : IS-A-NAME DUP B@ 0 31 WITHIN 0= ABORT" UNPLAUSIBLE LENGTH"
@@ -51,7 +61,7 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 \ Accumulate the information that ADDRESS contains a code field address.
 \ For variables the code ends after the call, so we don't want to crawl.
 : IS-A-CFA   L@ DUP ADD-CODE-LABEL
-    DUP 1+ L@ OVER 5 + + dovar = IF ADD-VAR-SECTIONS ELSE CRAWL THEN ;
+    DUP 1+ L@ OVER 5 + + dovar = IF ADD-VAR-INFO ELSE CRAWL THEN ;
 
 \ Accumulate the information that DEA is a dea.
 : IS-A-DEA   DUP 8 + IS-A-NAME  DUP ADD-DEA-LABEL
@@ -83,6 +93,10 @@ dovar CRAWL
 
 
 MAKE-CUL
+SORT-LABELS
+CLEAN-LABELS
+MAKE-CUL
+
 "----------------" TYPE CR
 \ DISASSEMBLE-ALL
 EXIT
