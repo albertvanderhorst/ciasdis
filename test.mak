@@ -343,9 +343,9 @@ ciasdis : $(ASSRC) asi586.frt ; lina -c ciasdis.frt
 cias : ciasdis ; ln -f ciasdis cias
 cidis : ciasdis ; ln -f ciasdis cidis
 
-test.bin : cidis cias test.asm test.asm.dat  ;
+test.bin : cidis cias test.asm test.cul  ;
 	cias test.asm test.bin;
-	cidis test.bin test.asm.dat > test2.asm;
+	cidis test.bin test.cul > test2.asm;
 	cias test2.asm test2.bin;
 	cmp test.bin test2.bin && cmp test.bin testresults/test.bin
 
