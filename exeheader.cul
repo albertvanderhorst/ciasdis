@@ -4,6 +4,10 @@
 \ Consult file for ciasdis. (See man 5 cul).
 \ In behalf of analysing Windows exe files.
 
+REQUIRE  do                     \ Interpreted control structures
+
+28 CONSTANT SECTION_SIZE        \ Size of a section header.
+
 0 -ORG-         \ Preliminary, to find out.
 0 TARGET>HOST 2 "MZ" $= 0 = "Fatal, not an ex header!" ?ABORT
 08  W@  10 *    NEGATE DUP -ORG-
@@ -54,10 +58,12 @@ DUP LABEL fhAddressOfEntryPoint         4 +
 DUP LABEL fhBaseOfCode                  4 +
 DUP LABEL coffHeaderEnd
 
+fhNumberOfSections      W@ CONSTANT NUMBER_OF_SECTIONS
+
 fhMachine W@ IMAGE_FILE_MACHINE_I386 <>
     "Fatal, this is an Intel 86..Pentium disassembler only!" ?ABORT
-fhCharacteristics W@ 2000 AND "Fatal, cannot handle dll's yet!" ?ABORT
-fhMagic W@ 10B <> "Fatal, cannot handle 64 bits address spaces yet!" ?ABORT
+fhCharacteristics W@ 2000 AND "Fatal, cannot handle dll's, yet!" ?ABORT
+fhMagic W@ 10B <> "Fatal, cannot handle 64 bits address spaces, yet!" ?ABORT
 
 \ MS names these thingies "optional file header" though there is nothing
 \ optional about it.
@@ -83,9 +89,16 @@ DUP LABEL ofhSizeOfHeapReserve             4 +
 DUP LABEL ofhSizeOfHeapCommit              4 +
 DUP LABEL ofhLoaderFlags                   4 +
 DUP LABEL ofhNumberOfRvaAndSizes           4 +
-    LABEL coffOptionalHeaderEnd
+DUP LABEL coffOptionalHeaderEnd
+DUP LABEL RvaAndSizes     ofhNumberOfRvaAndSizes W@ 8 * +
+DUP LABEL RvaAndSizesEnd
+DUP LABEL Sections              NUMBER_OF_SECTIONS SECTION_SIZE * +
+DUP LABEL SectionsEnd
+DROP
 
-fhNumberOfSections      W@ CONSTANT NUMBER_OF_SECTIONS
+ofhSubsystem W@ 2 <> "Fatal, can only handle windows GUI applications, as yet." ?ABORT
+
+
 fhSizeOfOptionalHeader  W@ CONSTANT OPTIONAL_HEADER_SIZE
 
 exEntry 0E +   LABEL NoDosMode$
@@ -103,6 +116,32 @@ ofhReserved             ofhSubsystem                       -dl-
 ofhSubsystem            ofhSizeOfStackReserve              -dw-
 ofhSizeOfStackReserve   coffOptionalHeaderEnd              -dl-
 
+\ The following thingies have names, but those we don't need.
+RvaAndSizes             RvaAndSizesEnd                  -dl-
+
+\ For the ADDRESS of a sectionheader N, give it a label.
+: ADD-SECTION-HEADER
+    "_Section" PAD $!   0 <# #S #> PAD $+!   PAD $@   LABELED
+;
+
+\ For the ADDRESS of a sectionheader, add the label of that section.
+\ Fetch its name from the section header.
+: ADD-SECTION
+    DUP 8 + L@   OVER TARGET>HOST 8 0 $S 2SWAP 2DROP   LABELED
+;
+
+\ Given ADDRESS of first section header and number of sections,
+\ add all sections.
+: ADD-SECTIONS  0 DO
+    DUP I ADD-SECTION-HEADER
+    DUP ADD-SECTION
+    SECTION_SIZE + LOOP
+DROP ;
+
+Sections NUMBER_OF_SECTIONS ADD-SECTIONS
+
+\ NUMBER_OF_SECTIONS 0 do   I . loop
+EQU-LABELS .LABELS QUIT
 
 
 \ Crawl the exe header. In rare case it is ill-advised
