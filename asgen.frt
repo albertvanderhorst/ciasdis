@@ -491,6 +491,10 @@ VARIABLE POINTER       HERE POINTER !
 ( Get the valid part of the INSTRUCTION under examination               )
 : INSTRUCTION  ISS @   ISL @   MC@ ;
 
+\ This is kept up to date during disassembly.
+\ It is useful for intelligent disassemblers.
+VARIABLE LATEST-INSTRUCTION
+
 ( These disassemblers are quite similar:                                )
 ( if the DEA on the stack is of the right type and if the               )
 ( precondition is fullfilled and if the dissassembly fits,              )
@@ -506,6 +510,7 @@ VARIABLE POINTER       HERE POINTER !
     OVER >DATA @ = IF
         DUP >BI TALLY:,
         DUP +DISS
+        DUP LATEST-INSTRUCTION !
         POINTER @ ISS !
         DUP >CNT @ POINTER +!
     THEN
@@ -629,7 +634,7 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 ( Leave a POINTER pointing after that instruction. )
 : ((DISASSEMBLE))
     SWAP
-    DUP POINTER !   >R  
+    DUP POINTER !   >R
     3 SPACES
     ( startdea -- ) BEGIN
         DIS-PI DIS-xFI DIS-DFI DIS-DFIR DIS-FIR DIS-COMMA
@@ -658,7 +663,7 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 
 ( Dissassemble one instruction from address ONE to address TWO. )
 : DISASSEMBLE-RANGE
-    SWAP   BEGIN DUP ADORN-ADDRESS    (DISASSEMBLE) 2DUP > 0= UNTIL   2DROP 
+    SWAP   BEGIN DUP ADORN-ADDRESS    (DISASSEMBLE) 2DUP > 0= UNTIL   2DROP
 ;
 
 ( ********************* DEFINING WORDS FRAMEWORK ********************** )

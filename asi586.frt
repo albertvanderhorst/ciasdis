@@ -223,7 +223,12 @@ _ 1 0000 0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 ( Disassemble the sib byte where the disassembler sits now.             )
 ( [ `FORCED-DISASSEMBLY' takes care itself of incrementing the          )
 (   disassembly pointer. ]                                              )
-: DIS-SIB DROP [ % ~SIB, ] LITERAL FORCED-DISASSEMBLY ;
+: DIS-SIB DROP 
+    LATEST-INSTRUCTION @        \ We don't want sib visible.
+    [ % ~SIB, ] LITERAL FORCED-DISASSEMBLY  
+    LATEST-INSTRUCTION !
+;
+
 ( Fill in deferred disassembler action.                                 )
  ' DIS-SIB    % SIB,, >DIS !
 

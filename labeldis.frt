@@ -377,4 +377,16 @@ ASSEMBLER DEFINITIONS
 '.COMMA-LABEL  'X,    >DIS !  ( immediate data : address/offset )
 '.COMMA-LABEL  'B,    >DIS !  ( immediate byte : address/offset )
 
+
+\ Contains all instruction that represent an unconditional transfer
+\ of control. It may be followed by data instead of code.
+20 BAG UNCONDITIONAL-TRANSFER
+
+REQUIRE NEW-IF
+DEPTH >R
+   'CALL, 'CALLFAR, 'CALLFARO, 'CALLO, 'INT, 'INT3, 'INTO, 'IRET,
+   'JMP, 'JMPFAR, 'JMPFARO, 'JMPO, 'JMPS, 'RET+, 'RET, 'RETFAR+,
+   'RETFAR,
+DEPTH R> DO  UNCONDITIONAL-TRANSFER BAG+! LOOP
+
 PREVIOUS DEFINITIONS
