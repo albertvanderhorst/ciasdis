@@ -23,7 +23,7 @@ INCLUDE elf.cul
 : hALIGN 1- 3 OR 1+ ;
 
 CREATE NAME-BUFFER 0 , 256 ALLOT
-\ Prefix to NAME a prefix, return prefixed NAME in a static buffer.
+\ Prepend to NAME a PREFIX, return prefixed NAME in a static buffer.
 : PRE-PEND NAME-BUFFER $! NAME-BUFFER $+! NAME-BUFFER $@ ;
 
 \ Transform NAME into: NAMELABEL (prepended "N_").
@@ -82,8 +82,11 @@ last_dea_envir CRAWL-WID
 last_dea CRAWL-WID
 SORT-ALL
 
+\ User area contains longs
 init_user       DUP 100 + -dl-
+\ Yet another buffer
 0804,DA0C       DUP 200 + -dl-
+\ The data fields of vocabularies consist of pointers.
 H_DENOTATION    DUP 10 + -dl-
 H_ENVIRONMENT   DUP 10 + -dl-
 H_FORTH         DUP 10 + -dl-
