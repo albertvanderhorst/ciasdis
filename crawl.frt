@@ -11,6 +11,11 @@ REQUIRE BAG
 
 \ : \D ;
 
+
+\ Make the output disappear till the end of the calling word.
+    : 2DROP'  2DROP ;      \ Need a high level word here.
+: SHUTUP   '2DROP' >DFA @  'TYPE >DFA !    CO   'TYPE RESTORED ;
+
 \ Make ADDRESS return some label NAME, static memory so use immediately.
 : INVENT-NAME   "L" PAD $!   0 8 (DH.) PAD $+! PAD $@ ;
 
@@ -307,7 +312,7 @@ NORMAL-DISASSEMBLY
 \ ADDRESS points into code. Crawl through code from there, i.e. add
 \ all information about code ranges that can be derived from that.
 : CRAWL   DUP ?INSERT-EQU?   SECTION-LABELS SORT-LABELS
-    STARTERS DUP !BAG BAG+!   (CRAWL) ;
+    STARTERS DUP !BAG BAG+!   SHUTUP (CRAWL) ;
 
 \ ------------------------ dl section  ------------------------------
 
