@@ -418,7 +418,7 @@ lina2 : ci86.lina.s ; gcc $+ -l 2>aap
 
 ci86.lina.s :
 
-testasalpha: asalpha.frt testsetalpha ; \
+testasalpha: asgen.frt asalpha.frt testsetalpha ; \
 	echo INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testsetalpha |\
 	lina -e |\
 	sed '1,/TEST STARTS HERE/d' |\
@@ -426,7 +426,7 @@ testasalpha: asalpha.frt testsetalpha ; \
 	diff -w $@ testsetalpha >$@.diff ;\
 	rcsdiff -bBw -r$(RCSVERSION) $@.diff
 
-testas6809: as6809.frt testset6809 ; \
+testas6809: asgen.frt as6809.frt testset6809 ; \
 	echo INCLUDE asgen.frt INCLUDE as6809.frt INCLUDE testset6809 |\
 	lina -e |\
 	sed '1,/TEST STARTS HERE/d' |\
@@ -481,7 +481,7 @@ testas386a: asgen.frt asi386.frt testset386a ; \
 
 testallpentium : testas86 testas386 testas386a testaspentium
 
-testasses : testasalpha testas80 testallpentium
+testasses : testasalpha testas6809 testas80 testallpentium
 
 test386: asgen.frt asi386.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-32   SHOW-ALL)|\
