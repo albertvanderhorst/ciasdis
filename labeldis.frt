@@ -339,10 +339,22 @@ CREATE ACCU 100 ALLOT           ACCU 100 ERASE
 \D ." EXPECT 0: "  0 .C CR .S
 \D ." EXPECT 9A: "  9A .C CR .S
 
+\ FIXME: to be renamd in WHERE-FLUSH
+VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
+
+\ For ADDR of a (printable) char, add it to the accumulated range.
+\ Force an immediate flush, if the range is full.
+\ Otherwise postpone the flush at least one char.
+\ If the character following is a string ender, this is a desirable
+\ place to break. (String enders like ^J and 0 are not printable.)
+: ACCU-$C+   DUP C@ ACCU $C+   ACCU @ 64 = IF 1+ ELSE 2 + THEN NEXT-CUT ! ;
+
 \ Print all chars from ADDR1 to ADDR2 appropriately.
-\ Try to combine.
-: (DUMP-$)   DO I DUP ADORN-ADDRESS C@ DUP IS-PRINT IF
-    ACCU $C+ ELSE .C THEN LOOP .ACCU ;
+\ Try to combine, playing with the next flush.
+: (DUMP-$)
+    DO  I ADORN-ADDRESS
+        I C@ IS-PRINT   IF I ACCU-$C+ ELSE I C@ .C THEN
+    LOOP  .ACCU ;
 
 \D "AAP" $, ^J C, ^M C, &A C, &A C, BL C, &P C, 0 C, 1 C, BL C, 2 C, 3 C,
 \D HERE
@@ -357,7 +369,6 @@ CREATE ACCU 100 ALLOT           ACCU 100 ERASE
 \ Start a new line, with printing the decompiled ADDRESS as seen
 : CR+ADDRESS CR .TARGET-ADDRESS ;
 
-VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 
 \ Initialise to the start of the code space.
 : NEXT-CUT!   CODE-SPACE NEXT-CUT ! ;
@@ -426,16 +437,18 @@ endclass
 \ Contains sector specification, range plus type.
 MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !BAG
 
-\ Specify that section "name" from AD1 to AD2 uses dis-assembler DEA
-: SECTION   SECTION-LABELS DIS-STRUCT DIS-START LAB+!  LATEST LAB+!  ;
-\ Specify that from AD1 to AD2 dis-assembler DEA is used. (anonymous).
-: ANON-SECTION NONAME$ POSTFIX SECTION ;
+\ Create a disassembly section from AD1 to AD2 using dis-assembler DEA1 and
+\ end-of-line action DEA2 with NAME. Register it as a labeled section.
+: SECTION   POSTFIX  DIS-STRUCT   SECTION-LABELS   DIS-START LAB+!   LATEST LAB+! ;
+\ Create a disassembly section from AD1 to AD2 using dis-assembler DEA1 and
+\ end-of-line action DEA2 without a name. Register it as a labeled section.
+: ANON-SECTION   NONAME$ SECTION ;
 
 \ Disassemble from target ADDRESS1 to ADDRESS2.
 : D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R SHOW-END ;
 
 \ Section ADDRESS1 .. ADDRESS2 is code with name NAME.
-: -dc    2>R 'D-R-T   'CR+LABEL 2R> POSTFIX  SECTION ;
+: -dc    2>R 'D-R-T   'CR+LABEL 2R> SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is code with name "name".
 : -dc:    (WORD) -dc ;
@@ -451,14 +464,14 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Dump bytes from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-B   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-B) ;
 
-\ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
-: -db:    'DUMP-B   'CR+db SECTION ;
-
 \ Section ADDRESS1 .. ADDRESS2 are bytes with name NAME.
-: -db    2>R 'DUMP-B 'CR+db 2R> POSTFIX  SECTION ;
+: -db    2>R 'DUMP-B 'CR+db 2R> SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
+: -db:    (WORD) -db ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous byte section.
-: -db-    'DUMP-B   'CR+db ANON-SECTION ;
+: -db-    NONAME$ -db ;
 
 'DUMP-B    '-db:   ARE-COUPLED \ Register the decompiler.
 
@@ -471,14 +484,14 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-W   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-W) ;
 
-\ Section ADDRESS1 .. ADDRESS2 are words with name "name".
-: -dw:    'DUMP-W   'CR+dw SECTION ;
-
 \ Section ADDRESS1 .. ADDRESS2 are words with name NAME.
-: -dw    2>R 'DUMP-W 'CR+db 2R> POSTFIX  SECTION ;
+: -dw    2>R 'DUMP-W 'CR+dw 2R> SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 are words with name "name".
+: -dw:    (WORD) -dw ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous word section.
-: -dw-    'DUMP-W   'CR+dw ANON-SECTION ;
+: -dw-    NONAME$ -dw ;
 
 'DUMP-W    '-dw:   ARE-COUPLED
 
@@ -488,28 +501,28 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-L) ;
 
-\ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
-: -dl:    'DUMP-L   'CR+dl SECTION ;
-
 \ Section ADDRESS1 .. ADDRESS2 are longs with name NAME.
-: -dl    2>R 'DUMP-L 'CR+dl 2R> POSTFIX  SECTION ;
+: -dl    2>R 'DUMP-L 'CR+dl 2R> SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
+: -dl:    (WORD) -dl ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
-: -dl-    'DUMP-L   'CR+dl ANON-SECTION ;
+: -dl-    NONAME$ -dl ;
 
 'DUMP-L    '-dl:   ARE-COUPLED
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-$   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-$) ;
 
-\ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
-: -d$:    'DUMP-$   'CR+d$ SECTION ;
-
 \ Section ADDRESS1 .. ADDRESS2 are longs with name NAME.
-: -d$    2>R 'DUMP-$ 'CR+d$ 2R> POSTFIX  SECTION ;
+: -d$    2>R 'DUMP-$ 'CR+d$ 2R> SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
+: -d$:    (WORD) -d$ ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
-: -d$-    'DUMP-$   'CR+d$ ANON-SECTION ;
+: -d$-    NONAME$ -d$ ;
 
 'DUMP-$    '-d$:   ARE-COUPLED
 
@@ -584,14 +597,14 @@ ASSEMBLER
 \ Disassemble from target ADDRESS1 to ADDRESS2 as 16 bit.
 : D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" TYPE SHOW-END ;
 
-\ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
-: -dc16:    'D-R-T-16   'CR+LABEL SECTION ;
-
 \ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name NAME.
-: -dc16    2>R 'D-R-T-16   'CR+LABEL 2R> POSTFIX  SECTION ;
+: -dc16    2>R 'D-R-T-16   'CR+LABEL 2R> SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
+: -dc16:   (WORD) -dc16 ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-section.
-: -dc16-    'D-R-T-16   'CR+LABEL ANON-SECTION ;
+: -dc16-   NONAME$ -dc16 ;
 
 'D-R-T-16   '-dc16:   ARE-COUPLED
 
