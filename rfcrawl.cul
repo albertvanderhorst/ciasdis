@@ -9,6 +9,8 @@ INCLUDE elf.cul
 0804,839C  LABEL dovar
 0804,879D EQU last_dea_base
 0804,85E5 EQU last_dea_literal
+0804,80BF EQU X_bye
+0804,80C6 EQU H_syscall
 
 
 CREATE NAME-BUFFER 0 , 256 ALLOT
@@ -61,70 +63,29 @@ DROP ;
 
 SORT-ALL
 
+X_bye  H_syscall -dc-   \ !! Instead of CRAWL-DEA
 last_dea_base CRAWL-DEA
 last_dea_literal CRAWL-DEA
-dovar CRAWL
-ELF-CRAWL
+_start H_emit -dc-      \ !! Instead of ELF-CRAWL
 
-\ Code addresses after CALL's (by hand)
+
+\ Code addresses that float somehow.
+dovar CRAWL
 0804,84C8 CRAWL
 0804,84B6 CRAWL
 0804,840E CRAWL
 0804,8404 CRAWL
 0804,839B CRAWL
+0804,8191 CRAWL
 
-0804,87AF 0804,87D7 -dl-
+\ An as yet unidentified data area.
+0804,87B3 0804,87D7 -dl-
 
-\ 0804,81E4 CRAWL
-\ 0804,81D6 CRAWL
-\ 0804,818A CRAWL
-\ 0804,8165 CRAWL
-\ 0804,8145 CRAWL
-\ 0804,812C CRAWL
-\ 0804,811A CRAWL
-\ 0804,810D CRAWL
-\ 0804,8105 CRAWL
-\ 0804,80AD CRAWL
-\ 0804,8082 CRAWL
-\
-\ 0804,8604 CRAWL
-\ 0804,85C8 CRAWL
-\ 0804,8524 CRAWL
-\ 0804,8500 CRAWL
-\ 0804,81CF CRAWL
-\
-\ 0804,869D CRAWL
-\ 0804,8570 CRAWL
-\ 0804,84F9 CRAWL
-\ 0804,84F2 CRAWL
-\ 0804,81C4 CRAWL
-\
-\ 0804,86C7 CRAWL
-\ 0804,868C CRAWL
-\ 0804,85D9 CRAWL
-\ 0804,856B CRAWL
-\ 0804,84E9 CRAWL
-\ 0804,84A7 CRAWL
-\ 0804,843B CRAWL
-\ 0804,82FD CRAWL
-\ 0804,828C CRAWL
-\ 0804,81B5 CRAWL
-\ 0804,81AF CRAWL
-\ 0804,8059 CRAWL
 
 MAKE-CUL
 "----------------" TYPE CR
 \ DISASSEMBLE-ALL
 EXIT
-
-\ User area contains longs
-init_user       DUP 100 + -dl-
-\ Yet another buffer
-0804,DA0C       DUP 200 + -dl-
-\ The data fields of vocabularies consist of pointers.
-H_DENOTATION    DUP 10 + -dl-
-H_ENVIRONMENT   DUP 10 + -dl-
-H_FORTH         DUP 10 + -dl-
 
 CLEANUP-SECTIONS
 MAKE-CUL
