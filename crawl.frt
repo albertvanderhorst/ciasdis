@@ -10,9 +10,6 @@ REQUIRE H.
 
 : \D ;
 
-\ Make section I current.
-: MAKE-CURRENT LABELS[] CELL+ @ EXECUTE ;
-
 \ Make ADDRESS return some label NAME, static memory so use immediately.
 : INVENT-NAME   "L" PAD $!   0 8 (DH.) PAD $+! PAD $@ ;
 
