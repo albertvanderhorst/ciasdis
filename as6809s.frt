@@ -1,8 +1,13 @@
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( $Id$)
+
+( ############## GENERIC PART OF ASSEMBER ############################# )
+
+: \   ^J WORD DROP ; IMMEDIATE
+
 ( --assembler_postit_fixup_1 ) \ A2oct21 AvdH
-REQUIRE ASSEMBLER
-ASSEMBLER DEFINITIONS
+\ REQUIRE ASSEMBLER
+\ ASSEMBLER DEFINITIONS
 VARIABLE ISS ( Instruction start )
 
 ( --assembler_postit_fixup_2 ) \ A2oct21 AvdH
@@ -33,25 +38,24 @@ VARIABLE ISS ( Instruction start )
 
 : 1FAMILY| 0 DO NO--? IF DUP 1FI THEN OVER + LOOP DROP DROP ;
 
-PREVIOUS
-( $Id$)
-( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
+\ PREVIOUS
 
-REQUIRE ALIAS
+\ REQUIRE ALIAS
 
 ( ############## 8089 ASSEMBLER ADDITIONS ############################# )
 
-ASSEMBLER DEFINITIONS  HEX
+\ ASSEMBLER DEFINITIONS
+HEX
 : W,   DUP 8 RSHIFT C,   C, ;
 
 ( ############## 6809 ASSEMBLER PROPER ################################ )
-' C,   ALIAS #, ( immediate byte data)
-' W,   ALIAS ##, ( immediate data : cell)
-' C,   ALIAS CO, ( address: byte offset)
-' W,   ALIAS WO, ( cell: address or offset)
-' C,   ALIAS DO, ( direct page offset )
-' W,   ALIAS E,  ( extended address )
-' C,   ALIAS STACK, ( what to push or pop)
+: #,     C, ; \ C,   ALIAS #,     ( immediate byte data)
+: ##,    W, ; \ W,   ALIAS ##,    ( immediate data : cell)
+: CO,    C, ; \ C,   ALIAS CO,    ( address: byte offset)
+: WO,    W, ; \ W,   ALIAS WO,    ( cell: address or offset)
+: DO,    C, ; \ C,   ALIAS DO,    ( direct page offset )
+: E,     W, ; \ W,   ALIAS E,     ( extended address )
+: STACK, C, ; \ C,   ALIAS STACK, ( what to push or pop)
 
 \ Adressing modes go here
 ( 30 ) 00 1FI #|                  ( 30 ) 00 1FI A|
@@ -61,9 +65,10 @@ ASSEMBLER DEFINITIONS  HEX
 
 
 ( --------------- Handling of the index byte. ------------------------- )
-    'DFI ALIAS (|#,)    \ Incorporate 5 bit unsigned DATA.
+: (|#,) DFI ;  \ 'DFI ALIAS (|#,)    \ Incorporate 5 bit unsigned DATA.
+
 \ Incorporate signed DATA. Cut off negative values at 5 bits.
-: |#, DUP -10 +10 WITHIN 0= 31 ?ERROR  1F AND   (|#,) ;
+: |#, DUP -10 +10 WITHIN 0= ABORT" offset > 5 bits"  1F AND   (|#,) ;
 20 0 4 1FAMILY| X Y U S
 ( FF ) 9F 1FI [##]
 
@@ -141,7 +146,9 @@ ASSEMBLER DEFINITIONS  HEX
 \ Usage : PUSHS, (& B& C& ... X& )S,
 : | CREATE DUP C, 1 LSHIFT DOES> C@ OR ;
 1 | CCR&  | A&   | B&   | DPR&   | X&   | Y&   | U&   | PC&   DROP
-'| HIDDEN    : (& DSP@ 0 ;    : )S, STACK, ?CSP ;
+\ '| HIDDEN
+\ : (& DSP@ 0 ;    : )S, STACK, ?CSP ;
+: (& 0 ;    : )S, STACK, ;
 
 \ The indirection require another byte to fixup.
 : [] []| 0 C, ;
