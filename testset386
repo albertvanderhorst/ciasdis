@@ -2112,8 +2112,8 @@ CMPS, X'|
 CMPS, B'|
 MOVS, X'|
 MOVS, B'|
-TESTI|A, X'|
-TESTI|A, B'|
+TESTI|A, X'| C IL,
+TESTI|A, B'| C IB,
 CMPI|A, X'| C IL,
 CMPI|A, B'| C IB,
 XORI|A, X'| C IL,
