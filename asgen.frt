@@ -139,7 +139,12 @@ CREATE TABLE 1 , 1 , ( x TABLE + @ yields $100^[-x mod 4] )
 VOCABULARY ASSEMBLER IMMEDIATE   ASSEMBLER DEFINITIONS HEX
 ( We use the abstraction of a dea "dictionary entry address". aqa "xt" )
 ( Return the DEA from "word". 1]                                         )
-DENOTATION : % POSTPONE ' ; PREVIOUS
+
+\ Make an alias for "'" in the minimum search order called "%".
+'ONLY >WID CURRENT !    \ Making ONLY the CONTEXT is dangerous! This will do.
+"'" 'ONLY >WID (FIND)   ALIAS %         ( "'" ) 2DROP
+CONTEXT @ CURRENT !     \ Restore current.
+
 : %>BODY >CFA >BODY ; ( From DEA to the DATA field of a created word )
 : %BODY> BODY> CFA> ; ( Reverse of above)
 : %>DOES >DFA @ ; ( From DEA to the DOES> pointer for a ``DOES>'' word )

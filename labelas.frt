@@ -38,7 +38,7 @@ REQUIRE OLD:
 : SECONDPASS '?ERROR RESTORED ;  \ And off again.
 
 ( Make a denotation for labels. They look like `` :LABEL ''             )
-( Put `` : '' in the DENOTATION wordlist, such that it doesn't          )
+( Put `` : '' in the ONLY wordlist, such that it doesn't                )
 ( interfere with the normal semicolon.                                  )
 REQUIRE POSTFIX
 
@@ -53,8 +53,8 @@ REQUIRE POSTFIX
     ETYPE 2DUP ETYPE CR THEN THEN
 R> ;
 
-( Making DENOTATION the CONTEXT is dangerous! This will do.             )
-'DENOTATION >WID CURRENT !
+( Making ONLY the CONTEXT is dangerous! This will do.                   )
+'ONLY >WID CURRENT !
 
 \ A word starting with a ``:'' is a label definition denotation.
 \ The part after the ``:'' may be defined already, but if it is
