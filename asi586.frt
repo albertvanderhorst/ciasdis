@@ -58,8 +58,8 @@
  40 00 4 FAMILY|R  +1* +2* +4* +8*
 8200 0 0700,0001 T!
  01 00 8 FAMILY|R [AX [CX [DX [BX [SP -- [SI [DI
-8280 00 0100,0007 05 FIR [BP   ( Fits in the hole, safe inconsistency check)
-8240 02 0100,0007 05 FIR [MEM  ( Fits in the hole, safe inconsistency check)
+8280 00 0100,0007 05 FIR [BP   ( Fits in the hole, but disallow ZO| )
+8248 02 0100,0007 05 FIR [MEM  ( Fits in the hole, but requires ZO| )
 
 4120 0 07 T!R
   01 00 8
