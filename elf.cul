@@ -1,0 +1,67 @@
+( $Id$ )
+( Copyright{2004}: Albert van der Horst, HCC FIG Holland by GNU Public License)
+
+0 -ORG-         \ Preliminary, to analyse header
+0 B@ 7F <> "Fatal, not an elf header!" ?ABORT
+1 TARGET>HOST 3 2DUP TYPE "ELF" $= 0 = "Fatal, not an elf header!" ?ABORT
+: \D ;
+0
+DUP LABEL e_ident           10 +
+DUP LABEL e_type            2  +
+DUP LABEL e_machine         2  +
+DUP LABEL e_version         4  +
+DUP LABEL e_entry           4  +
+DUP LABEL e_phoff           4  +
+DUP LABEL e_shoff           4  +
+DUP LABEL e_flags           4  +
+DUP LABEL e_ehsize          2  +
+DUP LABEL e_phentsize       2  +
+DUP LABEL e_phnum           2  +
+DUP LABEL e_shentsize       2  +
+DUP LABEL e_shnum           2  +
+DUP LABEL e_shstrndx        2  +
+    LABEL e_headerend
+\D
+\D  e_ident  TARGET>HOST  ."  e_ident      " CR     10 DUMP
+\D  e_type            W@  ."  e_type     " . CR
+\D  e_machine         W@  ."  e_machine  " . CR
+\D  e_version         L@  ."  e_version  " . CR
+\D  e_entry           L@  ."  e_entry    " . CR
+\D  e_phoff           L@  ."  e_phoff    " . CR
+\D  e_shoff           L@  ."  e_shoff    " . CR
+\D  e_flags           L@  ."  e_flags    " . CR
+\D  e_ehsize          W@  ."  e_ehsize   " . CR
+\D  e_phentsize       W@  ."  e_phentsize " . CR
+\D  e_phnum           W@  ."  e_phnum     " . CR
+\D  e_shentsize       W@  ."  e_shentsize " . CR
+\D  e_shnum           W@  ."  e_shnum     " . CR
+\D  e_shstrndx        W@  ."  e_shstrndx  " . CR
+
+e_phoff           L@  \ Where the programheader starts
+DUP 0= "Not a program, cidis can't handle multiple segments" ?ABORT
+DUP LABEL p_type     4 +
+DUP LABEL p_offset   4 +
+DUP LABEL p_vaddr    4 +
+DUP LABEL p_paddr    4 +
+DUP LABEL p_filesz   4 +
+DUP LABEL p_memsz   4 +
+DUP LABEL p_flags    4 +
+DUP LABEL p_align    4 +
+    LABEL p_headerend
+
+\D  p_type     L@   ."  p_type    " . CR
+\D  p_offset   L@   ."  p_offset  " . CR
+\D  p_vaddr    L@   ."  p_vaddr   " . CR
+\D  p_paddr    L@   ."  p_paddr   " . CR
+\D  p_filesz   L@   ."  p_filesz  " . CR
+\D  p_memsz    L@   ."  p_memsz   " . CR
+\D  p_flags    L@   ."  p_flags   " . CR
+\D  p_align    L@   ."  p_align   " . CR
+
+e_entry  L@ LABEL _start
+p_vaddr L@ p_offset L@ -   .S -ORG-
+
+
+_start CRAWL
+MAKE-CUL
+\ DISASSEMBLE-ALL
