@@ -33,28 +33,41 @@ exHeaderStart 3C + L@   exHeaderStart + LABEL coffHeaderStart
 coffHeaderStart TARGET>HOST 2 "PE" $= 0 = "Fatal, not a windows header!" ?ABORT
 
 \ Coff File Header.
-14C LABEL IMAGE_FILE_MACHINE_I386
+14C EQU IMAGE_FILE_MACHINE_I386
+10B EQU PE32    \ Magic number for windows (non)-Portable Execution format.
 coffHeaderStart   4 +
-DUP LABEL fhMachine                  2 +
-DUP LABEL fhNumberOfSections         2 +
-DUP LABEL fhTimeDateStamp            4 +
-DUP LABEL fhPointerToSymbolTable     4 +
-DUP LABEL fhNumberOfSymbols          4 +
-DUP LABEL fhSizeOfOptionalHeader     2 +
-DUP LABEL fhCharacteristics          2 +
-    LABEL fhcoffHeaderEnd
+DUP LABEL fhMachine                     2 +
+DUP LABEL fhNumberOfSections            2 +
+DUP LABEL fhTimeDateStamp               4 +
+DUP LABEL fhPointerToSymbolTable        4 +
+DUP LABEL fhNumberOfSymbols             4 +
+DUP LABEL fhSizeOfOptionalHeader        2 +
+DUP LABEL fhCharacteristics             2 +
+DUP LABEL fhMagic                       2 +
+DUP LABEL fhMajorLinkerVersion          1 +
+DUP LABEL fhMinorLinkerVersion          1 +
+DUP LABEL fhSizeOfCode                  4 +
+DUP LABEL fhSizeOfInitializedData       4 +
+DUP LABEL fhSizeOfUninitializedData     4 +
+DUP LABEL fhAddressOfEntryPoint         4 +
+DUP LABEL fhBaseOfCode                  4 +
+    LABEL coffHeaderEnd
 
 fhMachine W@ IMAGE_FILE_MACHINE_I386 <>
-    "Fatal, this is an Intel 386 Pentium disassembler only!" ?ABORT
+    "Fatal, this is an Intel 86..Pentium disassembler only!" ?ABORT
 fhCharacteristics W@ 2000 AND "Fatal, cannot handle dll's yet!" ?ABORT
+fhMagic W@ 10B <> "Fatal, cannot handle 64 bits address spaces yet!" ?ABORT
 
-exEntry         exEntry 0E +   -dc16-
-exEntry 0E +    exEntry 40 +   -d$-
+exEntry 0E +   LABEL NoDosMode$
+exEntry         NoDosMode$      -dc16-
+NoDosMode$      exEntry 40 +    -d$-
 
 coffHeaderStart         fhMachine               -d$-
 fhMachine               fhTimeDateStamp         -dw-
 fhTimeDateStamp         fhSizeOfOptionalHeader  -dl-
-fhSizeOfOptionalHeader  fhcoffHeaderEnd         -dw-
+fhSizeOfOptionalHeader  fhMajorLinkerVersion          -dw-
+fhMajorLinkerVersion    fhSizeOfCode            -db-
+fhSizeOfCode            coffHeaderEnd           -dl-
 
 \ Crawl the exe header. In rare case it is ill-advised
 \ to do it automatically.
