@@ -312,6 +312,9 @@ endstruct
 \ Sort all registered labelstructs.
 : SORT-ALL   THE-REGISTER DO-BAG   I @ EXECUTE SORT-LABELS   LOOP-BAG ;
 
+\ Show what type of labels there are.
+: SHOW-REGISTER   THE-REGISTER DO-BAG I @ ID. LOOP-BAG ;
+
 \ Disassemble the current program as stored in the ``CODE-BUFFER''.
 \ Using what is known about it.
 : DISASSEMBLE-TARGET
