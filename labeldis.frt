@@ -16,7 +16,11 @@ REQUIRE BIN-SEARCH
 
 : \D ;
 
+\ -------------------- generic definition of labels ----------------
 
+\ Labels are bags of two cell structs, a target address and a pointer
+\ to the payload (mostly a string).
+\ They are sorted on target address for convenience.
 
 \ Define a structure for label-like things of length N.
 1 \ Dummy length
@@ -24,20 +28,9 @@ struct LABELSTRUCT
   F: LABELS HERE CELL+ , 2* CELLS ALLOT FDOES> ;
 endstruct
 
-\ Contains labels, i.e. dea's of things that leave a number
-1000 LABELSTRUCT PLAIN-LABELS        LABELS !SET
-
-\ Associate ADDRES with "NAME". (Store it in ``LABELS'')
-: LABEL   LABELS    SET+!  (WORD) $,  LABELS    SET+! ;
-
 \ For I return the ith LABEL . 1 returns the first label.
 \ All indices are compatible with this.
 : LABELS[]   1- 2* CELLS LABELS CELL+ + ;
-
-\D 12 LABEL AAP
-\D 5 LABEL NOOT
-\D 2 LABEL MIES
-\D 123 LABEL POPI
 
 \ Print the name of the LABEL at address.
 : .LAB     CELL+ @ $@ TYPE   3 SPACES ;
@@ -45,9 +38,9 @@ endstruct
 \ Print the names and values of the LABELS ( a bag as ``LABELS'').
 : .LABELS @+ SWAP ?DO I @ .  I .LAB CR 2 CELLS +LOOP ;
 
-\ For a BAG of labels return LOWER and UPPER indices, inclusive.
+\ For return LOWER and UPPER indices of the labels , inclusive.
 \ The lower index is 1 and the upper index is corresponding.
-: BAG-BOUNDS  @+ SWAP - 2 CELLS / 1 SWAP ;
+: LAB-BOUNDS  LABELS @+ SWAP - 2 CELLS / 1 SWAP ;
 
 \ In behalf of qsort.
 \ For INDEX1 and INDEX2: "the value of the first
@@ -59,7 +52,7 @@ endstruct
 : LAB<->  LABELS[] SWAP LABELS[]  2 CELLS   EXCHANGE ;
 
 \ Sort the labels of ``LABELS'' in ascending order.
-: SORT-LABELS   LABELS BAG-BOUNDS   'LAB<   'LAB<->   QSORT ;
+: SORT-LABELS   LAB-BOUNDS   'LAB<   'LAB<->   QSORT ;
 
 \ In behalf of bin-search.
 \ Comparant
@@ -72,20 +65,32 @@ VARIABLE C
 \ Find the first label that is equal to (or greater than) VALUE
 \ Return INDEX or zero if not found.
 \ Note ``BIN-SEARCH'' returns the non-inclusive upper bound if not found.
-: FIND-LABEL   C !   LABELS BAG-BOUNDS 1+   DUP >R
+: FIND-LABEL   C !   LAB-BOUNDS 1+   DUP >R
     'L<   BIN-SEARCH   DUP R> <> AND ;
 
 \ Find ADDRESS in the label table. Return DEA of an exact
 \ matching label or zero if not found.
 : >LABEL   FIND-LABEL DUP IF LABELS[]  DUP @  C @ - IF DROP 0 THEN THEN ;
 
-\ Adorn the ADDRESS we are currently disassembling with a label
+
+\ ---------------- Names of labels ------------------------------
+
+\ Contains plain labels, i.e. structs as associate with ``LABEL''
+1000 LABELSTRUCT PLAIN-LABELS        LABELS !SET
+
+\ Generate a plain label at ADDRESS.
+\ The payload is a pointer to a string with "NAME".
+: LABEL   PLAIN-LABELS   LABELS SET+!   (WORD) $, LABELS SET+! ;
+
+\ Adorn the ADDRESS we are currently disassembling with a named label
 \ if any.
 : ADORN-WITH-LABEL   HOST>TARGET  >LABEL DUP IF
     &: EMIT .LAB CR _   THEN DROP ;
 
-: (ADORN-ADDRESS) ADORN-WITH-LABEL ;
-'(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !
+\D 12 LABEL AAP
+\D 5 LABEL NOOT
+\D 2 LABEL MIES
+\D 123 LABEL POPI
 
 \D LABELS .LABELS CR
 \D SORT-LABELS
@@ -96,16 +101,11 @@ VARIABLE C
 \D 12 1- FIND-LABEL  LABELS[] .LAB CR
 \D 12 >LABEL .LAB CR
 \D 12 1- >LABEL H. CR
-\D 12 ADORN-WITH-LABEL  .S CR  \ Should fail!
+\D 12 ADORN-WITH-LABEL  .S CR  \ Should give zero, not found!
 \D 12 0 HOST>TARGET - ADORN-WITH-LABEL  CR
 
-: DISASSEMBLE-TARGET
-    TARGET-START @ .  " ORG" TYPE CR
-    CODE-SPACE CP @ D-R
-    CP @ ADORN-WITH-LABEL ;
-
 ( ----------------------------------                                    )
-( asi386 dependant part, doesn't belong here                            )
+( asi386 dependant part, does it belong here?                           )
 
 ALSO ASSEMBLER DEFINITIONS
 ( Print X as a symbolic label if possible, else as a number             )
@@ -165,3 +165,18 @@ ALSO ASSEMBLER DEFINITIONS
 '.COMMA-LABEL  'B,    >DIS !  ( immediate byte : address/offset )
 
 PREVIOUS DEFINITIONS
+
+\ ------------------- Generic again -------------------
+
+
+\ Print out everything we know about ADDRESS.
+: (ADORN-ADDRESS) ADORN-WITH-LABEL ( .. ADORN-THIS ADORN-THAT ) ;
+
+\ Revector ``ADORN-ADDRESS'' used in "asgen.frt".
+'(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !
+
+\ Disassemble the current program as stored in the ``CODE-BUFFER''.
+: DISASSEMBLE-TARGET
+    TARGET-START @ .  " ORG" TYPE CR
+    CODE-SPACE CP @ D-R
+    CP @ ADORN-ADDRESS ;
