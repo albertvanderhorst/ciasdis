@@ -9,13 +9,18 @@ REQUIRE DO-BAG          \ More advanced bag facility
 
 ( Make sure undefined labels don't fool up the first pass of the        )
 (   assembly                                                            )
-\ Compile words that are unknown or look like malformed
-\ numbers as a _ ,i.e. it generates a don't care value.
+\ Compile words that are unknown
+\ as a _ ,i.e. it generates a don't care value.
 \ Supposedly these are labels that have not been compiled.
 \ Go on compiling.
 \ Loading the same code another time will give correct code.
 : FIX-DEA DROP '_ ;
-: FIX-NMB FIX-DEA (WORD) 2DROP ;
+\ Skip the remainder of the misspelled number.
+\ This may be empty, so in order to use (WORD) , we backspace one char.
+\ Afterwards we backspace again, such that the number routine we return
+\ to concludes it is ready.
+\ We leave some random number, which is okay, but it must be single precision!
+: FIX-NMB   -1 IN +!   (WORD) 2DROP   -1 IN +!   0 DPL ! ;
 
 : ERROR10 DROP IF  FIX-NMB THEN ;
 : ERROR12 DROP IF  FIX-DEA THEN ;
@@ -37,13 +42,29 @@ REQUIRE OLD:
 ( interfere with the normal semicolon.                                  )
 REQUIRE POSTFIX
 
+\ For NAME: "name REPRESENTS a label."
+: IS-A-LABEL? FOUND DUP IF >CFA @ 'BL >CFA @ = THEN ;
+
+\ For NAME: NAME and "it is a KNOWN label."
+\ We don't need to define it if there is already a label of that name.
+\ If it has not the value of the programpointer we must report a phase error.
+: KNOWN-LABEL?   2DUP IS-A-LABEL? >R
+    R@ IF 2DUP FOUND EXECUTE _AP_ <> IF "ERROR: phase error defining label "
+    ETYPE 2DUP ETYPE CR THEN THEN
+R> ;
+
 ( Making DENOTATION the CONTEXT is dangerous! This will do.             )
 'DENOTATION >WID CURRENT !
 
-: (:) _AP_ (WORD) 2DUP FOUND IF FOUND EXECUTE = 123 ?ERROR
-124 THROW ELSE   POSTFIX CONSTANT THEN ;
-: : '(:) CATCH 124 = IF ." PHASE ERROR " THEN ;
-LATEST >FFA 12 TOGGLE
+\ A word starting with a ``:'' is a label definition denotation.
+\ The part after the ``:'' may be defined already, but if it is
+\ a label it must have the value of the current program counter.
+\ So it is possible to redefine words as labels (heed the warnings.)
+\ This is very tricky, but the assembler programmer must not be
+\ restricted by what words are in Forth.
+\ Note: this is actually an abuse of the denotation mechanism.
+: : (WORD) KNOWN-LABEL? IF 2DROP ELSE 2>R _AP_ 2R> POSTFIX CONSTANT THEN ;
+LATEST >FFA 12 TOGGLE    \ Immediate and denotation.
 
 CONTEXT @ CURRENT !
 
