@@ -22,7 +22,7 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 : >N_  "N_" PRE-PEND ;
 
 \ ADDRESS points to a valid name. Add a label to address the name.
-: ADD-NAME-LABEL   DUP th $@ >N_ 2DUP TYPE INSERT-EQU ;
+: ADD-NAME-LABEL   DUP th $@ >N_ INSERT-EQU ;
 
 \ Generate a equ label at (target) ADDRESS with NAME,
 \ unless address is already labeled.
@@ -72,6 +72,7 @@ DROP ;
 0804,A6EC  LABEL doconstant
 0804,A72C  LABEL dovar
 0804,A75C  LABEL douse
+0804,B814  LABEL dodoes
 
 SORT-ALL
 
@@ -79,8 +80,10 @@ last_dea_envir CRAWL-WID
 last_dea CRAWL-WID
 SORT-ALL
 
-init_user DUP 100 + -dl-
-0804,DA0C DUP 100 + -dl-
+init_user       DUP 100 + -dl-
+0804,DA0C       DUP 200 + -dl-
+H_DENOTATION    DUP 10 + -dl-
+H_FORTH         DUP 10 + -dl-
 
 MAKE-CUL
 EXIT

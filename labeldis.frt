@@ -18,9 +18,6 @@ REQUIRE struct
 
 10000 CONSTANT MAX-LABEL
 
-\ This name might later be changed.
-: NONAME$ "NONAME" ;
-
 : \D POSTPONE \ ;
 
 \ -------------------- INTRODUCTION --------------------------------

@@ -11,6 +11,23 @@
 
 \ This is a main build. For details see asgen.frt
 
+\ ------------------Disgraceful adaptations. -------------------
+\ Put here to draw attention.
+\ This name might later be changed.
+: NONAME$ "NONAME" ;
+
+REQUIRE OLD:    REQUIRE $=
+\ Patch the word ``PRESENT'' such that no name words are no longer
+\ considered present. This prevent zillion error messages.
+: NEW-PRESENT   OLD: PRESENT DUP IF DUP >NFA @ $@ NONAME$ $= 0= AND THEN ;
+' NEW-PRESENT ' PRESENT 3 CELLS MOVE
+
+\ Patch the word ``L@'' with the name "FAR@". Such that it no longer
+\ conflicts with the ``L@'' we have.
+: FAR@ L@ ;    HIDE L@
+
+\ --------------------------------------------------------------
+
 INCLUDE asgen.frt
 INCLUDE aswrap.frt      \ neater if put here
 INCLUDE asi386.frt

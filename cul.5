@@ -241,12 +241,21 @@ then combine any anonymous sections.
 Add the information that \fI<expr>\fR is a target code address.
 It will be taken into account at the next invocation of CRAWL .
 
-.SH "STRING HANDLING"
+.SH "FETCHING FROM BINARY"
 Extracting label names from the binary is a vital capability.
+Also especially in headers, there are addresses to be fetched from
+the binary.
 Note that the keywords in this section are operators,
-in the sense that they leave a result string for further processing.
-They operate on addresses in the host space (unlike \fBL@\fR e.a.),
+in the sense that they leave a result for further processing.
+The string operators on addresses in the host space (unlike \fBL@\fR e.a.),
 so they are normally preceeded by \fBTARGET>HOST\fR.
+.TP
+\fI<addr>\fR \fB[B@|W@|L@]\fR
+Get an 8 bit, 16 bit or 32 bit value from target address \fI<addr>\fR,
+in a big-endian (Intel) fashion.
+.br
+Note the conflict with the built-in \fBL@\fR .
+The old \fBL@\fR is available under the name \fBFAR@\R.
 .TP
 \fI<addr>\fR \fBTARGET>HOST\fR
 Transform the target address to a host address.
