@@ -9,7 +9,7 @@
 REQUIRE H.
 REQUIRE BAG
 
-: \D ;
+\ : \D ;
 
 \ Make ADDRESS return some label NAME, static memory so use immediately.
 : INVENT-NAME   "L" PAD $!   0 8 (DH.) PAD $+! PAD $@ ;
@@ -125,10 +125,10 @@ REQUIRE BAG
 \D ." EXPECT: 0 :" 4 OVERLAP-OR-BORDER? . CR
 
 \ Section INDEX has a gap with the previous one.
-: GAP?' END+START < ;
-\D ." EXPECT: 0 :" 2 GAP?' . CR
-\D ." EXPECT: 0 :" 3 GAP?' . CR
-\D ." EXPECT: -1 :" 4 GAP?' . CR
+: GAP? END+START < ;
+\D ." EXPECT: 0 :" 2 GAP? . CR
+\D ." EXPECT: 0 :" 3 GAP? . CR
+\D ." EXPECT: -1 :" 4 GAP? . CR
 
 \ For section INDEX: "It HAS a name"
 : IS-NAMED   SECTION-NAME NONAME$ $= 0= ;
@@ -186,7 +186,7 @@ REQUIRE BAG
 \D ." EXPECT: 3 3 10 30 :" LAB-UPB . 2 KILL-OVERLAP LAB-UPB . 1 MAKE-CURRENT DIS-START . DIS-END . CR
 
 \ Introduce char section to fill the gap at INDEX. Note that the result is unordered.
-: FILL-GAP DUP GAP?' IF   DUP END+START -d$-   DUP 1+ LAB-UPB MAX KILL-OVERLAP
+: FILL-GAP DUP GAP? IF   DUP END+START -d$-   DUP 1+ LAB-UPB MAX KILL-OVERLAP
     DUP KILL-OVERLAP THEN DROP ;
 \D ." EXPECT: 3 4 28 30 :" LAB-UPB . 3 FILL-GAP LAB-UPB . 4 MAKE-CURRENT DIS-START . DIS-END . CR
 \D ." EXPECT: 4 4 20 28 :" LAB-UPB . 2 FILL-GAP LAB-UPB . 2 MAKE-CURRENT DIS-START . DIS-END . CR
@@ -201,8 +201,24 @@ REQUIRE BAG
 : CLEANUP-SECTIONS SECTION-LABELS
     2 LAB-UPB 2DUP <= IF DO I KILL-OVERLAP -1 +LOOP THEN ;
 
+\ Plug a hole at the first section.
+: PLUG-FIRST   1 MAKE-CURRENT TARGET-START DIS-START 2DUP <> IF
+   -d$- _ _ THEN 2DROP ;
+
+\ Plug a hole at the last section.
+: PLUG-LAST    LAB-UPB MAKE-CURRENT DIS-END TARGET-END 2DUP <> IF
+   -d$- _ _ THEN 2DROP ;
+
+\ If there are no sections at all, make the buffer into a char section.
+\ Else check last and first sections.
+\ Note that plugging results in a change of the number of sections,
+\ interfering with other plugging.
+: PLUG-SPECIAL  LAB-UPB IF PLUG-LAST PLUG-FIRST ELSE
+    TARGET-START TARGET-END -d$- THEN ;
+
 \ Fill any holes with character sections.
-: PLUG-HOLES  SECTION-LABELS LAB-UPB 1+ 2 ?DO I FILL-GAP LOOP SORT-LABELS ;
+: PLUG-HOLES  SECTION-LABELS LAB-UPB 1+ 2
+  2DUP > IF DO I FILL-GAP LOOP ELSE 2DROP THEN SORT-LABELS PLUG-SPECIAL SORT-LABELS ;
 
 \ ------------------------------------------------------------------------
 ASSEMBLER
@@ -280,11 +296,10 @@ NORMAL-DISASSEMBLY
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.
 : CRAWL-ONE  DUP >R TARGET>HOST BEGIN (DISASSEMBLE) ANALYSE-INSTRUCTION
     DUP HOST-END >=   LATEST-INSTRUCTION @ UNCONDITIONAL-TRANSFERS IN-BAG?   OR
-  UNTIL     R> SWAP HOST>TARGET INSERT-SECTION
-  CR ." STARTERS:" STARTERS .BAG CR ;
+  UNTIL     R> SWAP HOST>TARGET INSERT-SECTION ;
 
 \ Analyse code from ADDRESS , unless already known.
-: ?CRAWL-ONE? DUP KNOWN-CODE? 0= IF CRAWL-ONE _ THEN DROP ;
+: ?CRAWL-ONE? DUP STARTER? IF CRAWL-ONE _ THEN DROP ;
 
 \ Crawl through code from all points in ``STARTERS''.
 : (CRAWL)   BEGIN STARTERS BAG? WHILE STARTERS BAG@- ?CRAWL-ONE? REPEAT ;
