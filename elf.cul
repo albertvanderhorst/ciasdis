@@ -4,7 +4,7 @@
 0 -ORG-         \ Preliminary, to analyse header
 0 B@ 7F <> "Fatal, not an elf header!" ?ABORT
 1 TARGET>HOST 3 2DUP TYPE "ELF" $= 0 = "Fatal, not an elf header!" ?ABORT
-: \D ;
+\ : \D ;             \ Comment in for debugging.
 0
 DUP LABEL e_ident           10 +
 DUP LABEL e_type            2  +
