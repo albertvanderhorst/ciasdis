@@ -526,7 +526,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ( ------------- DISASSEMBLERS ------------------------------------------------)
 
 ( Contains the position that is being disassembled                      )
-VARIABLE POINTER       HERE POINTER !
+VARIABLE AS-POINTER       HERE AS-POINTER !
 
 ( Get the valid part of the INSTRUCTION under examination               )
 : INSTRUCTION  ISS @   ISL @   MC@ ;
@@ -546,13 +546,13 @@ VARIABLE LATEST-INSTRUCTION
     DUP IS-PI IF
     AT-REST? IF
     DUP >BI OVER >CNT @  MC@ INVERT
-    >R POINTER @ OVER >CNT @  MC@ R>   AND
+    >R AS-POINTER @ OVER >CNT @  MC@ R>   AND
     OVER >DATA @ = IF
         DUP >BI TALLY:,
         DUP +DISS
         DUP LATEST-INSTRUCTION !
-        POINTER @ ISS !
-        DUP >CNT @ POINTER +!
+        AS-POINTER @ ISS !
+        DUP >CNT @ AS-POINTER +!
     THEN
     THEN
     THEN
@@ -628,19 +628,19 @@ VARIABLE LATEST-INSTRUCTION
 
 ( Print a standard disassembly for the commaer DEA.                     )
 : .COMMA-STANDARD
-    POINTER @ OVER >CNT @ MC@ U.
-    DUP >CNT @ POINTER +!
+    AS-POINTER @ OVER >CNT @ MC@ U.
+    DUP >CNT @ AS-POINTER +!
     %ID.                         ( DEA -- )
 ;
 
 ( Print a signed disassembly for the commaer DEA.                       )
 : .COMMA-SIGNED
-    POINTER @ OVER >CNT @ MC@ .
-    DUP >CNT @ POINTER +!
+    AS-POINTER @ OVER >CNT @ MC@ .
+    DUP >CNT @ AS-POINTER +!
     %ID.                         ( DEA -- )
 ;
 
-( Print the disassembly for the commaer DEA, advancing `POINTER' past   )
+( Print the disassembly for the commaer DEA, advancing `AS-POINTER' past   )
 ( the comma-content                                                     )
 : .COMMA   DUP >DIS @ IF   DUP >DIS @ EXECUTE   ELSE
     .COMMA-STANDARD   THEN ;
@@ -665,16 +665,16 @@ VARIABLE LATEST-INSTRUCTION
 
 VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 
-( From POINTER show memory because the code there can't be              )
-( disassembled. Leave incremented POINTER.                              )
+( From AS-POINTER show memory because the code there can't be              )
+( disassembled. Leave incremented AS-POINTER.                              )
 : SHOW-MEMORY  BEGIN COUNT . ."  C, " DUP I-ALIGNMENT @ MOD WHILE REPEAT ;
 
-( Dissassemble one instruction from POINTER starting at DEA. )
+( Dissassemble one instruction from AS-POINTER starting at DEA. )
 ( Based on what is currently left in `TALLY!' )
-( Leave a POINTER pointing after that instruction. )
+( Leave a AS-POINTER pointing after that instruction. )
 : ((DISASSEMBLE))
     SWAP
-    DUP POINTER !   >R
+    DUP AS-POINTER !   >R
     3 SPACES
     ( startdea -- ) BEGIN
         DIS-PI DIS-xFI DIS-DFI DIS-DFIR DIS-FIR DIS-COMMA
@@ -684,7 +684,7 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
     RESULT? IF
       .DISS     \ Advances pointer past commaers
       LATEST-INSTRUCTION @ >PRF @ BA-XT !
-      RDROP POINTER @
+      RDROP AS-POINTER @
     ELSE
       R> SHOW-MEMORY
     THEN
@@ -695,12 +695,12 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 ( Leave an ADDRESS pointing after that instruction.                     )
 : (DISASSEMBLE)   !DISS !TALLY STARTVOC ((DISASSEMBLE)) ;
 
-( Forced dissassembly of one instruction from `POINTER'. )
+( Forced dissassembly of one instruction from `AS-POINTER'. )
 ( Force interpretation as DEA instruction. )
 ( This is useful for instructions that are known or hidden by an other  )
 ( instruction that is found first.                             )
 : FORCED-DISASSEMBLY
-    !DISS   !TALLY   POINTER @ SWAP ((DISASSEMBLE)) DROP ;
+    !DISS   !TALLY   AS-POINTER @ SWAP ((DISASSEMBLE)) DROP ;
 
 ( Dissassemble one instruction from address ONE to address TWO. )
 : DISASSEMBLE-RANGE

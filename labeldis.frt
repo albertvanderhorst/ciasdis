@@ -357,7 +357,7 @@ endstruct
 
 \ To be shown at the end of each range.
         ASSEMBLER
-: SHOW-END POINTER @ ADORN-ADDRESS CR ;
+: SHOW-END AS-POINTER @ ADORN-ADDRESS CR ;
         PREVIOUS
 
 : .PAY-SECTION CELL+ @ DUP EXECUTE
@@ -502,10 +502,13 @@ ASSEMBLER
 (                       SECTIONS                                        )
 
 \ Disassemble from target ADDRESS1 to ADDRESS2 as 16 bit.
-: D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" TYPE ;
+: D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" TYPE SHOW-END ;
 
 \ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
 : -dc16:    'D-R-T-16   'CR+LABEL SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name NAME.
+: -dc    2>R 'D-R-T-16   'CR+LABEL 2R> POSTFIX  SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-section.
 : -dc16-    'D-R-T-16   'CR+LABEL ANON-SECTION ;
@@ -524,8 +527,8 @@ VARIABLE LATEST-OFFSET
 ( Print a disassembly, for a commaer DEA , taking into account labels,  )
 ( {suitable for e.g. the commaer ``IX,''}                               )
 : .COMMA-LABEL
-    POINTER @ OVER >CNT @ MC@ .LABEL/.
-    DUP >CNT @ POINTER +!
+    AS-POINTER @ OVER >CNT @ MC@ .LABEL/.
+    DUP >CNT @ AS-POINTER +!
     %ID.                         ( DEA --)
 ;
 
@@ -535,11 +538,11 @@ VARIABLE LATEST-OFFSET
 (  Assuming the disassembly sits at the offset of a relative branch     )
 (  assembled by commaer DEA , return the host space ADDRESS of the next )
 (  instruction.                                                         )
-: NEXT-INSTRUCTION  >CNT @ POINTER @ + ;
+: NEXT-INSTRUCTION  >CNT @ AS-POINTER @ + ;
 
 (  Assuming the disassembly sits at the offset of a relative branch     )
 (  assembled by commaer DEA , return that OFFSET.                       )
-: GET-OFFSET   POINTER @ SWAP >CNT @ MC@-S DUP LATEST-OFFSET ! ;
+: GET-OFFSET   AS-POINTER @ SWAP >CNT @ MC@-S DUP LATEST-OFFSET ! ;
 
 ( For the commaer DEA return ADDRESS in host space that is the target   )
 ( of the current relative jump.                                         )
@@ -557,7 +560,7 @@ VARIABLE LATEST-OFFSET
 ( surrounded with brackets.                                             )
 : .COMMA-REL
    DUP  DUP GOAL-RB HOST>TARGET  .BRANCH/.
-   >CNT @ POINTER +! ;
+   >CNT @ AS-POINTER +! ;
 
 \D 5 .LABEL/. CR
 \D 5 .LABEL/. CR

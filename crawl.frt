@@ -186,7 +186,7 @@ NORMAL-DISASSEMBLY
 
 \ Return the target ADDRESS of the current instruction.
 \ (It must be a jump of course.
-: JUMP-TARGET   POINTER @   LATEST-OFFSET @  + HOST>TARGET ;
+: JUMP-TARGET   AS-POINTER @   LATEST-OFFSET @  + HOST>TARGET ;
 
 \ Analyse current instruction after disassembly.
 \ DISS LATEST-INSTRUCTION ISS ISL are all valid.
