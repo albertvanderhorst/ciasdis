@@ -6,10 +6,10 @@
 ( There is a separate one for the assembler.                            )
 
 INCLUDE struct.frt
+INCLUDE bag.frt
 
 REQUIRE ALIAS
 REQUIRE @+
-REQUIRE SET
 REQUIRE QSORT
 REQUIRE EXCHANGE
 REQUIRE BIN-SEARCH
@@ -18,30 +18,37 @@ REQUIRE BIN-SEARCH
 
 \ -------------------- generic definition of labels ----------------
 
+\ A bag with the dea's of all labelstruct 's.
+100 BAG THE-REGISTER
+
 \ Labels are bags of two cell structs, a target address and a pointer
 \ to the payload (mostly a string).
 \ They are sorted on target address for convenience.
 
 \ Define a structure for label-like things of length N.
+\ A label-like thing is two cells: address and a payload.
 1 \ Dummy length
 struct LABELSTRUCT
-  F: LABELS HERE CELL+ , 2* CELLS ALLOT FDOES> ;
+  F: LABELS   2* BUILD-BAG   FDOES> ;
+  F: DUMMY LATEST THE-REGISTER BAG+! FDOES> -1 13 ?ERROR ;
 endstruct
+
+THE-REGISTER !BAG       \ Get rid of dummy registration.
 
 \ For I return the ith LABEL . 1 returns the first label.
 \ All indices are compatible with this.
 : LABELS[]   1- 2* CELLS LABELS CELL+ + ;
 
-\ Print the name of the label at ADDRESS.
+\ Print the payload of the label at ADDRESS , provided it is a string.
 : .LAB     CELL+ @ $@ TYPE   3 SPACES ;
 
 \ Print the addresses and values of the labels, provided the
 \ payloads are strings.
 : .LABELS  LABELS @+ SWAP ?DO I @ .  I .LAB CR 2 CELLS +LOOP ;
 
-\ For return LOWER and UPPER indices of the labels , inclusive.
+\ Return LOWER and UPPER indices of the labels , inclusive.
 \ The lower index is 1 and the upper index is corresponding.
-: LAB-BOUNDS  LABELS @+ SWAP - 2 CELLS / 1 SWAP ;
+: LAB-BOUNDS   1   LABELS |BAG| 2/ ;
 
 \ In behalf of qsort.
 \ For INDEX1 and INDEX2: "the value of the first
@@ -77,11 +84,11 @@ VARIABLE C
 \ ---------------- Names of labels ------------------------------
 
 \ Contains plain labels, i.e. structs as associate with ``LABEL''
-1000 LABELSTRUCT PLAIN-LABELS        LABELS !SET
+1000 LABELSTRUCT PLAIN-LABELS        LABELS !BAG
 
 \ Generate a plain label at ADDRESS.
 \ The payload is a pointer to a string with "NAME".
-: LABEL   PLAIN-LABELS   LABELS SET+!   (WORD) $, LABELS SET+! ;
+: LABEL   PLAIN-LABELS   LABELS BAG+!   (WORD) $, LABELS BAG+! ;
 
 \ Adorn the ADDRESS we are currently disassembling with a named label
 \ if any.
@@ -108,11 +115,11 @@ VARIABLE C
 \ ---------------- Comment till remainder of line ------------------------------
 
 \ Contains comment labels, i.e. structs as associate with ``LABEL''
-1000 LABELSTRUCT COMMENT:-LABELS LABELS !SET
+1000 LABELSTRUCT COMMENT:-LABELS LABELS !BAG
 
 \ Generate a comment label at ADDRESS. A pointer to the
 \ remainder of the line is the payload.
-: COMMENT:   COMMENT:-LABELS   LABELS SET+!  ^J (PARSE) $, LABELS SET+! ;
+: COMMENT:   COMMENT:-LABELS   LABELS BAG+!  ^J (PARSE) $, LABELS BAG+! ;
 
 \ Remember the comment at the end of this instruction.
 \ Zero means no comment.
@@ -152,11 +159,11 @@ VARIABLE COMMENT:-TO-BE
 \ ---------------- Multiple line comment in front ----------------------------
 
 \ Contains comment labels, i.e. structs as associate with ``LABEL''
-1000 LABELSTRUCT MCOMMENT-LABELS LABELS !SET
+1000 LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 
 \ Make STRING the comment in front of label at ADDRESS. A pointer to this
 \ string the payload.
-: COMMENT   MCOMMENT-LABELS   LABELS SET+!  $, LABELS SET+! ;
+: COMMENT   MCOMMENT-LABELS   LABELS BAG+!  $, LABELS BAG+! ;
 
 \ Print comment for instruction at ADDRESS , if any.
 : PRINT-COMMENT MCOMMENT-LABELS  HOST>TARGET  >LABEL DUP IF
@@ -197,23 +204,12 @@ JOPI"
 \ Revector ``ADORN-ADDRESS'' used in "asgen.frt".
 '(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !
 
-\ Initialise all structs with labels.
-: INIT-ALL
-    PLAIN-LABELS LABELS !SET
-    COMMENT:-LABELS LABELS !SET
-    MCOMMENT-LABELS LABELS !SET
-    INIT-COMMENT:
-;
+\ Initialise all registered labelstructs.
+: INIT-ALL   THE-REGISTER DO-BAG   I @ EXECUTE LABELS !BAG   LOOP-BAG
+    INIT-COMMENT: ;
 
-\ FIXME : this is what I want:
-\ REGISTERED-LABELS DO-BAG I @ EXECUTE  LABELS !SET LOOP-BAG
-
-\ Sort all structs with labels.
-: SORT-ALL
-    PLAIN-LABELS SORT-LABELS
-    COMMENT:-LABELS SORT-LABELS
-    MCOMMENT-LABELS SORT-LABELS
-;
+\ Sort all registered labelstructs.
+: SORT-ALL   THE-REGISTER DO-BAG   I @ EXECUTE SORT-LABELS   LOOP-BAG ;
 
 \ Disassemble the current program as stored in the ``CODE-BUFFER''.
 \ Using what is known about it.
