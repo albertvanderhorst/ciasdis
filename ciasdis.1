@@ -1,7 +1,8 @@
 .\" $Id$
 .TH cias "1" "May 2004" "cias 0.1.0" DFW
 .SH "NAME"
-cias cidis \- computer intelligence assembler and disassembler
+cias \- computer intelligence assembler 386
+cidis \- computer intelligence disassembler 386
 .SH "SYNOPSIS"
 \fBcias   \fR  [\ \fB\-HV\fR\ ]
 .br
@@ -45,8 +46,11 @@ it.
 
 Information about the executable
 is accumulated in a
-so called \fIconsult\fI file
-with extension \fBcul\fR
+so called \fIconsult\fR file
+with extension \fBcul\fR.
+In typical Forth fashion a \fBcul\fR file can be used as
+a script,
+and additional commands can be burned into the executable.
 
 .SH "COMMAND"
 \fIcias\fR has no options but there is a wealth of commands
@@ -57,7 +61,8 @@ If called with two parameters,
 
 If \fB<bin-file>\fR is missing,
 the extension \fB.frt\fR removed from   \fI<source-file>\fR ,
-otherwise the output is in \fIa.out\fR .
+for other extensions
+the output is in \fIa.out\fR .
 
 The interactive mode is started if there is no parameter.
 
@@ -67,7 +72,7 @@ A \fBBYE\fR command ends an interactive session.
 
 After the command \fBFORTH\fR
 you have a full Forth environment available (see lina(1))
-.br
+
 \fIdisas\fR has no options but there is a wealth of commands
 in interactive mode.
 If there is a \fibin-files\fR parameter,
@@ -75,7 +80,7 @@ it is loaded into the code-buffer.
 If there is a \ficonsult\fR parameter,
 it is consulted.
 Then the interactive mode is entered,
-unless the \ficonsult\fR ends in a \fBYE\fR command.
+unless the \ficonsult\fR ends in a \fiBYE\fR command.
 A disassembly is always generated on standard output
 and must be captured by redirection.
 
@@ -117,6 +122,7 @@ Print help, i.e. the option summary.
 .\"\fB\-M\fR, \fB\--\fR, \fB\-\-help\fR, \fB\-\-version\fR
 .\"print help, version and copyright information.
 .\".TP
+.TP
 \fB\-V\fR
 Print version and copyright information.
 .SH "AVAILABILITY"
@@ -159,6 +165,8 @@ assembler   errors result in numeric error messages without mnemonics.
 .SH "SEE ALSO"
 
 lina(1) Linux Native version of ciforth.
+.br
+cul(5) format of consult file.
 
 .SH "DIAGNOSTICS"
 Uncaught exceptions will show the error number.
