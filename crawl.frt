@@ -2,14 +2,21 @@
 \ Crawling is the process of following jumps to determine code space.
 \ During crawling always the section labels must be current and sorted.
 
+ASSEMBLER
+
 \ Jump targets that are starting points for further crawling.
+\ Adding and removing from this bag ressembles a recursive action.
+\ Recursion will not do here! This is because sections are not added
+\ until the end is detected.
 1000 BAG STARTERS
+
+: >= < 0= ;
 
 VARIABLE (R-XT)        \ Required xt.
 \ Return the XT that is required for the current disassembly.
-: REQUIRED-XT (RX-T) @ ;
+: REQUIRED-XT (R-XT) @ ;
 \ Specify normal disassembly.
-: NORMAL-DISASSEMBLY 'D-R-T (RX-T) ! ;
+: NORMAL-DISASSEMBLY 'D-R-T (R-XT) ! ;
 NORMAL-DISASSEMBLY
 
 \ Where the code ends in the target space.
@@ -29,12 +36,12 @@ NORMAL-DISASSEMBLY
 \ Make section I current.
 : MAKE-CURRENT LABELS[] CELL+ @ EXECUTE ;
 
-\ For ADDRESS : "it IS in a current code segment"
-\ FIXME: if the jumps are not to the same type of disassembly segment
+\ For ADDRESS : "it IS in a current code section"
+\ FIXME: if the jumps are not to the same type of disassembly section
 \ this definitely signals a problem. Now it is ignored.
 : IN-CURRENT-CODE?   START END WITHIN   DIS-XT REQUIRED-XT =   AND ;
 
-\ For ADDRESS and segment number N: "address SITS in code segment n"
+\ For ADDRESS and section number N: "address SITS in code section n"
 : IN-CODE-N? MAKE-CURRENT IN-CURRENT-CODE? ;
 
 \ For ADDRESS and section I : "It IS code and address is part of it,
@@ -48,12 +55,12 @@ NORMAL-DISASSEMBLY
 
 \ Return the target ADDRESS of the current instruction.
 \ (It must be a jump of course.
-: JUMP-TARGET 1234 ;
+: JUMP-TARGET   POINTER @   LATEST-OFFSET @  + ;
 
 \ Analyse current instruction after disassembly.
 \ DISS LATEST-INSTRUCTION ISS ISL are all valid.
-: ANALYSE-INSTRUCTION   LATEST-INSTRUCTION JUMPS @ IN-BAG? IF
-    TARGET-ADDRESS KNOWN-CODE? IF TARGET-ADDRESS STARTERS +! THEN THEN ;
+: ANALYSE-INSTRUCTION   LATEST-INSTRUCTION @ JUMPS IN-BAG? IF
+    JUMP-TARGET KNOWN-CODE? 0= IF JUMP-TARGET STARTERS +! THEN THEN ;
 
 \ Analyse the code range from ADDRESS up to an unconditional transfer.
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.
@@ -69,13 +76,15 @@ NORMAL-DISASSEMBLY
 
 \ ADDRESS points into code. Crawl through code from there, i.e. add
 \ all information about code ranges that can be derived from that.
-: CRAWL   SECTION-LABELS SORT-LABELS   STARTERS BAG+! (CRAWL) ;
+: CRAWL   SECTION-LABELS SORT-LABELS   STARTERS DUP !BAG BAG+!   (CRAWL) ;
 
 \ ------------------------ INTEL 80386 ------------------------------
 \ Intel specific. There is a need to specify the disassembly xt.
 \ Crawl with normal disassembly (observing `` TALLY-BA '')
 \ resp. crawl through 16 / 32 bits code.
-\ without altering it. The other owns change it all the time.
+\ The other owns change it all the time.
 : CRAWL    NORMAL-DISASSEMBLY CRAWL ;
-: CRAWL16  'D-R-T-16 (RX-T) ! CRAWL ;
-: CRAWL32  'D-R-T-32 (RX-T) ! CRAWL ;
+: CRAWL16  'D-R-T-16 (R-XT) ! CRAWL ;
+: CRAWL32  'D-R-T-32 (R-XT) ! CRAWL ;
+
+PREVIOUS
