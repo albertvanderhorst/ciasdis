@@ -655,8 +655,11 @@ test.bin : cidis cias test.asm test.cul  ;
 	cias test2.asm test2.bin;
 	cmp test.bin test2.bin && cmp test.bin testresults/test.bin
 
-lina405.asm : cidis lina405 lina405equ.cul lina405.cul ; \
-cidis lina405 lina405.cul| sed -e 's/. DROP-THIS//' >$@
+lina405.asm : cidis lina405 lina405equ.cul lina405.cul lina405.asm.cmp
+	cidis lina405 lina405.cul| sed -e 's/. DROP-THIS//' >$@
+	cias lina405.asm lina405.cmp
+	diff lina405.asm lina405.asm.cmp
+	cmp lina405 lina405.cmp
 
 %.bin : %.asm ; cias $< $@
 
