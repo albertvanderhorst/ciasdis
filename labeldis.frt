@@ -56,11 +56,18 @@ VARIABLE C
 \ For INDEX1 : "the value of the label IS less than ``C''"
 : L<    LABELS[] EXECUTE   C @   < ;
 
-\ Find the first label that is equal   to (or greater than) VALUE
+\ Find the first label that is equal to (or greater than) VALUE
+\ Return INDEX.
 : FIND-LABEL   C !   LABELS BAG-BOUNDS 1+ 'L<   BIN-SEARCH ;
+
+\ Find ADDRESS in the label table. Return DEA of an exact
+\ matching label or zero if not found.
+: >LABEL   FIND-LABEL LABELS[]  DUP EXECUTE C @ - IF DROP 0 THEN ;
 
 \D LABELS .LABELS
 \D SORT-LABELS
 \D LABELS .LABELS
 
 \D AAP FIND-LABEL  LABELS[] ID. CR
+\D AAP >LABEL H. CR
+\D AAP 1- >LABEL H. CR
