@@ -2,8 +2,6 @@
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
-INCLUDE bag.frt
-
 ( Handle labels )
 
 ( Make sure undefined labels don't fool up the first pass of the        )
@@ -29,7 +27,7 @@ REQUIRE OLD:
 
 \ Try to automatically load missing words.
 : FIRSTPASS '?ERROR-FIXING >DFA @ '?ERROR >DFA ! ;
-: SECONDPASS '?ERROR RESTORED ;  \ And off again.
+: SECONDPASS '?ERROR RESTORED ;  \ And off again. 
 
 ( Make a denotation for labels. They look like `` :LABEL ''             )
 ( Put `` : ''them in the DENOTATION wordlist, such that it not          )
@@ -45,35 +43,3 @@ REQUIRE POSTFIX
 LATEST >FFA 12 TOGGLE
 
 CONTEXT @ CURRENT !
-
-( Handle constant data in assembler )
-
-\ Contains the data on the remainder of the line in reverse order.
-100 BAG DX-SET
-
-: !DX-SET DX-SET !BAG ;
-
-\ Fill ``DX-SET'' from the remainder of the line in reverse order.
-: GET-DX-SET    DEPTH >R   ^J (PARSE) EVALUATE DEPTH R> ?DO DX-SET BAG+! LOOP ;
-
-\ Output ``DX-SET'' as bytes.
-: C,-DX-SET  BEGIN DX-SET BAG@- AS-C,  DX-SET BAG? 0= UNTIL ;
-
-\ Add remainder of line to codespace, as bytes.
-: DB   !DX-SET  GET-DX-SET    C,-DX-SET  ;
-
-\ NOTE: The following assumes W, and L, are defined in the specific assembler.
-
-ASSEMBLER
-\ Output ``DX-SET'' as words (16-bits)
-: W,-DX-SET  BEGIN DX-SET BAG@- W,  DX-SET BAG? 0= UNTIL ;
-
-\ Add remainder of line to codespace, as words.
-: DW   !DX-SET  GET-DX-SET    W,-DX-SET  ;
-
-\ Output ``DX-SET'' as longs (32-bits)
-: L,-DX-SET  BEGIN DX-SET BAG@- L,  DX-SET BAG? 0= UNTIL ;
-
-\ Add remainder of line to codespace, as longs (or, mostly, cells).
-: DL   !DX-SET  GET-DX-SET    L,-DX-SET  ;
-PREVIOUS

@@ -367,26 +367,26 @@ ASSEMBLER DEFINITIONS
 \D '(RB,) ID.-NO() CR
 
 '.COMMA-LABEL  'OW,   >DIS ! ( obligatory word     )
-'.COMMA-REL    '(RX,) >DIS !  ( cell relative to IP )
+'.COMMA-REL    '(RL,) >DIS !  ( cell relative to IP )
+'.COMMA-REL    '(RW,) >DIS !  ( cell relative to IP )
 '.COMMA-REL    '(RB,) >DIS !  ( byte relative to IP )
 '.COMMA-LABEL  'SG,   >DIS !  (  Segment: WORD      )
 '.COMMA-LABEL  'P,    >DIS !  ( port number ; byte     )
 '.COMMA-LABEL  'IS,   >DIS !  ( Single -obl-  byte )
-'.COMMA-LABEL  'IX,   >DIS !  ( immediate data : cell)
+'.COMMA-LABEL  'IL,   >DIS !  ( immediate data : cell)
+'.COMMA-LABEL  'IW,   >DIS !  ( immediate data : cell)
 '.COMMA-LABEL  'IB,   >DIS !  ( immediate byte data)
-'.COMMA-LABEL  'X,    >DIS !  ( immediate data : address/offset )
+'.COMMA-LABEL  'L,    >DIS !  ( immediate data : address/offset )
+'.COMMA-LABEL  'W,    >DIS !  ( immediate data : address/offset )
 '.COMMA-LABEL  'B,    >DIS !  ( immediate byte : address/offset )
 
 
 \ Contains all instruction that represent an unconditional transfer
 \ of control. It may be followed by data instead of code.
-20 BAG UNCONDITIONAL-TRANSFER
-
-REQUIRE NEW-IF
-DEPTH >R
-   'CALL, 'CALLFAR, 'CALLFARO, 'CALLO, 'INT, 'INT3, 'INTO, 'IRET,
-   'JMP, 'JMPFAR, 'JMPFARO, 'JMPO, 'JMPS, 'RET+, 'RET, 'RETFAR+,
-   'RETFAR,
-DEPTH R> DO  UNCONDITIONAL-TRANSFER BAG+! LOOP
+0 BAG UNCONDITIONAL-TRANSFER
+  'CALL, , 'CALLFAR, , 'CALLFARO, , 'CALLO, , 'INT, , 'INT3, , 'INTO, ,
+  'IRET, , 'JMP, , 'JMPFAR, , 'JMPFARO, , 'JMPO, , 'JMPS, , 'RET+, ,
+  'RET, , 'RETFAR+, , 'RETFAR, ,
+HERE UNCONDITIONAL-TRANSFER !
 
 PREVIOUS DEFINITIONS

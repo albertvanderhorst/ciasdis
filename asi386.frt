@@ -6,8 +6,8 @@
 ( ############## 80386 ASSEMBLER ADDITIONS ############################ )
 ( The patch for the assembler doesn't belong in the generic part        )
 ( To be used when overruling, e.g. prefix)
-: W, lsbyte, lsbyte, DROP ;
-: L, lsbyte, lsbyte, lsbyte, lsbyte, DROP ;
+: (W,) lsbyte, lsbyte, DROP ;
+: (L,) lsbyte, lsbyte, lsbyte, lsbyte, DROP ;
 
 ( Al fixups-from-reverse are at most 0002 bytes, so they all end in     )
 ( 0000 To improve readability we use the ignore ``,'' from ciforth.     )
@@ -20,17 +20,20 @@
 ( Where there is a placeholder ``_'' the execution token is filled in   )
 ( later. )
 
-0 2 0000 0,0100 ' W, COMMAER OW,    ( obligatory word     )
-0 4 0000 0,0080 ' L, COMMAER (RX,) ( cell relative to IP )
-0 1 0000 0,0040 ' AS-C, COMMAER (RB,) ( byte relative to IP )
-0 2 0000 0,0020 ' W, COMMAER SG,   (  Segment: WORD      )
-0 1 0000 0,0010 ' AS-C, COMMAER P,    ( port number ; byte     )
-0 1 0000 0,0008 ' AS-C, COMMAER IS,    ( Single -obl-  byte )
-0 4 0002 0,0004 ' L, COMMAER IX,   ( immediate data : cell)
-0 1 0001 0,0004 ' AS-C, COMMAER IB,   ( immediate byte data)
-0 4 0008 0,0002 ' L, COMMAER X,    ( immediate data : address/offset )
-0 1 0004 0,0002 ' AS-C, COMMAER B,    ( immediate byte : address/offset )
-_ 1 0000 0,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
+0 2  0000 0,0100 ' (W,) COMMAER OW,    ( obligatory word     )
+0 4  8000 0,0080 ' (L,) COMMAER (RL,) ( cell relative to IP )
+0 2  4000 0,0080 ' (W,) COMMAER (RW,) ( cell relative to IP )
+0 1  0000 0,0040 ' AS-C, COMMAER (RB,) ( byte relative to IP )
+0 2  0000 0,0020 ' (W,) COMMAER SG,   (  Segment: WORD      )
+0 1  0000 0,0010 ' AS-C, COMMAER P,    ( port number ; byte     )
+0 1  0000 0,0008 ' AS-C, COMMAER IS,    ( Single -obl-  byte )
+0 4 20002 0,0004 ' (L,) COMMAER IL,   ( immediate data : cell)
+0 2 10002 0,0004 ' (W,) COMMAER IW,   ( immediate data : cell)
+0 1  0001 0,0004 ' AS-C, COMMAER IB,   ( immediate byte data)
+0 4  8008 0,0002 ' (L,) COMMAER L,    ( immediate data : address/offset )
+0 2  4008 0,0002 ' (W,) COMMAER W,    ( immediate data : address/offset )
+0 1  0004 0,0002 ' AS-C, COMMAER B,    ( immediate byte : address/offset )
+_ 1  0000 0,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 
 
 ( Meaning of the bits in TALLY-BA :                                     )
@@ -47,8 +50,8 @@ _ 1 0000 0,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 (  Use debug   4,0000 no ..          8,0000 CR0 ..DB0                   )
 
 ( Names *ending* in primes BP|' -- not BP'| the prime registers -- are  )
-( only valid for 0016 bits real mode, in combination with an address    )
-( overwite. Use W, L, appropriately.                                    )
+( only valid for 16 bits mode, or with an address overwite. Use W, L,   )
+( appropriately.                                                        )
 
 8200 0 38 T!R
  08 00 8 FAMILY|R AX] CX] DX] BX] 0] BP] SI] DI]
@@ -243,9 +246,9 @@ _ 1 0000 0,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 
 ( ############## 80386 ASSEMBLER PROPER END ########################### )
 ( You may want to use these always instead of (RB,)
-    : RB, _AP_ 1 + - (RB,) ;      : RX, _AP_ 4 + - (RX,) ;
-' .COMMA-SIGNED   % (RB,) >DIS !
-' .COMMA-SIGNED   % (RX,) >DIS !
+    : RB, _AP_ 1 + - (RB,) ;    ' .COMMA-SIGNED   % (RB,) >DIS !
+    : RW, _AP_ 4 + - (RW,) ;    ' .COMMA-SIGNED   % (RW,) >DIS !
+    : RL, _AP_ 4 + - (RL,) ;    ' .COMMA-SIGNED   % (RL,) >DIS !
 
 ( Require instructions as per a 32 resp. 16 bits segment.               )
 : BITS-32   2,8000 BA-DEFAULT ! ;
