@@ -2582,70 +2582,6 @@ MOV|FA, X'| C L,
 MOV|FA, B'| C L,
 MOV|TA, X'| C L,
 MOV|TA, B'| C L,
-LMSW, MEM| C L,
-LMSW,   R|   DI|   
-LMSW,   R|   SI|   
-LMSW,   R|   BP|   
-LMSW,   R|   SP|   
-LMSW,   R|   BX|   
-LMSW,   R|   DX|   
-LMSW,   R|   CX|   
-LMSW,   R|   AX|   
-LMSW, XO| [DI] 10 L,
-LMSW, XO| [SI] 10 L,
-LMSW, XO| [BP] 10 L,
-LMSW, XO| [DX +1* DX] 14 L,
-LMSW, XO| [BX] 10 L,
-LMSW, XO| [DX] 10 L,
-LMSW, XO| [CX] 10 L,
-LMSW, XO| [AX] 10 L,
-LMSW, BO| [DI] 10 B,
-LMSW, BO| [SI] 10 B,
-LMSW, BO| [BP] 10 B,
-LMSW, BO| [DX +1* DX] 14 B,
-LMSW, BO| [BX] 10 B,
-LMSW, BO| [DX] 10 B,
-LMSW, BO| [CX] 10 B,
-LMSW, BO| [AX] 10 B,
-LMSW, ZO| [DI]
-LMSW, ZO| [SI]
-LMSW, ZO| [DX +1* DX]
-LMSW, ZO| [BX]
-LMSW, ZO| [DX]
-LMSW, ZO| [CX]
-LMSW, ZO| [AX]
-SMSW, MEM| C L,
-SMSW,   R|   DI|   
-SMSW,   R|   SI|   
-SMSW,   R|   BP|   
-SMSW,   R|   SP|   
-SMSW,   R|   BX|   
-SMSW,   R|   DX|   
-SMSW,   R|   CX|   
-SMSW,   R|   AX|   
-SMSW, XO| [DI] 10 L,
-SMSW, XO| [SI] 10 L,
-SMSW, XO| [BP] 10 L,
-SMSW, XO| [DX +1* DX] 14 L,
-SMSW, XO| [BX] 10 L,
-SMSW, XO| [DX] 10 L,
-SMSW, XO| [CX] 10 L,
-SMSW, XO| [AX] 10 L,
-SMSW, BO| [DI] 10 B,
-SMSW, BO| [SI] 10 B,
-SMSW, BO| [BP] 10 B,
-SMSW, BO| [DX +1* DX] 14 B,
-SMSW, BO| [BX] 10 B,
-SMSW, BO| [DX] 10 B,
-SMSW, BO| [CX] 10 B,
-SMSW, BO| [AX] 10 B,
-SMSW, ZO| [DI]
-SMSW, ZO| [SI]
-SMSW, ZO| [DX +1* DX]
-SMSW, ZO| [BX]
-SMSW, ZO| [DX]
-SMSW, ZO| [CX]
-SMSW, ZO| [AX]
 LIDT, MEM| C L,
 LIDT, XO| [DI] 10 L,
 LIDT, XO| [SI] 10 L,
@@ -2742,6 +2678,70 @@ SGDT, ZO| [BX]
 SGDT, ZO| [DX]
 SGDT, ZO| [CX]
 SGDT, ZO| [AX]
+LMSW, MEM| C L,
+LMSW,   R|   DI|
+LMSW,   R|   SI|
+LMSW,   R|   BP|
+LMSW,   R|   SP|
+LMSW,   R|   BX|
+LMSW,   R|   DX|
+LMSW,   R|   CX|
+LMSW,   R|   AX|
+LMSW, XO| [DI] 10 L,
+LMSW, XO| [SI] 10 L,
+LMSW, XO| [BP] 10 L,
+LMSW, XO| [DX +1* DX] 14 L,
+LMSW, XO| [BX] 10 L,
+LMSW, XO| [DX] 10 L,
+LMSW, XO| [CX] 10 L,
+LMSW, XO| [AX] 10 L,
+LMSW, BO| [DI] 10 B,
+LMSW, BO| [SI] 10 B,
+LMSW, BO| [BP] 10 B,
+LMSW, BO| [DX +1* DX] 14 B,
+LMSW, BO| [BX] 10 B,
+LMSW, BO| [DX] 10 B,
+LMSW, BO| [CX] 10 B,
+LMSW, BO| [AX] 10 B,
+LMSW, ZO| [DI]
+LMSW, ZO| [SI]
+LMSW, ZO| [DX +1* DX]
+LMSW, ZO| [BX]
+LMSW, ZO| [DX]
+LMSW, ZO| [CX]
+LMSW, ZO| [AX]
+SMSW, MEM| C L,
+SMSW,   R|   DI|
+SMSW,   R|   SI|
+SMSW,   R|   BP|
+SMSW,   R|   SP|
+SMSW,   R|   BX|
+SMSW,   R|   DX|
+SMSW,   R|   CX|
+SMSW,   R|   AX|
+SMSW, XO| [DI] 10 L,
+SMSW, XO| [SI] 10 L,
+SMSW, XO| [BP] 10 L,
+SMSW, XO| [DX +1* DX] 14 L,
+SMSW, XO| [BX] 10 L,
+SMSW, XO| [DX] 10 L,
+SMSW, XO| [CX] 10 L,
+SMSW, XO| [AX] 10 L,
+SMSW, BO| [DI] 10 B,
+SMSW, BO| [SI] 10 B,
+SMSW, BO| [BP] 10 B,
+SMSW, BO| [DX +1* DX] 14 B,
+SMSW, BO| [BX] 10 B,
+SMSW, BO| [DX] 10 B,
+SMSW, BO| [CX] 10 B,
+SMSW, BO| [AX] 10 B,
+SMSW, ZO| [DI]
+SMSW, ZO| [SI]
+SMSW, ZO| [DX +1* DX]
+SMSW, ZO| [BX]
+SMSW, ZO| [DX]
+SMSW, ZO| [CX]
+SMSW, ZO| [AX]
 VERW, MEM| C L,
 VERW, R| DI|
 VERW, R| SI|
