@@ -19,14 +19,14 @@ VARIABLE (R-XT)        \ Required xt.
 : NORMAL-DISASSEMBLY 'D-R-T (R-XT) ! ;
 NORMAL-DISASSEMBLY
 
-\ Where the code ends in the target space.
+\ Where the code ends in the host space.
 \ FIXME! Knullig.
-: END-TARGET  _AP_ ;
+: END-HOST  CP @ ;
 
 \ Swap the ITH and last label.
 \ A label occupies two consecutive places!
 : SWAP-LABEL   DUP   LABELS[]  DUP LABELS BAG-HOLE   LABELS BAG-HOLE
-   LAB-BOUNDS 1- SWAP DROP   LAB<->   LABELS BAG@- DROP ;
+   LAB-BOUNDS SWAP DROP   LAB<->   -2 CELLS LABELS  +! ;
 
 \ Add the information that ADDRESS1 to ADDRESS2 is a code section.
 \ It is added to the end, then swapped to the right place.
@@ -39,7 +39,7 @@ NORMAL-DISASSEMBLY
 \ For ADDRESS : "it IS in a current code section"
 \ FIXME: if the jumps are not to the same type of disassembly section
 \ this definitely signals a problem. Now it is ignored.
-: IN-CURRENT-CODE?   START END WITHIN   DIS-XT REQUIRED-XT =   AND ;
+: IN-CURRENT-CODE?   DIS-START DIS-END WITHIN   DIS-XT REQUIRED-XT =   AND ;
 
 \ For ADDRESS and section number N: "address SITS in code section n"
 : IN-CODE-N? MAKE-CURRENT IN-CURRENT-CODE? ;
@@ -64,9 +64,9 @@ NORMAL-DISASSEMBLY
 
 \ Analyse the code range from ADDRESS up to an unconditional transfer.
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.
-: CRAWL-ONE  DUP >R BEGIN (DISASSEMBLE) ANALYSE-INSTRUCTION
-    DUP _AP_ >=   LATEST-INSTRUCTION @ UNCONDITIONAL-TRANSFERS IN-BAG?   OR
-  UNTIL     R> SWAP ADD-SECTION ;
+: CRAWL-ONE  DUP >R TARGET>HOST BEGIN (DISASSEMBLE) ANALYSE-INSTRUCTION
+    DUP END-HOST >=   LATEST-INSTRUCTION @ UNCONDITIONAL-TRANSFERS IN-BAG?   OR
+  UNTIL     R> SWAP HOST>TARGET ADD-SECTION ;
 
 \ Analyse code from ADDRESS , unless already known.
 : ?CRAWL-ONE? DUP KNOWN-CODE? 0= IF CRAWL-ONE _ THEN DROP ;
