@@ -506,6 +506,10 @@ test386: asgen.frt asi386.frt ; \
     diff -w $@ testset386 >$@.diff ;\
     diff $@.diff testresults
 
+testallpentium : testas86 testas386 test386 testaspentium
+
+testasses : testasalpa testas80 testallpentium
+
 # There is a problem here: SHOW-ALL shows almost nothing
 # because asi386.frt is not loaded.
 # testpentium: asgen.frt asipentium.frt ; \
@@ -634,14 +638,6 @@ testlina : $(TESTLINA) ci86.lina.rawtest lina forth.lab.lina tsuite.frt ;
 	ln -sf forth.lab.lina  forth.lab
 	rm $(TEMPFILE)
 
-testlinux : $(TESTLINUX) ci86.linux.rawtest ciforthc forth.lab ;
-	m4 $(TESTLINUX)  >$(TEMPFILE)
-	sed $(TEMPFILE) -e '/Split here for test/,$$d' >$@.1
-	sed $(TEMPFILE) -e '1,/Split here for test/d' >$@.2
-	ciforthc <$@.1 | grep -v RCSfile >$@.3
-	diff -b -B $@.2 $@.3 || true
-	rm $(TEMPFILE)
-
 %.test : ci86.%.rawtest test.m4 ;
 	m4 test.m4 $<  >$(TEMPFILE)
 	sed $(TEMPFILE) -e '/Split here for test/,$$d' >$@.1
@@ -649,7 +645,7 @@ testlinux : $(TESTLINUX) ci86.linux.rawtest ciforthc forth.lab ;
 	rm $(TEMPFILE)
 
 # Preliminary until it is clear whether we want other disassemblers.
-ciasdis : $(ASSRC) asi386.frt ; lina -c ciasdis.frt
+ciasdis : $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
 cias : ciasdis ; ln -f ciasdis cias
 cidis : ciasdis ; ln -f ciasdis cidis
 
@@ -664,4 +660,9 @@ cidis lina405 lina405.cul| sed -e 's/. DROP-THIS//' >$@
 
 %.bin : %.asm ; cias $< $@
 
-cidis386.zip : $(ASSRC) asi386.frt ;  zip $@ $+
+cidis386.zip : $(ASSRC) asi386.frt asipentium.frt ;  zip $@ $+
+
+testciasdis : test.bin lina405.asm
+
+# -----------------
+regressiontest : testasses testciasdis

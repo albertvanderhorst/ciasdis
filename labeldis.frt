@@ -14,7 +14,6 @@ REQUIRE POSTFIX
 REQUIRE H.      \ In behalf of (DH.)
 REQUIRE 2>R
 REQUIRE BAG             \ Simple bag facility
-REQUIRE struct
 
 1000 CONSTANT MAX-LABEL
 
@@ -25,7 +24,7 @@ REQUIRE struct
 
 \ -------------------- generic definition of labels ----------------
 
-\ A bag with the dea's of all labelstruct 's.
+\ A bag with the dea's of all labelclasses.
 100 BAG THE-REGISTER
 
 \ Labels are bags of two cell structs, a target address and a pointer
@@ -40,34 +39,37 @@ REQUIRE struct
 \ new buffer.
 : REALLOC-POINTER   >R    DUP @ R> REALLOC   SWAP ! ;
 
-\ Define a structure for label-like things of length N.
+\ Define a class for label-like things of length N.
 \ A label-like thing is two cells: address and a payload.
 1 'DROP 'DROP \ Reverse of: Dummy decompiler, printer, length.
-struct LABELSTRUCT
-\ Return the DEA of the current label struct.
-  F: CURRENT-LABEL LATEST DUP ,   THE-REGISTER BAG+! FDOES> @ ;
+class LABELSTRUCT
+\ Return the DEA of the current label class.
+  LATEST
+  M: CURRENT-LABEL @ M; DUP ,   THE-REGISTER BAG+!
 
-  F: DECOMP , FDOES> @ EXECUTE ;        \ (Re)generate source for INDEX.
-  F: .PAY , FDOES> @ EXECUTE ;          \ Print payload
+  M: DECOMP @ EXECUTE M; ,       \ (Re)generate source for INDEX.
+  M: .PAY @ EXECUTE M; ,        \ Print payload
 
 \ Remember that from now on two times as much labels are allowed.
-  F: DOUBLE-SIZE FDOES> DUP @ 2* SWAP ! ;
+  M: DOUBLE-SIZE DUP @ 2* SWAP ! M;
 \ Return a VARIABLE containing the max labels allowed.
-  F: MAX-LAB DUP , FDOES> @ ;
+  M: MAX-LAB @ M;
+  DUP ,
 
-  F: LABELS   FDOES> ;   \ Return ADDRESS
-  F: >RELOCATABLE FDOES> DUP @   OVER - SWAP ! ; \ Make labelstruct relocatable
-  F: RELOCATABLE> FDOES> DUP +! ;           \    and back. Don't use in between!
-
+  M: LABELS   M;   \ Return ADDRESS
+  M: >RELOCATABLE DUP @   OVER - SWAP ! M; \ Make labelclass relocatable
+  M: RELOCATABLE> DUP +! M;           \    and back. Don't use in between!
 \ Return largest INDEX of labels present.
-  F: LAB-UPB FDOES> |BAG| 2/ ;
-\ Reallocate if the structure is full. 6 cells : does> pointer, 4 fields and
+  M: LAB-UPB |BAG| 2/ M;
+\ Reallocate if the class is full. 6 cells : does> pointer, 4 fields and
 \ upperbound of bag.
-  F: ?REALLOC? FDOES>   DROP MAX-LAB LAB-UPB = IF DOUBLE-SIZE
-     >RELOCATABLE   CURRENT-LABEL >DFA MAX-LAB 2* 6 + CELLS REALLOC-POINTER
-     CURRENT-LABEL EXECUTE   RELOCATABLE> THEN ;
-  F: LAB+!   2* BUILD-BAG   FDOES> BAG+! ?REALLOC? ;              \ Add to ``LABELS''
-endstruct
+  M: ?REALLOC?
+  DROP MAX-LAB LAB-UPB = IF DOUBLE-SIZE
+       >RELOCATABLE   CURRENT-LABEL >DFA MAX-LAB 2* 6 + CELLS REALLOC-POINTER
+       CURRENT-LABEL EXECUTE   RELOCATABLE> THEN M;
+  M: LAB+!   BAG+! ?REALLOC? M;              \ Add to ``LABELS''
+  2* BUILD-BAG
+endclass
 
 THE-REGISTER !BAG       \ Get rid of dummy registration.
 
@@ -160,7 +162,7 @@ VARIABLE LABEL-CACHE    \ Index of next label.
 \ Decompile label INDEX.
 : .EQU    LABELS[] DUP @ H. " EQU " TYPE  CELL+ @ %ID. CR ;
 
-\ Contains equ labels, i.e. structs as associate with ``LABEL''
+\ Contains equ labels, i.e. classes as associate with ``LABEL''
 MAX-LABEL '.PAY-DEA '.EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
 
 \ Generate a equ label at (target) ADDRESS with "NAME", this can be
@@ -209,7 +211,7 @@ MAX-LABEL '.PAY-DEA '.EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
 \ Decompile comment: label INDEX.
 : .COMMENT:   LABELS[] DUP @ H. " COMMENT: " TYPE  CELL+ @ $@ TYPE CR ;
 
-\ Contains comment labels, i.e. structs as associate with ``COMMENT:''
+\ Contains comment labels, i.e. classes as associate with ``COMMENT:''
 MAX-LABEL '.PAY$ '.COMMENT: LABELSTRUCT COMMENT:-LABELS LABELS !BAG
 
 \ Generate a comment label at ADDRESS. A pointer to the
@@ -256,7 +258,7 @@ VARIABLE COMMENT:-TO-BE
 \ Decompile mcomment label INDEX.
 : .MCOMMENT   LABELS[] DUP CELL+ @ $@ ."$" SPACE @ H. " COMMENT " TYPE  CR ;
 
-\ Contains multiple line comment labels, i.e. structs as associate with ``COMMENT''
+\ Contains multiple line comment labels, i.e. classes as associate with ``COMMENT''
 MAX-LABEL '.PAY$ '.MCOMMENT LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 
 \ Make STRING the comment in front of label at ADDRESS. A pointer to this
@@ -364,7 +366,7 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 : NEXT-CUT?   NEXT-CUT @ =  DUP IF 16 NEXT-CUT +! THEN ;
 
 \ For ADDRESS and assembler directive STRING (such "db") ,
-\ interrupt the laying down of memory structures by a new line and possibly
+\ interrupt the laying down of memory classes by a new line and possibly
 \ a label, when appropriate.
 : CR+GENERIC   2>R DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF
      CR+ADDRESS  ADORN-WITH-LABEL 2R@ TYPE _ THEN DROP RDROP RDROP ;
@@ -389,17 +391,17 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 
 \ Define a section.
 12 34 '2DROP 'DROP
-struct DIS-STRUCT
-   F: REVERSE-ORDER >R >R >R >R FDOES> ; \ Cludge, not actually executed.
-   F: DIS-START R> , FDOES> @ ;     \ Start of range
-   F: DIS-END! FDOES> ! ;       \ End of range
-   F: DIS-END R> , FDOES> @ ;       \ End of range
-   F: DIS-STRIDE 1 , FDOES> @ ;  \ For the moment FIXME!
-   F: DIS-XT FDOES> @ ;
-   F: DIS-RANGE R> , FDOES> @ >R DIS-START DIS-END R> EXECUTE ;       \ End of range
-   F: DIS-CR-XT FDOES> @ ;       \ Which xt?
-   F: DIS-CR R> , FDOES> @ EXECUTE ;       \ What to do at line boundaries.
-endstruct
+class DIS-STRUCT
+   >R >R >R >R          \ Get them in reverse order.
+   M: DIS-START @ M; R> ,     \ Start of range
+   M: DIS-END! ! M;       \ End of range
+   M: DIS-END   @ M; R> ,       \ End of range
+   M: DIS-STRIDE   @ M; 1 ,  \ For the moment FIXME!
+   M: DIS-XT   @ M;
+   M: DIS-RANGE   @ >R DIS-START DIS-END R> EXECUTE M; R> ,       \ End of range
+   M: DIS-CR-XT   @ M;       \ Which xt?
+   M: DIS-CR   @ EXECUTE M; R> ,      \ What to do at line boundaries.
+endclass
 
 \ To be shown at the end of each range.
         ASSEMBLER
@@ -542,17 +544,17 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Revector ``ADORN-ADDRESS'' used in "asgen.frt".
 '(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !
 
-\ Initialise all registered labelstructs.
+\ Initialise all registered labelclasses.
 : INIT-ALL   THE-REGISTER DO-BAG   I @ EXECUTE LABELS !BAG   LOOP-BAG
     INIT-COMMENT: ;
 
-\ Sort all registered labelstructs.
+\ Sort all registered labelclasses.
 : SORT-ALL   THE-REGISTER DO-BAG   I @ EXECUTE SORT-LABELS   LOOP-BAG ;
 
-\ Decompile all labels of current labelstruct.
+\ Decompile all labels of current labelclass.
 : DECOMP-ONE  LAB-UPB 1+ 1 ?DO I DECOMP LOOP ;
 
-\ Generate the source of all labelstructs.
+\ Generate the source of all labelclasss.
 : DECOMP-ALL THE-REGISTER DO-BAG   I @ EXECUTE DECOMP-ONE   LOOP-BAG ;
 
 \ Make a full blown cul file from the internal data.
@@ -666,7 +668,7 @@ VARIABLE LATEST-OFFSET
   'RET, , 'RETFAR+, , 'RETFAR, ,
 HERE UNCONDITIONAL-TRANSFERS !
 
-\ Contains all instruction that represent intra-segment jumps.
+\ Contains all instructions that represent intra-segment jumps.
 0 BAG JUMPS
    'CALL, , 'J, , 'JCXZ, , 'JMP, , 'JMPS, , 'J|X, , 'LOOP, , 'LOOPNZ,
    , 'LOOPZ, ,
