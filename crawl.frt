@@ -9,26 +9,30 @@
 REQUIRE H.
 REQUIRE BAG
 
-\ : \D ;
+: \D ;
 
 \ Make ADDRESS return some label NAME, static memory so use immediately.
 : INVENT-NAME   "L" PAD $!   0 8 (DH.) PAD $+! PAD $@ ;
 
-\D HEX 42 INVENT-NAME TYPE ." EXPECT: L0000,0042 " CR
+\D HEX ." EXPECT: L0000,0042 " 42 INVENT-NAME TYPE CR
+
+\ Insert the equ-label ADDRESS1 with an NAME.
+\ If equ labels was sorted, it remains so.
+: INSERT-EQU 2>R DUP EQU-LABELS WHERE-LABEL SWAP 2R> LABELED
+    ROLL-LABEL ;
 
 \ Insert the equ-label ADDRESS1 with an invented name.
 \ If equ labels was sorted, it remains so.
-: INSERT-EQU DUP EQU-LABELS WHERE-LABEL >R   DUP INVENT-NAME LABELED
-    R> ROLL-LABEL ;
+: INSERT-EQU-INVENT DUP INVENT-NAME INSERT-EQU ;
 
 \ Add target ADDRESS to the equ labels if it is not there. Invent a name.
-: ?INSERT-EQU?    EQU-LABELS DUP >LABEL IF DROP ELSE INSERT-EQU THEN ;
+: ?INSERT-EQU?    EQU-LABELS DUP >LABEL IF DROP ELSE INSERT-EQU-INVENT THEN ;
 
 \D EQU-LABELS LABELS !BAG
 \D ." EXPECT: empty " EQU-LABELS .LABELS  CR
-\D 44 ?INSERT-EQU?
+\D 42 ?INSERT-EQU?
 \D ." EXPECT: L0000,0042 added " EQU-LABELS .LABELS     CR
-\D 44 ?INSERT-EQU?
+\D 42 ?INSERT-EQU?
 \D ." EXPECT: L0000,0042 NOT added again " EQU-LABELS .LABELS     CR .S
 
 \D SECTION-LABELS       LABELS !BAG
@@ -38,40 +42,21 @@ REQUIRE BAG
 \D 560 590 -db: bytes
 \D ." EXPECT: 4 sections :" .LABELS CR .S
 
-\ Section INDEX1 and INDEX2 are of the same type.
-: COMPATIBLE?  OVER MAKE-CURRENT DIS-XT   OVER MAKE-CURRENT DIS-XT = >R
-              OVER MAKE-CURRENT DIS-CR-XT OVER MAKE-CURRENT DIS-CR-XT  = >R
-    2DROP   R> R> AND ;
+\ Section INDEX is of the same type as the previous one.
+: COMPATIBLE?
+    DUP MAKE-CURRENT DIS-XT   OVER 1-   MAKE-CURRENT DIS-XT = >R
+    DUP MAKE-CURRENT DIS-CR-XT OVER 1-  MAKE-CURRENT DIS-CR-XT  = >R
+    DROP   R> R> AND ;
 
-\D  ." EXPECT: -1 :" 1 2 COMPATIBLE? .  CR
-\D  ." EXPECT: -1 :" 2 3 COMPATIBLE? .  CR
-\D  ." EXPECT: 0 :"  3 4 COMPATIBLE? .  CR .S
-
-\ Section INDEX1 and INDEX2 have overlap or are adjacent.
-\ Index1 must have a lower start than index2
-: OVERLAP?  SWAP MAKE-CURRENT DIS-END SWAP MAKE-CURRENT DIS-START >= ;
-
-\D ." EXPECT: 0 :"  1 2 OVERLAP? .     CR
-\D ." EXPECT: -1 :" 2 3 OVERLAP? .     CR
-\D ." EXPECT: 0 :"  1 3 OVERLAP? .     CR
-\D ." EXPECT: -1 :" 3 4 OVERLAP? .     CR .S
+\D ." EXPECT: -1 :" 2 COMPATIBLE? . CR
+\D ." EXPECT: -1 :" 3 COMPATIBLE? . CR
+\D ." EXPECT: 0 :" 4 COMPATIBLE? . CR
 
 \ Get the name of section INDEX.
 : SECTION-NAME LABELS[] CELL+ @ >NFA @ $@ ;
 
 \D  ." EXPECT: NONAME :" 1 SECTION-NAME TYPE CR
 \D ." EXPECT: oops :"    2 SECTION-NAME TYPE   CR .S
-
-\ For INDEX1 and INDEX2 leave INDEX1 and INDEX2 . Return a new NAME for
-\ the section, plus "not both ARE named"
-: NEW-NAME 2DUP SECTION-NAME 2DUP NONAME$ $= IF 2DROP SECTION-NAME -1 ELSE
-           ROT SECTION-NAME NONAME$ $= THEN ;
-
-\D  ." EXPECT -1 oops : " 1 2 NEW-NAME  . TYPE 2DROP CR
-\D  ." EXPECT -1 oops : " 2 3 NEW-NAME  . TYPE 2DROP CR
-\D  ." EXPECT -1 bytes : " 3 4 NEW-NAME  . TYPE 2DROP CR
-\D 590 5A0 -db: byt2
-\D  ." EXPECT 0 <anything> :" 3 4 NEW-NAME  . TYPE 2DROP CR .S
 
 \ For a collapsible pair of section with INDEX1 and INDEX2 return INDEX1 and
 \ INDEX2 plus a new START for the combined section.
@@ -83,28 +68,6 @@ REQUIRE BAG
 
 \D  ." EXPECT 520 : " 2 3 NEW-DIS-START . 2DROP CR
 \D  ." EXPECT 590 : " 3 4 NEW-DIS-END  . 2DROP CR .S
-
-\ For a pair of sections with INDEX1 and INDEX2 return INDEX1 and
-\ INDEX2 plus "they CAN be collapsed."
-: COLLAPSIBLE?  2DUP OVERLAP? IF 2DUP COMPATIBLE? ELSE 0 THEN ;
-
-\D  ." EXPECT 0 : " 1 2 COLLAPSIBLE?    . 2DROP CR
-\D  ." EXPECT -1 : " 2 3 COLLAPSIBLE?   . 2DROP CR
-\D  ." EXPECT 0 : " 3 4 COLLAPSIBLE?   . 2DROP CR .S
-
-\ Try to collapse a pair of sections with INDEX1 and INDEX2 return INDEX1 and
-\ INDEX2 plus "they WERE collapsed."
-\ Don't collapse sections that have been carefully given names,
-\ but collapse a noname section into a named section.
-: COMBINE  COLLAPSIBLE? 0= IF 0 EXIT THEN
-    NEW-NAME 0= IF 2DROP 0 EXIT THEN   2>R
-    DIS-CR-XT >R DIS-XT >R NEW-DIS-END >R NEW-DIS-START >R
-   R> R> R> R> 2R> POSTFIX SECTION -1 ;
-
-\D  .LABELS
-\D  ." EXPECT 0  SAME ; " 3 4 COMBINE . .LABELS 2DROP CR  .S
-\D  ." EXPECT -1 1 MORE : " 2 3 COMBINE . .LABELS 2DROP CR .S
-\D  ." EXPECT 0  SAME : " 1 2 COMBINE . .LABELS  2DROP CR .S
 
 \ Replace the two sections INDEX1 and INDEX2 with the last section.
 \ Place it at index1 (which has the correct start address.)
@@ -144,12 +107,6 @@ REQUIRE BAG
 \D ." EXPECT: -1 :" 3 SAME-ALIGN . CR \ Must become 0
 \D ." EXPECT: -1 :" 4 SAME-ALIGN . CR
 
-\ Redefine it to apply to one INDEX.
-: COMPATIBLE?' DUP 1- SWAP  COMPATIBLE?   ;
-\D ." EXPECT: 0 :" 2 COMPATIBLE?' . CR
-\D ." EXPECT: 0 :" 3 COMPATIBLE?' . CR \ Must become 0
-\D ." EXPECT: -1 :" 4 COMPATIBLE?' . CR
-
 \ For section INDEX return END of previous, START of this one,
 : END+START DUP MAKE-CURRENT DIS-START SWAP 1- MAKE-CURRENT DIS-END SWAP ;
 \D ." EXPECT: 34 34 :" 2 END+START SWAP . . CR
@@ -174,7 +131,7 @@ REQUIRE BAG
 \D ." EXPECT: -1 :" 4 GAP?' . CR
 
 \ For section INDEX: "It HAS a name"
-: IS-NAMED   LABELS[] CELL+ @ ( xt) >NFA @ $@ "NONAME" $= 0= ;
+: IS-NAMED   SECTION-NAME NONAME$ $= 0= ;
 \D ." EXPECT: -1 :" 2 IS-NAMED . CR
 \D ." EXPECT: 0 :" 3 IS-NAMED . CR
 
@@ -205,7 +162,7 @@ REQUIRE BAG
 \D ." EXPECT: 5 4 10 30 :" LAB-UPB . 2 COMBINE LAB-UPB . 1 MAKE-CURRENT DIS-START . DIS-END . CR
 
 \ Combine section INDEX with a previous overlapping or bordering section.
-: KILL-OVERLAP DUP SAME-ALIGN OVER COMPATIBLE?' AND IF DUP COMBINE THEN DROP ;
+: KILL-OVERLAP DUP SAME-ALIGN OVER COMPATIBLE? AND IF DUP COMBINE THEN DROP ;
 \D INIT-ALL
 \D 10  30 -dl-
 \D 20  40 -dl-
@@ -334,7 +291,8 @@ NORMAL-DISASSEMBLY
 
 \ ADDRESS points into code. Crawl through code from there, i.e. add
 \ all information about code ranges that can be derived from that.
-: CRAWL   SECTION-LABELS SORT-LABELS   STARTERS DUP !BAG BAG+!   (CRAWL) ;
+: CRAWL   DUP ?INSERT-EQU?   SECTION-LABELS SORT-LABELS
+    STARTERS DUP !BAG BAG+!   (CRAWL) ;
 
 \ ------------------------ INTEL 80386 ------------------------------
 \ Intel specific. There is a need to specify the disassembly xt.
