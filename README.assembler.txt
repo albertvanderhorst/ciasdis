@@ -18,7 +18,7 @@ The files marked * are generated
 
 Meta information
 COPYING                 Copyleft
-README.assembler        This file 
+README.assembler        This file
 
 Generic source
 asgen.frt      Generic assembler / disassembler.
@@ -86,6 +86,8 @@ Documentation
 Read the lina handboek for the usage of the assembler, inasfar it is
 a normal Forth assembler. Read the man pages for the reverse engineering
 on top of it (pretty much independant of the processor type.
+forth.lab      Must be present in the current directory for mnemonic messages.
+               Can be used to load tools ( DO-DEBUG DUMP LOCATE ) too.
 assembler.itxt The assembler chapter of lina in ascii.
 cias.1         manual page for computer_intelligence_assembler_disassembler
 cul.5          the underlying language for reverse engineering

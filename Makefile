@@ -132,8 +132,11 @@ exeheader.cul \
 # That's all folks!
 
 # Documentation files and archives
+# Formally forth.lab is for error messages, but
+# you can load debug tools from it too.
 DOC = \
 COPYING   \
+forth.lab      \
 cul.5           \
 cias.1          \
 README.assembler \
@@ -326,22 +329,8 @@ moreboot: forth.lab.wina ci86.alone.bin  ci86.mina.bin
 
 allboot: boot filler moreboot
 
-forth.lab.lina : toblock options.frt errors.linux.txt blocks.frt
-	cat options.frt errors.linux.txt blocks.frt | toblock >$@
-	ln -f $@ forth.lab
-
-forth.lab.wina : toblock options.frt errors.dos.txt blocks.frt
-	cat options.frt errors.dos.txt blocks.frt | toblock >$@
-	ln -f $@ forth.lab
-
-# Like above. However there is no attempt to have MSDOS reading from
-# the hard disk succeed.
-# The option BOOTHD must be installed into alone.m4.
-hdboot: ci86.alonehd.bin
-	cp $+ /dev/$(FLOPPY) || fdformat /dev/$(FLOPPY) ; cp $+ /dev/$(FLOPPY)
-
-figdoc.txt glossary.txt frontpage.tif memmap.tif : ; co -r1 $@
-figdoc.zip : figdoc.txt glossary.txt frontpage.tif memmap.tif ; zip figdoc $+
+# Get the library file that is used while compiling.
+forth.lab : ; echo 'BLOCK-FILE $$@ GET-FILE "'$@'" PUT-FILE'|lina
 
 zip : $(RELEASECONTENT) ; echo cias-$(VERSION).tar.gz $+ | xargs tar -cvzf
 
