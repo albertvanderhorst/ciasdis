@@ -16,7 +16,7 @@ BITS-32
         d$  1 ^C &C  "AAP"
 \        db  1 ^C &C  #65 #65 #80
         dw  1 ^C &C  #65 #65 #80
-        dl  1 ^C &C  #65 #65 #80
+        dl  1 ^C &C  #65 #65 #1279
 :XXX
     MOV, X| T| DI'| MEM| QQQ L,
     JMP, XXX RL,
