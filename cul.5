@@ -5,9 +5,9 @@ cul \- consult file format for
 computer intelligence
 disassembler 386
 .SH "DESCRIPTION"
-\fBcul\fR files are \fBCONSULTED\fR by \fBcidis\fR.
+\fBcul\fR files are consulted by \fBcidis\fR.
 They contain a prescription of how the file that has been
-\fbFETCHED\fR (hencetoforth called \fIbinary image\fR) is to be disassembled.
+fetched (hencetoforth called \fIbinary image\fR) is to be disassembled.
 .br
 On top of the user commands described in this page,
 the full assembler is available after the command \fBASSEMBLER\fR and
@@ -89,9 +89,19 @@ preceeding expressions.
 They may also scan ahead,
 mostly for a name that is hence-to-forth known, e.g. as a label.
 .TP
-\fI<expr>\fR \fBLABEL\fR \fR"name"\fR
+\fbFETCH\fR \fI<name>\fR
 .br
-Add a label to the plain labels with name \fI"name"\fR with value \fI<expr>\fR.
+Fetch the binary image \fI<name>\fR to the code buffer.
+.TP
+\fbCONSULT\fR \fI<name>\fR
+.br
+Get the information from file \fI<name>\fR.
+It presumedly refers to the current codebuffer and is used to analyse its
+content.
+.TP
+\fI<expr>\fR \fBLABEL\fR \fI<name>\fR
+.br
+Add a label to the plain labels with name \fI<name>\fR with value \fI<expr>\fR.
 .TP
 \fI<expr>\fR \fI<string>\fR \fBLABELED\fR
 .br
@@ -100,44 +110,44 @@ name in \fI<string>\fR.
 This is useful if the string is extracted from
 the binary image.
 .TP
-\fI<expr>\fR \fBEQU\fR \fI"name"\fR
+\fI<expr>\fR \fBEQU\fR \fI<name>\fR
 .br
-Add \fI"name"\fR to the plain labels with value \fI<expr>\fR.
+Add \fI<name>\fR to the plain labels with value \fI<expr>\fR.
 .TP
-\fI<expr1>\ <expr2>\fR \fB-DB:\fR \fI"name"\fR
+\fI<expr1>\ <expr2>\fR \fB-db:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI"name"\fR and is a section to be disassembled as byte values.
+\fI<name>\fR and is a section to be disassembled as byte values.
 .TP
-\fI<expr1>\ <expr2>\fR \fB-DW:\fR \fI"name"\fR
+\fI<expr1>\ <expr2>\fR \fB-dw:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI"name"\fR and is a section to be disassembled as word (16-bit)
+\fI<name>\fR and is a section to be disassembled as word (16-bit)
 values.
 .TP
-\fI<expr1>\ <expr2>\fR \fB-DL:\fR \fI"name"\fR
+\fI<expr1>\ <expr2>\fR \fB-dl:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI"name"\fR and is a section to be disassembled as long (32-bit) values.
+\fI<name>\fR and is a section to be disassembled as long (32-bit) values.
 .TP
-\fI<expr1>\ <expr2>\fR \fB-DC16:\fR \fI"name"\fR
+\fI<expr1>\ <expr2>\fR \fB-dc16:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI"name"\fR and is a section to be disassembled as a 16-bit code section.
+\fI<name>\fR and is a section to be disassembled as a 16-bit code section.
 This command is specific to the Intel 80386.
 .TP
-\fI<expr1>\ <expr2>\fR \fB-DC:\fR \fI"name"\fR
+\fI<expr1>\ <expr2>\fR \fB-dc:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI"name"\fR and is a section to be disassembled as a normal code section.
+\fI<name>\fR and is a section to be disassembled as a normal code section.
 For the Intel 80386 this means a 32-bit code section.
 .TP
-\fI<expr1>\ <expr2>\fR \fI<string>\fR \fB[-DB|-BW|-DL|-DC|-DC16]\fR
-These commands are equivalent to \fB-DB: -DW: -DL: -DC: -DC16:\fR but the
+\fI<expr1>\ <expr2>\fR \fI<string>\fR \fB[-db|-bw|-dl|-dc|-dc16]\fR
+These commands are equivalent to \fB-db: -dw: -dl: -dc: -dc16:\fR but the
 sections get their names from \fI<string>\fR.
 .TP
-\fI<expr1>\ <expr2>\fR \fB[-DB-|-BW-|-DL-|-DC-|-DC1\fR6-]
-These commands are equivalent to \fB-DB: -DW: -DL: -DC: -DC16:\fR but the
+\fI<expr1>\ <expr2>\fR \fB[-db-|-bw-|-dl-|-dc-|-dc1\fR6-]
+These commands are equivalent to \fB-db: -dw: -dl: -dc: -dc16:\fR but the
 sections are anonymous.
 .TP
 \fI<expr>\fR \fB-ORG-\fR
@@ -171,14 +181,14 @@ This is mandatory for DISASSEMBLE-ALL and recommended for DUMP-ALL .
 Output all available information to standard output.
 This includes all information added interactively.
 .TP
-\fBINCLUDE\fR \fI"name"\fR
+\fBINCLUDE\fR \fI<name>\fR
 .br
-Read in the file named \fI"name"\fR and execute all commands there \fBin.
+Read in the file named \fI<name>\fR and execute all commands there \fBin.
 .TP
-\fB[PLAIN-LABELS|SECTION-LABELS]\ BREMOVE:\fR \fI"name"\fR
+\fB[PLAIN-LABELS|SECTION-LABELS]\ BREMOVE:\fR \fI<name>\fR
 .br
 Select the plain labels or the sections labels class and
-remove the label \fI"name"\fR from it.
+remove the label \fI<name>\fR from it.
 Removal of several labels in the same class need not repeat
 the selection.
 .br
@@ -228,11 +238,11 @@ A sequence of commands can be combined into a macro in the following
 fashion (which is regular Forth practice):
 .br
 .TP
-\fB:\ \fI"name" <sequence> \fB;\fR
+\fB:\ \fI<name> <sequence> \fB;\fR
 .br
-Using \fI"name"\fR will result in the execution of the commands in \fi<sequence>\fR.
+Using \fI<name>\fR will result in the execution of the commands in \fi<sequence>\fR.
 If \fI<sequence>\fR contains commands that scan ahead,
-the scanning will be done when \fI"name"\fR is invoked;
+the scanning will be done when \fI<name>\fR is invoked;
 this can be confusing for novices.
 .TP
 \fBSHOW-REGISTER\fR
@@ -276,13 +286,15 @@ a c-program could contain:
 .br
  \ \ \ 100 148 -   -ORG-
 .br
- \ \ \ 0 148 -DB: header
+ \ \ \ 0 148 -db: header
 .br
  \ \ \ 148 COMMENT: entry point
 .br
- \ \ \ 148 2008 -DB : text
+ \ \ \ 148 2008 -db : text
 .br
- \ \ \ 2008 4804 -DC: data
+ \ \ \ "Data area" 2008 COMMENT
+.br
+ \ \ \ 2008 4804 -dc: data
 .br
  \ \ \ DISASSEMBLE-ALL
 .br

@@ -85,22 +85,28 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 
 \ In behalf of bin-search.
 \ Comparant
-VARIABLE C
+VARIABLE CONT
 
 \ In behalf of bin-search.
-\ For INDEX1 : "the value of the label IS less than ``C''"
-: L<    LABELS[] @   C @   < ;
+\ For INDEX1 : "the value of the label IS less than ``CONT''"
+: L<    LABELS[] @   CONT @   < ;
+
+VARIABLE LABEL-CACHE    \ Index of next label.
 
 \ Find the first label that is equal to (or greater than) VALUE
-\ Return INDEX or zero if not found.
+\ Return INDEX or zero if not found. Put it in the label-cache too.
 \ Note ``BIN-SEARCH'' returns the non-inclusive upper bound if not found.
-: FIND-LABEL   C !   LAB-BOUNDS 1+   DUP >R
-    'L<   BIN-SEARCH   DUP R> <> AND ;
+: FIND-LABEL   CONT !   LAB-BOUNDS 1+   DUP >R
+    'L<   BIN-SEARCH   DUP R> <> AND    DUP LABEL-CACHE ! ;
 
 \ Find ADDRESS in the label table. Return DEA of an exact
 \ matching label or zero if not found.
-: >LABEL   FIND-LABEL DUP IF LABELS[]  DUP @  C @ - IF DROP 0 THEN THEN ;
+: >LABEL   FIND-LABEL DUP IF LABELS[]  DUP @  CONT @ - IF DROP 0 THEN THEN ;
 
+\ Return the next label or 0.
+: NEXT-LABEL   LABEL-CACHE @   DUP IF
+   1+ DUP LAB-BOUNDS + = IF DROP 0 THEN
+   DUP LABEL-CACHE ! THEN ;
 
 \ ---------------- Names of labels ------------------------------
 
@@ -214,6 +220,12 @@ VARIABLE COMMENT:-TO-BE
 
 \ ---------------- Specifiers of disassembly ranges ----------------------
 
+\ A section, as we all know, is a range of addresses that is kept
+\ together, even during relocation and such.
+\ Section ADDRESS1 .. ADDRESS2 always refers to a target range,
+\ where address2 is exclusive.
+
+\ Define a section.
 12 34 '2DROP
 struct DIS-STRUCT
    F: DIS-START ROT , FDOES> @ ;     \ Start of range
@@ -221,14 +233,6 @@ struct DIS-STRUCT
    F: DIS-XT FDOES> @ ;       \ Which xt?
    F: DIS-RANGE , FDOES> @ >R DIS-START DIS-END R> EXECUTE ;       \ End of range
 endstruct
-
-\ ---------------- Specifiers of disassembly ranges ----------------------
-
-\ A section, as we all know, is a range of addresses that is kept
-\ together, even during relocation and such.
-\ Section ADDRESS1 .. ADDRESS2 always refers to a target range,
-\ where address2 is exclusive.
-
 
 \ To be shown at the end of each range.
         ASSEMBLER
@@ -250,47 +254,50 @@ endstruct
 : D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R SHOW-END ;
 
 \ Section ADDRESS1 .. ADDRESS2 is code with name "name".
-: -DC:    'D-R-T   SECTION ;
+: -dc:    'D-R-T   SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous code section.
-: -DC-    'D-R-T   ANON-SECTION ;
+: -dc-    'D-R-T   ANON-SECTION ;
 
-\ Dump bytes from target ADDRESS1 to ADDRESS2.
-: DUMP-B
-    TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS
-    "        db" TYPE DO I C@ 3 .R LOOP CR ;
+\ Dump bytes from target ADDRESS1 to ADDRESS2 plain.
+: (DUMP-B)   " db" TYPE DO I C@ 3 .R LOOP CR ;
+
+\ Dump bytes from target ADDRESS1 to ADDRESS2 adorned with labels.
+: DUMP-B   TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS (DUMP-B) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
-: -DB:    'DUMP-B   SECTION ;
+: -db:    'DUMP-B   SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous byte section.
-: -DB-    'DUMP-B   ANON-SECTION ;
+: -db-    'DUMP-B   ANON-SECTION ;
 
 
 \ Print X as a word (4 hex digits).
 : W. 0 4 (DH.) TYPE ;
 
-\ Dump words from target ADDRESS1 to ADDRESS2.
-: DUMP-W
-    TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS
-    "        dw" TYPE DO I @ SPACE W. 2 +LOOP CR ;
+\ Dump words from target ADDRESS1 to ADDRESS2, plain.
+: (DUMP-W)   " dw" TYPE DO I @ SPACE W. 2 +LOOP CR ;
+
+\ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
+: DUMP-W   TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS (DUMP-W) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are words with name "name".
-: -DW:    'DUMP-W   SECTION ;
+: -dw:    'DUMP-W   SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous word section.
-: -DW-    'DUMP-W   ANON-SECTION ;
+: -dw-    'DUMP-W   ANON-SECTION ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2.
-: DUMP-L
-    TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS
-    "        dl" TYPE DO I @ SPACE H. 4 +LOOP CR ;
+: (DUMP-L)   " dl" TYPE DO I @ SPACE H. 4 +LOOP CR ;
+
+\ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
+: DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS (DUMP-L) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
-: -DL:    'DUMP-L   SECTION ;
+: -dl:    'DUMP-L   SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
-: -DL-    'DUMP-L   ANON-SECTION ;
+: -dl-    'DUMP-L   ANON-SECTION ;
 
 \ Disassemble all those sectors as if they were code.
 : DISASSEMBLE-ALL
@@ -351,10 +358,10 @@ ASSEMBLER
 : D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" ;
 
 \ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
-: -DC16:    'D-R-T-16   SECTION ;
+: -dc16:    'D-R-T-16   SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-section.
-: -DC16-    'D-R-T-16   ANON-SECTION ;
+: -dc16-    'D-R-T-16   ANON-SECTION ;
 
 DEFINITIONS
 

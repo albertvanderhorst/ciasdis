@@ -14,12 +14,12 @@ CP @ CODE-SPACE - START +   EQU END
 START -ORG-
 0505  LABEL QQQ
 050F  LABEL RRR
-START RRR -DC: poo      \ Named section
-RRR   DUP 6 + -DB: bytes
-RRR 6 +   DUP 0C +  -DW: words
-RRR 12 +   DUP 18 + -DL: longs
-RRR 2A +   END LEN16 -   -DC-            \ Unnamed section
-END LEN16 -  END  -DC16: AAP               \ Named section
+START RRR -dc: poo      \ Named section
+RRR   DUP 6 + -db: bytes
+RRR 6 +   DUP 0C +  -dw: words
+RRR 12 +   DUP 18 + -dl: longs
+RRR 2A +   END LEN16 -   -dc-            \ Unnamed section
+END LEN16 -  END  -dc16: AAP               \ Named section
 
 "XXX is a target for backward jumps:" 0539 COMMENT
 0539  LABEL XXX
