@@ -237,9 +237,11 @@ _ 1 0000 0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 : [BX   ~SIB| SIB,, [BX ;       : [DI   ~SIB| SIB,, [DI ;
 : [MEM  ~SIB| SIB,, [MEM ;
 
-( ############## 8086 ASSEMBLER PROPER END ############################ )
+( ############## 80386 ASSEMBLER PROPER END ########################### )
 ( You may want to use these always instead of (RB,)
-    : RB, ISS @ - (RB,) ;      : RX, ISS @ - (RX,) ;
+    : RB, _AP_ 1 + - (RB,) ;      : RX, _AP_ 4 + - (RX,) ;
+' .COMMA-SIGNED   % (RB,) >DIS !     
+' .COMMA-SIGNED   % (RX,) >DIS !     
 
 PREVIOUS DEFINITIONS DECIMAL
 ( ############## 8086 ASSEMBLER POST ################################## )
