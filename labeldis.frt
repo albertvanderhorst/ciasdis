@@ -1,12 +1,9 @@
  ( $Id$ )
- ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
+ ( Copyright{2004}: Albert van der Horst, HCC FIG Holland by GNU Public License)
  ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
 ( Handle labels as far as disassembly is concerned.                     )
 ( There is a separate one for the assembler.                            )
-
-INCLUDE struct.frt
-INCLUDE bag.frt
 
 REQUIRE ALIAS
 REQUIRE @+

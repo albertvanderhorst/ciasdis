@@ -15,6 +15,11 @@ INCLUDE asgen.frt
 INCLUDE aswrap.frt
 INCLUDE asi586.frt
 
+\ Tools
+INCLUDE bag.frt
+INCLUDE struct.frt
+INCLUDE decsharp.frt
+
 \ These two files could be incorporated in 2 previous ones.
 \ A problem is getting rid of the labels if we don't want them.
 INCLUDE labelas.frt
