@@ -82,12 +82,17 @@ REQUIRE DUMP
 : RESTORE-ALL  'ERROR RESTORED     'INCLUDED RESTORED      'ABORT RESTORED ;
 
 \ Handle arguments, start interactive system if no arguments.
-: HANDLE-ARG   ARGC 1 = IF OK QUIT THEN
+: HANDLE-ARG   ARGC 1 = IF 0 LIST OK QUIT THEN
     \ second argument still obligatory for the moment.
     ARGC ( 2) 3 4 WITHIN 0= 13 ?ERROR ;
 
 \ For STRING: "It CONTAINS a `d' or a `D' "
 : CONTAINS-D?    2DUP &D $I >R  &d $I R>  OR ;
+
+\ Fetch the library file from the current directory.
+\ We can't assume lina has been installed so forth.lab is supplied with
+\ the ciasdis program.
+"forth.lab" BLOCK-FILE $!
 
 \ The name determines what to do.
 : MAIN   RESTORE-ALL  HANDLE-ARG   0 ARG[] CONTAINS-D? IF cidis ELSE cias THEN ;
