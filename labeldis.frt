@@ -218,6 +218,19 @@ VARIABLE COMMENT:-TO-BE
 \D 12 PRINT-COMMENT CR  \ Should give nothing, not found!
 \D 12 0 HOST>TARGET - PRINT-COMMENT CR
 
+\ ---------------- Things to print at the start of a line --------------------------------------
+
+
+: .TARGET-ADDRESS "( " TYPE DUP HOST>TARGET H. " )   " TYPE ;
+\ Start a new line, with printing the decompiled ADDRESS as seen
+: CR+ADDRESS CR .TARGET-ADDRESS ;
+
+: CR+db CR+ADDRESS  ADORN-WITH-LABEL "  db" TYPE ;
+: CR+dw CR+ADDRESS  ADORN-WITH-LABEL "  dw" TYPE ;
+: CR+dl CR+ADDRESS  ADORN-WITH-LABEL "  dl" TYPE ;
+: CR+LABEL CR+ADDRESS ADORN-WITH-LABEL ;
+
+
 \ ---------------- Specifiers of disassembly ranges ----------------------
 
 \ A section, as we all know, is a range of addresses that is kept
@@ -226,12 +239,14 @@ VARIABLE COMMENT:-TO-BE
 \ where address2 is exclusive.
 
 \ Define a section.
-12 34 '2DROP
+12 34 '2DROP 'DROP
 struct DIS-STRUCT
-   F: DIS-START ROT , FDOES> @ ;     \ Start of range
-   F: DIS-END SWAP , FDOES> @ ;       \ End of range
+   F: REVERSE-ORDER >R >R >R >R FDOES> ; \ Cludge, not actually executed.
+   F: DIS-START R> , FDOES> @ ;     \ Start of range
+   F: DIS-END R> , FDOES> @ ;       \ End of range
    F: DIS-XT FDOES> @ ;       \ Which xt?
-   F: DIS-RANGE , FDOES> @ >R DIS-START DIS-END R> EXECUTE ;       \ End of range
+   F: DIS-RANGE R> , FDOES> @ >R DIS-START DIS-END R> EXECUTE ;       \ End of range
+   F: DIS-CR-XT R> , FDOES> @ EXECUTE ;       \ What to do at line boundaries.
 endstruct
 
 \ To be shown at the end of each range.
@@ -254,50 +269,50 @@ endstruct
 : D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R SHOW-END ;
 
 \ Section ADDRESS1 .. ADDRESS2 is code with name "name".
-: -dc:    'D-R-T   SECTION ;
+: -dc:    'D-R-T   'CR+LABEL SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous code section.
-: -dc-    'D-R-T   ANON-SECTION ;
+: -dc-    'D-R-T   'CR+LABEL ANON-SECTION ;
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 plain.
-: (DUMP-B)   " db" TYPE DO I C@ 3 .R LOOP CR ;
+: (DUMP-B)   DO I C@ 3 .R LOOP CR ;
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-B   TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS (DUMP-B) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
-: -db:    'DUMP-B   SECTION ;
+: -db:    'DUMP-B   'CR+db SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous byte section.
-: -db-    'DUMP-B   ANON-SECTION ;
+: -db-    'DUMP-B   'CR+db ANON-SECTION ;
 
 
 \ Print X as a word (4 hex digits).
 : W. 0 4 (DH.) TYPE ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2, plain.
-: (DUMP-W)   " dw" TYPE DO I @ SPACE W. 2 +LOOP CR ;
+: (DUMP-W)   DO I @ SPACE W. 2 +LOOP CR ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-W   TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS (DUMP-W) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are words with name "name".
-: -dw:    'DUMP-W   SECTION ;
+: -dw:    'DUMP-W   'CR+dw SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous word section.
-: -dw-    'DUMP-W   ANON-SECTION ;
+: -dw-    'DUMP-W   'CR+dw ANON-SECTION ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2.
-: (DUMP-L)   " dl" TYPE DO I @ SPACE H. 4 +LOOP CR ;
+: (DUMP-L)   DO I @ SPACE H. 4 +LOOP CR ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS (DUMP-L) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
-: -dl:    'DUMP-L   SECTION ;
+: -dl:    'DUMP-L   'CR+dl SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
-: -dl-    'DUMP-L   ANON-SECTION ;
+: -dl-    'DUMP-L   'CR+dl ANON-SECTION ;
 
 \ Disassemble all those sectors as if they were code.
 : DISASSEMBLE-ALL
@@ -305,15 +320,12 @@ endstruct
 
 \ ------------------- Generic again -------------------
 
-\ Start a new line, with printing the decompiled ADDRESS as seen
-: CR+ADDRESS CR "( " TYPE DUP HOST>TARGET H. " )   " TYPE ;
-
 \ Print out everything we know about ADDRESS.
 : (ADORN-ADDRESS)
     PRINT-OLD-COMMENT:
     DUP PRINT-COMMENT
     DUP REMEMBER-COMMENT:
-    CR+ADDRESS ADORN-WITH-LABEL ;
+    DIS-CR-XT ( disassembly type dependant action ) ;
 
 \ Revector ``ADORN-ADDRESS'' used in "asgen.frt".
 '(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !
@@ -358,10 +370,10 @@ ASSEMBLER
 : D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" ;
 
 \ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
-: -dc16:    'D-R-T-16   SECTION ;
+: -dc16:    'D-R-T-16   'CR+LABEL SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-section.
-: -dc16-    'D-R-T-16   ANON-SECTION ;
+: -dc16-    'D-R-T-16   'CR+LABEL ANON-SECTION ;
 
 DEFINITIONS
 
