@@ -5,7 +5,7 @@
 \ Tools are those auxiliary thingies that are not appropriate elsewhere.
 
 \ ------------------------------------------------------------------------
-.S
+
 REQUIRE H.
 REQUIRE RESTORED
 
