@@ -147,10 +147,6 @@ VARIABLE (R-XT)        \ Required xt.
 : NORMAL-DISASSEMBLY 'D-R-T (R-XT) ! BITS-32 ;
 NORMAL-DISASSEMBLY
 
-\ Where the code ends in the host space.
-\ FIXME! Knullig.
-: END-HOST  CP @ ;
-
 \ Add the information that ADDRESS1 to ADDRESS2 is a code section.
 \ If section labels was sorted, it remains so.
 : INSERT-SECTION   OVER SECTION-LABELS WHERE-LABEL >R
@@ -179,7 +175,7 @@ NORMAL-DISASSEMBLY
 : KNOWN-CODE?   SECTION-LABELS DUP FIND-LABEL DUP IF IN-CODE? ELSE 2DROP 0 THEN ;
 
 \ For ADDRESS : "it IS in a current code section"
-: IN-CODE-SPACE?   TARGET-START@ END-HOST WITHIN ;
+: IN-CODE-SPACE?   TARGET-START TARGET-END WITHIN ;
 
 \ For ADDRESS: "It IS usable as a new starter"
 : STARTER?    DUP KNOWN-CODE? 0=  SWAP IN-CODE-SPACE? AND ;
@@ -198,7 +194,7 @@ NORMAL-DISASSEMBLY
 \ Analyse the code range from ADDRESS up to an unconditional transfer.
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.
 : CRAWL-ONE  DUP >R TARGET>HOST BEGIN (DISASSEMBLE) ANALYSE-INSTRUCTION
-    DUP END-HOST >=   LATEST-INSTRUCTION @ UNCONDITIONAL-TRANSFERS IN-BAG?   OR
+    DUP HOST-END >=   LATEST-INSTRUCTION @ UNCONDITIONAL-TRANSFERS IN-BAG?   OR
   UNTIL     R> SWAP HOST>TARGET INSERT-SECTION
   CR ." STARTERS:" STARTERS .BAG CR ;
 

@@ -18,14 +18,6 @@ REQUIRE 2>R
 
 \ -------------------- INTRODUCTION --------------------------------
 
-\ FIXME : probably belongs in aswrap.frt.
-
-\ Associate target ADDRESS with start of ``CODE-BUFFER''
-\ Here is something stupid  going, there may be several addresses.
-\ The valid range from the code buffer goes to ``CP @'' and is not
-\ affected.
-: -ORG- (TARGET-START) ! ;
-
 
 \ -------------------- generic definition of labels ----------------
 
@@ -362,7 +354,7 @@ endstruct
 
 \ To be shown at the end of each range.
         ASSEMBLER
-: SHOW-END AS-POINTER @ DUP ADORN-ADDRESS NEXT-CUT ! CR ;
+: SHOW-END AS-POINTER @ ADORN-ADDRESS CR ;
         PREVIOUS
 
 : .PAY-SECTION CELL+ @ DUP EXECUTE
@@ -438,7 +430,6 @@ endstruct
 : -dl-    'DUMP-L   'CR+dl ANON-SECTION ;
 
 \ Dump strings to target ADDRESS1 from target ADDRESS2.
-: (DUMP-$)   DO I DUP ADORN-ADDRESS @ SPACE H. 20 +LOOP CR ;
 : (DUMP-$)   DO I DUP ADORN-ADDRESS SPACE C@ DUP IS-PRINT IF
     ACCU $C+ ELSE .C THEN LOOP .ACCU ;
 
@@ -461,7 +452,6 @@ endstruct
 
 \ Print a remark about whether start of the current range fits to the
 \ END of the previous range. Leave END of current range for the next check.
-\ FIXME : this one crashes!
 : HOW-FIT   DIS-START .HOW-FIT DIS-END ;
 
 \ Print a remark about whether the END of the previous range is really
@@ -469,7 +459,7 @@ endstruct
 : HOW-FIT-END    TARGET-END .HOW-FIT ;
 
 \ Disassemble all those sectors as if they were code.
-: DISASSEMBLE-ALL   NEXT-CUT!   TARGET-START@
+: DISASSEMBLE-ALL   NEXT-CUT!   TARGET-START
     SECTION-LABELS DO-LAB I CELL+ @ EXECUTE   HOW-FIT DIS-RANGE LOOP-LAB
     HOW-FIT-END ;
 
@@ -498,7 +488,7 @@ endstruct
 \ Disassemble the current program as stored in the ``CODE-BUFFER''.
 \ Using what is known about it.
 : DISASSEMBLE-TARGET
-    TARGET-START@ . " ORG" TYPE CR   DISASSEMBLE-ALL   CP @ ADORN-ADDRESS CR ;
+    TARGET-START . " ORG" TYPE CR   DISASSEMBLE-ALL   ;
 
 \ i386 dependant, should somehow be separated out.
 : DISASSEMBLE-TARGET "BITS-32" TYPE CR  DISASSEMBLE-TARGET ;

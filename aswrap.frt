@@ -35,17 +35,30 @@ VARIABLE CP
 \ Where the code is to be located during execution.
 VARIABLE (TARGET-START)
 
-\ FIXME: to be renamed.
-: TARGET-START@ (TARGET-START) @ ;
+\ Return the START of the file as a target address.
+: TARGET-START (TARGET-START) @ ;
+
+\ Use only while disassembling.
+\ Return the END of the file as a target address.
+: TARGET-END   TARGET-START   CP @ CODE-SPACE - + ;
+
+\ Use only while disassembling.
+\ The end of the code area while disassembling: a host address.
+: HOST-END CP @ ;
+
+\ Associate target ADDRESS with start of ``CODE-BUFFER''
+\ The valid range from the code buffer goes to ``CP @'' and is not
+\ affected.
+: -ORG- (TARGET-START) ! ;
 
 \ Associate ADDRESS with the start of ``CODE-SPACE''.
 : ORG      (TARGET-START) !   CODE-SPACE CP ! ;
 
 \ Convert host memory ADDRESS. Leave target memory ADDRESS.
-: HOST>TARGET  CODE-SPACE - TARGET-START@ + ;
+: HOST>TARGET  CODE-SPACE - TARGET-START + ;
 
 \ Convert target memory ADDRESS. Leave host memory ADDRESS.
-: TARGET>HOST   TARGET-START@ -   CODE-SPACE +   ;
+: TARGET>HOST   TARGET-START -   CODE-SPACE +   ;
 
 \ Instruction pointer in assembly. View used in branches etc.
 : NEW-_AP_    CP @ HOST>TARGET ;   HOT-PATCH _AP_
@@ -60,6 +73,3 @@ VARIABLE (TARGET-START)
 \ Only Needed. Maybe ``CP C! 1 CP +!''
 \ Wrapper for ``C,'' such as used in assembly.
 : NEW-AS-C,    SWAP-AS C, SWAP-AS ;  HOT-PATCH AS-C,
-
-\ The end of the code area while disassembling: a target address.
-'_AP_ ALIAS TARGET-END
