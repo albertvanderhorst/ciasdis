@@ -314,7 +314,10 @@ CREATE ACCU 100 ALLOT           ACCU 100 ERASE
 \ Start a new line, with printing the decompiled ADDRESS as seen
 : CR+ADDRESS CR .TARGET-ADDRESS ;
 
-VARIABLE NEXT-CUT       \ Where to separate db etc. in chunks.
+VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
+
+\ Initialise to the start of the code space.
+: NEXT-CUT!   CODE-SPACE NEXT-CUT ! ;
 
 \ For ADDRESS: "it IS at next cut." If so, advance.
 : NEXT-CUT?   NEXT-CUT @ =  DUP IF 16 NEXT-CUT +! THEN ;
@@ -357,7 +360,7 @@ endstruct
 
 \ To be shown at the end of each range.
         ASSEMBLER
-: SHOW-END AS-POINTER @ ADORN-ADDRESS CR ;
+: SHOW-END AS-POINTER @ DUP ADORN-ADDRESS NEXT-CUT ! CR ;
         PREVIOUS
 
 : .PAY-SECTION CELL+ @ DUP EXECUTE
@@ -449,8 +452,21 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
 : -d$-    'DUMP-$   'CR+d$ ANON-SECTION ;
 
+\ Print a remark about whether start of the current range fits to the
+\ END of the previous range. Leave END of current range for the next check.
+\ FIXME : this one crashes!
+: HOW-FIT   DIS-START 2DUP .S = IF 2DROP " Perfect Fit." ELSE
+   > IF "Overlapping sections." ELSE
+   "Hole between sections" THEN THEN CR TYPE CR DIS-END ;
+
+\ Print a remark about whether or not the disassembled ranges
+\ fit well together.
+: HOW-FIT   NEXT-CUT @ DIS-START TARGET>HOST 2DUP .S = IF 2DROP " Perfect Fit." ELSE
+   > IF "Overlapping sections." ELSE
+   "Hole between sections" THEN THEN CR TYPE CR ;
+
 \ Disassemble all those sectors as if they were code.
-: DISASSEMBLE-ALL
+: DISASSEMBLE-ALL   NEXT-CUT!
     SECTION-LABELS DO-LAB I CELL+ @ EXECUTE   DIS-RANGE LOOP-LAB ;
 
 \ ------------------- Generic again -------------------
@@ -508,7 +524,7 @@ ASSEMBLER
 : -dc16:    'D-R-T-16   'CR+LABEL SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name NAME.
-: -dc    2>R 'D-R-T-16   'CR+LABEL 2R> POSTFIX  SECTION ;
+: -dc16    2>R 'D-R-T-16   'CR+LABEL 2R> POSTFIX  SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-section.
 : -dc16-    'D-R-T-16   'CR+LABEL ANON-SECTION ;
