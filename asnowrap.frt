@@ -10,4 +10,4 @@
 
 \ Adorn the ADDRESS we are currently disassembling with data
 \ from a disassembly data file.
-: ADORN-ADDRESS DROP ;
+: ADORN-ADDRESS DROP CR ;

@@ -629,7 +629,7 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 ( Leave a POINTER pointing after that instruction. )
 : ((DISASSEMBLE))
     SWAP
-    DUP ADORN-ADDRESS    DUP POINTER !   >R
+    DUP POINTER !   >R  
     3 SPACES
     ( startdea -- ) BEGIN
         DIS-PI DIS-xFI DIS-DFI DIS-DFIR DIS-FIR DIS-COMMA
@@ -658,7 +658,7 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 
 ( Dissassemble one instruction from address ONE to address TWO. )
 : DISASSEMBLE-RANGE
-    SWAP   BEGIN (DISASSEMBLE) CR 2DUP > 0= UNTIL   2DROP
+    SWAP   BEGIN DUP ADORN-ADDRESS    (DISASSEMBLE) 2DUP > 0= UNTIL   2DROP 
 ;
 
 ( ********************* DEFINING WORDS FRAMEWORK ********************** )

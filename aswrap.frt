@@ -23,7 +23,7 @@ VARIABLE TARGET-START
 : ORG      TARGET-START !   CODE-SPACE CP ! ;
 
 \ Convert host memory ADDRESS. Leave target memory ADDRESS.
-: HOST>TARGET  CODE-SPACE - TARGET-START @ + ;  
+: HOST>TARGET  CODE-SPACE - TARGET-START @ + ;
 
 \ Instruction pointer in assembly. View used in branches etc.
 : _AP_    CP @ HOST>TARGET ;
@@ -45,4 +45,4 @@ VARIABLE TARGET-START
 
 \ Adorn the ADDRESS we are currently disassembling with data
 \ from a disassembly data file.
-: ADORN-ADDRESS DROP ;
+: ADORN-ADDRESS DROP CR ;
