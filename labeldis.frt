@@ -11,7 +11,6 @@ REQUIRE ALIAS
 REQUIRE @+
 REQUIRE SET
 REQUIRE QSORT
-REQUIRE PAIR[]
 REQUIRE BIN-SEARCH
 
 : \D ;
@@ -28,7 +27,7 @@ struct LABELSTRUCT
   F: LABELS HERE CELL+ , 2* CELLS ALLOT FDOES> ;
 endstruct
 
-\ For I return the ith label . 1 returns the first label.
+\ For I return the ith LABEL . 1 returns the first label.
 \ All indices are compatible with this.
 : LABELS[]   1- 2* CELLS LABELS CELL+ + ;
 
@@ -186,7 +185,7 @@ JOPI"
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
 
-ALSO ASSEMBLER DEFINITIONS
+ASSEMBLER DEFINITIONS
 ( Print X as a symbolic label if possible, else as a number             )
 : .LABEL/.   PLAIN-LABELS DUP >LABEL DUP IF .LAB DROP ELSE DROP U. THEN ;
 
