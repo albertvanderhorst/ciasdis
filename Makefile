@@ -154,6 +154,7 @@ testset8080     \
 testset8086     \
 testset386      \
 testset386a     \
+testsetpentium  \
 testset6809     \
 testsetalpha    \
 asm386endtest   \
@@ -373,8 +374,9 @@ asclean: ; rm -f $(ASTARGETS)
 
 qr8080.ps       :; make as80.ps TITLE='QUICK REFERENCE PAGE FOR 8080 ASSEMBLER'; mv p0.as80.ps $@
 qr8086.ps       :; make asi86.ps TITLE='QUICK REFERENCE PAGE FOR 8086 ASSEMBLER'; mv p0.asi86.ps $@
-p0.asi386.ps    :; make asi386.ps PREFIX=0 MASK=FF
+p0.asi386    :; make asi386.ps PREFIX=0 MASK=FF
 p0F.asi386.ps   :; make asi386.ps PREFIX=0F MASK=FFFF
+p0F.asiP.ps   :; make asiP.ps PREFIX=0F MASK=FFFF
 
 do : ci86.mina.msm
 		diff -w ci86.mina.msm orig/FORTH > masm.dif ||true
@@ -486,6 +488,14 @@ testas386: asgen.frt asi386.frt testset386 ; \
     diff -w $@ testset386 >$@.diff ;\
     diff $@.diff testresults
 
+testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
+    cat $+|\
+    lina -e|\
+    sed '1,/TEST STARTS HERE/d' |\
+    sed 's/^[0-9A-F \.,]*://' >$@       ;\
+    diff -w $@ testsetpentium >$@.diff ;\
+    diff $@.diff testresults
+
 test386: asgen.frt asi386.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-32   SHOW-ALL)|\
     lina -e|\
@@ -495,6 +505,18 @@ test386: asgen.frt asi386.frt ; \
     sed 's/~SIB|   14 SIB,,/[AX +1* BX]/' >$@       ;\
     diff -w $@ testset386 >$@.diff ;\
     diff $@.diff testresults
+
+# There is a problem here: SHOW-ALL shows almost nothing
+# because asi386.frt is not loaded.
+# testpentium: asgen.frt asipentium.frt ; \
+#     (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
+#     lina -e|\
+#     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
+#     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
+#     sed 's/~SIB|   1C SIB,,/[AX +1* 0]/' |\
+#     sed 's/~SIB|   14 SIB,,/[AX +1* BX]/' >$@       ;\
+#     diff -w $@ testsetpentium >$@.diff ;\
+#     diff $@.diff testresults
 
 test386-16: asgen.frt asi386.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
