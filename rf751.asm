@@ -376,7 +376,7 @@ BITS-32
 ( 0804,832F )   :L0804,832F    MOV, X| F| DI'| MEM| tin L, 
 ( 0804,8335 )                  SUB, X| F| DI'| R| CX| 
 ( 0804,8337 )                  J, CZ| Y| L0804,8351 RB,
-( 0804,8339 )                  MOVI|BR, AL| 0A IB, 
+( 0804,8339 )                  MOVI|B, AL| 0A IB, 
 ( 0804,833B )                  REPNZ, 
 ( 0804,833C )                  SCAS, B'| 
 ( 0804,833D )                  MOV, X| F| DI'| R| AX| 
