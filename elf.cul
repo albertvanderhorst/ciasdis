@@ -57,12 +57,11 @@ DUP LABEL p_align    4 +
 \D  p_memsz    L@   ."  p_memsz   " . CR
 \D  p_flags    L@   ."  p_flags   " . CR
 \D  p_align    L@   ."  p_align   " . CR
+\D  MAKE-CUL
 
-e_entry  L@ 
+e_entry  L@
 p_vaddr L@ p_offset L@ -   .S -ORG-
 
 EQU-LABELS LABELS !BAG  \ Rid of the preliminary labels
 ( starting point -- ) LABEL _start
 _start CRAWL
-MAKE-CUL
-\ DISASSEMBLE-ALL
