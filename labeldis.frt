@@ -16,6 +16,15 @@ REQUIRE BIN-SEARCH
 
 : \D ;
 
+\ -------------------- INTRODUCTION --------------------------------
+
+\ Associate target ADDRESS with start of ``CODE-BUFFER''
+\ Here is something stupid  going, there may be several addresses.
+\ The valid range from the code buffer goes to ``CP @'' and is not
+\ affected.
+: -ORG- TARGET-START ! ;
+
+
 \ -------------------- generic definition of labels ----------------
 
 \ A bag with the dea's of all labelstruct 's.
@@ -30,10 +39,12 @@ REQUIRE BIN-SEARCH
 1 'DROP \ Dummy printer, dummy length
 struct LABELSTRUCT
   F: .PAY , FDOES> @ EXECUTE ;          \ Print payload
+\   F: LAB+!  FDOES> SET+! ;
   F: LABELS   2* BUILD-BAG   LATEST THE-REGISTER BAG+! FDOES> ;
 endstruct
 
 THE-REGISTER !BAG       \ Get rid of dummy registration.
+
 
 \ For I return the ith LABEL . 1 returns the first label.
 \ All indices are compatible with this.
@@ -96,6 +107,7 @@ VARIABLE C
 \ any symbolic constant in fact.
 \ The payload is the dea of a constant leaving that address.
 : LABEL   EQU-LABELS   DUP LABELS BAG+!   CONSTANT   LATEST LABELS BAG+! ;
+'LABEL ALIAS EQU
 
 \ Adorn the ADDRESS we are currently disassembling with a named label
 \ if any.
@@ -195,6 +207,27 @@ JOPI"
 
 \D 12 PRINT-COMMENT CR  \ Should give nothing, not found!
 \D 12 0 HOST>TARGET - PRINT-COMMENT CR
+\ ---------------- Specifiers of disassembly ranges ----------------------
+
+\ A simple printout of the payload.
+: .PAY. CELL+ ? ;
+
+\ Contains sector specification, range plus type.
+1000 '.PAY. LABELSTRUCT SECTOR-LABELS   LABELS !BAG
+
+\ Define a disassembly sector from AD1 to AD2.
+: SECTOR   SECTOR-LABELS SWAP LABELS BAG+!  LABELS BAG+!  ;
+
+\ Target ADDRESS1 through ADDRESS2 (exclusive) is to be treated as
+\ code.
+\ ; -DC-    LABELS SET+!   'D-R LABELS SET+! ;
+'SECTOR ALIAS -DC-
+
+\ Disassemble from target ADDRESS1 to ADDRESS2.
+: D-R-T SWAP TARGET>HOST SWAP TARGET>HOST D-R ;
+
+\ Disassemble all those sectors as if they were code.
+: DISASSEMBLE-ALL  SECTOR-LABELS LABELS DO-BAG   I @ I CELL+ @ D-R-T   LOOP-BAG ;
 
 \ ------------------- Generic again -------------------
 
@@ -220,10 +253,7 @@ JOPI"
 
 \ Disassemble the current program as stored in the ``CODE-BUFFER''.
 \ Using what is known about it.
-: DISASSEMBLE-TARGET
-    TARGET-START @ .  " ORG" TYPE CR    \ FIXME
-    CODE-SPACE CP @ D-R
-    CP @ ADORN-ADDRESS CR ;
+: DISASSEMBLE-TARGET   TARGET-START @ .  " ORG" TYPE CR   DISASSEMBLE-ALL ;
 
 \ Using (only) information from "file",
 \ disassemble the current program as stored in the ``CODE-BUFFER''.

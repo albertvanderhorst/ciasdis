@@ -25,6 +25,9 @@ VARIABLE TARGET-START
 \ Convert host memory ADDRESS. Leave target memory ADDRESS.
 : HOST>TARGET  CODE-SPACE - TARGET-START @ + ;
 
+\ Convert target memory ADDRESS. Leave host memory ADDRESS.  
+: TARGET>HOST   TARGET-START @ -   CODE-SPACE +   ; 
+
 \ Instruction pointer in assembly. View used in branches etc.
 : _AP_    CP @ HOST>TARGET ;
 
