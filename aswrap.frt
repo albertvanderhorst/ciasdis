@@ -5,16 +5,25 @@
 \ This file hot patches some words in the prelude of asgen.frt.
 \ It must be called after asgen.frt.
 
+\ ------------------------- library definitions -------------------------
+\ Copy the behaviour of the latest definition into "name" affecting all
+\ words already using that word.
+: HOT-PATCH   LATEST   (WORD) FOUND   3 CELLS MOVE ;
+
+VARIABLE STUB   \ Example for `` DELAYED-BUFFFER ''.
+\ Create a buffer of N items. Execute: return buffer address.
+\ The buffer is allocated at run time, preventing static buffers in load
+\ images.
+: DELAYED-BUFFER   CREATE ,   DOES>   >R HERE 'STUB >DFA !
+    R@ BODY>  'STUB SWAP 3 CELLS MOVE   HERE R> @ ALLOT ;
+
+\ ------------------------- library definitions end ---------------------
 
 \ Length of the code buffer.
 VARIABLE CODE-LENGTH
 2,000,000 CODE-LENGTH !
 
-CREATE CODE-SPACE     CODE-LENGTH @ ALLOT
-
-\ Copy the behaviour of the latest definition into "name" affecting all
-\ words already using DEA2 .
-: HOT-PATCH   LATEST   (WORD) FOUND   3 CELLS MOVE ;
+CODE-LENGTH @    DELAYED-BUFFER CODE-SPACE
 
 \ Point into CODE-SPACE, used to assemble
 VARIABLE CP                 CODE-SPACE CP !
