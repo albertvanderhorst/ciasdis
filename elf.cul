@@ -74,5 +74,8 @@ e_version e_ehsize      -dl-
 e_ehsize  e_headerend   -dw-
 p_type    p_headerend   -dl-
 
+e_ident p_filesz L@ + LABEL _end
+_end e_ident - EQU filesz
+
 e_entry  L@ LABEL _start
 _start CRAWL
