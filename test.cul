@@ -1,11 +1,19 @@
 \ 1278 ORG
-"Here it all starts
-\ Fasten Your Seat Belts (tm)"   
-1278 COMMENT
+\ In files ciforth multiple line strings are allowed.
 
-1278 COMMENT: First instruction
+"
+
+\ #################### ""WELCOME"" he said ####################
+
+\ Here it all starts
+\ Fasten Your Seat Belts (tm)"  1278 COMMENT
+
 1285  LABEL QQQ
 "XXX is a target for backward jumps:" 1294 COMMENT
 1294  LABEL XXX
-"YYY is a target for forward jumps:" 1337 COMMENT 
+1294  COMMENT:   Move a xell to register DI from memory at QQQ
+"YYY is a target for forward jumps:" 1337 COMMENT
 1337  LABEL YYY
+
+\ Oeps, forgot this one ... Shows that labels need not supplied in order.
+1278 COMMENT: First instruction
