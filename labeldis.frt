@@ -12,6 +12,7 @@ REQUIRE EXCHANGE
 REQUIRE BIN-SEARCH
 REQUIRE POSTFIX
 REQUIRE H.      \ In behalf of (DH.)
+REQUIRE 2>R
 
 : \D POSTPONE \ ;
 
@@ -232,12 +233,20 @@ VARIABLE COMMENT:-TO-BE
 : CR+ADDRESS CR .TARGET-ADDRESS ;
 
 VARIABLE NEXT-CUT       \ Where to separate db etc. in chunks.
-: NEXT-CUT?   NEXT-CUT @ =  DUP IF 2 NEXT-CUT +! THEN ;
 
-: CR+db   DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF
-     CR+ADDRESS  ADORN-WITH-LABEL "  db" TYPE _ THEN DROP ;
-: CR+dw   CR+ADDRESS  ADORN-WITH-LABEL "  dw" TYPE ;
-: CR+dl   CR+ADDRESS  ADORN-WITH-LABEL "  dl" TYPE ;
+\ For ADDRESS: "it IS at next cut." If so, advance.
+: NEXT-CUT?   NEXT-CUT @ =  DUP IF 16 NEXT-CUT +! THEN ;
+
+\ For ADDRESS and assembler directive STRING (such "db") ,
+\ interrupt the laying down of memory structures by a new line and possibly
+\ a label, when appropriate.
+: CR+GENERIC   2>R DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF
+     CR+ADDRESS  ADORN-WITH-LABEL 2R@ TYPE _ THEN DROP RDROP RDROP ;
+
+\ For ADDRESS : interupt byte display.
+: CR+db   "  db" CR+GENERIC ;
+: CR+dw   "  dw" CR+GENERIC ;
+: CR+dl   "  dl" CR+GENERIC ;
 : CR+LABEL   CR+ADDRESS ADORN-WITH-LABEL ;
 
 
@@ -301,10 +310,10 @@ endstruct
 : W. 0 4 (DH.) TYPE ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2, plain.
-: (DUMP-W)   DO I @ SPACE W. 2 +LOOP CR ;
+: (DUMP-W)   DO I DUP ADORN-ADDRESS @ SPACE W. 2 +LOOP CR ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
-: DUMP-W   TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS (DUMP-W) ;
+: DUMP-W   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-W) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are words with name "name".
 : -dw:    'DUMP-W   'CR+dw SECTION ;
@@ -313,10 +322,10 @@ endstruct
 : -dw-    'DUMP-W   'CR+dw ANON-SECTION ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2.
-: (DUMP-L)   DO I @ SPACE H. 4 +LOOP CR ;
+: (DUMP-L)   DO I DUP ADORN-ADDRESS @ SPACE H. 4 +LOOP CR ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
-: DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS (DUMP-L) ;
+: DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-L) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
 : -dl:    'DUMP-L   'CR+dl SECTION ;
