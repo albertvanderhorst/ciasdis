@@ -21,11 +21,11 @@ BITS-32
 ( 0804,8030 )   :e_shnum   dw 0000 
 ( 0804,8032 )   :e_shstrndx   dw 0000 
 
-( 0804,8034 )   :e_headerend :p_type   dl 1 
+( 0804,8034 )   :p_type :e_headerend   dl 1 
 ( 0804,8038 )   :p_offset   dl 54 
 ( 0804,803C )   :p_vaddr   dl p_headerend 
 ( 0804,8040 )   :p_paddr   dl p_headerend 
-( 0804,8044 )   :p_filesz   dl 1163 
+( 0804,8044 )   :p_filesz   dl filesz 
 ( 0804,8048 )   :p_memsz   dl 0006,2563 
 ( 0804,804C )   :p_flags   dl 7 
 ( 0804,8050 )   :p_align   dl 1000 
@@ -222,7 +222,7 @@ BITS-32
 ( 0804,819B )                  MOVI|XR, AX| retroforth_f IL, 
 ( 0804,81A0 )                  SUBSI, R| SI| 4 IS, 
 ( 0804,81A3 )                  MOV, X| F| AX'| ZO| [SI] 
-( 0804,81A5 )                  MOVI|XR, AX| 09E0 IL, 
+( 0804,81A5 )                  MOVI|XR, AX| retrofilesz IL, 
 ( 0804,81AA )                  CALL, X_eval RL,
 ( 0804,81AF )                  RET, 
 ( 0804,81B0 )   :L0804,81B0    CALL, L0804,82DA RL,
@@ -596,7 +596,7 @@ BITS-32
 ( 0804,85D4 )   :X_:    CALL, X_create RL,
 ( 0804,85D9 )                  SUBSI, MEM| V_h0 L, 5 IS, 
 ( 0804,85E0 )                  JMP, X_] RL,
-( 0804,85E5 )   :last_dea_macro :H_mliteral   dl H_m; X_mliteral 
+( 0804,85E5 )   :H_mliteral :last_dea_macro   dl H_m; X_mliteral 
 
 ( 0804,85ED )   :N_mliteral   d$  7  "literal"
 
@@ -750,21 +750,18 @@ BITS-32
 
 ( 0804,8780 )   :X_h0    CALL, dovar RL,
 ( 0804,8785 )   :V_h0   dl dictend 
-
 ( 0804,8789 )   :H_d0   dl H_h0 X_d0 
 
 ( 0804,8791 )   :N_d0   d$  2  "d0"
 
 ( 0804,8794 )   :X_d0    CALL, dovar RL,
 ( 0804,8799 )   :V_d0   dl d0 
-
-( 0804,879D )   :last_dea_forth :H_base   dl H_d0 X_base 
+( 0804,879D )   :H_base :last_dea_forth   dl H_d0 X_base 
 
 ( 0804,87A5 )   :N_base   d$  4  "base"
 
 ( 0804,87AA )   :X_base    CALL, dovar RL,
 ( 0804,87AF )   :V_base   dl 0A 
-
 ( 0804,87B3 )   :tail   dl 0 \   Allow tail-calls?
 ( 0804,87B7 )   :buffer   dl 0 \   Buffer (for ports to use as needed)
 ( 0804,87BB )   :source   dl 0 \   Evaluate from RAM or KBD
@@ -774,8 +771,8 @@ BITS-32
 ( 0804,87C7 )   :bases   db 10 2 8 0FF \   $hex %bin &oct 'ascii
 
 ( 0804,87CB )   :last   dl flast \   Last word in dictionary
-( 0804,87CF )   :flast   dl last_dea_forth \   Last word in 'forth'
-( 0804,87D3 )   :mlast   dl last_dea_macro \   Last word in 'macro'
+( 0804,87CF )   :flast   dl H_base \   Last word in 'forth'
+( 0804,87D3 )   :mlast   dl H_mliteral \   Last word in 'macro'
 
 ( 0804,87D7 )   :retroforth_f   d$  " forth" ^J
 ( 0804,87DE )                 d$  ": swap [ $0687 2, ] ;" ^J
