@@ -3,7 +3,7 @@
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
 HEX INIT-ALL
-INCLUDE elf2.cul
+INCLUDE elf.cul
 
 0804,A0DC EQU semis
 0804,F82C EQU last_dea
@@ -34,14 +34,13 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 
 \ ADDRESS points to a dea.
 \ Add an anonymous section to disassemble the dea.
-: ADD-DEA-SECTION   DUP 14 + -dl- ;
+: ADD-DEA-SECTION   DUP 18 + -dl- ;
 
 \ Add the information that ADDRESS is a nfa.
 : IS-A-NAME L@ DUP IF DUP ADD-NAME-LABEL ADD-NAME-SECTION _ THEN DROP ;
 
 \ Add the information that ADDRESS points to high level code.
-: IS-HIGH-LEVEL NAME-BUFFER $@ TYPE H. "IS A HIGH LEVEL THINGY" TYPE ;
-: CRAWL         NAME-BUFFER $@ TYPE CRAWL ;
+: IS-HIGH-LEVEL DUP BEGIN DUP L@ semis <> WHILE 4 + REPEAT 4 + -dl- ;
 
 \ For CFA : "it POINTS to the high level interpreter"
 : IS-DOCOL?   L@ docol = ;
@@ -57,8 +56,8 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 
 \ Accumulate the information from DEA as a wid, follow the link field.
 : IS-A-WID BEGIN DUP IS-A-DEA 0C + L@ DUP 0= UNTIL DROP ;
-
+\ EXIT
 last_dea IS-A-WID
 
-MAKE-CUL
-DISASSEMBLE-ALL
+\ MAKE-CUL
+\ DISASSEMBLE-ALL
