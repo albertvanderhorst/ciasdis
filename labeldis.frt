@@ -176,15 +176,23 @@ MAX-LABEL '.PAY-DEA '.EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
 'LABEL ALIAS EQU
 
 
-\ For host ADDRESS return an associated equ LABEL (target) or 0.
+\ For host ADDRESS return an associated equ LABEL or 0.
+\ CAVEAT: if there are more than one label for the same addres,
+\ just the first one is returned.
 : =EQU-LABEL   HOST>TARGET  EQU-LABELS >LABEL ;
 
-\ Print an equ LABEL as an assembly line label. Accept zero.
-: .EQU-LABEL   DUP IF &: EMIT .PAY ELSE DROP 12 SPACES THEN ;
+\ For host ADDRES print all labels at that addres,
+\ return the NUMBER of labels printed.
+: .EQU-ALL   HOST>TARGET  EQU-LABELS   0 ( no labels printed) SWAP
+   LAB-UPB 1+ OVER WHERE-LABEL ?DO
+       DUP I LABELS[] @ <> IF LEAVE THEN
+       SWAP 1+ SWAP
+       &: EMIT I LABELS[] .PAY
+   LOOP DROP ;
 
 \ Adorn the ADDRESS we are currently disassembling with a named label
 \ if any.
-: ADORN-WITH-LABEL   =EQU-LABEL .EQU-LABEL ;
+: ADORN-WITH-LABEL   .EQU-ALL    0= IF 12 SPACES THEN ;
 
 HEX FFFF0000 CONSTANT LARGE-NUMBER-MASK
 
