@@ -119,8 +119,8 @@ REQUIRE H.
 
 \ Collapse the label at INDEX with the next and or previous labels.
 : COLLAPSE(I1) SECTION-LABELS
-    1 OVER < IF DUP 1- OVER COLLAPSE(I1,I2) 1- ( !! section moves !!) THEN
-    LAB-UPB OVER > IF DUP OVER 1+ COLLAPSE(I1,I2) THEN
+    DUP LAB-UPB < IF DUP OVER 1+ COLLAPSE(I1,I2) THEN
+    DUP 1 > IF DUP 1- OVER COLLAPSE(I1,I2) THEN
     DROP ;
 
 \D LABELS !BAG
