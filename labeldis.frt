@@ -244,6 +244,69 @@ VARIABLE COMMENT:-TO-BE
 \D 12 PRINT-COMMENT CR  \ Should give nothing, not found!
 \D 12 0 HOST>TARGET - PRINT-COMMENT CR
 
+\ ---------------- The special printing of strings.     --------------------------------------
+
+REQUIRE NEW-IF
+
+\ Contains a printing indicator :
+\ 0 as hex                      8A
+\ 1 control character           ^J
+\ 2 a blank                     BL  "xxx xxx"
+\ 3 normal printable            &Z  "xxxZxxx"
+CREATE TABLE HEX 100 ALLOT      TABLE 100 ERASE
+&~ 1 + BL 1 + DO 3 TABLE I + C! LOOP
+2 BL TABLE + C!
+1 ^I TABLE + C!
+1 ^J TABLE + C!
+1 ^M TABLE + C!
+1 ^L TABLE + C!
+
+\ For CHAR: " it IS control"
+: IS-CTRL   TABLE + C@ 1 = ;
+
+\D ." EXPECT 0 -1 :" &A IS-CTRL .   ^J IS-CTRL . CR .S
+
+\ For CHAR: " it IS printable"
+: IS-PRINT   TABLE + C@ 1 > ;
+
+\D ." EXPECT 0 -1 -1 :" ^A IS-PRINT .   &A IS-PRINT . BL IS-PRINT . CR .S
+
+\ Accumulates characters that may form a string.
+CREATE ACCU 100 ALLOT           ACCU 100 ERASE
+
+\ Print STRING, duly doubling the ``"'' if present.
+: ."$" BEGIN &" $S &" EMIT TYPE &" EMIT OVER 0= UNTIL 2DROP ;
+
+\D ." Expect "  """ AA""""AA """ TYPE &: EMIT " AA""AA " ."$" CR .S
+
+\ Print the accumulated chars, if any.
+: .ACCU   ACCU $@
+    OVER C@ BL = OVER 1 = AND IF 2DROP &B EMIT &L EMIT SPACE ELSE
+    DUP 1 > IF ."$" SPACE ELSE
+    IF && EMIT C@ EMIT SPACE ELSE DROP THEN THEN THEN 0 0 ACCU $! ;
+
+\D ." EXPECT "  """XY""" TYPE &: EMIT "XY" ACCU $! .ACCU CR .S
+\D ." EXPECT BL :"   " " ACCU $!   .ACCU CR .S
+\D ." EXPECT &Y :"   "Y" ACCU $!   .ACCU CR .S
+
+
+\ Display the non-printable character.
+: .C   .ACCU DUP IS-CTRL IF &^ EMIT &@ + EMIT ELSE 0 <# #S #> TYPE THEN  SPACE ;
+
+\D ." EXPECT ^J: "  ^J .C CR .S
+\D ." EXPECT 0: "  0 .C CR .S
+\D ." EXPECT 9A: "  9A .C CR .S
+
+\ Print all chars from ADDR1 to ADDR2 appropriately.
+\ Try to combine.
+: DUMP$  0 0 ACCU $! SWAP DO I C@ DUP IS-PRINT IF ACCU $C+ ELSE .C THEN LOOP .ACCU ;
+
+\D "AAP" $, ^J C, ^M C, &A C, &A C, BL C, &P C, 0 C, 1 C, BL C, 2 C, 3 C,
+\D HERE
+\D ." EXPECT"  "``3 0 0 0 ""AAP"" XX ^J ^M ""AA P"" 0 1 BL 2 3 '':" TYPE
+\D .S DUMP$ CR .S
+
+
 \ ---------------- Things to print at the start of a line --------------------------------------
 
 
@@ -262,10 +325,14 @@ VARIABLE NEXT-CUT       \ Where to separate db etc. in chunks.
 : CR+GENERIC   2>R DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF
      CR+ADDRESS  ADORN-WITH-LABEL 2R@ TYPE _ THEN DROP RDROP RDROP ;
 
+: CR+$         2>R DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF .ACCU
+     CR+ADDRESS  ADORN-WITH-LABEL 2R@ TYPE _ THEN DROP RDROP RDROP ;
+
 \ For ADDRESS : interupt byte display.
 : CR+db   "  db" CR+GENERIC ;
 : CR+dw   "  dw" CR+GENERIC ;
 : CR+dl   "  dl" CR+GENERIC ;
+: CR+d$   "  d$" CR+$ ;
 : CR+LABEL   CR+ADDRESS ADORN-WITH-LABEL ;
 
 
@@ -360,10 +427,27 @@ endstruct
 : -dl:    'DUMP-L   'CR+dl SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 are longs with name NAME.
-: -dl    2>R 'DUMP-W 'CR+db 2R> POSTFIX  SECTION ;
+: -dl    2>R 'DUMP-L 'CR+dl 2R> POSTFIX  SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
 : -dl-    'DUMP-L   'CR+dl ANON-SECTION ;
+
+\ Dump strings to target ADDRESS1 from target ADDRESS2.
+: (DUMP-$)   DO I DUP ADORN-ADDRESS @ SPACE H. 20 +LOOP CR ;
+: (DUMP-$)   DO I DUP ADORN-ADDRESS SPACE C@ DUP IS-PRINT IF
+    ACCU $C+ ELSE .C THEN LOOP .ACCU ;
+
+\ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
+: DUMP-$   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-$) ;
+
+\ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
+: -d$:    'DUMP-$   'CR+d$ SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 are longs with name NAME.
+: -d$    2>R 'DUMP-$ 'CR+d$ 2R> POSTFIX  SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
+: -d$-    'DUMP-$   'CR+d$ ANON-SECTION ;
 
 \ Disassemble all those sectors as if they were code.
 : DISASSEMBLE-ALL
