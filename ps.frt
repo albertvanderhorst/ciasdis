@@ -2,6 +2,7 @@
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Generate postscript data sheet. )
 ( Instructions to compare with, last byte 0..FF )
+ALSO ASSEMBLER
 DECIMAL
 0 VARIABLE PREFIX
 ( Mask to compare with, contains valid bytes of PREFIX )
@@ -94,3 +95,4 @@ DECIMAL
     DUP VOCEND? UNTIL DROP
     POSTLUDE
 ;
+PREVIOUS
