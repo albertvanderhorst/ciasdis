@@ -5,7 +5,7 @@
 
 ( ############## 80386 ASSEMBLER ADDITIONS ############################ )
 ( These definitions are such that they work regardless of the endianness)
-( of the host. Lay down word (16 bits) and long (32) bits constants.    )
+( of the host. Lay down word {16 bits} and long {32} bits constants.    )
 : (W,) lsbyte, lsbyte, DROP ;
 : (L,) lsbyte, lsbyte, lsbyte, lsbyte, DROP ;
 
