@@ -119,10 +119,16 @@ VARIABLE LABEL-CACHE    \ Index of next label.
 : LABEL   EQU-LABELS   DUP LAB+!   CONSTANT   LATEST LAB+! ;
 'LABEL ALIAS EQU
 
+
+\ For host ADDRESS return an associated equ LABEL (target) or 0.
+: =EQU-LABEL   HOST>TARGET  EQU-LABELS >LABEL ;
+
+\ Print an equ LABEL as an assembly line label. Accept zero.
+: .EQU-LABEL   DUP IF &: EMIT .PAY ELSE DROP 12 SPACES THEN ;
+
 \ Adorn the ADDRESS we are currently disassembling with a named label
 \ if any.
-: ADORN-WITH-LABEL   EQU-LABELS HOST>TARGET  >LABEL DUP IF
-    &: EMIT .PAY ELSE DROP 12 SPACES THEN  ;
+: ADORN-WITH-LABEL   =EQU-LABEL .EQU-LABEL ;
 
 \D 12 LABEL AAP
 \D 5 LABEL NOOT
@@ -225,10 +231,10 @@ VARIABLE COMMENT:-TO-BE
 \ Start a new line, with printing the decompiled ADDRESS as seen
 : CR+ADDRESS CR .TARGET-ADDRESS ;
 
-: CR+db CR+ADDRESS  ADORN-WITH-LABEL "  db" TYPE ;
-: CR+dw CR+ADDRESS  ADORN-WITH-LABEL "  dw" TYPE ;
-: CR+dl CR+ADDRESS  ADORN-WITH-LABEL "  dl" TYPE ;
-: CR+LABEL CR+ADDRESS ADORN-WITH-LABEL ;
+: CR+db   DUP =EQU-LABEL IF CR+ADDRESS  ADORN-WITH-LABEL "  db" TYPE _ THEN DROP ;
+: CR+dw   CR+ADDRESS  ADORN-WITH-LABEL "  dw" TYPE ;
+: CR+dl   CR+ADDRESS  ADORN-WITH-LABEL "  dl" TYPE ;
+: CR+LABEL   CR+ADDRESS ADORN-WITH-LABEL ;
 
 
 \ ---------------- Specifiers of disassembly ranges ----------------------
@@ -275,10 +281,10 @@ endstruct
 : -dc-    'D-R-T   'CR+LABEL ANON-SECTION ;
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 plain.
-: (DUMP-B)   DO I C@ 3 .R LOOP CR ;
+: (DUMP-B)   DO I DUP ADORN-ADDRESS C@ 3 .R LOOP CR ;
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 adorned with labels.
-: DUMP-B   TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS (DUMP-B) ;
+: DUMP-B   TARGET>HOST SWAP TARGET>HOST  (DUMP-B) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
 : -db:    'DUMP-B   'CR+db SECTION ;
