@@ -11,14 +11,20 @@
 \ Supposedly these are labels that have not been compiled.
 \ Go on compiling.
 \ Loading the same code another time will give correct code.
-: FIX-DEA '_ 0 DSP@ 3 CELLS + ! DSP@ 3 CELLS + ! ;
+: FIX-DEA DROP '_ ;
 : FIX-NMB FIX-DEA (WORD) 2DROP ;
+
+: ERROR10 DROP IF  FIX-NMB THEN ;
+: ERROR12 DROP IF  FIX-DEA THEN ;
 
 REQUIRE OLD:
 \ Replacement for ?ERROR. Fix up errors, see FIX-NMB FIX-DEA.
-: ?ERROR-FIXING OVER IF
-    DUP 10 = IF FIX-NMB ELSE   DUP 12 = IF FIX-DEA   THEN THEN
-THEN OLD: ?ERROR ;
+: ?ERROR-FIXING
+    DUP 10 = IF ERROR10 ELSE
+    DUP 12 = IF ERROR12 ELSE
+    OLD: ?ERROR
+    THEN THEN   ;
+
 \ Try to automatically load missing words.
 : AUTOLOAD '?ERROR-FIXING >DFA @ '?ERROR >DFA ! ;
 : NO-AUTOLOAD '?ERROR RESTORED ;  \ And off again.
