@@ -12,21 +12,20 @@
 \ This is a main build. For details see asgen.frt
 
 INCLUDE asgen.frt
-INCLUDE aswrap.frt
+INCLUDE aswrap.frt      \ neater if put here
 INCLUDE asi386.frt
 
 \ Tools
-INCLUDE bag.frt
-INCLUDE struct.frt
 INCLUDE access.frt
-INCLUDE decsharp.frt
 
-\ These two files could be incorporated in 2 previous ones.
-\ A problem is getting rid of the labels if we don't want them.
+\ INCLUDE aswrap.frt      \ neater if put here
 INCLUDE labelas.frt
 INCLUDE labeldis.frt
 INCLUDE crawl.frt
 
+\ In behalf of user.
+REQUIRE #-PREFIX
+\ In behalf of building an executable.
 REQUIRE ARGC    REQUIRE OLD:    REQUIRE SRC>EXEC        REQUIRE INCLUDED
 
 \ Assemble file NAME. Leave compiled BUFFER LENGTH.
@@ -38,12 +37,14 @@ REQUIRE ARGC    REQUIRE OLD:    REQUIRE SRC>EXEC        REQUIRE INCLUDED
 \ Return the NAME of the target file.
 : TARGET-AS 2 ARG[] ;
 
-
 \ Perform the action of the program as per the spec's of ``cias''
 : cias   1 ARG[] ASSEMBLED   TARGET-AS PUT-FILE ;
 
 \ Fetch file NAME to the code buffer.
 : FETCHED    GET-FILE CODE-SPACE SWAP    2DUP + CP !   MOVE ;
+
+\ Fetch file "name" to the code buffer.
+: FETCH    (WORD) FETCHED ;
 
 \ Return the NAME of the target file.
 : TARGET-DIS 2 ARG[] ;

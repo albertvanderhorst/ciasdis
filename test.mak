@@ -13,13 +13,10 @@ ASSRC= \
 access.frt   \
 aswrap.frt   \
 asgen.frt    \
-bag.frt      \
 ciasdis.frt  \
 crawl.frt    \
-decsharp.frt \
 labelas.frt  \
 labeldis.frt \
-struct.frt   \
 # That's all folks!
 
 testclean: ; rm -f $(TESTTARGETS)

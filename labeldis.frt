@@ -13,6 +13,8 @@ REQUIRE BIN-SEARCH
 REQUIRE POSTFIX
 REQUIRE H.      \ In behalf of (DH.)
 REQUIRE 2>R
+REQUIRE BAG             \ Simple bag facility
+REQUIRE struct
 
 : \D POSTPONE \ ;
 

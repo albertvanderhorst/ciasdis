@@ -4,6 +4,9 @@
 
 ( Handle labels )
 
+REQUIRE BAG             \ Simple bag facility
+REQUIRE DO-BAG          \ More advanced bag facility
+
 ( Make sure undefined labels don't fool up the first pass of the        )
 (   assembly                                                            )
 \ Compile words that are unknown or look like malformed
