@@ -99,38 +99,38 @@ FBLD,   ZO|   [DX]
 FBLD,   ZO|   [CX]
 FBLD,   ZO|   [AX]
 FCOMPP,
-FDIVP,   ST7|
-FDIVP,   ST6|
-FDIVP,   ST5|
-FDIVP,   ST4|
-FDIVP,   ST3|
-FDIVP,   ST2|
-FDIVP,   ST1|
-FDIVP,   ST0|
-FDIVRP,   ST7|
-FDIVRP,   ST6|
-FDIVRP,   ST5|
-FDIVRP,   ST4|
-FDIVRP,   ST3|
-FDIVRP,   ST2|
-FDIVRP,   ST1|
-FDIVRP,   ST0|
-FSUBP,   ST7|
-FSUBP,   ST6|
-FSUBP,   ST5|
-FSUBP,   ST4|
-FSUBP,   ST3|
-FSUBP,   ST2|
-FSUBP,   ST1|
-FSUBP,   ST0|
-FSUBRP,   ST7|
-FSUBRP,   ST6|
-FSUBRP,   ST5|
-FSUBRP,   ST4|
-FSUBRP,   ST3|
-FSUBRP,   ST2|
-FSUBRP,   ST1|
-FSUBRP,   ST0|
+FDIVP, r|   ST7|
+FDIVP, r|   ST6|
+FDIVP, r|   ST5|
+FDIVP, r|   ST4|
+FDIVP, r|   ST3|
+FDIVP, r|   ST2|
+FDIVP, r|   ST1|
+FDIVP, r|   ST0|
+FDIVP, n|   ST7|
+FDIVP, n|   ST6|
+FDIVP, n|   ST5|
+FDIVP, n|   ST4|
+FDIVP, n|   ST3|
+FDIVP, n|   ST2|
+FDIVP, n|   ST1|
+FDIVP, n|   ST0|
+FSUBP, r|   ST7|
+FSUBP, r|   ST6|
+FSUBP, r|   ST5|
+FSUBP, r|   ST4|
+FSUBP, r|   ST3|
+FSUBP, r|   ST2|
+FSUBP, r|   ST1|
+FSUBP, r|   ST0|
+FSUBP, n|   ST7|
+FSUBP, n|   ST6|
+FSUBP, n|   ST5|
+FSUBP, n|   ST4|
+FSUBP, n|   ST3|
+FSUBP, n|   ST2|
+FSUBP, n|   ST1|
+FSUBP, n|   ST0|
 FMULP,   ST7|
 FMULP,   ST6|
 FMULP,   ST5|
