@@ -135,11 +135,11 @@ CREATE TABLE 1 , 1 , ( x TABLE + @ yields $100^[-x mod 4] )
 'TABLE HIDDEN
 
 ( ------------- UTILITIES, SYSTEM DEPENDANT ----------------------------)
+: %ID. >NFA @ $@ TYPE SPACE ;   ( Print a definitions name from its DEA.)
 VOCABULARY ASSEMBLER IMMEDIATE   ASSEMBLER DEFINITIONS HEX
 ( We use the abstraction of a dea "dictionary entry address". aqa "xt" )
 ( Return the DEA from "word". 1]                                         )
 DENOTATION : % POSTPONE ' ; PREVIOUS
-: %ID. ID. ;   ( Print a definitions name from its DEA.)
 : %>BODY >CFA >BODY ; ( From DEA to the DATA field of a created word )
 : %BODY> BODY> CFA> ; ( Reverse of above)
 : %>DOES >DFA @ ; ( From DEA to the DOES> pointer for a ``DOES>'' word )

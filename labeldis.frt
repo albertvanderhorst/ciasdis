@@ -60,7 +60,7 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 
 \ Print the name of the label at ADDRESS , provided it is a dea.
 \ This applies to plain labels that are in fact fact constants.
-: .PAY-DEA  CELL+ @ ID. ;
+: .PAY-DEA  CELL+ @ %ID. ;
 
 \ Print the addresses and payloads of the labels.
 : .LABELS  DO-LAB I @ .  I .PAY CR LOOP-LAB ;
@@ -275,9 +275,9 @@ CREATE ACCU 100 ALLOT           ACCU 100 ERASE
 
 \ Print the accumulated chars, if any.
 : .ACCU   ACCU $@
-    OVER C@ BL = OVER 1 = AND IF 2DROP &B EMIT &L EMIT SPACE ELSE
-    DUP 1 > IF ."$" SPACE ELSE
-    IF && EMIT C@ EMIT SPACE ELSE DROP THEN THEN THEN 0 0 ACCU $! ;
+    OVER C@ BL = OVER 1 = AND IF 2DROP SPACE &B EMIT &L EMIT ELSE
+    DUP 1 > IF SPACE ."$" ELSE
+    IF SPACE && EMIT C@ EMIT ELSE DROP THEN THEN THEN 0 0 ACCU $! ;
 
 \D ." EXPECT "  """XY""" TYPE &: EMIT "XY" ACCU $! .ACCU CR .S
 \D ." EXPECT BL :"   " " ACCU $!   .ACCU CR .S
@@ -285,7 +285,7 @@ CREATE ACCU 100 ALLOT           ACCU 100 ERASE
 
 
 \ Display the non-printable character.
-: .C   .ACCU DUP IS-CTRL IF &^ EMIT &@ + EMIT ELSE 0 <# #S #> TYPE THEN  SPACE ;
+: .C   .ACCU SPACE DUP IS-CTRL IF &^ EMIT &@ + EMIT ELSE 0 <# #S #> TYPE THEN  ;
 
 \D ." EXPECT ^J: "  ^J .C CR .S
 \D ." EXPECT 0: "  0 .C CR .S
@@ -293,12 +293,13 @@ CREATE ACCU 100 ALLOT           ACCU 100 ERASE
 
 \ Print all chars from ADDR1 to ADDR2 appropriately.
 \ Try to combine.
-: DUMP$  0 0 ACCU $! SWAP DO I C@ DUP IS-PRINT IF ACCU $C+ ELSE .C THEN LOOP .ACCU ;
+: (DUMP-$)   DO I DUP ADORN-ADDRESS C@ DUP IS-PRINT IF
+    ACCU $C+ ELSE .C THEN LOOP .ACCU ;
 
 \D "AAP" $, ^J C, ^M C, &A C, &A C, BL C, &P C, 0 C, 1 C, BL C, 2 C, 3 C,
 \D HERE
 \D ." EXPECT"  "``3 0 0 0 ""AAP"" XX ^J ^M ""AA P"" 0 1 BL 2 3 '':" TYPE
-\D .S DUMP$ CR .S
+\D .S (DUMP-$) CR .S
 
 
 \ ---------------- Things to print at the start of a line --------------------------------------
@@ -358,7 +359,7 @@ endstruct
         PREVIOUS
 
 : .PAY-SECTION CELL+ @ DUP EXECUTE
-   DIS-START H.  SPACE DIS-END H.  " BY " TYPE DIS-XT ID.  ID. ;
+   DIS-START H.  SPACE DIS-END H.  " BY " TYPE DIS-XT %ID.  %ID. ;
 
 \ Contains sector specification, range plus type.
 1000 '.PAY-SECTION LABELSTRUCT SECTION-LABELS   LABELS !BAG
@@ -429,10 +430,6 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
 : -dl-    'DUMP-L   'CR+dl ANON-SECTION ;
 
-\ Dump strings to target ADDRESS1 from target ADDRESS2.
-: (DUMP-$)   DO I DUP ADORN-ADDRESS SPACE C@ DUP IS-PRINT IF
-    ACCU $C+ ELSE .C THEN LOOP .ACCU ;
-
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-$   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-$) ;
 
@@ -446,9 +443,10 @@ endstruct
 : -d$-    'DUMP-$   'CR+d$ ANON-SECTION ;
 
 \ Print a remark about whether START and END fit.
-: .HOW-FIT   2DUP = IF 2DROP "\ Perfect Fit." ELSE
-   > IF "\ Overlapping sections." ELSE
-   "\ Hole between sections" THEN THEN CR TYPE CR ;
+: .HOW-FIT   2DUP = IF 2DROP ELSE
+   > IF "\ WARNING: This section overlaps with the previous one." ELSE
+   "\ WARNING: There is hole between this section and the previous one" THEN
+   CR TYPE CR THEN ;
 
 \ Print a remark about whether start of the current range fits to the
 \ END of the previous range. Leave END of current range for the next check.
@@ -458,10 +456,13 @@ endstruct
 \ the end of the input file.
 : HOW-FIT-END    TARGET-END .HOW-FIT ;
 
-\ Print a remark about whether START and END fit.
-: PLUG-HOLE   2DUP < IF
-   CR "\ Hole sections." TYPE CR .S -d$- ELSE 2DROP
-THEN  ;
+\ Abort if END of last section greater than START of new section.
+: OVERLAP-CHECK
+   OVER < IF 0 8 (DH.) ETYPE 1 ABORT"  is an address that runs into next section" THEN DROP ;
+
+\ Check whether START and END fit. Plug a new section in
+\ if there is a hole. Abort on overlaps.
+: PLUG-HOLE   2DUP < IF -d$- ELSE  OVERLAP-CHECK THEN ;
 
 \ Add sectors of type string where there are holes. section-labels must be
 \ sorted on entry, and are sorted on exit.
@@ -494,7 +495,7 @@ THEN  ;
 : SORT-ALL   THE-REGISTER DO-BAG   I @ EXECUTE SORT-LABELS   LOOP-BAG ;
 
 \ Show what type of labels there are.
-: SHOW-REGISTER   THE-REGISTER DO-BAG I @ ID. LOOP-BAG ;
+: SHOW-REGISTER   THE-REGISTER DO-BAG I @ %ID. LOOP-BAG ;
 
 \ Disassemble the current program as stored in the ``CODE-BUFFER''.
 \ Using what is known about it.
