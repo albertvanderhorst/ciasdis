@@ -404,11 +404,11 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 
 \ ---------------- Things to print at the start of a line --------------------------------------
 
-
+\ Print the ADDRES as target address in hex.
 : .TARGET-ADDRESS "( " TYPE DUP HOST>TARGET H. " )   " TYPE ;
-\ Start a new line, with printing the decompiled ADDRESS as seen
-: CR+ADDRESS CR .TARGET-ADDRESS ;
 
+\ Start a new line, with printing the decompiled ADDRESS as seen
+: CR+ADDRESS CR .TARGET-ADDRESS ADORN-WITH-LABEL ;
 
 \ Initialise to the start of the code space.
 : NEXT-CUT!   CODE-SPACE NEXT-CUT ! ;
@@ -419,18 +419,19 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 \ For ADDRESS and assembler directive STRING (such "db") ,
 \ interrupt the laying down of memory classes by a new line and possibly
 \ a label, when appropriate.
-: CR+GENERIC   2>R DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF
-     CR+ADDRESS  ADORN-WITH-LABEL 2R@ TYPE _ THEN DROP RDROP RDROP ;
 
-: CR+$         2>R DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF .ACCU
-     CR+ADDRESS  ADORN-WITH-LABEL 2R@ TYPE _ THEN DROP RDROP RDROP ;
+: CR+GENERIC   2>R DUP REMEMBER-COMMENT: DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF
+     CR+ADDRESS  2R@ TYPE _ THEN DROP RDROP RDROP ;
+
+: CR+$         2>R DUP REMEMBER-COMMENT: DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF .ACCU
+     CR+ADDRESS  2R@ TYPE _ THEN DROP RDROP RDROP ;
 
 \ For ADDRESS : interupt byte display.
 : CR+db   "  db" CR+GENERIC ;
 : CR+dw   "  dw" CR+GENERIC ;
 : CR+dl   "  dl" CR+GENERIC ;
 : CR+d$   "  d$" CR+$ ;
-: CR+LABEL   CR+ADDRESS ADORN-WITH-LABEL ;
+: CR+LABEL   CR+ADDRESS ;
 
 
 \ ---------------- Specifiers of disassembly ranges ----------------------
@@ -453,6 +454,12 @@ class DIS-STRUCT
    M: DIS-CR-XT   @ M;       \ Which xt?
    M: DIS-CR   @ EXECUTE M; R> ,      \ What to do at line boundaries.
 endclass
+
+\ Print out everything we know about ADDRESS.
+: (ADORN-ADDRESS)
+    PRINT-OLD-COMMENT:
+    DUP PRINT-COMMENT
+    DIS-CR ( disassembly type dependant action ) ;
 
 \ To be shown at the end of each range.
         ASSEMBLER
@@ -499,7 +506,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 'D-R-T     '-dc:   ARE-COUPLED
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 plain.
-: (DUMP-B)   DO I DUP ADORN-ADDRESS C@ 3 .R LOOP CR ;
+: (DUMP-B)   DO I DUP CR+db C@ 3 .R LOOP CR ;
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-B   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-B) ;
@@ -519,7 +526,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 : W. 0 4 (DH.) TYPE ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2, plain.
-: (DUMP-W)   DO I DUP ADORN-ADDRESS @ SPACE W. 2 +LOOP CR ;
+: (DUMP-W)   DO I DUP CR+dw @ SPACE W. 2 +LOOP CR ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-W   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-W) ;
@@ -536,7 +543,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 'DUMP-W    '-dw:   ARE-COUPLED
 
 \ Dump words from target ADDRESS1 to ADDRESS2.
-: (DUMP-L)   DO I DUP ADORN-ADDRESS @ SPACE .LABEL/. 4 +LOOP CR ;
+: (DUMP-L)   DO I DUP CR+dl @ SPACE .LABEL/. 4 +LOOP CR ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-L) ;
@@ -591,7 +598,6 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 : (ADORN-ADDRESS)
     PRINT-OLD-COMMENT:
     DUP PRINT-COMMENT
-    DUP REMEMBER-COMMENT:
     DIS-CR ( disassembly type dependant action ) ;
 
 \ Revector ``ADORN-ADDRESS'' used in "asgen.frt".

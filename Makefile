@@ -263,9 +263,9 @@ ci86.%     : %.cfg       ci86.gnr ; cat $+ | m4 >$@
 # In particular the order of operands.
 %.s : %pres ; sed -f transforms <$+ >$@
 
-.PRECIOUS: ci86.%.rawdoc
+.PRECIOUS: ci86.%.rawdoc rf751.asm lina405.asm test.bin
 
-.PHONY: default all clean boot filler moreboot allboot hdboot releaseproof zip mslinks release
+.PHONY: default all clean releaseproof zip mslinks release regressiontest
 # Default target for convenience
 default : lina
 ci86.$(s).bin :
@@ -622,14 +622,21 @@ test.bin : cidis cias test.asm test.cul
 lina405.asm : cidis lina405 lina405equ.cul lina405.cul
 	cidis lina405 lina405.cul| sed -e 's/. DROP-THIS//' >$@
 	cias lina405.asm lina405
-	rcsdiff -r$(RCSVERSION) lina405.asm
-	rcsdiff -r$(RCSVERSION) lina405
+	rcsdiff -b -B -r$(RCSVERSION) lina405.asm
+	rcsdiff -b -B -r$(RCSVERSION) lina405
+
+# Test case, reverse engineer retroforth version 7.5.1.
+rf751.asm : cidis rf751 rf751equ.cul rf751.cul
+	cidis rf751 rf751.cul| sed -e 's/. DROP-THIS//' >$@
+	cias rf751.asm rf751
+	rcsdiff -b -B -r$(RCSVERSION) rf751.asm
+	rcsdiff -b -B -r$(RCSVERSION) rf751
 
 %.bin : %.asm ; cias $< $@
 
 cidis386.zip : $(ASSRC) asi386.frt asipentium.frt ;  zip $@ $+
 
-testciasdis : test.bin lina405.asm
+testciasdis : test.bin lina405.asm rf751.asm
 
 # -----------------
-regressiontest : testasses testciasdis l
+regressiontest : testasses testciasdis
