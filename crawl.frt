@@ -261,16 +261,16 @@ REQUIRE BAG
 \ So a section can comfortably be removed using the regular removal
 \ mechanism for bags. A newly introduced section automatically falls
 \ into place, because of the conditions regarding the start addresses.
-: CLEAN-UP-SECTIONS  SECTION-LABELS LAB-BOUNDS SWAP 1+ ?DO I KILL-OVERLAP LOOP ;
+: CLEANUP-SECTIONS SECTION-LABELS
+    2 LAB-UPB 2DUP <= IF DO I .S KILL-OVERLAP -1 +LOOP THEN ;
 
 \ Fill any holes with character sections.
-: PLUG-HOLES  SECTION-LABELS LAB-BOUNDS SWAP 1+ ?DO I FILL-GAP LOOP   SORT-LABELS ;
-
+: PLUG-HOLES  SECTION-LABELS LAB-UPB 1+ 2 ?DO I .S FILL-GAP LOOP SORT-LABELS ;
 
 \ ------------------------------------------------------------------------
 ASSEMBLER
 
-\ Jump targets that are starting points for further crawling.
+        \ Jump targets that are starting points for further crawling.
 \ Adding and removing from this bag ressembles a recursive action.
 \ Recursion will not do here! This is because sections are not added
 \ until the end is detected.
