@@ -5,6 +5,8 @@
 
 : \   ^J WORD DROP ; IMMEDIATE
 
+: ALIAS CREATE , DOES> @ EXECUTE ;
+
 ( --assembler_postit_fixup_1 ) \ A2oct21 AvdH
 \ REQUIRE ASSEMBLER
 \ ASSEMBLER DEFINITIONS
@@ -40,7 +42,6 @@ VARIABLE ISS ( Instruction start )
 
 \ PREVIOUS
 
-\ REQUIRE ALIAS
 
 ( ############## 8089 ASSEMBLER ADDITIONS ############################# )
 
@@ -49,13 +50,13 @@ HEX
 : W,   DUP 8 RSHIFT C,   C, ;
 
 ( ############## 6809 ASSEMBLER PROPER ################################ )
-: #,     C, ; \ C,   ALIAS #,     ( immediate byte data)
-: ##,    W, ; \ W,   ALIAS ##,    ( immediate data : cell)
-: CO,    C, ; \ C,   ALIAS CO,    ( address: byte offset)
-: WO,    W, ; \ W,   ALIAS WO,    ( cell: address or offset)
-: DO,    C, ; \ C,   ALIAS DO,    ( direct page offset )
-: E,     W, ; \ W,   ALIAS E,     ( extended address )
-: STACK, C, ; \ C,   ALIAS STACK, ( what to push or pop)
+' C,   ALIAS #,     ( immediate byte data)
+' W,   ALIAS ##,    ( immediate data : cell)
+' C,   ALIAS CO,    ( address: byte offset)
+' W,   ALIAS WO,    ( cell: address or offset)
+' C,   ALIAS DO,    ( direct page offset )
+' W,   ALIAS E,     ( extended address )
+' C,   ALIAS STACK, ( what to push or pop)
 
 \ Adressing modes go here
 ( 30 ) 00 1FI #|                  ( 30 ) 00 1FI A|
@@ -65,7 +66,7 @@ HEX
 
 
 ( --------------- Handling of the index byte. ------------------------- )
-: (|#,) DFI ;  \ 'DFI ALIAS (|#,)    \ Incorporate 5 bit unsigned DATA.
+' DFI ALIAS (|#,)    \ Incorporate 5 bit unsigned DATA.
 
 \ Incorporate signed DATA. Cut off negative values at 5 bits.
 : |#, DUP -10 +10 WITHIN 0= ABORT" offset > 5 bits"  1F AND   (|#,) ;
