@@ -619,9 +619,9 @@ test.bin : cidis cias test.asm test.cul
 	rcsdiff -r$(RCSVERSION) test.bin
 	rcsdiff -r$(RCSVERSION) test2.asm
 
-lina405.asm : cidis lina405 lina405equ.cul lina405.cul lina405.asm.cmp
+lina405.asm : cidis lina405 lina405equ.cul lina405.cul
 	cidis lina405 lina405.cul| sed -e 's/. DROP-THIS//' >$@
-	cias lina405.asm lina405.cmp
+	cias lina405.asm lina405
 	rcsdiff -r$(RCSVERSION) lina405.asm
 	rcsdiff -r$(RCSVERSION) lina405
 
