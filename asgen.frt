@@ -219,15 +219,15 @@ HEX
 : >CNT %>BODY 4 CELLS + ;   ( `HERE' advances with count )
 : >DIS %>BODY 5 CELLS + ; ( disassembler only for COMMA , 0 -> default  )
 
-( Adjust `HERE' for actual instruction length after `DO-POST' did `,' )
-: CORRECT,- ISL @   1 CELLS -  AS-ALLOT ;
+( Assemble INSTRUCTION for ``ISL'' bytes. ls byte first.                )
+: assemble, ISL @ 0 DO lsbyte, LOOP DROP ;
 : !POSTIT  AS-HERE ISS !  0 OLDCOMMA ! ;  ( Initialise in behalf of postit )
 ( Bookkeeping for a postit using a pointer to the BIBYBA )
 ( information, can fake a postit in disassembling too                   )
 : TALLY:,   @+ TALLY-BI !  @+ TALLY-BY !   @+ TALLY-BA OR!U   @ ISL ! ;
 ( Post the instruction using DATA. )
 : POSTIT   CHECK26   !TALLY   !POSTIT
-    @+ AS-,   TALLY:,   CORRECT,- ;
+    @+ >R   TALLY:,   R> assemble, ;
 ( Define an instruction by BA BY BI and the OPCODE                      )
 ( For 1 2 3 and 4 byte opcodes.                                         )
 IS-A IS-1PI : 1PI  CHECK33 CREATE-- , , , , 1 , DOES> REMEMBER POSTIT ;
