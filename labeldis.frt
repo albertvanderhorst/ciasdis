@@ -165,16 +165,15 @@ VARIABLE LABEL-CACHE    \ Index of next label.
 \ Contains equ labels, i.e. classes as associate with ``LABEL''
 MAX-LABEL '.PAY-DEA '.EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
 
-\ Generate a equ label at (target) ADDRESS with "NAME", this can be
+\ Generate a equ label at (target) ADDRESS with NAME, this can be
 \ any symbolic constant in fact.
 \ The payload is the dea of a constant leaving that address.
-: LABEL   EQU-LABELS   DUP LAB+!   CONSTANT   LATEST LAB+! ;
-
-\ Generate a equ label at (target) ADDRESS with NAME. Like ``LABEL''.
 : LABELED   POSTFIX CONSTANT   EQU-LABELS   LATEST DUP EXECUTE LAB+! LAB+! ;
 
-'LABEL ALIAS EQU
+\ Generate a equ label at (target) ADDRESS with "NAME". Like ``LABEL''.
+: LABEL   (WORD) LABELED ;
 
+'LABEL ALIAS EQU
 
 \ For host ADDRESS return an associated equ LABEL or 0.
 \ CAVEAT: if there are more than one label for the same addres,
