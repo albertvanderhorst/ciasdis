@@ -155,15 +155,13 @@ NORMAL-DISASSEMBLY
 \ If section labels was sorted, it remains so.
 : INSERT-SECTION   OVER SECTION-LABELS WHERE-LABEL >R
     REQUIRED-XT 'CR+LABEL ANON-SECTION   R@ ROLL-LABEL .LABELS
-    R> COLLAPSE(I1) ;
+    R> COLLAPSE(I1) .LABELS ;
 
 \ The following are auxiliary words for `` KNOWN-CODE? '' mainly.
 \ For all those section labels must be current and sorted.
 \ Prepend `` SECTION-LABELS '' if you want to use the auxiliary words.
 
 \ For ADDRESS : "it IS in a current code section"
-\ FIXME: if the jumps are not to the same type of disassembly section
-\ this definitely signals a problem. Now it is ignored.
 : IN-CURRENT-CODE?   DIS-START DIS-END WITHIN   DIS-XT REQUIRED-XT =   AND ;
 
 \ For ADDRESS and section number N: "address SITS in code section n"
@@ -176,7 +174,7 @@ NORMAL-DISASSEMBLY
             1- IN-CODE-N? THEN THEN ;
 
 \ For ADDRESS: "It IS known code, according to ``SECTION-LABELS''".
-: KNOWN-CODE?   SECTION-LABELS DUP FIND-LABEL DUP IF IN-CODE? ELSE 2DROP 0 THEN ;
+: KNOWN-CODE?   SECTION-LABELS DUP WHERE-LABEL LAB-UPB MIN IN-CODE? ;
 
 \ For ADDRESS : "it IS in a current code section"
 : IN-CODE-SPACE?   TARGET-START TARGET-END WITHIN ;
@@ -203,7 +201,7 @@ NORMAL-DISASSEMBLY
   CR ." STARTERS:" STARTERS .BAG CR ;
 
 \ Analyse code from ADDRESS , unless already known.
-: ?CRAWL-ONE? DUP KNOWN-CODE? 0= IF CRAWL-ONE _ THEN DROP ;
+: ?CRAWL-ONE? DUP KNOWN-CODE? .S 0= IF CRAWL-ONE _ THEN DROP ;
 
 \ Crawl through code from all points in ``STARTERS''.
 : (CRAWL)   BEGIN STARTERS BAG? WHILE STARTERS BAG@- ?CRAWL-ONE? REPEAT ;
