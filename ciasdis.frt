@@ -52,7 +52,6 @@ REQUIRE DUMP
 \ Perform the action of the program as per the spec's of ``cidis''
 : cidis   1 ARG[] FETCHED TARGET-DIS CONSULTED ;
 
-
 \ Restore all revectoring done while compiling to stand alone.
 : RESTORE-ALL  'ERROR RESTORED     'INCLUDED RESTORED      'ABORT RESTORED ;
 
@@ -61,5 +60,8 @@ REQUIRE DUMP
     \ second argument still obligatory for the moment.
     ARGC ( 2) 3 4 WITHIN 0= 13 ?ERROR ;
 
+\ For STRING: "It CONTAINS a `d' or a `D' "
+: CONTAINS-D?    2DUP &D $I >R  &d $I R>  OR ;
+
 \ The name determines what to do.
-: MAIN   RESTORE-ALL  HANDLE-ARG   0 ARG[] &d $I IF cidis ELSE cias THEN ;
+: MAIN   RESTORE-ALL  HANDLE-ARG   0 ARG[] CONTAINS-D? IF cidis ELSE cias THEN ;
