@@ -8,7 +8,7 @@ BITS-32
 \ Here it all starts
 \ Fasten Your Seat Belts (tm)   
 ( 0000,04FE )   :START    CLD, \ First instruction
-( 0000,04FF )                  MOV, X| T| DI'| MEM| XXX L, 
+( 0000,04FF )   :L0000,04FF    MOV, X| T| DI'| MEM| XXX L, 
 ( 0000,0505 )   :QQQ    POP|ES, 
 ( 0000,0506 )                  ADD, B| F| AL'| ZO| [SI] 
 ( 0000,0508 )                  MOV, X| T| DI'| MEM| XXX L, 
@@ -22,7 +22,7 @@ BITS-32
 ( 0000,051B )                 dw 0001 0003 0043 0041 0041 0050
 
 ( 0000,0527 )                 dl 0000,0001  0000,0003  0000,0043  0000,0041 
-( 0000,0537 )                 dl 0000,0041  0000,0050 
+( 0000,0537 )                 dl 0000,0041  L0000,04FF 
 
 \ XXX is a target for backward jumps:   
 ( 0000,053F )   :XXX    MOV, X| T| DI'| MEM| QQQ L, \   Move a xell to register DI from memory at QQQ
