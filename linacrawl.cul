@@ -23,9 +23,17 @@ CREATE NAME-BUFFER 256 ALLOT
 \ ADDRESS points to a valid name. Add a label to address the name.
 : ADD-NAME-LABEL   DUP th $@ >N_ LABELED ;
 
+\ ADDRESS points to a valid dea. Add a label to address the dea.
+\ Assume that just before the dea's name has been analysed.
+: ADD-DEA-LABEL   &T NAME-BUFFER CELL+ C!  NAME-BUFFER $@ LABELED ;
+
 \ ADDRESS points to a valid name.
 \ Add an anonymous section to disassemble the name.
 : ADD-NAME-SECTION   DUP L@ hALIGN OVER + 4 + -d$- ;
+
+\ ADDRESS points to a dea.
+\ Add an anonymous section to disassemble the dea.
+: ADD-DEA-SECTION   DUP 14 + -dl- ;
 
 \ Add the information that ADDRESS is a nfa.
 : IS-A-NAME L@ DUP IF DUP ADD-NAME-LABEL ADD-NAME-SECTION _ THEN DROP ;
@@ -34,12 +42,12 @@ CREATE NAME-BUFFER 256 ALLOT
 \ : IS-NAME H. TARGET>HOST $@ TYPE "IS A NAME THINGY" TYPE CR ;
 
 \ Accumulate the information that DEA is a dea.
-: IS-A-DEA    10 + IS-A-NAME ;
+: IS-A-DEA   DUP 10 + IS-A-NAME   DUP ADD-DEA-SECTION   ADD-DEA-LABEL ;
 
 \     DUP L@ DUP IS-DOCOL? IF DROP DUP 4 + L@ IS-HIGH-LEVEL ELSE CRAWL THEN
 \     16 + L@ IS-A-NAME ;
 
-\ Accumulate the information from DEA as a wid.
+\ Accumulate the information from DEA as a wid, follow the link field.
 : IS-A-WID BEGIN DUP IS-A-DEA 0C + L@ DUP 0= UNTIL DROP ;
 
 last_dea IS-A-WID
