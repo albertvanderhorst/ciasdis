@@ -1,7 +1,8 @@
 BITS-32
 8048000  ORG
 
-0000,1163 EQU filesz
+INCLUDE rf751equ.cul
+
 ( 0804,8000 )   :e_ident   d$ 7F "ELF" 1
 ( 0804,8005 )                 d$ 1 1 0 0 0 0 0 0 0 0 0
 ( 0804,8010 )   :e_type   dw 0002
@@ -20,7 +21,7 @@ BITS-32
 ( 0804,8030 )   :e_shnum   dw 0000
 ( 0804,8032 )   :e_shstrndx   dw 0000
 
-( 0804,8034 )   :e_headerend   dl 1
+( 0804,8034 )   :p_type   dl 1
 ( 0804,8038 )   :p_offset   dl 54
 ( 0804,803C )   :p_vaddr   dl p_headerend
 ( 0804,8040 )   :p_paddr   dl p_headerend
@@ -29,7 +30,8 @@ BITS-32
 ( 0804,804C )   :p_flags   dl 7
 ( 0804,8050 )   :p_align   dl 1000
 
-( 0804,8054 )   :p_headerend    CALL, L0804,8191 RL,
+( 0804,8054 )   :p_headerend
+( 0804,8054 )   :filest         CALL, L0804,8191 RL,
 ( 0804,8059 )                  CALL, L0804,81B0 RL,
 ( 0804,805E )   :H_emit
 
@@ -225,7 +227,7 @@ BITS-32
 ( 0804,819B )                  MOVI|XR, AX| retroforth_f IL,
 ( 0804,81A0 )                  SUBSI, R| SI| 4  IS,
 ( 0804,81A3 )                  MOV, X| F| AX'| ZO| [SI]
-( 0804,81A5 )                  MOVI|XR, AX| 09E0 IL,
+( 0804,81A5 )                  MOVI|XR, AX| retrofilesz IL,
 ( 0804,81AA )                  CALL, X_eval RL,
 ( 0804,81AF )                  RET,
 ( 0804,81B0 )   :L0804,81B0    CALL, L0804,82DA RL,
@@ -501,12 +503,12 @@ BITS-32
 ( 0804,847F )                  POP|X, CX|
 ( 0804,8480 )                  MOVI|XR, AX| dovar IL,
 ( 0804,8485 )                  JMP, X_compile RL,
-( 0804,848A )   :H_does>
+( 0804,848A )   :H_mdoes>
 
-( 0804,848A )   :H_does>   dl 0   X_does>
+( 0804,848A )   :H_mdoes>   dl 0   X_mdoes>
 
-( 0804,8492 )   :N_does>   d$ 5 "does>"
-( 0804,8498 )   :X_does>    SUBSI, R| SI| 4  IS,
+( 0804,8492 )   :N_mdoes>   d$ 5 "does>"
+( 0804,8498 )   :X_mdoes>    SUBSI, R| SI| 4  IS,
 ( 0804,849B )                  MOV, X| F| AX'| ZO| [SI]
 ( 0804,849D )                  MOVI|XR, AX| L0804,84B6 IL,
 ( 0804,84A2 )                  CALL, X_compile RL,
@@ -577,19 +579,19 @@ BITS-32
 ( 0804,856B )                  CALL, X_, RL,
 ( 0804,8570 )                  MOVI, X| MEM| tail L, 0  IL,
 ( 0804,857A )                  RET,
-( 0804,857B )   :H_[
+( 0804,857B )   :H_m[
 
-( 0804,857B )   :H_[   dl H_does>  X_[
+( 0804,857B )   :H_m[   dl H_mdoes>  X_m[
 
-( 0804,8583 )   :N_[   d$ 1 &[
-( 0804,8585 )   :X_[    ADDSI, R| SP| 4  IS,
+( 0804,8583 )   :N_m[   d$ 1 &[
+( 0804,8585 )   :X_m[    ADDSI, R| SP| 4  IS,
 ( 0804,8588 )                  RET,
-( 0804,8589 )   :H_;;
+( 0804,8589 )   :H_m;;
 
-( 0804,8589 )   :H_;;   dl H_[  X_;;
+( 0804,8589 )   :H_m;;   dl H_m[  X_m;;
 
-( 0804,8591 )   :N_;;   d$ 2 ";;"
-( 0804,8594 )   :X_;;    MOV, X| T| DX'| MEM| V_h0 L,
+( 0804,8591 )   :N_m;;   d$ 2 ";;"
+( 0804,8594 )   :X_m;;    MOV, X| T| DX'| MEM| V_h0 L,
 ( 0804,859A )                  SUBSI, R| DX| 5  IS,
 ( 0804,859D )                  CMPI, B| ZO| [DX] 0E8  IB,
 ( 0804,85A0 )                  J, Z| N| L0804,85AE RB,
@@ -600,13 +602,13 @@ BITS-32
 ( 0804,85AE )   :L0804,85AE    MOVI, B| BO| [DX] 5  B, 0C3  IB,
 ( 0804,85B2 )                  INC, X| MEM| V_h0 L,
 ( 0804,85B8 )                  RET,
-( 0804,85B9 )   :H_;
+( 0804,85B9 )   :H_m;
 
-( 0804,85B9 )   :H_;   dl H_;;  X_;
+( 0804,85B9 )   :H_m;   dl H_m;;  X_m;
 
-( 0804,85C1 )   :N_;   d$ 1 &;
-( 0804,85C3 )   :X_;    CALL, X_;; RL,
-( 0804,85C8 )                  JMPS, X_[ RB,
+( 0804,85C1 )   :N_m;   d$ 1 &;
+( 0804,85C3 )   :X_m;    CALL, X_m;; RL,
+( 0804,85C8 )                  JMPS, X_m[ RB,
 ( 0804,85CA )   :H_:
 
 ( 0804,85CA )   :H_:   dl H_compile  X_:
@@ -615,12 +617,12 @@ BITS-32
 ( 0804,85D4 )   :X_:    CALL, X_create RL,
 ( 0804,85D9 )                  SUBSI, MEM| V_h0 L, 5  IS,
 ( 0804,85E0 )                  JMP, X_] RL,
-( 0804,85E5 )   :last_dea_literal
+( 0804,85E5 )   :H_mliteral
 
-( 0804,85E5 )   :last_dea_literal   dl H_;  X_literal
+( 0804,85E5 )   :H_mliteral   dl H_m;  X_mliteral
 
-( 0804,85ED )   :N_literal   d$ 7 "literal"
-( 0804,85F5 )   :X_literal    SUBSI, R| SI| 4  IS,
+( 0804,85ED )   :N_mliteral   d$ 7 "literal"
+( 0804,85F5 )   :X_mliteral    SUBSI, R| SI| 4  IS,
 ( 0804,85F8 )                  MOV, X| F| AX'| ZO| [SI]
 ( 0804,85FA )                  MOVI|XR, AX| L0804,840E IL,
 ( 0804,85FF )                  CALL, X_compile RL,
@@ -789,13 +791,15 @@ BITS-32
 ( 0804,8799 )   :V_d0
 
 ( 0804,8799 )   :V_d0   dl d0
-( 0804,879D )   :last_dea_base   dl H_d0  X_base
+
+( 0804,879D )   :H_base   dl H_d0  X_base
 
 ( 0804,87A5 )   :N_base   d$ 4 "base"
 ( 0804,87AA )   :X_base    CALL, dovar RL,
 ( 0804,87AF )   :V_base
 
 ( 0804,87AF )   :V_base   dl 0A
+
 ( 0804,87B3 )   :tail   dl 0  \   Allow tail-calls?
 ( 0804,87B7 )   :buffer   dl 0  \   Buffer (for ports to use as needed)
 ( 0804,87BB )   :source   dl 0  \   Evaluate from RAM or KBD
@@ -805,8 +809,8 @@ BITS-32
 ( 0804,87C7 )   :bases   db 10 2  8 FF \   $hex %bin &oct 'ascii
 
 ( 0804,87CB )   :last   dl flast \   Last word in dictionary
-( 0804,87CF )   :flast   dl last_dea_base \   Last word in 'forth'
-( 0804,87D3 )   :mlast   dl last_dea_literal
+( 0804,87CF )   :flast   dl H_base \   Last word in 'forth'
+( 0804,87D3 )   :mlast   dl H_mliteral
 \   Last word in 'macro'
 ( 0804,87D7 )   :retroforth_f   d$ " forth" ^J
 ( 0804,87DE )                 d$ ": swap [ $0687 2, ] ;" ^J
@@ -905,13 +909,6 @@ BITS-32
 ( 0804,9131 )                 d$ " forth" ^J
 ( 0804,9138 )                 d$ "here s0 ! 4096 allot" ^J
 ( 0804,914D )                 d$ ": version# 7 5 1 ;" ^J
-( 0804,9160 )                 d$ ": ."
-( 0804,9163 )   :_end   d$ "version s"" RetroForth "" type" ^J
+( 0804,9160 )                 d$ ": .version s"" RetroForth "" type" ^J
 ( 0804,9180 )                 d$ "  version# rot . del '. emit swap . del '. emit . cr ;" ^J
-
-0804,91B7  DUP EQU tib          DUP COMMENT:    Text Input Buffer (1k)
-   400 +                        DUP COMMENT:    Stack (2k normal) \ A total of
-   800 +   DUP EQU s0           DUP COMMENT:    Stack (2k below)  / 4k for the stack
-   800 +   DUP EQU d0           DUP COMMENT:    Dictionary (128k)
-2,0000 +   DUP EQU dictend
-DROP
+:_end
