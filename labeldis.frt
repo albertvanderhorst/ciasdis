@@ -32,7 +32,7 @@ REQUIRE struct
 
 \ Define a structure for label-like things of length N.
 \ A label-like thing is two cells: address and a payload.
-1 'DROP \ Dummy printer, dummy length
+1 'DROP 'DROP \ Dummy decompiler, printer, length.
 struct LABELSTRUCT
   F: DECOMP , FDOES> @ EXECUTE ;        \ (Re)generate source for INDEX.
   F: .PAY , FDOES> @ EXECUTE ;          \ Print payload
@@ -102,7 +102,8 @@ VARIABLE CONT
 : L<    LABELS[] @   CONT @   < ;
 
 
-\ Find the INDEX where ADDRESS belongs in a sorted array.
+\ Find where ADDRESS belongs in a sorted array. Return the INDEX.
+\ If address is already present, its index is returned.
 \ This may be outside, if it is larger than any.
 : WHERE-LABEL   CONT !   LAB-BOUNDS 1+   'L<   BIN-SEARCH   ;
 
@@ -112,7 +113,7 @@ VARIABLE LABEL-CACHE    \ Index of next label.
 \ Note ``BIN-SEARCH'' returns the non-inclusive upper bound if not found.
 : FIND-LABEL   WHERE-LABEL   DUP LAB-UPB 1+ <> AND    DUP LABEL-CACHE ! ;
 
-\ Find ADDRESS in the label table. Return DEA of an exact
+\ Find ADDRESS in the label table. Return ADDRESS of an exact
 \ matching label or zero if not found.
 : >LABEL   FIND-LABEL DUP IF LABELS[]  DUP @  CONT @ - IF DROP 0 THEN THEN ;
 
