@@ -231,7 +231,11 @@ VARIABLE COMMENT:-TO-BE
 \ Start a new line, with printing the decompiled ADDRESS as seen
 : CR+ADDRESS CR .TARGET-ADDRESS ;
 
-: CR+db   DUP =EQU-LABEL IF CR+ADDRESS  ADORN-WITH-LABEL "  db" TYPE _ THEN DROP ;
+VARIABLE NEXT-CUT       \ Where to separate db etc. in chunks.
+: NEXT-CUT?   NEXT-CUT @ =  DUP IF 2 NEXT-CUT +! THEN ;
+
+: CR+db   DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF
+     CR+ADDRESS  ADORN-WITH-LABEL "  db" TYPE _ THEN DROP ;
 : CR+dw   CR+ADDRESS  ADORN-WITH-LABEL "  dw" TYPE ;
 : CR+dl   CR+ADDRESS  ADORN-WITH-LABEL "  dl" TYPE ;
 : CR+LABEL   CR+ADDRESS ADORN-WITH-LABEL ;
@@ -284,7 +288,7 @@ endstruct
 : (DUMP-B)   DO I DUP ADORN-ADDRESS C@ 3 .R LOOP CR ;
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 adorned with labels.
-: DUMP-B   TARGET>HOST SWAP TARGET>HOST  (DUMP-B) ;
+: DUMP-B   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-B) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
 : -db:    'DUMP-B   'CR+db SECTION ;
