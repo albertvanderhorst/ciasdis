@@ -338,7 +338,8 @@ testlinux : $(TESTLINUX) ci86.linux.rawtest ciforthc forth.lab ;
 	sed $(TEMPFILE) -e '1,/Split here for test/d' >$@.2
 	rm $(TEMPFILE)
 
-ciasdis : $(ASSRC) ; lina -c ciasdis.frt
+# Preliminary until it is clear whether we want other disassemblers.
+ciasdis : $(ASSRC) asi586.frt ; lina -c ciasdis.frt
 cias : ciasdis ; ln -f ciasdis cias
 cidis : ciasdis ; ln -f ciasdis cidis
 
