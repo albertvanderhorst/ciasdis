@@ -218,7 +218,7 @@ _ 1  0000 0,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 (   Handle bad bits by hand, prevent resetting of ``TALLY-BA'' which    )
 (   could switch 16/32 bits modes.                                      )
 (   0900 are the bad bits conflicting with ~SIB,                        )
-    CHECK32 TALLY-BA @ 0900 INVERT AND TALLY-BA !   -1 INST-PREFIX? !
+    CHECK32 TALLY-BA @ 0900 INVERT AND TALLY-BA !   'NOOP BA-XT !
     ~SIB,   TALLY-BY !   ;
 
  ' (SIB),,   % SIB,, >DATA !   ( Fill in deferred data creation action  )
@@ -245,14 +245,14 @@ _ 1  0000 0,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 : [BX   ~SIB| SIB,, [BX ;       : [DI   ~SIB| SIB,, [DI ;
 : [MEM  ~SIB| SIB,, [MEM ;
 
-( Add to some prefixes a change in the information what instructions    )
-( are allowed in ``TALLY-BA''. Its reset must be suppressed.            )
+( Fill in the transformation to TALLY-BA for `` AS:, OS:, ''            )
+( This flags them as prefixes.                                          )
 ( The toggle inverts the 16 and 32 bits at the same time.               )
-: AS:,   AS:,   TALLY-BA  C000 TOGGLE   -1 INST-PREFIX? ! ;
-: OS:,   OS:,   TALLY-BA 30000 TOGGLE   -1 INST-PREFIX? ! ;
+: AS16<->32   TALLY-BA  C000 TOGGLE ;  LATEST 'AS:, >PRF !
+: OS16<->32   TALLY-BA 30000 TOGGLE ;  LATEST 'OS:, >PRF !
 
 ( ############## 80386 ASSEMBLER PROPER END ########################### )
-( You may want to use these always instead of (RB,)
+( You may want to use these always instead of (Rx,)
     : RB, _AP_ 1 + - (RB,) ;    ' .COMMA-SIGNED   % (RB,) >DIS !
     : RW, _AP_ 2 + - (RW,) ;    ' .COMMA-SIGNED   % (RW,) >DIS !
     : RL, _AP_ 4 + - (RL,) ;    ' .COMMA-SIGNED   % (RL,) >DIS !

@@ -90,6 +90,10 @@
 ( - commaing when `TALLY-BI' still contains bits up                     )
 ( - setting `TALLY-BA' bad                                              )
 
+( A prefix PostIt has its prefix filled in with an execution token.     )
+( This execution token represents the action performed on the TALLY-BA  )
+( flags, that is used instead of resetting it.                          )
+
 ( ############### PART I ASSEMBLER #################################### )
 ( MAYBE NOT PRESENT UTILITIES                                           )
 REQUIRE !CSP         \ To counter design error to eliminate it.
@@ -178,13 +182,14 @@ VARIABLE BA-DEFAULT    0 BA-DEFAULT !
 VARIABLE OLDCOMMA ( Previous comma, or zero)
 VARIABLE ISS  ( Start of current instruction)
 VARIABLE ISL  ( Lenghth of current instruction)
-VARIABLE INST-PREFIX?  ( Don't reset BA, between prefix and instruction )
+( To be executed instead of reset BA between prefix and instruction )
+VARIABLE BA-XT
 ( Reset ``BA'' to default for begin instruction, unless prefix.         )
-: RESET-BAD   INST-PREFIX? @ 0= IF BA-DEFAULT @ TALLY-BA ! THEN
-   0 INST-PREFIX? ! ;
+: RESET-BAD   BA-XT @ DUP IF EXECUTE ELSE
+   DROP  BA-DEFAULT @ TALLY-BA ! THEN ;
 ( Initialise ``TALLY''                                                  )
 : !TALLY   0 TALLY-BI !   0 TALLY-BY !   RESET-BAD   0 OLDCOMMA ! ;
-   !TALLY
+   0 BA-XT !   !TALLY
 ( Return: instruction IS complete, or not started)
 : AT-REST? TALLY-BI @ 0=   TALLY-BY @ 0=  AND ;
 ( For N : it CONTAINS bad pairs)
@@ -238,22 +243,26 @@ HEX
 : >BA %>BODY  3 CELLS + ;                ( OR!U   OR!U      OR!U      )
 : >CNT %>BODY 4 CELLS + ;   ( `HERE' advances with count )
 : >DIS %>BODY 5 CELLS + ; ( disassembler only for COMMA , 0 -> default  )
+: >PRF %>BODY 5 CELLS + ; ( prefix flag, only for PI ,    0 -> default  )
 
 ( Assemble INSTRUCTION for ``ISL'' bytes. ls byte first.                )
 : assemble, ISL @ 0 DO lsbyte, LOOP DROP ;
 : !POSTIT  AS-HERE ISS !  0 OLDCOMMA ! ;  ( Initialise in behalf of postit )
 ( Bookkeeping for a postit using a pointer to the BIBYBA )
 ( information, can fake a postit in disassembling too                   )
-: TALLY:,   @+ TALLY-BI !  @+ TALLY-BY !   @+ TALLY-BA OR!U   @ ISL ! ;
+: TALLY:,   @+ TALLY-BI !  @+ TALLY-BY !   @+ TALLY-BA OR!U
+    @+ ISL !   @ BA-XT ! ;
 ( Post the instruction using DATA. )
 : POSTIT   CHECK26   !TALLY   !POSTIT
     @+ >R   TALLY:,   R> assemble, ;
+( Build an instruction given by BA BY BI the OPCODE and COUNT           )
+: BUILD-IP >R , , , , R> , 0 ( prefix) , ;
 ( Define an instruction by BA BY BI and the OPCODE                      )
 ( For 1 2 3 and 4 byte opcodes.                                         )
-IS-A IS-1PI : 1PI  CHECK33 CREATE-- , , , , 1 , DOES> REMEMBER POSTIT ;
-IS-A IS-2PI : 2PI  CHECK33 CREATE-- , , , , 2 , DOES> REMEMBER POSTIT ;
-IS-A IS-3PI : 3PI  CHECK33 CREATE-- , , , , 3 , DOES> REMEMBER POSTIT ;
-IS-A IS-4PI : 4PI  CHECK33 CREATE-- , , , , 4 , DOES> REMEMBER POSTIT ;
+IS-A IS-1PI : 1PI  CHECK33 CREATE--  1 BUILD-IP DOES> REMEMBER POSTIT ;
+IS-A IS-2PI : 2PI  CHECK33 CREATE--  2 BUILD-IP DOES> REMEMBER POSTIT ;
+IS-A IS-3PI : 3PI  CHECK33 CREATE--  3 BUILD-IP DOES> REMEMBER POSTIT ;
+IS-A IS-4PI : 4PI  CHECK33 CREATE--  4 BUILD-IP DOES> REMEMBER POSTIT ;
 ( For DEA : it REPRESENTS some kind of opcode.                          )
 : IS-PI  >R 0
     R@ IS-1PI OR  R@ IS-2PI OR  R@ IS-3PI OR   R@ IS-4PI OR
@@ -649,6 +658,7 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
     DUP VOCEND? RESULT? OR UNTIL DROP
     RESULT? IF
       .DISS     \ Advances pointer past commaers
+      LATEST-INSTRUCTION @ >PRF @ BA-XT !
       RDROP POINTER @
     ELSE
       R> SHOW-MEMORY
