@@ -60,6 +60,7 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 \ This applies to plain labels that are in fact fact constants.
 : .PAY-DEA  CELL+ @ ID. ;
 
+
 \ Print the addresses and payloads of the labels.
 : .LABELS  LABELS @+ SWAP ?DO I @ .  I .PAY CR 2 CELLS +LOOP ;
 
@@ -224,10 +225,11 @@ JOPI"
 'SECTOR ALIAS -DC-
 
 \ Disassemble from target ADDRESS1 to ADDRESS2.
-: D-R-T SWAP TARGET>HOST SWAP TARGET>HOST D-R ;
+: D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R ;
 
 \ Disassemble all those sectors as if they were code.
-: DISASSEMBLE-ALL  SECTOR-LABELS LABELS DO-BAG   I @ I CELL+ @ D-R-T   LOOP-BAG ;
+: DISASSEMBLE-ALL   SECTOR-LABELS
+    LABELS @+ SWAP ?DO I @ I CELL+ @ D-R-T 2 CELLS +LOOP ;
 
 \ ------------------- Generic again -------------------
 
@@ -253,7 +255,8 @@ JOPI"
 
 \ Disassemble the current program as stored in the ``CODE-BUFFER''.
 \ Using what is known about it.
-: DISASSEMBLE-TARGET   TARGET-START @ .  " ORG" TYPE CR   DISASSEMBLE-ALL ;
+: DISASSEMBLE-TARGET
+    TARGET-START @ . " ORG" TYPE CR   DISASSEMBLE-ALL   CP @ ADORN-ADDRESS CR ;
 
 \ Using (only) information from "file",
 \ disassemble the current program as stored in the ``CODE-BUFFER''.
