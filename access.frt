@@ -19,7 +19,7 @@ PREVIOUS
 
 \ If FLAG is not zero, output STRING on the error channel and exit
 \ with an error code of 2.
-: ?ABORT ROT IF ETYPE 2 EXIT-CODE ! BYE THEN ;
+: ?ABORT ROT IF ETYPE 2 EXIT-CODE ! BYE ELSE 2DROP THEN ;
 
 
 REQUIRE $=
