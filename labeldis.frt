@@ -186,8 +186,18 @@ MAX-LABEL '.PAY-DEA '.EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
 \ if any.
 : ADORN-WITH-LABEL   =EQU-LABEL .EQU-LABEL ;
 
+HEX FFFF0000 CONSTANT LARGE-NUMBER-MASK
+
+\ Prevent leading hex letter for NUMBER by printing a zero.
+: .0?   DUP 0A0 100 WITHIN SWAP 0A 10 WITHIN OR IF &0 EMIT THEN ;
+
+\ Print a NUMBER in hex in a smart way.
+: SMART.   DUP ABS 101 < IF DUP .0? . ELSE
+    LARGE-NUMBER-MASK OVER AND IF H. ELSE 0 4 (DH.) TYPE THEN THEN ;
+
+DECIMAL
 ( Print X as a symbolic label if possible, else as a number             )
-: .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP H. SPACE THEN ;
+: .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP SMART. SPACE THEN ;
 
 \D 12 LABEL AAP
 \D 5 LABEL NOOT
@@ -612,7 +622,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
     TARGET-START . " ORG" TYPE CR   DISASSEMBLE-ALL   ;
 
 \ i386 dependant, should somehow be separated out.
-: DISASSEMBLE-TARGET "BITS-32" TYPE CR  DISASSEMBLE-TARGET ;
+: DISASSEMBLE-TARGET "BITS-32" TYPE CR  DISASSEMBLE-TARGET CR  ;
 
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
