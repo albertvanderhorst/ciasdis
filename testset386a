@@ -1,291 +1,723 @@
 ASSEMBLER
 !TALLY
 HEX
-( As `DISASSEMBLE-RANGE' but forces an instruction to be SIB )
-: MY-DISASSEMBLE-RANGE
-    SWAP AS-POINTER !
-    BEGIN CR "~SIB, " TYPE '~SIB, FORCED-DISASSEMBLY !TALLY AS-POINTER @ OVER < 0= UNTIL
-    DROP
-;
-
-REQUIRE HIDE
-( The definitions available to the user are hiding the following: )
-HIDE [AX
-HIDE [SP
-HIDE [CX
-HIDE [BP
-HIDE [DX
-HIDE [SI
-HIDE [BX
-HIDE [DI
-HIDE [MEM
-: ~SIB, !TALLY ~SIB, ;
 
 10 AS-HERE 10 MOD - AS-ALLOT ( To get a nice DUMP)
-BITS-32
+\ BITS-32
 \ BA-DEFAULT 100 TOGGLE
 AS-HERE
-~SIB, [MEM +8* DI]    14 B,
-~SIB, [MEM +8* SI]    14 B,
-~SIB, [MEM +8* BP]    14 B,
-~SIB, [MEM +8* 0]     14 B,
-~SIB, [MEM +8* BX]    14 B,
-~SIB, [MEM +8* DX]    14 B,
-~SIB, [MEM +8* CX]    14 B,
-~SIB, [MEM +8* AX]    14 B,
-~SIB, [MEM +4* DI]    14 B,
-~SIB, [MEM +4* SI]    14 B,
-~SIB, [MEM +4* BP]    14 B,
-~SIB, [MEM +4* 0]     14 B,
-~SIB, [MEM +4* BX]    14 B,
-~SIB, [MEM +4* DX]    14 B,
-~SIB, [MEM +4* CX]    14 B,
-~SIB, [MEM +4* AX]    14 B,
-~SIB, [MEM +2* DI]    14 B,
-~SIB, [MEM +2* SI]    14 B,
-~SIB, [MEM +2* BP]    14 B,
-~SIB, [MEM +2* 0]     14 B,
-~SIB, [MEM +2* BX]    14 B,
-~SIB, [MEM +2* DX]    14 B,
-~SIB, [MEM +2* CX]    14 B,
-~SIB, [MEM +2* AX]    14 B,
-~SIB, [MEM +1* DI]    14 B,
-~SIB, [MEM +1* SI]    14 B,
-~SIB, [MEM +1* BP]    14 B,
-~SIB, [MEM +1* 0]     14 B,
-~SIB, [MEM +1* BX]    14 B,
-~SIB, [MEM +1* DX]    14 B,
-~SIB, [MEM +1* CX]    14 B,
-~SIB, [MEM +1* AX]    14 B,
-~SIB, [DI +8* DI]
-~SIB, [DI +8* SI]
-~SIB, [DI +8* BP]
-~SIB, [DI +8* 0]
-~SIB, [DI +8* BX]
-~SIB, [DI +8* DX]
-~SIB, [DI +8* CX]
-~SIB, [DI +8* AX]
-~SIB, [DI +4* DI]
-~SIB, [DI +4* SI]
-~SIB, [DI +4* BP]
-~SIB, [DI +4* 0]
-~SIB, [DI +4* BX]
-~SIB, [DI +4* DX]
-~SIB, [DI +4* CX]
-~SIB, [DI +4* AX]
-~SIB, [DI +2* DI]
-~SIB, [DI +2* SI]
-~SIB, [DI +2* BP]
-~SIB, [DI +2* 0]
-~SIB, [DI +2* BX]
-~SIB, [DI +2* DX]
-~SIB, [DI +2* CX]
-~SIB, [DI +2* AX]
-~SIB, [DI +1* DI]
-~SIB, [DI +1* SI]
-~SIB, [DI +1* BP]
-~SIB, [DI +1* 0]
-~SIB, [DI +1* BX]
-~SIB, [DI +1* DX]
-~SIB, [DI +1* CX]
-~SIB, [DI +1* AX]
-~SIB, [SI +8* DI]
-~SIB, [SI +8* SI]
-~SIB, [SI +8* BP]
-~SIB, [SI +8* 0]
-~SIB, [SI +8* BX]
-~SIB, [SI +8* DX]
-~SIB, [SI +8* CX]
-~SIB, [SI +8* AX]
-~SIB, [SI +4* DI]
-~SIB, [SI +4* SI]
-~SIB, [SI +4* BP]
-~SIB, [SI +4* 0]
-~SIB, [SI +4* BX]
-~SIB, [SI +4* DX]
-~SIB, [SI +4* CX]
-~SIB, [SI +4* AX]
-~SIB, [SI +2* DI]
-~SIB, [SI +2* SI]
-~SIB, [SI +2* BP]
-~SIB, [SI +2* 0]
-~SIB, [SI +2* BX]
-~SIB, [SI +2* DX]
-~SIB, [SI +2* CX]
-~SIB, [SI +2* AX]
-~SIB, [SI +1* DI]
-~SIB, [SI +1* SI]
-~SIB, [SI +1* BP]
-~SIB, [SI +1* 0]
-~SIB, [SI +1* BX]
-~SIB, [SI +1* DX]
-~SIB, [SI +1* CX]
-~SIB, [SI +1* AX]
-~SIB, [SP +8* DI]
-~SIB, [SP +8* SI]
-~SIB, [SP +8* BP]
-~SIB, [SP +8* 0]
-~SIB, [SP +8* BX]
-~SIB, [SP +8* DX]
-~SIB, [SP +8* CX]
-~SIB, [SP +8* AX]
-~SIB, [SP +4* DI]
-~SIB, [SP +4* SI]
-~SIB, [SP +4* BP]
-~SIB, [SP +4* 0]
-~SIB, [SP +4* BX]
-~SIB, [SP +4* DX]
-~SIB, [SP +4* CX]
-~SIB, [SP +4* AX]
-~SIB, [SP +2* DI]
-~SIB, [SP +2* SI]
-~SIB, [SP +2* BP]
-~SIB, [SP +2* 0]
-~SIB, [SP +2* BX]
-~SIB, [SP +2* DX]
-~SIB, [SP +2* CX]
-~SIB, [SP +2* AX]
-~SIB, [SP +1* DI]
-~SIB, [SP +1* SI]
-~SIB, [SP +1* BP]
-~SIB, [SP +1* 0]
-~SIB, [SP +1* BX]
-~SIB, [SP +1* DX]
-~SIB, [SP +1* CX]
-~SIB, [SP +1* AX]
-~SIB, [BX +8* DI]
-~SIB, [BX +8* SI]
-~SIB, [BX +8* BP]
-~SIB, [BX +8* 0]
-~SIB, [BX +8* BX]
-~SIB, [BX +8* DX]
-~SIB, [BX +8* CX]
-~SIB, [BX +8* AX]
-~SIB, [BX +4* DI]
-~SIB, [BX +4* SI]
-~SIB, [BX +4* BP]
-~SIB, [BX +4* 0]
-~SIB, [BX +4* BX]
-~SIB, [BX +4* DX]
-~SIB, [BX +4* CX]
-~SIB, [BX +4* AX]
-~SIB, [BX +2* DI]
-~SIB, [BX +2* SI]
-~SIB, [BX +2* BP]
-~SIB, [BX +2* 0]
-~SIB, [BX +2* BX]
-~SIB, [BX +2* DX]
-~SIB, [BX +2* CX]
-~SIB, [BX +2* AX]
-~SIB, [BX +1* DI]
-~SIB, [BX +1* SI]
-~SIB, [BX +1* BP]
-~SIB, [BX +1* 0]
-~SIB, [BX +1* BX]
-~SIB, [BX +1* DX]
-~SIB, [BX +1* CX]
-~SIB, [BX +1* AX]
-~SIB, [DX +8* DI]
-~SIB, [DX +8* SI]
-~SIB, [DX +8* BP]
-~SIB, [DX +8* 0]
-~SIB, [DX +8* BX]
-~SIB, [DX +8* DX]
-~SIB, [DX +8* CX]
-~SIB, [DX +8* AX]
-~SIB, [DX +4* DI]
-~SIB, [DX +4* SI]
-~SIB, [DX +4* BP]
-~SIB, [DX +4* 0]
-~SIB, [DX +4* BX]
-~SIB, [DX +4* DX]
-~SIB, [DX +4* CX]
-~SIB, [DX +4* AX]
-~SIB, [DX +2* DI]
-~SIB, [DX +2* SI]
-~SIB, [DX +2* BP]
-~SIB, [DX +2* 0]
-~SIB, [DX +2* BX]
-~SIB, [DX +2* DX]
-~SIB, [DX +2* CX]
-~SIB, [DX +2* AX]
-~SIB, [DX +1* DI]
-~SIB, [DX +1* SI]
-~SIB, [DX +1* BP]
-~SIB, [DX +1* 0]
-~SIB, [DX +1* BX]
-~SIB, [DX +1* DX]
-~SIB, [DX +1* CX]
-~SIB, [DX +1* AX]
-~SIB, [CX +8* DI]
-~SIB, [CX +8* SI]
-~SIB, [CX +8* BP]
-~SIB, [CX +8* 0]
-~SIB, [CX +8* BX]
-~SIB, [CX +8* DX]
-~SIB, [CX +8* CX]
-~SIB, [CX +8* AX]
-~SIB, [CX +4* DI]
-~SIB, [CX +4* SI]
-~SIB, [CX +4* BP]
-~SIB, [CX +4* 0]
-~SIB, [CX +4* BX]
-~SIB, [CX +4* DX]
-~SIB, [CX +4* CX]
-~SIB, [CX +4* AX]
-~SIB, [CX +2* DI]
-~SIB, [CX +2* SI]
-~SIB, [CX +2* BP]
-~SIB, [CX +2* 0]
-~SIB, [CX +2* BX]
-~SIB, [CX +2* DX]
-~SIB, [CX +2* CX]
-~SIB, [CX +2* AX]
-~SIB, [CX +1* DI]
-~SIB, [CX +1* SI]
-~SIB, [CX +1* BP]
-~SIB, [CX +1* 0]
-~SIB, [CX +1* BX]
-~SIB, [CX +1* DX]
-~SIB, [CX +1* CX]
-~SIB, [CX +1* AX]
-~SIB, [AX +8* DI]
-~SIB, [AX +8* SI]
-~SIB, [AX +8* BP]
-~SIB, [AX +8* 0]
-~SIB, [AX +8* BX]
-~SIB, [AX +8* DX]
-~SIB, [AX +8* CX]
-~SIB, [AX +8* AX]
-~SIB, [AX +4* DI]
-~SIB, [AX +4* SI]
-~SIB, [AX +4* BP]
-~SIB, [AX +4* 0]
-~SIB, [AX +4* BX]
-~SIB, [AX +4* DX]
-~SIB, [AX +4* CX]
-~SIB, [AX +4* AX]
-~SIB, [AX +2* DI]
-~SIB, [AX +2* SI]
-~SIB, [AX +2* BP]
-~SIB, [AX +2* 0]
-~SIB, [AX +2* BX]
-~SIB, [AX +2* DX]
-~SIB, [AX +2* CX]
-~SIB, [AX +2* AX]
-~SIB, [AX +1* DI]
-~SIB, [AX +1* SI]
-~SIB, [AX +1* BP]
-~SIB, [AX +1* 0]
-~SIB, [AX +1* BX]
-~SIB, [AX +1* DX]
-~SIB, [AX +1* CX]
-~SIB, [AX +1* AX]
+LEA, AX'| ZO| [MEM +8* DI]    14 L,
+LEA, AX'| ZO| [MEM +8* SI]    14 L,
+LEA, AX'| ZO| [MEM +8* BP]    14 L,
+LEA, AX'| ZO| [MEM +8* 0]     14 L,
+LEA, AX'| ZO| [MEM +8* BX]    14 L,
+LEA, AX'| ZO| [MEM +8* DX]    14 L,
+LEA, AX'| ZO| [MEM +8* CX]    14 L,
+LEA, AX'| ZO| [MEM +8* AX]    14 L,
+LEA, AX'| ZO| [MEM +4* DI]    14 L,
+LEA, AX'| ZO| [MEM +4* SI]    14 L,
+LEA, AX'| ZO| [MEM +4* BP]    14 L,
+LEA, AX'| ZO| [MEM +4* 0]     14 L,
+LEA, AX'| ZO| [MEM +4* BX]    14 L,
+LEA, AX'| ZO| [MEM +4* DX]    14 L,
+LEA, AX'| ZO| [MEM +4* CX]    14 L,
+LEA, AX'| ZO| [MEM +4* AX]    14 L,
+LEA, AX'| ZO| [MEM +2* DI]    14 L,
+LEA, AX'| ZO| [MEM +2* SI]    14 L,
+LEA, AX'| ZO| [MEM +2* BP]    14 L,
+LEA, AX'| ZO| [MEM +2* 0]     14 L,
+LEA, AX'| ZO| [MEM +2* BX]    14 L,
+LEA, AX'| ZO| [MEM +2* DX]    14 L,
+LEA, AX'| ZO| [MEM +2* CX]    14 L,
+LEA, AX'| ZO| [MEM +2* AX]    14 L,
+LEA, AX'| ZO| [MEM +1* DI]    14 L,
+LEA, AX'| ZO| [MEM +1* SI]    14 L,
+LEA, AX'| ZO| [MEM +1* BP]    14 L,
+LEA, AX'| ZO| [MEM +1* 0]     14 L,
+LEA, AX'| ZO| [MEM +1* BX]    14 L,
+LEA, AX'| ZO| [MEM +1* DX]    14 L,
+LEA, AX'| ZO| [MEM +1* CX]    14 L,
+LEA, AX'| ZO| [MEM +1* AX]    14 L,
+LEA, AX'| ZO| [DI +8* DI]
+LEA, AX'| ZO| [DI +8* SI]
+LEA, AX'| ZO| [DI +8* BP]
+LEA, AX'| ZO| [DI +8* 0]
+LEA, AX'| ZO| [DI +8* BX]
+LEA, AX'| ZO| [DI +8* DX]
+LEA, AX'| ZO| [DI +8* CX]
+LEA, AX'| ZO| [DI +8* AX]
+LEA, AX'| ZO| [DI +4* DI]
+LEA, AX'| ZO| [DI +4* SI]
+LEA, AX'| ZO| [DI +4* BP]
+LEA, AX'| ZO| [DI +4* 0]
+LEA, AX'| ZO| [DI +4* BX]
+LEA, AX'| ZO| [DI +4* DX]
+LEA, AX'| ZO| [DI +4* CX]
+LEA, AX'| ZO| [DI +4* AX]
+LEA, AX'| ZO| [DI +2* DI]
+LEA, AX'| ZO| [DI +2* SI]
+LEA, AX'| ZO| [DI +2* BP]
+LEA, AX'| ZO| [DI +2* 0]
+LEA, AX'| ZO| [DI +2* BX]
+LEA, AX'| ZO| [DI +2* DX]
+LEA, AX'| ZO| [DI +2* CX]
+LEA, AX'| ZO| [DI +2* AX]
+LEA, AX'| ZO| [DI +1* DI]
+LEA, AX'| ZO| [DI +1* SI]
+LEA, AX'| ZO| [DI +1* BP]
+LEA, AX'| ZO| [DI +1* 0]
+LEA, AX'| ZO| [DI +1* BX]
+LEA, AX'| ZO| [DI +1* DX]
+LEA, AX'| ZO| [DI +1* CX]
+LEA, AX'| ZO| [DI +1* AX]
+LEA, AX'| ZO| [SI +8* DI]
+LEA, AX'| ZO| [SI +8* SI]
+LEA, AX'| ZO| [SI +8* BP]
+LEA, AX'| ZO| [SI +8* 0]
+LEA, AX'| ZO| [SI +8* BX]
+LEA, AX'| ZO| [SI +8* DX]
+LEA, AX'| ZO| [SI +8* CX]
+LEA, AX'| ZO| [SI +8* AX]
+LEA, AX'| ZO| [SI +4* DI]
+LEA, AX'| ZO| [SI +4* SI]
+LEA, AX'| ZO| [SI +4* BP]
+LEA, AX'| ZO| [SI +4* 0]
+LEA, AX'| ZO| [SI +4* BX]
+LEA, AX'| ZO| [SI +4* DX]
+LEA, AX'| ZO| [SI +4* CX]
+LEA, AX'| ZO| [SI +4* AX]
+LEA, AX'| ZO| [SI +2* DI]
+LEA, AX'| ZO| [SI +2* SI]
+LEA, AX'| ZO| [SI +2* BP]
+LEA, AX'| ZO| [SI +2* 0]
+LEA, AX'| ZO| [SI +2* BX]
+LEA, AX'| ZO| [SI +2* DX]
+LEA, AX'| ZO| [SI +2* CX]
+LEA, AX'| ZO| [SI +2* AX]
+LEA, AX'| ZO| [SI +1* DI]
+LEA, AX'| ZO| [SI +1* SI]
+LEA, AX'| ZO| [SI +1* BP]
+LEA, AX'| ZO| [SI +1* 0]
+LEA, AX'| ZO| [SI +1* BX]
+LEA, AX'| ZO| [SI +1* DX]
+LEA, AX'| ZO| [SI +1* CX]
+LEA, AX'| ZO| [SI +1* AX]
+LEA, AX'| ZO| [SP +8* DI]
+LEA, AX'| ZO| [SP +8* SI]
+LEA, AX'| ZO| [SP +8* BP]
+LEA, AX'| ZO| [SP +8* 0]
+LEA, AX'| ZO| [SP +8* BX]
+LEA, AX'| ZO| [SP +8* DX]
+LEA, AX'| ZO| [SP +8* CX]
+LEA, AX'| ZO| [SP +8* AX]
+LEA, AX'| ZO| [SP +4* DI]
+LEA, AX'| ZO| [SP +4* SI]
+LEA, AX'| ZO| [SP +4* BP]
+LEA, AX'| ZO| [SP +4* 0]
+LEA, AX'| ZO| [SP +4* BX]
+LEA, AX'| ZO| [SP +4* DX]
+LEA, AX'| ZO| [SP +4* CX]
+LEA, AX'| ZO| [SP +4* AX]
+LEA, AX'| ZO| [SP +2* DI]
+LEA, AX'| ZO| [SP +2* SI]
+LEA, AX'| ZO| [SP +2* BP]
+LEA, AX'| ZO| [SP +2* 0]
+LEA, AX'| ZO| [SP +2* BX]
+LEA, AX'| ZO| [SP +2* DX]
+LEA, AX'| ZO| [SP +2* CX]
+LEA, AX'| ZO| [SP +2* AX]
+LEA, AX'| ZO| [SP +1* DI]
+LEA, AX'| ZO| [SP +1* SI]
+LEA, AX'| ZO| [SP +1* BP]
+LEA, AX'| ZO| [SP +1* 0]
+LEA, AX'| ZO| [SP +1* BX]
+LEA, AX'| ZO| [SP +1* DX]
+LEA, AX'| ZO| [SP +1* CX]
+LEA, AX'| ZO| [SP +1* AX]
+LEA, AX'| ZO| [BX +8* DI]
+LEA, AX'| ZO| [BX +8* SI]
+LEA, AX'| ZO| [BX +8* BP]
+LEA, AX'| ZO| [BX +8* 0]
+LEA, AX'| ZO| [BX +8* BX]
+LEA, AX'| ZO| [BX +8* DX]
+LEA, AX'| ZO| [BX +8* CX]
+LEA, AX'| ZO| [BX +8* AX]
+LEA, AX'| ZO| [BX +4* DI]
+LEA, AX'| ZO| [BX +4* SI]
+LEA, AX'| ZO| [BX +4* BP]
+LEA, AX'| ZO| [BX +4* 0]
+LEA, AX'| ZO| [BX +4* BX]
+LEA, AX'| ZO| [BX +4* DX]
+LEA, AX'| ZO| [BX +4* CX]
+LEA, AX'| ZO| [BX +4* AX]
+LEA, AX'| ZO| [BX +2* DI]
+LEA, AX'| ZO| [BX +2* SI]
+LEA, AX'| ZO| [BX +2* BP]
+LEA, AX'| ZO| [BX +2* 0]
+LEA, AX'| ZO| [BX +2* BX]
+LEA, AX'| ZO| [BX +2* DX]
+LEA, AX'| ZO| [BX +2* CX]
+LEA, AX'| ZO| [BX +2* AX]
+LEA, AX'| ZO| [BX +1* DI]
+LEA, AX'| ZO| [BX +1* SI]
+LEA, AX'| ZO| [BX +1* BP]
+LEA, AX'| ZO| [BX +1* 0]
+LEA, AX'| ZO| [BX +1* BX]
+LEA, AX'| ZO| [BX +1* DX]
+LEA, AX'| ZO| [BX +1* CX]
+LEA, AX'| ZO| [BX +1* AX]
+LEA, AX'| ZO| [DX +8* DI]
+LEA, AX'| ZO| [DX +8* SI]
+LEA, AX'| ZO| [DX +8* BP]
+LEA, AX'| ZO| [DX +8* 0]
+LEA, AX'| ZO| [DX +8* BX]
+LEA, AX'| ZO| [DX +8* DX]
+LEA, AX'| ZO| [DX +8* CX]
+LEA, AX'| ZO| [DX +8* AX]
+LEA, AX'| ZO| [DX +4* DI]
+LEA, AX'| ZO| [DX +4* SI]
+LEA, AX'| ZO| [DX +4* BP]
+LEA, AX'| ZO| [DX +4* 0]
+LEA, AX'| ZO| [DX +4* BX]
+LEA, AX'| ZO| [DX +4* DX]
+LEA, AX'| ZO| [DX +4* CX]
+LEA, AX'| ZO| [DX +4* AX]
+LEA, AX'| ZO| [DX +2* DI]
+LEA, AX'| ZO| [DX +2* SI]
+LEA, AX'| ZO| [DX +2* BP]
+LEA, AX'| ZO| [DX +2* 0]
+LEA, AX'| ZO| [DX +2* BX]
+LEA, AX'| ZO| [DX +2* DX]
+LEA, AX'| ZO| [DX +2* CX]
+LEA, AX'| ZO| [DX +2* AX]
+LEA, AX'| ZO| [DX +1* DI]
+LEA, AX'| ZO| [DX +1* SI]
+LEA, AX'| ZO| [DX +1* BP]
+LEA, AX'| ZO| [DX +1* 0]
+LEA, AX'| ZO| [DX +1* BX]
+LEA, AX'| ZO| [DX +1* DX]
+LEA, AX'| ZO| [DX +1* CX]
+LEA, AX'| ZO| [DX +1* AX]
+LEA, AX'| ZO| [CX +8* DI]
+LEA, AX'| ZO| [CX +8* SI]
+LEA, AX'| ZO| [CX +8* BP]
+LEA, AX'| ZO| [CX +8* 0]
+LEA, AX'| ZO| [CX +8* BX]
+LEA, AX'| ZO| [CX +8* DX]
+LEA, AX'| ZO| [CX +8* CX]
+LEA, AX'| ZO| [CX +8* AX]
+LEA, AX'| ZO| [CX +4* DI]
+LEA, AX'| ZO| [CX +4* SI]
+LEA, AX'| ZO| [CX +4* BP]
+LEA, AX'| ZO| [CX +4* 0]
+LEA, AX'| ZO| [CX +4* BX]
+LEA, AX'| ZO| [CX +4* DX]
+LEA, AX'| ZO| [CX +4* CX]
+LEA, AX'| ZO| [CX +4* AX]
+LEA, AX'| ZO| [CX +2* DI]
+LEA, AX'| ZO| [CX +2* SI]
+LEA, AX'| ZO| [CX +2* BP]
+LEA, AX'| ZO| [CX +2* 0]
+LEA, AX'| ZO| [CX +2* BX]
+LEA, AX'| ZO| [CX +2* DX]
+LEA, AX'| ZO| [CX +2* CX]
+LEA, AX'| ZO| [CX +2* AX]
+LEA, AX'| ZO| [CX +1* DI]
+LEA, AX'| ZO| [CX +1* SI]
+LEA, AX'| ZO| [CX +1* BP]
+LEA, AX'| ZO| [CX +1* 0]
+LEA, AX'| ZO| [CX +1* BX]
+LEA, AX'| ZO| [CX +1* DX]
+LEA, AX'| ZO| [CX +1* CX]
+LEA, AX'| ZO| [CX +1* AX]
+LEA, AX'| ZO| [AX +8* DI]
+LEA, AX'| ZO| [AX +8* SI]
+LEA, AX'| ZO| [AX +8* BP]
+LEA, AX'| ZO| [AX +8* 0]
+LEA, AX'| ZO| [AX +8* BX]
+LEA, AX'| ZO| [AX +8* DX]
+LEA, AX'| ZO| [AX +8* CX]
+LEA, AX'| ZO| [AX +8* AX]
+LEA, AX'| ZO| [AX +4* DI]
+LEA, AX'| ZO| [AX +4* SI]
+LEA, AX'| ZO| [AX +4* BP]
+LEA, AX'| ZO| [AX +4* 0]
+LEA, AX'| ZO| [AX +4* BX]
+LEA, AX'| ZO| [AX +4* DX]
+LEA, AX'| ZO| [AX +4* CX]
+LEA, AX'| ZO| [AX +4* AX]
+LEA, AX'| ZO| [AX +2* DI]
+LEA, AX'| ZO| [AX +2* SI]
+LEA, AX'| ZO| [AX +2* BP]
+LEA, AX'| ZO| [AX +2* 0]
+LEA, AX'| ZO| [AX +2* BX]
+LEA, AX'| ZO| [AX +2* DX]
+LEA, AX'| ZO| [AX +2* CX]
+LEA, AX'| ZO| [AX +2* AX]
+LEA, AX'| ZO| [AX +1* DI]
+LEA, AX'| ZO| [AX +1* SI]
+LEA, AX'| ZO| [AX +1* BP]
+LEA, AX'| ZO| [AX +1* 0]
+LEA, AX'| ZO| [AX +1* BX]
+LEA, AX'| ZO| [AX +1* DX]
+LEA, AX'| ZO| [AX +1* CX]
+LEA, AX'| ZO| [AX +1* AX]
+   LEA, AX'| BO|    [DI +8* DI]   12 B,
+   LEA, AX'| BO|    [DI +8* SI]   12 B,
+   LEA, AX'| BO|    [DI +8* BP]   12 B,
+   LEA, AX'| BO|    [DI +8* 0]    12 B,
+   LEA, AX'| BO|    [DI +8* BX]   12 B,
+   LEA, AX'| BO|    [DI +8* DX]   12 B,
+   LEA, AX'| BO|    [DI +8* CX]   12 B,
+   LEA, AX'| BO|    [DI +8* AX]   12 B,
+   LEA, AX'| BO|    [DI +4* DI]   12 B,
+   LEA, AX'| BO|    [DI +4* SI]   12 B,
+   LEA, AX'| BO|    [DI +4* BP]   12 B,
+   LEA, AX'| BO|    [DI +4* 0]    12 B,
+   LEA, AX'| BO|    [DI +4* BX]   12 B,
+   LEA, AX'| BO|    [DI +4* DX]   12 B,
+   LEA, AX'| BO|    [DI +4* CX]   12 B,
+   LEA, AX'| BO|    [DI +4* AX]   12 B,
+   LEA, AX'| BO|    [DI +2* DI]   12 B,
+   LEA, AX'| BO|    [DI +2* SI]   12 B,
+   LEA, AX'| BO|    [DI +2* BP]   12 B,
+   LEA, AX'| BO|    [DI +2* 0]    12 B,
+   LEA, AX'| BO|    [DI +2* BX]   12 B,
+   LEA, AX'| BO|    [DI +2* DX]   12 B,
+   LEA, AX'| BO|    [DI +2* CX]   12 B,
+   LEA, AX'| BO|    [DI +2* AX]   12 B,
+   LEA, AX'| BO|    [DI +1* DI]   12 B,
+   LEA, AX'| BO|    [DI +1* SI]   12 B,
+   LEA, AX'| BO|    [DI +1* BP]   12 B,
+   LEA, AX'| BO|    [DI +1* 0]    12 B,
+   LEA, AX'| BO|    [DI +1* BX]   12 B,
+   LEA, AX'| BO|    [DI +1* DX]   12 B,
+   LEA, AX'| BO|    [DI +1* CX]   12 B,
+   LEA, AX'| BO|    [DI +1* AX]   12 B,
+   LEA, AX'| BO|    [SI +8* DI]   12 B,
+   LEA, AX'| BO|    [SI +8* SI]   12 B,
+   LEA, AX'| BO|    [SI +8* BP]   12 B,
+   LEA, AX'| BO|    [SI +8* 0]    12 B,
+   LEA, AX'| BO|    [SI +8* BX]   12 B,
+   LEA, AX'| BO|    [SI +8* DX]   12 B,
+   LEA, AX'| BO|    [SI +8* CX]   12 B,
+   LEA, AX'| BO|    [SI +8* AX]   12 B,
+   LEA, AX'| BO|    [SI +4* DI]   12 B,
+   LEA, AX'| BO|    [SI +4* SI]   12 B,
+   LEA, AX'| BO|    [SI +4* BP]   12 B,
+   LEA, AX'| BO|    [SI +4* 0]    12 B,
+   LEA, AX'| BO|    [SI +4* BX]   12 B,
+   LEA, AX'| BO|    [SI +4* DX]   12 B,
+   LEA, AX'| BO|    [SI +4* CX]   12 B,
+   LEA, AX'| BO|    [SI +4* AX]   12 B,
+   LEA, AX'| BO|    [SI +2* DI]   12 B,
+   LEA, AX'| BO|    [SI +2* SI]   12 B,
+   LEA, AX'| BO|    [SI +2* BP]   12 B,
+   LEA, AX'| BO|    [SI +2* 0]    12 B,
+   LEA, AX'| BO|    [SI +2* BX]   12 B,
+   LEA, AX'| BO|    [SI +2* DX]   12 B,
+   LEA, AX'| BO|    [SI +2* CX]   12 B,
+   LEA, AX'| BO|    [SI +2* AX]   12 B,
+   LEA, AX'| BO|    [SI +1* DI]   12 B,
+   LEA, AX'| BO|    [SI +1* SI]   12 B,
+   LEA, AX'| BO|    [SI +1* BP]   12 B,
+   LEA, AX'| BO|    [SI +1* 0]    12 B,
+   LEA, AX'| BO|    [SI +1* BX]   12 B,
+   LEA, AX'| BO|    [SI +1* DX]   12 B,
+   LEA, AX'| BO|    [SI +1* CX]   12 B,
+   LEA, AX'| BO|    [SI +1* AX]   12 B,
+   LEA, AX'| BO|    [SP +8* DI]   12 B,
+   LEA, AX'| BO|    [SP +8* SI]   12 B,
+   LEA, AX'| BO|    [SP +8* BP]   12 B,
+   LEA, AX'| BO|    [SP +8* 0]    12 B,
+   LEA, AX'| BO|    [SP +8* BX]   12 B,
+   LEA, AX'| BO|    [SP +8* DX]   12 B,
+   LEA, AX'| BO|    [SP +8* CX]   12 B,
+   LEA, AX'| BO|    [SP +8* AX]   12 B,
+   LEA, AX'| BO|    [SP +4* DI]   12 B,
+   LEA, AX'| BO|    [SP +4* SI]   12 B,
+   LEA, AX'| BO|    [SP +4* BP]   12 B,
+   LEA, AX'| BO|    [SP +4* 0]    12 B,
+   LEA, AX'| BO|    [SP +4* BX]   12 B,
+   LEA, AX'| BO|    [SP +4* DX]   12 B,
+   LEA, AX'| BO|    [SP +4* CX]   12 B,
+   LEA, AX'| BO|    [SP +4* AX]   12 B,
+   LEA, AX'| BO|    [SP +2* DI]   12 B,
+   LEA, AX'| BO|    [SP +2* SI]   12 B,
+   LEA, AX'| BO|    [SP +2* BP]   12 B,
+   LEA, AX'| BO|    [SP +2* 0]    12 B,
+   LEA, AX'| BO|    [SP +2* BX]   12 B,
+   LEA, AX'| BO|    [SP +2* DX]   12 B,
+   LEA, AX'| BO|    [SP +2* CX]   12 B,
+   LEA, AX'| BO|    [SP +2* AX]   12 B,
+   LEA, AX'| BO|    [SP +1* DI]   12 B,
+   LEA, AX'| BO|    [SP +1* SI]   12 B,
+   LEA, AX'| BO|    [SP +1* BP]   12 B,
+   LEA, AX'| BO|    [SP +1* 0]    12 B,
+   LEA, AX'| BO|    [SP +1* BX]   12 B,
+   LEA, AX'| BO|    [SP +1* DX]   12 B,
+   LEA, AX'| BO|    [SP +1* CX]   12 B,
+   LEA, AX'| BO|    [SP +1* AX]   12 B,
+   LEA, AX'| BO|    [BX +8* DI]   12 B,
+   LEA, AX'| BO|    [BX +8* SI]   12 B,
+   LEA, AX'| BO|    [BX +8* BP]   12 B,
+   LEA, AX'| BO|    [BX +8* 0]    12 B,
+   LEA, AX'| BO|    [BX +8* BX]   12 B,
+   LEA, AX'| BO|    [BX +8* DX]   12 B,
+   LEA, AX'| BO|    [BX +8* CX]   12 B,
+   LEA, AX'| BO|    [BX +8* AX]   12 B,
+   LEA, AX'| BO|    [BX +4* DI]   12 B,
+   LEA, AX'| BO|    [BX +4* SI]   12 B,
+   LEA, AX'| BO|    [BX +4* BP]   12 B,
+   LEA, AX'| BO|    [BX +4* 0]    12 B,
+   LEA, AX'| BO|    [BX +4* BX]   12 B,
+   LEA, AX'| BO|    [BX +4* DX]   12 B,
+   LEA, AX'| BO|    [BX +4* CX]   12 B,
+   LEA, AX'| BO|    [BX +4* AX]   12 B,
+   LEA, AX'| BO|    [BX +2* DI]   12 B,
+   LEA, AX'| BO|    [BX +2* SI]   12 B,
+   LEA, AX'| BO|    [BX +2* BP]   12 B,
+   LEA, AX'| BO|    [BX +2* 0]    12 B,
+   LEA, AX'| BO|    [BX +2* BX]   12 B,
+   LEA, AX'| BO|    [BX +2* DX]   12 B,
+   LEA, AX'| BO|    [BX +2* CX]   12 B,
+   LEA, AX'| BO|    [BX +2* AX]   12 B,
+   LEA, AX'| BO|    [BX +1* DI]   12 B,
+   LEA, AX'| BO|    [BX +1* SI]   12 B,
+   LEA, AX'| BO|    [BX +1* BP]   12 B,
+   LEA, AX'| BO|    [BX +1* 0]    12 B,
+   LEA, AX'| BO|    [BX +1* BX]   12 B,
+   LEA, AX'| BO|    [BX +1* DX]   12 B,
+   LEA, AX'| BO|    [BX +1* CX]   12 B,
+   LEA, AX'| BO|    [BX +1* AX]   12 B,
+   LEA, AX'| BO|    [DX +8* DI]   12 B,
+   LEA, AX'| BO|    [DX +8* SI]   12 B,
+   LEA, AX'| BO|    [DX +8* BP]   12 B,
+   LEA, AX'| BO|    [DX +8* 0]    12 B,
+   LEA, AX'| BO|    [DX +8* BX]   12 B,
+   LEA, AX'| BO|    [DX +8* DX]   12 B,
+   LEA, AX'| BO|    [DX +8* CX]   12 B,
+   LEA, AX'| BO|    [DX +8* AX]   12 B,
+   LEA, AX'| BO|    [DX +4* DI]   12 B,
+   LEA, AX'| BO|    [DX +4* SI]   12 B,
+   LEA, AX'| BO|    [DX +4* BP]   12 B,
+   LEA, AX'| BO|    [DX +4* 0]    12 B,
+   LEA, AX'| BO|    [DX +4* BX]   12 B,
+   LEA, AX'| BO|    [DX +4* DX]   12 B,
+   LEA, AX'| BO|    [DX +4* CX]   12 B,
+   LEA, AX'| BO|    [DX +4* AX]   12 B,
+   LEA, AX'| BO|    [DX +2* DI]   12 B,
+   LEA, AX'| BO|    [DX +2* SI]   12 B,
+   LEA, AX'| BO|    [DX +2* BP]   12 B,
+   LEA, AX'| BO|    [DX +2* 0]    12 B,
+   LEA, AX'| BO|    [DX +2* BX]   12 B,
+   LEA, AX'| BO|    [DX +2* DX]   12 B,
+   LEA, AX'| BO|    [DX +2* CX]   12 B,
+   LEA, AX'| BO|    [DX +2* AX]   12 B,
+   LEA, AX'| BO|    [DX +1* DI]   12 B,
+   LEA, AX'| BO|    [DX +1* SI]   12 B,
+   LEA, AX'| BO|    [DX +1* BP]   12 B,
+   LEA, AX'| BO|    [DX +1* 0]    12 B,
+   LEA, AX'| BO|    [DX +1* BX]   12 B,
+   LEA, AX'| BO|    [DX +1* DX]   12 B,
+   LEA, AX'| BO|    [DX +1* CX]   12 B,
+   LEA, AX'| BO|    [DX +1* AX]   12 B,
+   LEA, AX'| BO|    [CX +8* DI]   12 B,
+   LEA, AX'| BO|    [CX +8* SI]   12 B,
+   LEA, AX'| BO|    [CX +8* BP]   12 B,
+   LEA, AX'| BO|    [CX +8* 0]    12 B,
+   LEA, AX'| BO|    [CX +8* BX]   12 B,
+   LEA, AX'| BO|    [CX +8* DX]   12 B,
+   LEA, AX'| BO|    [CX +8* CX]   12 B,
+   LEA, AX'| BO|    [CX +8* AX]   12 B,
+   LEA, AX'| BO|    [CX +4* DI]   12 B,
+   LEA, AX'| BO|    [CX +4* SI]   12 B,
+   LEA, AX'| BO|    [CX +4* BP]   12 B,
+   LEA, AX'| BO|    [CX +4* 0]    12 B,
+   LEA, AX'| BO|    [CX +4* BX]   12 B,
+   LEA, AX'| BO|    [CX +4* DX]   12 B,
+   LEA, AX'| BO|    [CX +4* CX]   12 B,
+   LEA, AX'| BO|    [CX +4* AX]   12 B,
+   LEA, AX'| BO|    [CX +2* DI]   12 B,
+   LEA, AX'| BO|    [CX +2* SI]   12 B,
+   LEA, AX'| BO|    [CX +2* BP]   12 B,
+   LEA, AX'| BO|    [CX +2* 0]    12 B,
+   LEA, AX'| BO|    [CX +2* BX]   12 B,
+   LEA, AX'| BO|    [CX +2* DX]   12 B,
+   LEA, AX'| BO|    [CX +2* CX]   12 B,
+   LEA, AX'| BO|    [CX +2* AX]   12 B,
+   LEA, AX'| BO|    [CX +1* DI]   12 B,
+   LEA, AX'| BO|    [CX +1* SI]   12 B,
+   LEA, AX'| BO|    [CX +1* BP]   12 B,
+   LEA, AX'| BO|    [CX +1* 0]    12 B,
+   LEA, AX'| BO|    [CX +1* BX]   12 B,
+   LEA, AX'| BO|    [CX +1* DX]   12 B,
+   LEA, AX'| BO|    [CX +1* CX]   12 B,
+   LEA, AX'| BO|    [CX +1* AX]   12 B,
+   LEA, AX'| BO|    [AX +8* DI]   12 B,
+   LEA, AX'| BO|    [AX +8* SI]   12 B,
+   LEA, AX'| BO|    [AX +8* BP]   12 B,
+   LEA, AX'| BO|    [AX +8* 0]    12 B,
+   LEA, AX'| BO|    [AX +8* BX]   12 B,
+   LEA, AX'| BO|    [AX +8* DX]   12 B,
+   LEA, AX'| BO|    [AX +8* CX]   12 B,
+   LEA, AX'| BO|    [AX +8* AX]   12 B,
+   LEA, AX'| BO|    [AX +4* DI]   12 B,
+   LEA, AX'| BO|    [AX +4* SI]   12 B,
+   LEA, AX'| BO|    [AX +4* BP]   12 B,
+   LEA, AX'| BO|    [AX +4* 0]    12 B,
+   LEA, AX'| BO|    [AX +4* BX]   12 B,
+   LEA, AX'| BO|    [AX +4* DX]   12 B,
+   LEA, AX'| BO|    [AX +4* CX]   12 B,
+   LEA, AX'| BO|    [AX +4* AX]   12 B,
+   LEA, AX'| BO|    [AX +2* DI]   12 B,
+   LEA, AX'| BO|    [AX +2* SI]   12 B,
+   LEA, AX'| BO|    [AX +2* BP]   12 B,
+   LEA, AX'| BO|    [AX +2* 0]    12 B,
+   LEA, AX'| BO|    [AX +2* BX]   12 B,
+   LEA, AX'| BO|    [AX +2* DX]   12 B,
+   LEA, AX'| BO|    [AX +2* CX]   12 B,
+   LEA, AX'| BO|    [AX +2* AX]   12 B,
+   LEA, AX'| BO|    [AX +1* DI]   12 B,
+   LEA, AX'| BO|    [AX +1* SI]   12 B,
+   LEA, AX'| BO|    [AX +1* BP]   12 B,
+   LEA, AX'| BO|    [AX +1* 0]    12 B,
+   LEA, AX'| BO|    [AX +1* BX]   12 B,
+   LEA, AX'| BO|    [AX +1* DX]   12 B,
+   LEA, AX'| BO|    [AX +1* CX]   12 B,
+   LEA, AX'| BO|    [AX +1* AX]   12 B,
+
+   LEA, AX'| XO|    [DI +8* DI]   12 L,
+   LEA, AX'| XO|    [DI +8* SI]   12 L,
+   LEA, AX'| XO|    [DI +8* BP]   12 L,
+   LEA, AX'| XO|    [DI +8* 0]    12 L,
+   LEA, AX'| XO|    [DI +8* BX]   12 L,
+   LEA, AX'| XO|    [DI +8* DX]   12 L,
+   LEA, AX'| XO|    [DI +8* CX]   12 L,
+   LEA, AX'| XO|    [DI +8* AX]   12 L,
+   LEA, AX'| XO|    [DI +4* DI]   12 L,
+   LEA, AX'| XO|    [DI +4* SI]   12 L,
+   LEA, AX'| XO|    [DI +4* BP]   12 L,
+   LEA, AX'| XO|    [DI +4* 0]    12 L,
+   LEA, AX'| XO|    [DI +4* BX]   12 L,
+   LEA, AX'| XO|    [DI +4* DX]   12 L,
+   LEA, AX'| XO|    [DI +4* CX]   12 L,
+   LEA, AX'| XO|    [DI +4* AX]   12 L,
+   LEA, AX'| XO|    [DI +2* DI]   12 L,
+   LEA, AX'| XO|    [DI +2* SI]   12 L,
+   LEA, AX'| XO|    [DI +2* BP]   12 L,
+   LEA, AX'| XO|    [DI +2* 0]    12 L,
+   LEA, AX'| XO|    [DI +2* BX]   12 L,
+   LEA, AX'| XO|    [DI +2* DX]   12 L,
+   LEA, AX'| XO|    [DI +2* CX]   12 L,
+   LEA, AX'| XO|    [DI +2* AX]   12 L,
+   LEA, AX'| XO|    [DI +1* DI]   12 L,
+   LEA, AX'| XO|    [DI +1* SI]   12 L,
+   LEA, AX'| XO|    [DI +1* BP]   12 L,
+   LEA, AX'| XO|    [DI +1* 0]    12 L,
+   LEA, AX'| XO|    [DI +1* BX]   12 L,
+   LEA, AX'| XO|    [DI +1* DX]   12 L,
+   LEA, AX'| XO|    [DI +1* CX]   12 L,
+   LEA, AX'| XO|    [DI +1* AX]   12 L,
+   LEA, AX'| XO|    [SI +8* DI]   12 L,
+   LEA, AX'| XO|    [SI +8* SI]   12 L,
+   LEA, AX'| XO|    [SI +8* BP]   12 L,
+   LEA, AX'| XO|    [SI +8* 0]    12 L,
+   LEA, AX'| XO|    [SI +8* BX]   12 L,
+   LEA, AX'| XO|    [SI +8* DX]   12 L,
+   LEA, AX'| XO|    [SI +8* CX]   12 L,
+   LEA, AX'| XO|    [SI +8* AX]   12 L,
+   LEA, AX'| XO|    [SI +4* DI]   12 L,
+   LEA, AX'| XO|    [SI +4* SI]   12 L,
+   LEA, AX'| XO|    [SI +4* BP]   12 L,
+   LEA, AX'| XO|    [SI +4* 0]    12 L,
+   LEA, AX'| XO|    [SI +4* BX]   12 L,
+   LEA, AX'| XO|    [SI +4* DX]   12 L,
+   LEA, AX'| XO|    [SI +4* CX]   12 L,
+   LEA, AX'| XO|    [SI +4* AX]   12 L,
+   LEA, AX'| XO|    [SI +2* DI]   12 L,
+   LEA, AX'| XO|    [SI +2* SI]   12 L,
+   LEA, AX'| XO|    [SI +2* BP]   12 L,
+   LEA, AX'| XO|    [SI +2* 0]    12 L,
+   LEA, AX'| XO|    [SI +2* BX]   12 L,
+   LEA, AX'| XO|    [SI +2* DX]   12 L,
+   LEA, AX'| XO|    [SI +2* CX]   12 L,
+   LEA, AX'| XO|    [SI +2* AX]   12 L,
+   LEA, AX'| XO|    [SI +1* DI]   12 L,
+   LEA, AX'| XO|    [SI +1* SI]   12 L,
+   LEA, AX'| XO|    [SI +1* BP]   12 L,
+   LEA, AX'| XO|    [SI +1* 0]    12 L,
+   LEA, AX'| XO|    [SI +1* BX]   12 L,
+   LEA, AX'| XO|    [SI +1* DX]   12 L,
+   LEA, AX'| XO|    [SI +1* CX]   12 L,
+   LEA, AX'| XO|    [SI +1* AX]   12 L,
+   LEA, AX'| XO|    [SP +8* DI]   12 L,
+   LEA, AX'| XO|    [SP +8* SI]   12 L,
+   LEA, AX'| XO|    [SP +8* BP]   12 L,
+   LEA, AX'| XO|    [SP +8* 0]    12 L,
+   LEA, AX'| XO|    [SP +8* BX]   12 L,
+   LEA, AX'| XO|    [SP +8* DX]   12 L,
+   LEA, AX'| XO|    [SP +8* CX]   12 L,
+   LEA, AX'| XO|    [SP +8* AX]   12 L,
+   LEA, AX'| XO|    [SP +4* DI]   12 L,
+   LEA, AX'| XO|    [SP +4* SI]   12 L,
+   LEA, AX'| XO|    [SP +4* BP]   12 L,
+   LEA, AX'| XO|    [SP +4* 0]    12 L,
+   LEA, AX'| XO|    [SP +4* BX]   12 L,
+   LEA, AX'| XO|    [SP +4* DX]   12 L,
+   LEA, AX'| XO|    [SP +4* CX]   12 L,
+   LEA, AX'| XO|    [SP +4* AX]   12 L,
+   LEA, AX'| XO|    [SP +2* DI]   12 L,
+   LEA, AX'| XO|    [SP +2* SI]   12 L,
+   LEA, AX'| XO|    [SP +2* BP]   12 L,
+   LEA, AX'| XO|    [SP +2* 0]    12 L,
+   LEA, AX'| XO|    [SP +2* BX]   12 L,
+   LEA, AX'| XO|    [SP +2* DX]   12 L,
+   LEA, AX'| XO|    [SP +2* CX]   12 L,
+   LEA, AX'| XO|    [SP +2* AX]   12 L,
+   LEA, AX'| XO|    [SP +1* DI]   12 L,
+   LEA, AX'| XO|    [SP +1* SI]   12 L,
+   LEA, AX'| XO|    [SP +1* BP]   12 L,
+   LEA, AX'| XO|    [SP +1* 0]    12 L,
+   LEA, AX'| XO|    [SP +1* BX]   12 L,
+   LEA, AX'| XO|    [SP +1* DX]   12 L,
+   LEA, AX'| XO|    [SP +1* CX]   12 L,
+   LEA, AX'| XO|    [SP +1* AX]   12 L,
+   LEA, AX'| XO|    [BX +8* DI]   12 L,
+   LEA, AX'| XO|    [BX +8* SI]   12 L,
+   LEA, AX'| XO|    [BX +8* BP]   12 L,
+   LEA, AX'| XO|    [BX +8* 0]    12 L,
+   LEA, AX'| XO|    [BX +8* BX]   12 L,
+   LEA, AX'| XO|    [BX +8* DX]   12 L,
+   LEA, AX'| XO|    [BX +8* CX]   12 L,
+   LEA, AX'| XO|    [BX +8* AX]   12 L,
+   LEA, AX'| XO|    [BX +4* DI]   12 L,
+   LEA, AX'| XO|    [BX +4* SI]   12 L,
+   LEA, AX'| XO|    [BX +4* BP]   12 L,
+   LEA, AX'| XO|    [BX +4* 0]    12 L,
+   LEA, AX'| XO|    [BX +4* BX]   12 L,
+   LEA, AX'| XO|    [BX +4* DX]   12 L,
+   LEA, AX'| XO|    [BX +4* CX]   12 L,
+   LEA, AX'| XO|    [BX +4* AX]   12 L,
+   LEA, AX'| XO|    [BX +2* DI]   12 L,
+   LEA, AX'| XO|    [BX +2* SI]   12 L,
+   LEA, AX'| XO|    [BX +2* BP]   12 L,
+   LEA, AX'| XO|    [BX +2* 0]    12 L,
+   LEA, AX'| XO|    [BX +2* BX]   12 L,
+   LEA, AX'| XO|    [BX +2* DX]   12 L,
+   LEA, AX'| XO|    [BX +2* CX]   12 L,
+   LEA, AX'| XO|    [BX +2* AX]   12 L,
+   LEA, AX'| XO|    [BX +1* DI]   12 L,
+   LEA, AX'| XO|    [BX +1* SI]   12 L,
+   LEA, AX'| XO|    [BX +1* BP]   12 L,
+   LEA, AX'| XO|    [BX +1* 0]    12 L,
+   LEA, AX'| XO|    [BX +1* BX]   12 L,
+   LEA, AX'| XO|    [BX +1* DX]   12 L,
+   LEA, AX'| XO|    [BX +1* CX]   12 L,
+   LEA, AX'| XO|    [BX +1* AX]   12 L,
+   LEA, AX'| XO|    [DX +8* DI]   12 L,
+   LEA, AX'| XO|    [DX +8* SI]   12 L,
+   LEA, AX'| XO|    [DX +8* BP]   12 L,
+   LEA, AX'| XO|    [DX +8* 0]    12 L,
+   LEA, AX'| XO|    [DX +8* BX]   12 L,
+   LEA, AX'| XO|    [DX +8* DX]   12 L,
+   LEA, AX'| XO|    [DX +8* CX]   12 L,
+   LEA, AX'| XO|    [DX +8* AX]   12 L,
+   LEA, AX'| XO|    [DX +4* DI]   12 L,
+   LEA, AX'| XO|    [DX +4* SI]   12 L,
+   LEA, AX'| XO|    [DX +4* BP]   12 L,
+   LEA, AX'| XO|    [DX +4* 0]    12 L,
+   LEA, AX'| XO|    [DX +4* BX]   12 L,
+   LEA, AX'| XO|    [DX +4* DX]   12 L,
+   LEA, AX'| XO|    [DX +4* CX]   12 L,
+   LEA, AX'| XO|    [DX +4* AX]   12 L,
+   LEA, AX'| XO|    [DX +2* DI]   12 L,
+   LEA, AX'| XO|    [DX +2* SI]   12 L,
+   LEA, AX'| XO|    [DX +2* BP]   12 L,
+   LEA, AX'| XO|    [DX +2* 0]    12 L,
+   LEA, AX'| XO|    [DX +2* BX]   12 L,
+   LEA, AX'| XO|    [DX +2* DX]   12 L,
+   LEA, AX'| XO|    [DX +2* CX]   12 L,
+   LEA, AX'| XO|    [DX +2* AX]   12 L,
+   LEA, AX'| XO|    [DX +1* DI]   12 L,
+   LEA, AX'| XO|    [DX +1* SI]   12 L,
+   LEA, AX'| XO|    [DX +1* BP]   12 L,
+   LEA, AX'| XO|    [DX +1* 0]    12 L,
+   LEA, AX'| XO|    [DX +1* BX]   12 L,
+   LEA, AX'| XO|    [DX +1* DX]   12 L,
+   LEA, AX'| XO|    [DX +1* CX]   12 L,
+   LEA, AX'| XO|    [DX +1* AX]   12 L,
+   LEA, AX'| XO|    [CX +8* DI]   12 L,
+   LEA, AX'| XO|    [CX +8* SI]   12 L,
+   LEA, AX'| XO|    [CX +8* BP]   12 L,
+   LEA, AX'| XO|    [CX +8* 0]    12 L,
+   LEA, AX'| XO|    [CX +8* BX]   12 L,
+   LEA, AX'| XO|    [CX +8* DX]   12 L,
+   LEA, AX'| XO|    [CX +8* CX]   12 L,
+   LEA, AX'| XO|    [CX +8* AX]   12 L,
+   LEA, AX'| XO|    [CX +4* DI]   12 L,
+   LEA, AX'| XO|    [CX +4* SI]   12 L,
+   LEA, AX'| XO|    [CX +4* BP]   12 L,
+   LEA, AX'| XO|    [CX +4* 0]    12 L,
+   LEA, AX'| XO|    [CX +4* BX]   12 L,
+   LEA, AX'| XO|    [CX +4* DX]   12 L,
+   LEA, AX'| XO|    [CX +4* CX]   12 L,
+   LEA, AX'| XO|    [CX +4* AX]   12 L,
+   LEA, AX'| XO|    [CX +2* DI]   12 L,
+   LEA, AX'| XO|    [CX +2* SI]   12 L,
+   LEA, AX'| XO|    [CX +2* BP]   12 L,
+   LEA, AX'| XO|    [CX +2* 0]    12 L,
+   LEA, AX'| XO|    [CX +2* BX]   12 L,
+   LEA, AX'| XO|    [CX +2* DX]   12 L,
+   LEA, AX'| XO|    [CX +2* CX]   12 L,
+   LEA, AX'| XO|    [CX +2* AX]   12 L,
+   LEA, AX'| XO|    [CX +1* DI]   12 L,
+   LEA, AX'| XO|    [CX +1* SI]   12 L,
+   LEA, AX'| XO|    [CX +1* BP]   12 L,
+   LEA, AX'| XO|    [CX +1* 0]    12 L,
+   LEA, AX'| XO|    [CX +1* BX]   12 L,
+   LEA, AX'| XO|    [CX +1* DX]   12 L,
+   LEA, AX'| XO|    [CX +1* CX]   12 L,
+   LEA, AX'| XO|    [CX +1* AX]   12 L,
+   LEA, AX'| XO|    [AX +8* DI]   12 L,
+   LEA, AX'| XO|    [AX +8* SI]   12 L,
+   LEA, AX'| XO|    [AX +8* BP]   12 L,
+   LEA, AX'| XO|    [AX +8* 0]    12 L,
+   LEA, AX'| XO|    [AX +8* BX]   12 L,
+   LEA, AX'| XO|    [AX +8* DX]   12 L,
+   LEA, AX'| XO|    [AX +8* CX]   12 L,
+   LEA, AX'| XO|    [AX +8* AX]   12 L,
+   LEA, AX'| XO|    [AX +4* DI]   12 L,
+   LEA, AX'| XO|    [AX +4* SI]   12 L,
+   LEA, AX'| XO|    [AX +4* BP]   12 L,
+   LEA, AX'| XO|    [AX +4* 0]    12 L,
+   LEA, AX'| XO|    [AX +4* BX]   12 L,
+   LEA, AX'| XO|    [AX +4* DX]   12 L,
+   LEA, AX'| XO|    [AX +4* CX]   12 L,
+   LEA, AX'| XO|    [AX +4* AX]   12 L,
+   LEA, AX'| XO|    [AX +2* DI]   12 L,
+   LEA, AX'| XO|    [AX +2* SI]   12 L,
+   LEA, AX'| XO|    [AX +2* BP]   12 L,
+   LEA, AX'| XO|    [AX +2* 0]    12 L,
+   LEA, AX'| XO|    [AX +2* BX]   12 L,
+   LEA, AX'| XO|    [AX +2* DX]   12 L,
+   LEA, AX'| XO|    [AX +2* CX]   12 L,
+   LEA, AX'| XO|    [AX +2* AX]   12 L,
+   LEA, AX'| XO|    [AX +1* DI]   12 L,
+   LEA, AX'| XO|    [AX +1* SI]   12 L,
+   LEA, AX'| XO|    [AX +1* BP]   12 L,
+   LEA, AX'| XO|    [AX +1* 0]    12 L,
+   LEA, AX'| XO|    [AX +1* BX]   12 L,
+   LEA, AX'| XO|    [AX +1* DX]   12 L,
+   LEA, AX'| XO|    [AX +1* CX]   12 L,
+   LEA, AX'| XO|    [AX +1* AX]   12 L,
+
 AS-HERE
 10 AS-ALLOT
 DUP 10 ERASE    \ Padding for dump
 ." TEST STARTS HERE"
 2DUP OVER - DUMP
-MY-DISASSEMBLE-RANGE
+2DUP OVER - "test386a.bin" PUT-FILE
+DISASSEMBLE-RANGE
 CR
 BYE
