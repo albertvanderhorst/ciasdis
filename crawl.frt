@@ -152,8 +152,7 @@ NORMAL-DISASSEMBLY
 \ Add the information that ADDRESS1 to ADDRESS2 is a code section.
 \ If section labels was sorted, it remains so.
 : INSERT-SECTION   OVER SECTION-LABELS WHERE-LABEL >R
-    REQUIRED-XT 'CR+LABEL ANON-SECTION   R@ ROLL-LABEL .LABELS
-    R> COLLAPSE(I1) .LABELS ;
+    REQUIRED-XT 'CR+LABEL ANON-SECTION   R@ ROLL-LABEL   R> COLLAPSE(I1) ;
 
 \ The following are auxiliary words for `` KNOWN-CODE? '' mainly.
 \ For all those section labels must be current and sorted.
