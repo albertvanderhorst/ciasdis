@@ -16,6 +16,4 @@ INCLUDE test.asm
 INCLUDE labeldis.frt
 INCLUDE test.asm.dat
 
-CODE-SPACE CP @ D-R
-
-
+DISASSEMBLE-TARGET
