@@ -50,6 +50,14 @@ REQUIRE ARGC    REQUIRE OLD:    REQUIRE SRC>EXEC        REQUIRE INCLUDED
 : TARGET-DIS 2 ARG[] ;
 
 REQUIRE DUMP
+\ Using (only) information from file with NAME,
+\ disassemble the current program as stored in the ``CODE-BUFFER''.
+: CONSULTED   INIT-ALL   HEX INCLUDED ( file)   SORT-ALL
+    PLUG-HOLES DISASSEMBLE-TARGET DECIMAL ;
+
+\ Consult "file" as per ``CONSULT''
+: CONSULT   (WORD) CONSULTED ;
+
 \ Perform the action of the program as per the spec's of ``cidis''
 : cidis   1 ARG[] FETCHED TARGET-DIS CONSULTED ;
 

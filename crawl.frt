@@ -112,26 +112,6 @@ REQUIRE BAG
 
 \D  ." EXPECT 1 LESS : " 2 3 REPLACE .LABELS CR .S
 
-\ Collapse INDEX1 and INDEX2 if possible.
-\ It should work for increasing, but is tested for consequitive.
-: COLLAPSE(I1,I2) COMBINE IF REPLACE ELSE 2DROP THEN ;
-
-\D 59F 800 -db- .LABELS
-\D  ." EXPECT 1 LESS : " 2 3 COLLAPSE(I1,I2) .LABELS CR .S
-
-\ Collapse the label at INDEX with the next and or previous labels.
-: COLLAPSE(I1) SECTION-LABELS
-    DUP LAB-UPB < IF DUP OVER 1+ COLLAPSE(I1,I2) THEN
-    DUP 1 > IF DUP 1- OVER COLLAPSE(I1,I2) THEN
-    DROP ;
-
-\D LABELS !BAG
-\D 4FE 520 -dc-
-\D 520 530 -dc: oops
-\D 52A 570 -dc-
-\D 560 590 -db: bytes
-\D .LABELS
-\D  ." EXPECT 1 LESS : " 2 COLLAPSE(I1) .LABELS CR .S
 \ This looks like a proper design.
 \ - sort on the start address, type (disassembler) and end address.
 \ - start with the last section and work down until the second
@@ -262,10 +242,10 @@ REQUIRE BAG
 \ mechanism for bags. A newly introduced section automatically falls
 \ into place, because of the conditions regarding the start addresses.
 : CLEANUP-SECTIONS SECTION-LABELS
-    2 LAB-UPB 2DUP <= IF DO I .S KILL-OVERLAP -1 +LOOP THEN ;
+    2 LAB-UPB 2DUP <= IF DO I KILL-OVERLAP -1 +LOOP THEN ;
 
 \ Fill any holes with character sections.
-: PLUG-HOLES  SECTION-LABELS LAB-UPB 1+ 2 ?DO I .S FILL-GAP LOOP SORT-LABELS ;
+: PLUG-HOLES  SECTION-LABELS LAB-UPB 1+ 2 ?DO I FILL-GAP LOOP SORT-LABELS ;
 
 \ ------------------------------------------------------------------------
 ASSEMBLER
@@ -282,11 +262,6 @@ VARIABLE (R-XT)        \ Required xt.
 \ Specify normal disassembly.
 : NORMAL-DISASSEMBLY 'D-R-T (R-XT) ! BITS-32 ;
 NORMAL-DISASSEMBLY
-
-\ Add the information that ADDRESS1 to ADDRESS2 is a code section.
-\ If section labels was sorted, it remains so.
-: INSERT-SECTION   OVER SECTION-LABELS WHERE-LABEL >R
-    REQUIRED-XT 'CR+LABEL ANON-SECTION   R@ ROLL-LABEL   R> COLLAPSE(I1) ;
 
 \ The following are auxiliary words for `` KNOWN-CODE? '' mainly.
 \ For all those section labels must be current and sorted.
@@ -324,6 +299,25 @@ NORMAL-DISASSEMBLY
 : ANALYSE-INSTRUCTION   LATEST-INSTRUCTION @ JUMPS IN-BAG? IF
     JUMP-TARGET DUP ?INSERT-EQU?
     STARTER? IF JUMP-TARGET STARTERS SET+ THEN THEN ;
+
+\ Collapse the label at INDEX with the next and or previous labels.
+: COLLAPSE(I1) SECTION-LABELS
+    DUP LAB-UPB < IF DUP 1+ KILL-OVERLAP THEN
+    DUP 1 > IF DUP KILL-OVERLAP THEN
+    DROP ;
+
+\D LABELS !BAG
+\D 4FE 520 -dc-
+\D 520 530 -dc: oops
+\D 52A 570 -dc-
+\D 560 590 -db: bytes
+\D .LABELS
+\D  ." EXPECT 1 LESS : " 2 COLLAPSE(I1) .LABELS CR .S
+
+\ Add the information that ADDRESS1 to ADDRESS2 is a code section.
+\ If section labels was sorted, it remains so.
+: INSERT-SECTION   OVER SECTION-LABELS WHERE-LABEL >R
+    REQUIRED-XT 'CR+LABEL ANON-SECTION   R@ ROLL-LABEL   R> COLLAPSE(I1) ;
 
 \ Analyse the code range from ADDRESS up to an unconditional transfer.
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.

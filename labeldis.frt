@@ -503,20 +503,6 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ the end of the input file.
 : HOW-FIT-END    TARGET-END .HOW-FIT ;
 
-\ Warn if END of last section greater than START of new section.
-: OVERLAP-CHECK  OVER < IF "The following address runs into next section: " ETYPE
-    0 8 (DH.) ETYPE THEN DROP ;
-
-\ Check whether START and END fit. Plug a new section in
-\ if there is a hole. Abort on overlaps.
-: PLUG-HOLE   2DUP < IF -d$- ELSE  OVERLAP-CHECK THEN ;
-
-\ Add sectors of type string where there are holes. section-labels must be
-\ sorted on entry, and are sorted on exit.
-: PLUG-HOLES   TARGET-START SECTION-LABELS DO-LAB
-        I CELL+ @ EXECUTE DIS-START   PLUG-HOLE   I CELL+ @ EXECUTE DIS-END
-    LOOP-LAB   TARGET-END PLUG-HOLE   SORT-LABELS ;
-
 \ Disassemble all those sectors as if they were code.
 : DISASSEMBLE-ALL   NEXT-CUT!   TARGET-START
     SECTION-LABELS DO-LAB I CELL+ @ EXECUTE   HOW-FIT DIS-RANGE LOOP-LAB
@@ -560,14 +546,6 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 
 \ i386 dependant, should somehow be separated out.
 : DISASSEMBLE-TARGET "BITS-32" TYPE CR  DISASSEMBLE-TARGET ;
-
-\ Using (only) information from file with NAME,
-\ disassemble the current program as stored in the ``CODE-BUFFER''.
-: CONSULTED   INIT-ALL   HEX INCLUDED ( file)   SORT-ALL
-    PLUG-HOLES DISASSEMBLE-TARGET DECIMAL ;
-
-\ Consult "file" as per ``CONSULT''
-: CONSULT   (WORD) CONSULTED ;
 
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
