@@ -252,7 +252,7 @@ endstruct
 \ ------------------- Generic again -------------------
 
 \ Start a new line, with printing the decompiled ADDRESS as seen
-: CR+ADDRESS CR "( " TYPE DUP HOST>TARGET 4 .R " )   " TYPE ;
+: CR+ADDRESS CR "( " TYPE DUP HOST>TARGET H. " )   " TYPE ;
 
 \ Print out everything we know about ADDRESS.
 : (ADORN-ADDRESS)
@@ -278,14 +278,14 @@ endstruct
 
 \ Using (only) information from "file",
 \ disassemble the current program as stored in the ``CODE-BUFFER''.
-: CONSULT   INIT-ALL   INCLUDE ( file)   SORT-ALL   DISASSEMBLE-TARGET ;
+: CONSULT   INIT-ALL   HEX INCLUDE ( file)   SORT-ALL   DISASSEMBLE-TARGET DECIMAL ;
 
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
 
 ASSEMBLER DEFINITIONS
 ( Print X as a symbolic label if possible, else as a number             )
-: .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP U. THEN ;
+: .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP H. SPACE THEN ;
 
 ( Print a disassembly, for a commaer DEA , taking into account labels,  )
 ( {suitable for e.g. the commaer ``IX,''}                               )
