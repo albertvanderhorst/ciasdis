@@ -11,7 +11,8 @@
 1285  LABEL QQQ
 "XXX is a target for backward jumps:" 1294 COMMENT
 1294  LABEL XXX
-1294  COMMENT:   Move a xell to register DI from memory at QQQ
+\ From now on the label ``XXXX'' can be used: like this
+XXX  COMMENT:   Move a xell to register DI from memory at QQQ
 "YYY is a target for forward jumps:" 1337 COMMENT
 1337  LABEL YYY
 

@@ -27,10 +27,10 @@ REQUIRE BIN-SEARCH
 
 \ Define a structure for label-like things of length N.
 \ A label-like thing is two cells: address and a payload.
-1 \ Dummy length
+1 'DROP \ Dummy printer, dummy length
 struct LABELSTRUCT
-  F: LABELS   2* BUILD-BAG   FDOES> ;
-  F: DUMMY LATEST THE-REGISTER BAG+! FDOES> -1 13 ?ERROR ;
+  F: .PAY , FDOES> @ EXECUTE ;          \ Print payload
+  F: LABELS   2* BUILD-BAG   LATEST THE-REGISTER BAG+! FDOES> ;
 endstruct
 
 THE-REGISTER !BAG       \ Get rid of dummy registration.
@@ -40,11 +40,17 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 : LABELS[]   1- 2* CELLS LABELS CELL+ + ;
 
 \ Print the payload of the label at ADDRESS , provided it is a string.
+: .PAY$     CELL+ @ $@ TYPE   3 SPACES ;
+
+\ Print the payload of the label at ADDRESS , provided it is a string.
 : .LAB     CELL+ @ $@ TYPE   3 SPACES ;
 
-\ Print the addresses and values of the labels, provided the
-\ payloads are strings.
-: .LABELS  LABELS @+ SWAP ?DO I @ .  I .LAB CR 2 CELLS +LOOP ;
+\ Print the name of the label at ADDRESS , provided it is a dea.
+\ This applies to plain labels that are in fact fact constants.
+: .PAY-DEA  CELL+ @ ID. ;
+
+\ Print the addresses and payloads of the labels.
+: .LABELS  LABELS @+ SWAP ?DO I @ .  I .PAY CR 2 CELLS +LOOP ;
 
 \ Return LOWER and UPPER indices of the labels , inclusive.
 \ The lower index is 1 and the upper index is corresponding.
@@ -83,17 +89,18 @@ VARIABLE C
 
 \ ---------------- Names of labels ------------------------------
 
-\ Contains plain labels, i.e. structs as associate with ``LABEL''
-1000 LABELSTRUCT PLAIN-LABELS        LABELS !BAG
+\ Contains equ labels, i.e. structs as associate with ``LABEL''
+1000 '.PAY-DEA LABELSTRUCT EQU-LABELS        LABELS !BAG
 
-\ Generate a plain label at ADDRESS.
-\ The payload is a pointer to a string with "NAME".
-: LABEL   PLAIN-LABELS   LABELS BAG+!   (WORD) $, LABELS BAG+! ;
+\ Generate a equ label at (target) ADDRESS with "NAME", this can be
+\ any symbolic constant in fact.
+\ The payload is the dea of a constant leaving that address.
+: LABEL   EQU-LABELS   DUP LABELS BAG+!   CONSTANT   LATEST LABELS BAG+! ;
 
 \ Adorn the ADDRESS we are currently disassembling with a named label
 \ if any.
-: ADORN-WITH-LABEL   PLAIN-LABELS HOST>TARGET  >LABEL DUP IF
-    &: EMIT .LAB ELSE DROP 12 SPACES THEN  ;
+: ADORN-WITH-LABEL   EQU-LABELS HOST>TARGET  >LABEL DUP IF
+    &: EMIT .PAY ELSE DROP 12 SPACES THEN  ;
 
 \D 12 LABEL AAP
 \D 5 LABEL NOOT
@@ -105,9 +112,9 @@ VARIABLE C
 \D .LABELS CR
 
 \D 200 FIND-LABEL . CR
-\D 12 FIND-LABEL  LABELS[] .LAB CR
-\D 12 1- FIND-LABEL  LABELS[] .LAB CR
-\D 12 >LABEL .LAB CR
+\D 12 FIND-LABEL  LABELS[] .PAY CR
+\D 12 1- FIND-LABEL  LABELS[] .PAY CR
+\D 12 >LABEL .PAY CR
 \D 12 1- >LABEL H. CR
 \D 12 ADORN-WITH-LABEL  .S CR  \ Should give zero, not found!
 \D 12 0 HOST>TARGET - ADORN-WITH-LABEL  CR
@@ -115,7 +122,7 @@ VARIABLE C
 \ ---------------- Comment till remainder of line ------------------------------
 
 \ Contains comment labels, i.e. structs as associate with ``LABEL''
-1000 LABELSTRUCT COMMENT:-LABELS LABELS !BAG
+1000 '.PAY$ LABELSTRUCT COMMENT:-LABELS LABELS !BAG
 
 \ Generate a comment label at ADDRESS. A pointer to the
 \ remainder of the line is the payload.
@@ -148,9 +155,9 @@ VARIABLE COMMENT:-TO-BE
 \D .LABELS CR
 
 \D 200 FIND-LABEL . CR
-\D 12 FIND-LABEL  LABELS[] .LAB CR
-\D 12 1- FIND-LABEL  LABELS[] .LAB CR
-\D 12 >LABEL .LAB CR
+\D 12 FIND-LABEL  LABELS[] .PAY CR
+\D 12 1- FIND-LABEL  LABELS[] .PAY CR
+\D 12 >LABEL .PAY CR
 \D 12 1- >LABEL H. CR
 
 \D 12 REMEMBER-COMMENT: PRINT-OLD-COMMENT: CR  \ Should give nothing, not found!
@@ -159,7 +166,7 @@ VARIABLE COMMENT:-TO-BE
 \ ---------------- Multiple line comment in front ----------------------------
 
 \ Contains comment labels, i.e. structs as associate with ``LABEL''
-1000 LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
+1000 '.PAY$ LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 
 \ Make STRING the comment in front of label at ADDRESS. A pointer to this
 \ string the payload.
@@ -167,7 +174,7 @@ VARIABLE COMMENT:-TO-BE
 
 \ Print comment for instruction at ADDRESS , if any.
 : PRINT-COMMENT MCOMMENT-LABELS  HOST>TARGET  >LABEL DUP IF
-   CR   "\ " TYPE   .LAB _ THEN DROP ;
+   CR   "\ " TYPE   .PAY _ THEN DROP ;
 
 \D "AAP" 12 COMMENT
 \D "NOOT" 5 COMMENT
@@ -181,9 +188,9 @@ JOPI"
 \D .LABELS CR
 
 \D 200 FIND-LABEL . CR
-\D 12 FIND-LABEL  LABELS[] .LAB CR
-\D 12 1- FIND-LABEL  LABELS[] .LAB CR
-\D 12 >LABEL .LAB CR
+\D 12 FIND-LABEL  LABELS[] .PAY CR
+\D 12 1- FIND-LABEL  LABELS[] .PAY CR
+\D 12 >LABEL .PAY CR
 \D 12 1- >LABEL H. CR
 
 \D 12 PRINT-COMMENT CR  \ Should give nothing, not found!
@@ -227,7 +234,7 @@ JOPI"
 
 ASSEMBLER DEFINITIONS
 ( Print X as a symbolic label if possible, else as a number             )
-: .LABEL/.   PLAIN-LABELS DUP >LABEL DUP IF .LAB DROP ELSE DROP U. THEN ;
+: .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP U. THEN ;
 
 ( Print a disassembly, for a commaer DEA , taking into account labels,  )
 ( {suitable for e.g. the commaer ``IX,''}                               )
@@ -256,8 +263,8 @@ ASSEMBLER DEFINITIONS
 ( For the relative branch commaer DEA print the target ADDRESS as a     )
 ( symbolic label if possible else print the branch offset, followed     )
 ( by an appropriate commaer for each case.                              )
-: .BRANCH/.  PLAIN-LABELS
-  >LABEL DUP IF   .LAB ID.-NO() ELSE   DROP DUP GET-OFFSET . %ID. THEN  ;
+: .BRANCH/.  EQU-LABELS
+  >LABEL DUP IF   .PAY ID.-NO() ELSE   DROP DUP GET-OFFSET . %ID. THEN  ;
 
 ( Print a disassembly for a relative branch DEA .                       )
 ( This relies on the convention that the commaer that consumes an       )
