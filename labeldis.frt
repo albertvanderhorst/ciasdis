@@ -82,4 +82,26 @@ VARIABLE C
 \D AAP >LABEL ID. CR
 \D AAP 1- >LABEL H. CR
 \D AAP ADORN-WITH-LABEL  .S CR  \ Should fail!
-\D AAP 0 HOST>TARGET - ADORN-WITH-LABEL  .S CR
+\D AAP 0 HOST>TARGET - ADORN-WITH-LABEL  CR
+
+( ----------------------------------                                    )
+\ asi386 dependant part, doesn't belong here
+
+ALSO ASSEMBLER DEFINITIONS
+( Print X as a symbolic label if possible, else as a number             )
+: .LABEL/.   DUP >LABEL DUP IF ID. DROP ELSE DROP U. THEN ;
+
+( Print a disassembly, for a commaer DEA , taking into account labels,  )
+( {suitable for e.g. the commaer ``IX,''}                               )
+: .COMMA-LABEL
+    POINTER @ OVER >CNT @ MC@ .LABEL/.
+    DUP >CNT @ POINTER +!
+    %ID.                         ( DEA -- )
+;
+
+\D NOOT 1- .LABEL/. CR
+\D NOOT .LABEL/. .S CR
+
+'.COMMA-LABEL   'X, >DIS !
+
+PREVIOUS DEFINITIONS
