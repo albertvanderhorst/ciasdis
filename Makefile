@@ -600,6 +600,6 @@ test.bin : cidis cias test.asm test.cul  ;
 	cias test2.asm test2.bin;
 	cmp test.bin test2.bin && cmp test.bin testresults/test.bin
 
-lina405.asm : cidis lina405 lina405equ.cul lina405.cul ; cidis lina405 lina405.cul
+lina405.asm : cidis lina405 lina405equ.cul lina405.cul ; cidis lina405 lina405.cul>$@
 
 cidis386.zip : $(ASSRC) asi386.frt ;  zip $@ $+
