@@ -22,14 +22,17 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 : >N_  "N_" PRE-PEND ;
 
 \ ADDRESS points to a valid name. Add a label to address the name.
-: ADD-NAME-LABEL   DUP th $@ >N_ 2DUP TYPE LABELED ;
+: ADD-NAME-LABEL   DUP th $@ >N_ 2DUP TYPE INSERT-EQU ;
+
+\ Generate a equ label at (target) ADDRESS with NAME,
+\ unless address is already labeled.
+: ?LABELED?  2>R DUP .S >LABEL .S 0= IF 2R> INSERT-EQU ELSE 2R> 2DROP DROP THEN ;
 
 \ ADDRESS points to a valid dea. Add a label to address the dea(xt)
 \ and the datafield.
 \ Assume that just before the dea's name has been analysed.
-: ADD-DEA-LABEL   &X NAME-BUFFER CELL+ C!   DUP NAME-BUFFER $@ LABELED
-                   &H NAME-BUFFER CELL+ C!
-      4 + L@ NAME-BUFFER $@ LABELED ;
+: ADD-DEA-LABEL   &X NAME-BUFFER CELL+ C!   DUP NAME-BUFFER $@ ?LABELED?
+    &H NAME-BUFFER CELL+ C!   4 + L@ NAME-BUFFER $@ ?LABELED? ;
 
 \ ADDRESS points to a valid name.
 \ Add an anonymous section to disassemble the name.
@@ -57,15 +60,28 @@ CREATE NAME-BUFFER 0 , 256 ALLOT
 
 \ Accumulate the information that DEA is a dea.
 : IS-A-DEA   DUP 8 + L@ 1 AND IF DROP EXIT THEN \ Dummy field
-             DUP IS-A-CFA   DUP 10 + IS-A-NAME
-             DUP ADD-DEA-SECTION   ADD-DEA-LABEL ;
+             DUP 10 + IS-A-NAME  DUP ADD-DEA-LABEL
+             DUP IS-A-CFA   DUP ADD-DEA-SECTION
+DROP ;
 
 \ Accumulate the information from DEA as a wid, follow the link field.
 : CRAWL-WID BEGIN DUP IS-A-DEA 0C + L@ DUP 0= UNTIL DROP ;
 
+0804,9968 LABEL init_user
+0804,BE3C  LABEL donumber
+0804,A6EC  LABEL doconstant
+0804,A72C  LABEL dovar
+0804,A75C  LABEL douse
+
+SORT-ALL
+
 last_dea_envir CRAWL-WID
 last_dea CRAWL-WID
 SORT-ALL
+
+init_user DUP 100 + -dl-
+0804,DA0C DUP 100 + -dl-
+
 MAKE-CUL
 EXIT
 CLEANUP-SECTIONS
