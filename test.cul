@@ -10,7 +10,9 @@
 \ Fasten Your Seat Belts (tm)"  START COMMENT
 
 START -ORG-
-START END -DC-
+1285  LABEL QQQ
+START QQQ -DC-
+QQQ END -DC-
 
 1285  LABEL QQQ
 "XXX is a target for backward jumps:" 1294 COMMENT
