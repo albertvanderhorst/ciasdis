@@ -213,12 +213,13 @@ _ 1  0000 0,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 ( instruction. as per -- error checking omitted -- " 1,0000 ' ~SIB, >CFA )
 ( COMMAER SIB,,"                                                        )
 ( All the rest is to nest the state in this recursive situation:        )
-( 0900 are the bad bits conflicting with ~SIB,                           )
 ( Leaving BY would flag commaers to be done after the sib byte as errors)
-: (SIB),,
-    TALLY-BA @   TALLY-BY @   !TALLY      ( . -- state1 state2 )
-    ~SIB,
-    TALLY-BY ! 0900 INVERT AND TALLY-BA @ OR TALLY-BA ! ;
+: (SIB),,   TALLY-BY @   0 TALLY-BY !
+(   Handle bad bits by hand, prevent resetting of ``TALLY-BA'' which    )
+(   could switch 16/32 bits modes.                                      )
+(   0900 are the bad bits conflicting with ~SIB,                        )
+    CHECK32 TALLY-BA @ 0900 INVERT AND TALLY-BA !   -1 INST-PREFIX? !
+    ~SIB,   TALLY-BY !   ;
 
  ' (SIB),,   % SIB,, >DATA !   ( Fill in deferred data creation action  )
 
@@ -244,10 +245,16 @@ _ 1  0000 0,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 : [BX   ~SIB| SIB,, [BX ;       : [DI   ~SIB| SIB,, [DI ;
 : [MEM  ~SIB| SIB,, [MEM ;
 
+( Add to some prefixes a change in the information what instructions    )
+( are allowed in ``TALLY-BA''. Its reset must be suppressed.            )
+( The toggle inverts the 16 and 32 bits at the same time.               )
+: AS:,   AS:,   TALLY-BA  C000 TOGGLE   -1 INST-PREFIX? ! ;
+: OS:,   OS:,   TALLY-BA 30000 TOGGLE   -1 INST-PREFIX? ! ;
+
 ( ############## 80386 ASSEMBLER PROPER END ########################### )
 ( You may want to use these always instead of (RB,)
     : RB, _AP_ 1 + - (RB,) ;    ' .COMMA-SIGNED   % (RB,) >DIS !
-    : RW, _AP_ 4 + - (RW,) ;    ' .COMMA-SIGNED   % (RW,) >DIS !
+    : RW, _AP_ 2 + - (RW,) ;    ' .COMMA-SIGNED   % (RW,) >DIS !
     : RL, _AP_ 4 + - (RL,) ;    ' .COMMA-SIGNED   % (RL,) >DIS !
 
 ( Require instructions as per a 32 resp. 16 bits segment.               )

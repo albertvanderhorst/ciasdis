@@ -174,13 +174,17 @@ VARIABLE TALLY-BY  ( Bits represent a commaer that is to be supplied)
 VARIABLE TALLY-BA  ( State bits, bad if two consequitive bits are up)
 ( Bits set in the default can be used to exclude certain classes of     )
 ( instructions, e.g. because they are not implemented.                  )
-VARIABLE BA-DEFAULT    0 BA-DEFAULT ! 
+VARIABLE BA-DEFAULT    0 BA-DEFAULT !
 VARIABLE OLDCOMMA ( Previous comma, or zero)
 VARIABLE ISS  ( Start of current instruction)
 VARIABLE ISL  ( Lenghth of current instruction)
-
+VARIABLE INST-PREFIX?  ( Don't reset BA, between prefix and instruction )
+( Reset ``BA'' to default for begin instruction, unless prefix.         )
+: RESET-BAD   INST-PREFIX? @ 0= IF BA-DEFAULT @ TALLY-BA ! THEN
+   0 INST-PREFIX? ! ;
 ( Initialise ``TALLY''                                                  )
-: !TALLY   0 TALLY-BI !   0 TALLY-BY !   BA-DEFAULT @ TALLY-BA !  0 OLDCOMMA ! ;
+: !TALLY   0 TALLY-BI !   0 TALLY-BY !   RESET-BAD   0 OLDCOMMA ! ;
+   !TALLY
 ( Return: instruction IS complete, or not started)
 : AT-REST? TALLY-BI @ 0=   TALLY-BY @ 0=  AND ;
 ( For N : it CONTAINS bad pairs)
