@@ -3,7 +3,7 @@
 
 0 -ORG-         \ Preliminary, to analyse header
 0 B@ 7F <> "Fatal, not an elf header!" ?ABORT
-1 TARGET>HOST 3 2DUP TYPE "ELF" $= 0 = "Fatal, not an elf header!" ?ABORT
+1 TARGET>HOST 3 "ELF" $= 0 = "Fatal, not an elf header!" ?ABORT
 \ : \D ;             \ Comment in for debugging.
 0
 DUP LABEL e_ident           10 +
@@ -59,13 +59,13 @@ DUP LABEL p_align    4 +
 \D  p_align    L@   ."  p_align   " . CR
 \D  MAKE-CUL
 
-p_vaddr L@ p_offset L@ -   .S -ORG-
+p_vaddr L@ p_offset L@ -   -ORG-
 
 \ Correct the labels to have the target position.
 \ Note that the value of the label was stored at 2 places,
 \ this may be a design error.
 : test EQU-LABELS DO-LAB
-    TARGET-START I .S +!   TARGET-START I CELL+ @ >DFA +!
+    TARGET-START I +!   TARGET-START I CELL+ @ >DFA +!
 LOOP-LAB ; test
 
 e_ident    DUP        10 +  -d$-
@@ -78,4 +78,4 @@ e_ident p_filesz L@ + LABEL _end
 _end e_ident - EQU filesz
 
 e_entry  L@ LABEL _start
-_start CRAWL
+: ELF-CRAWL   _start CRAWL ;
