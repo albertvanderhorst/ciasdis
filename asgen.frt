@@ -378,6 +378,7 @@ IS-A IS-DFIR   : DFIR   CHECK31 CREATE-- , REVERSE-BYTES , , ,
 : COMMA @+ >R  TALLY:,,  CHECK32   R> EXECUTE ;
 ( Build with an disassembly ROUTINE, with the LENGTH to comma, the BA   )
 ( BY information and the ADDRESS that is executing the commaer          )
+( A disassembly routine gets the ``DEA'' of the commaer on stack.       )
 IS-A  IS-COMMA   : COMMAER CREATE  , 0 , , , , , DOES> REMEMBER COMMA ;
 
 ( ------------- ASSEMBLER, SUPER DEFINING WORDS ----------------------)

@@ -3,9 +3,9 @@
 ( ############## 8089 ASSEMBLER ADDITIONS ############################# )
 ASSEMBLER DEFINITIONS  HEX
 : W,   DUP 8 RSHIFT C,   C, ;
-: DIS-C   POINTER @ COUNT U. POINTER !  ;
-: DIS-W   POINTER @ COUNT 8 LSHIFT >R COUNT >R POINTER !  R> R> OR U. ;
-( The standard disassembly for the commaer DEA for small endian.
+: DIS-C   AS-POINTER @ COUNT U. AS-POINTER !  ;
+: DIS-W   AS-POINTER @ COUNT 8 LSHIFT >R COUNT >R AS-POINTER !  R> R> OR U. ;
+( The standard disassembly for the commaer DEA for small endian.        )
 : .COMMA-STANDARD-NEW   DUP >CNT @ 1 = IF DIS-C ELSE DIS-W THEN   %ID. ;
 '.COMMA-STANDARD-NEW   '.COMMA-STANDARD 3 CELLS MOVE   \ Patch, one and for all.
 
@@ -133,16 +133,17 @@ ASSEMBLER DEFINITIONS  HEX
 : PRINT-STACK 80 AND IF %ID. _ THEN DROP ;
 \ For DEA and MASK leave next DEA and MASK.
 : NEXT-STACK 7F AND 1 LSHIFT SWAP >NEXT% SWAP ;
-: DIS-STACK   'PC&   POINTER @ @ 1 FIRSTBYTES    1 POINTER +!
+\ Disassembler byte denoting stack at ``AS-POINTER'' for DEA of 'STACK, .
+: DIS-STACK   DROP 'PC&   AS-POINTER @ C@   1 AS-POINTER +!
    ." (& " BEGIN 2DUP PRINT-STACK NEXT-STACK DUP 0= UNTIL ." )S, "
    2DROP ;
 ' DIS-STACK    % STACK, >DIS !
 
  ' ~IB,   % IB,, >DATA !   ( Fill in deferred data creation action  )
-( Disassemble the sib byte where the disassembler sits now.             )
-( [ `FORCED-DISASSEMBLY' takes care itself of incrementing the          )
-(   disassembly pointer. ]                                              )
-: DIS-IB [ % ~IB, ] LITERAL FORCED-DISASSEMBLY ;
+( Disassemble the ib byte where the disassembler sits now, ignore DEA   )
+( of 'E, . [ `FORCED-DISASSEMBLY' takes care itself of incrementing     )
+( the disassembly pointer. ]                                            )
+: DIS-IB   DROP [ % ~IB, ] LITERAL FORCED-DISASSEMBLY ;
 ( Fill in deferred disassembler action.                                 )
 ' DIS-IB    % IB,, >DIS !
 
