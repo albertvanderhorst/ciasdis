@@ -25,7 +25,7 @@ INCLUDE decsharp.frt
 INCLUDE labelas.frt
 INCLUDE labeldis.frt
 INCLUDE crawl.frt
-
+INCLUDE access.frt
 
 REQUIRE ARGC    REQUIRE OLD:    REQUIRE SRC>EXEC        REQUIRE INCLUDED
 
