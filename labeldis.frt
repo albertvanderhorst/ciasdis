@@ -253,7 +253,7 @@ REQUIRE NEW-IF
 \ 1 control character           ^J
 \ 2 a blank                     BL  "xxx xxx"
 \ 3 normal printable            &Z  "xxxZxxx"
-CREATE TABLE HEX 100 ALLOT      TABLE 100 ERASE
+CREATE TABLE 256 ALLOT      TABLE 256 ERASE
 &~ 1 + BL 1 + DO 3 TABLE I + C! LOOP
 2 BL TABLE + C!
 1 ^I TABLE + C!
