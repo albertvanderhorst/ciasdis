@@ -165,6 +165,8 @@
 0000 0 0200,0200 0000 FIR 1|   0000 0 0200,0200 0200 FIR V|          ( 3)
 0100 0 2,C703 T! ( 2,0000 is a lockin for 1| V|)                   ( 3)
  0800 00D0 8 2FAMILY, ROL, ROR, RCL, RCR, SHL, SHR, -- SAR,  ( 3)
+0000 8 C701 T!
+ 0800 00C0 8 2FAMILY, ROLI, RORI, RCLI, RCRI, SHLI, SHRI, -- SARI,  ( 3)
 8,0012 0000 3F,0300 C0,200F 3PI  MOV|CD,  ( 3)
 
 0800 80 5,0F00 800F 2PI J|X,                                           ( 3)
