@@ -128,7 +128,7 @@ ASSEMBLER DEFINITIONS  HEX
 \ Usage : PUSHS, (& B& C& ... X& )S,
 : | CREATE DUP C, 1 LSHIFT DOES> C@ OR ;
 1 | CCR&  | A&   | B&   | DPR&   | X&   | Y&   | U&   | PC&   DROP
-'| HIDDEN    : (& DSP@ 0 ;    : )S, STACK, ?CSP ;
+'| HIDDEN    : (& !CSP 0 ;    : )S, STACK, ?CSP ;
 \ For DEA and MASK print name if mask applicable.
 : PRINT-STACK 80 AND IF %ID. _ THEN DROP ;
 \ For DEA and MASK leave next DEA and MASK.
