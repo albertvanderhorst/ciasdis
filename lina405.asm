@@ -22,7 +22,7 @@ BITS-32
 ( 0804,9030 )   :e_shnum   dw 0006 
 ( 0804,9032 )   :e_shstrndx   dw 0005 
 
-( 0804,9034 )   :p_type   dl 1 
+( 0804,9034 )   :p_type :e_headerend   dl 1 
 ( 0804,9038 )   :p_offset   dl 0 
 ( 0804,903C )   :p_vaddr   dl e_ident 
 ( 0804,9040 )   :p_paddr   dl e_ident 
@@ -251,7 +251,7 @@ BITS-32
 
 ( 0804,95B8 )   :N_SUPPLIER   d$  8  0  0  0  "SUPPLIER"
 
-( 0804,95C4 )   :X_SUPPLIER   dl docol H_SUPPLIER 0 X_NAME 
+( 0804,95C4 )   :X_SUPPLIER :last_dea_envir   dl docol H_SUPPLIER 0 X_NAME 
 ( 0804,95D4 )                 dl N_SUPPLIER 0 
 ( 0804,95DC )   :H_SUPPLIER   dl X_SKIP H_RUBOUT 
 ( 0804,95E4 )   :NAME3   dl 6562,6C41 7620,7472 6420,6E61 4820,7265 
@@ -813,7 +813,7 @@ BITS-32
 
 ( 0804,A0D4 )   :N_(;)   d$  3  0  0  0  "(;)" 90 
 
-( 0804,A0DC )   :semis   dl L0804,A0A0 N_LEAVE 0 X_CO 
+( 0804,A0DC )   :semis :X_(;)   dl L0804,A0A0 N_LEAVE 0 X_CO 
 ( 0804,A0EC )                 dl N_(;) 0 
 
 ( 0804,A0F4 )   :N_LEAVE   d$  5  0  0  0  "LEAVE" 90 
@@ -1968,7 +1968,7 @@ BITS-32
 
 ( 0804,B7A0 )   :N_(;CODE)   d$  7  0  0  0  "(;CODE)" 90 
 
-( 0804,B7AC )   :semiscode   dl docol H_(;CODE) 0 X_DECIMAL 
+( 0804,B7AC )   :semiscode :X_(;CODE)   dl docol H_(;CODE) 0 X_DECIMAL 
 ( 0804,B7BC )                 dl N_(;CODE) 0 
 ( 0804,B7C4 )   :H_(;CODE)   dl X_R> X_LATEST 
 ( 0804,B7CC )                 dl X_>CFA X_! semis 
@@ -3950,7 +3950,7 @@ BITS-32
 
 ( 0804,F824 )   :N_TASK   d$  4  0  0  0  "TASK"
 
-( 0804,F82C )   :last_dea   dl docol H_TASK 0 X_.SIGNON 
+( 0804,F82C )   :last_dea :X_TASK   dl docol H_TASK 0 X_.SIGNON 
 ( 0804,F83C )                 dl N_TASK 0 
 ( 0804,F844 )   :H_TASK   dl semis 
 
