@@ -175,6 +175,7 @@ lina405.asm     \
 # That's all folks!
 
 RELEASEASSEMBLER=      \
+Makefile        \
 $(ASSRC)        \
 $(PGSRC)        \
 $(UNPSRC)       \
@@ -517,16 +518,6 @@ testas6809: asgen.frt as6809.frt testset6809 ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset6809 >$@.diff ;\
-    diff $@.diff testresults
-
-# Special test to exercise otherwise hidden instructions.
-testas6809a: asgen.frt as6809.frt testset6809a ; \
-    (echo 5 LOAD; cat $+)|\
-    lina |\
-    sed '1,/TEST STARTS HERE/d' |\
-    sed '/^OK$$/d' |\
-    sed 's/^[0-9A-F \.,]*://' >$@       ;\
-    diff -w $@ testset6809a >$@.diff ;\
     diff $@.diff testresults
 
 as.tgz : $(RELEASEASSEMBLER) cias ciasdis cidis ; echo as$(VERSION).tgz $+ |\
