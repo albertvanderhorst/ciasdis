@@ -218,10 +218,10 @@ JOPI"
 
 12 34 '2DROP
 struct DIS-STRUCT
-   F: START ROT , FDOES> @ ;     \ Start of range
-   F: END SWAP , FDOES> @ ;       \ End of range
+   F: DIS-START ROT , FDOES> @ ;     \ Start of range
+   F: DIS-END SWAP , FDOES> @ ;       \ End of range
    F: DIS-XT FDOES> @ ;       \ Which xt?
-   F: DIS-RANGE , FDOES> @ >R START END R> EXECUTE ;       \ End of range
+   F: DIS-RANGE , FDOES> @ >R DIS-START DIS-END R> EXECUTE ;       \ End of range
 endstruct
 
 \ ---------------- Specifiers of disassembly ranges ----------------------
@@ -235,7 +235,7 @@ endstruct
 1000 '.PAY-DEA LABELSTRUCT SECTION-LABELS   LABELS !BAG
 
 \ Specify that section "name" from AD1 to AD2 uses dis-assembler DEA
-: SECTION   SECTION-LABELS DIS-STRUCT START LAB+!  LATEST LAB+!  ;
+: SECTION   SECTION-LABELS DIS-STRUCT DIS-START LAB+!  LATEST LAB+!  ;
 \ Specify that from AD1 to AD2 dis-assembler DEA is used. (anonymous).
 : ANON-SECTION "NONAME" POSTFIX SECTION ;
 

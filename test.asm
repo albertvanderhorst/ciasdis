@@ -11,6 +11,7 @@ BITS-32
     POP|ES,
     ADD, B| F| AL'| D0| [SI]
     MOV, X| T| DI'| MEM| XXX L,
+    RET,
 \ XXX is a target for backward jumps:
 :RRR
         DB  1 ^C &C  65 65 80
@@ -40,6 +41,7 @@ OS:,
 OS:,
 AS:,
     LEA, AX'| DW| [BX+SI]'   16 W,
+    RET,
 BITS-32
 INC|X,  AX|
     MOVI,   X|   DW|   [BX]   14 L,   18 IL,
@@ -51,6 +53,7 @@ AS:,
     MOVI,   X|   DW|   [BX]'   20 W,   24 IL,
 AS:, OS:,
     MOVI,   X|   DW|   [BX]'   20 W,   24 IW,
+    RET,
 BITS-16
 INC|X,  AX|
 AS:, OS:,
@@ -62,6 +65,7 @@ INC|X,  AX|
 OS:,
     MOVI,   X|   DW|   [BX]'   20 W,   24 IL,
     MOVI,   X|   DW|   [BX]'   20 W,   24 IW,
+    RET,
 BITS-32
 \ YYY is a target for forward jumps:
 :YYY
