@@ -229,8 +229,17 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 always refers to a target range,
 \ where address2 is exclusive.
 
+
+\ To be shown at the end of each range.
+        ASSEMBLER
+: SHOW-END POINTER @ ADORN-ADDRESS CR ;
+        PREVIOUS
+
+: .PAY-SECTION CELL+ @ DUP EXECUTE
+   DIS-START H.  SPACE DIS-END H.  " BY " TYPE DIS-XT ID.  ID. ;
+
 \ Contains sector specification, range plus type.
-1000 '.PAY-DEA LABELSTRUCT SECTION-LABELS   LABELS !BAG
+1000 '.PAY-SECTION LABELSTRUCT SECTION-LABELS   LABELS !BAG
 
 \ Specify that section "name" from AD1 to AD2 uses dis-assembler DEA
 : SECTION   SECTION-LABELS DIS-STRUCT DIS-START LAB+!  LATEST LAB+!  ;
@@ -238,7 +247,7 @@ endstruct
 : ANON-SECTION "NONAME" POSTFIX SECTION ;
 
 \ Disassemble from target ADDRESS1 to ADDRESS2.
-: D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R ;
+: D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R SHOW-END ;
 
 \ Section ADDRESS1 .. ADDRESS2 is code with name "name".
 : -DC:    'D-R-T   SECTION ;
