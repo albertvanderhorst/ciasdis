@@ -7,10 +7,10 @@
 ( ############## 8086 ASSEMBLER ADDITIONS ############################# )
 ( The patch for the assembler doesn't belong in the generic part        )
 ( To be used when overruling, e.g. prefix)
-: lsbyte, 0 100 UM/MOD SWAP C, ;
+: lsbyte, DUP AS-C, 0008 RSHIFT ;
 : W, lsbyte, lsbyte, DROP ;
 : L, lsbyte, lsbyte, lsbyte, lsbyte, DROP ;
-: IS, C, ;
+: IS, AS-C, ;
 ( There are some fixups-from-reverse that are larger than 2 l bytes.    )
 ( Using the out of mask bit trick, that has to be eliminated.           )
 ." This 8086 assembler runs only on 32 bits systems!" CR
@@ -18,15 +18,15 @@
 ( ############## 8086 ASSEMBLER PROPER ################################ )
 ( The decreasing order means that a decompiler hits them in the         )
 ( right order                                                           )
-0 0 CELL+  0 8000 ' ,  >CFA  COMMAER (RX,) ( cell relative to IP )
-0 1        0 4000 ' C, >CFA  COMMAER (RB,) ( byte relative to IP )
+0 0 CELL+  0 8000 ' AS-,  >CFA  COMMAER (RX,) ( cell relative to IP )
+0 1        0 4000 ' AS-C, >CFA  COMMAER (RB,) ( byte relative to IP )
 0 2        0 2000 ' W, >CFA  COMMAER SG,   (  Segment: WORD      )
-0 1        0 1000 ' C, >CFA  COMMAER P,    ( port number ; byte     )
-0 1        0  800 ' C, >CFA  COMMAER IS,   ( immediate byte data, obligatory size)
-0 0 CELL+  2  400 ' ,  >CFA  COMMAER IX,   ( immediate data : cell)
-0 1        1  400 ' C, >CFA  COMMAER IB,   ( immediate byte data)
-0 0 CELL+  8  200 ' ,  >CFA  COMMAER X,    ( immediate data : address/offset )
-0 1        4  200 ' C, >CFA  COMMAER B,    ( immediate byte : address/offset )
+0 1        0 1000 ' AS-C, >CFA  COMMAER P,    ( port number ; byte     )
+0 1        0  800 ' AS-C, >CFA  COMMAER IS,   ( immediate byte data, obligatory size)
+0 0 CELL+  2  400 ' AS-,  >CFA  COMMAER IX,   ( immediate data : cell)
+0 1        1  400 ' AS-C, >CFA  COMMAER IB,   ( immediate byte data)
+0 0 CELL+  8  200 ' AS-,  >CFA  COMMAER X,    ( immediate data : address/offset )
+0 1        4  200 ' AS-C, >CFA  COMMAER B,    ( immediate byte : address/offset )
 0 2        0  100 ' W, >CFA  COMMAER W,    ( obligatory word     )
 ( Bits in TALLY  1 OPERAND IS BYTE     2 OPERAND IS CELL                )
 (                4 OFFSET   DB|        8 ADDRESS      DW|               )
@@ -92,8 +92,8 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 8 0200 201 T!    02 A0 2 1FAMILY, MOVTA, MOVFA,
 0 0400 201 T!
  08 04 8 1FAMILY, ADDI|A, ORI|A, ADCI|A, SBBI|A, ANDI|A, SUBI|A, XORI|A, CMPI|A,
-00 00 201 A8 1PI TESTI|A,                                                                                               020
-00 00 201 T!  02 A4 6 1FAMILY, MOVS, CMPS, -- STOS, LODS, SCAS,                                                         040
+00 00 201 A8 1PI TESTI|A,
+00 00 201 T!  02 A4 6 1FAMILY, MOVS, CMPS, -- STOS, LODS, SCAS,
 00 1000 201 T!   02 E4 2 1FAMILY, IN|P, OUT|P,
 00 0000 201 T!   02 EC 2 1FAMILY, IN|D, OUT|D,
 

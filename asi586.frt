@@ -6,7 +6,7 @@
 ( ############## 80386 ASSEMBLER ADDITIONS ############################ )
 ( The patch for the assembler doesn't belong in the generic part        )
 ( To be used when overruling, e.g. prefix)
-: lsbyte, DUP C, 0008 RSHIFT ;
+: lsbyte, DUP AS-C, 0008 RSHIFT ;
 : W, lsbyte, lsbyte, DROP ;
 : L, lsbyte, lsbyte, lsbyte, lsbyte, DROP ;
 
@@ -22,15 +22,15 @@
 ( later. )
 
 0 2 0000 0100 ' W, COMMAER OW,    ( obligatory word     )
-0 4 0000 0080 ' ,  COMMAER (RX,) ( cell relative to IP )
-0 1 0000 0040 ' C, COMMAER (RB,) ( byte relative to IP )
+0 4 0000 0080 ' AS-,  COMMAER (RX,) ( cell relative to IP )
+0 1 0000 0040 ' AS-C, COMMAER (RB,) ( byte relative to IP )
 0 2 0000 0020 ' W, COMMAER SG,   (  Segment: WORD      )
-0 1 0000 0010 ' C, COMMAER P,    ( port number ; byte     )
-0 1 0000 0008 ' C, COMMAER IS,    ( Single -obl-  byte )
-0 4 0002 0004 ' ,  COMMAER IX,   ( immediate data : cell)
-0 1 0001 0004 ' C, COMMAER IB,   ( immediate byte data)
-0 4 0008 0002 ' ,  COMMAER X,    ( immediate data : address/offset )
-0 1 0004 0002 ' C, COMMAER B,    ( immediate byte : address/offset )
+0 1 0000 0010 ' AS-C, COMMAER P,    ( port number ; byte     )
+0 1 0000 0008 ' AS-C, COMMAER IS,    ( Single -obl-  byte )
+0 4 0002 0004 ' AS-,  COMMAER IX,   ( immediate data : cell)
+0 1 0001 0004 ' AS-C, COMMAER IB,   ( immediate byte data)
+0 4 0008 0002 ' AS-,  COMMAER X,    ( immediate data : address/offset )
+0 1 0004 0002 ' AS-C, COMMAER B,    ( immediate byte : address/offset )
 _ 1 0000 0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 
 
