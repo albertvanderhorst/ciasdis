@@ -92,7 +92,6 @@
 
 ( ############### PART I ASSEMBLER #################################### )
 ( MAYBE NOT PRESENT UTILITIES                                           )
-"aswrap.frt" INCLUDED
 REQUIRE !CSP         \ To counter design error to eliminate it.
 REQUIRE @+ ( Fetch from ADDRES. Leave incremented ADDRESS and DATA )
 : !+ >R R@ ! R> CELL+ ; ( Store DATA to ADDRES. Leave incremented ADDRESS)
