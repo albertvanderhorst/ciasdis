@@ -120,6 +120,11 @@ the binary image.
 .br
 Add \fI<name>\fR to the plain labels with value \fI<expr>\fR.
 .TP
+\fI<expr>\fR \fB.LABEL/.\fR
+.br
+If \fIexpr\fR is known as a plain label print the label,
+otherwise print its value in hex.
+.TP
 \fI<expr1>\ <expr2>\fR \fB-db:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
@@ -135,6 +140,8 @@ values.
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
 \fI<name>\fR and is a section to be disassembled as long (32-bit) values.
+They are printed as symbolic names,
+if they occur as a plain label.
 .TP
 \fI<expr1>\ <expr2>\fR \fB-d$:\fR \fI<name>\fR
 .br
@@ -238,21 +245,32 @@ It will be taken into account at the next invocation of CRAWL .
 Extracting label names from the binary is a vital capability.
 Note that the keywords in this section are operators,
 in the sense that they leave a result string for further processing.
+They operate on addresses in the host space (unlike \fBL@\fR e.a.),
+so they are normally preceeded by \fBTARGET>HOST\fR.
 .TP
-\fI<expr>\fR \fBCOUNT\fR
-Get a string expression from address \fI<expr>\fR,
+\fI<addr>\fR \fBTARGET>HOST\fR
+Transform the target address to a host address.
+It may be abbreviated to \fBth\fR.
+.TP
+\fI<addr>\fR \fBCOUNT\fR
+Get a string expression from address \fI<addr>\fR,
 assuming its first byte is the character count.
 .TP
-\fI<expr>\fR \fB$@\fR
-Get a string expression from address \fI<expr>\fR,
+\fI<addr>\fR \fB$@\fR
+Get a string expression from address \fI<addr>\fR,
 assuming its first long-word (32 bits) is the character count.
 .TP
-\fI<expr>\fR \fBZ$@\fR
-Get a string expression from address \fI<expr>\fR,
+\fI<addr>\fR \fBZ$@\fR
+Get a string expression from address \fI<addr>\fR,
 assuming it ends in an ASCII zero (c-style).
 .SH "ADVANCED"
 A modest skill in the Forth language can increase the usefulness
 of \fBcidis\fR considerably.
+.br
+You can get pretty far by making a customized script.
+The source contains many commands that are occasionally
+useful.
+All commands in the source are documented using the Stallman convention.
 .br
 With the Forth commands \fBDUP SWAP OVER 2DUP 2SWAP 2OVER\fR
 writing down the same expression repeatedly can be avoided.
@@ -264,7 +282,8 @@ fashion (regular Forth practice):
 .TP
 \fB:\ \fI<name> <sequence> \fB;\fR
 .br
-Using \fI<name>\fR will result in the execution of the commands in \fI<sequence>\fR.
+Using \fI<name>\fR will result in the execution of the commands
+in \fI<sequence>\fR.
 If \fI<sequence>\fR contains commands that scan ahead (e.g. \fI-db:\fR)
 the scanning will be done when \fI<name>\fR is invoked;
 this can be confusing for novices.
