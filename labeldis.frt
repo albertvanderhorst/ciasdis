@@ -50,6 +50,9 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 \ All indices are compatible with this.
 : LABELS[]   1- 2* CELLS LABELS CELL+ + ;
 
+\ Remove label I.
+: REMOVE-LABEL   LABELS[] LABELS   2DUP BAG-REMOVE BAG-REMOVE ;
+
 \ Loop through all ``LABELS'', similar to ``DO-BAG .. DO-LOOP'' but with
 \ a stride of 2 cells and the bag built-in.
 : DO-LAB POSTPONE LABELS POSTPONE DO-BAG ; IMMEDIATE
@@ -279,9 +282,10 @@ struct DIS-STRUCT
    F: REVERSE-ORDER >R >R >R >R FDOES> ; \ Cludge, not actually executed.
    F: DIS-START R> , FDOES> @ ;     \ Start of range
    F: DIS-END R> , FDOES> @ ;       \ End of range
-   F: DIS-XT FDOES> @ ;       \ Which xt?
+   F: DIS-XT FDOES> @ ;
    F: DIS-RANGE R> , FDOES> @ >R DIS-START DIS-END R> EXECUTE ;       \ End of range
-   F: DIS-CR-XT R> , FDOES> @ EXECUTE ;       \ What to do at line boundaries.
+   F: DIS-CR-XT FDOES> @ ;       \ Which xt?
+   F: DIS-CR R> , FDOES> @ EXECUTE ;       \ What to do at line boundaries.
 endstruct
 
 \ To be shown at the end of each range.
@@ -306,7 +310,6 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 is code with name "name".
 : -dc:    'D-R-T   'CR+LABEL SECTION ;
 
-\ FIXME : to be tested still!
 \ Section ADDRESS1 .. ADDRESS2 is code with name NAME.
 : -dc    2>R 'D-R-T   'CR+LABEL 2R> POSTFIX  SECTION ;
 
@@ -321,6 +324,9 @@ endstruct
 
 \ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
 : -db:    'DUMP-B   'CR+db SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 are bytes with name NAME.
+: -db    2>R 'DUMP-B 'CR+db 2R> POSTFIX  SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous byte section.
 : -db-    'DUMP-B   'CR+db ANON-SECTION ;
@@ -338,6 +344,9 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 are words with name "name".
 : -dw:    'DUMP-W   'CR+dw SECTION ;
 
+\ Section ADDRESS1 .. ADDRESS2 are words with name NAME.
+: -dw    2>R 'DUMP-W 'CR+db 2R> POSTFIX  SECTION ;
+
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous word section.
 : -dw-    'DUMP-W   'CR+dw ANON-SECTION ;
 
@@ -349,6 +358,9 @@ endstruct
 
 \ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
 : -dl:    'DUMP-L   'CR+dl SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 are longs with name NAME.
+: -dl    2>R 'DUMP-W 'CR+db 2R> POSTFIX  SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
 : -dl-    'DUMP-L   'CR+dl ANON-SECTION ;
@@ -364,7 +376,7 @@ endstruct
     PRINT-OLD-COMMENT:
     DUP PRINT-COMMENT
     DUP REMEMBER-COMMENT:
-    DIS-CR-XT ( disassembly type dependant action ) ;
+    DIS-CR ( disassembly type dependant action ) ;
 
 \ Revector ``ADORN-ADDRESS'' used in "asgen.frt".
 '(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !

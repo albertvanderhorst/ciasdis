@@ -4,6 +4,134 @@
 
 \ Crawling is the process of following jumps to determine code space.
 
+\ ------------------------------------------------------------------------
+
+REQUIRE H.
+
+: \D ;
+
+\ Make section I current.
+: MAKE-CURRENT LABELS[] CELL+ @ EXECUTE ;
+
+\ Make ADDRESS return some label NAME, static memory so use immediately.
+: INVENT-NAME   "L" PAD $!   0 8 (DH.) PAD $+! PAD $@ ;
+
+\D HEX 42 INVENT-NAME TYPE ." EXPECT: L0000,0042 " CR
+
+\ Add target ADDRESS to the equ labels if it is not there. Invent a name.
+: INVENT-LABEL    EQU-LABELS DUP >LABEL IF DROP ELSE
+     DUP INVENT-NAME LABELED THEN ;
+
+\D EQU-LABELS LABELS !BAG
+\D ." EXPECT: empty " EQU-LABELS .LABELS  CR
+\D 44 INVENT-LABEL
+\D ." EXPECT: L0000,0042 added " EQU-LABELS .LABELS     CR
+\D 44 INVENT-LABEL
+\D ." EXPECT: L0000,0042 NOT added again " EQU-LABELS .LABELS     CR .S
+
+\D SECTION-LABELS       LABELS !BAG
+\D 4FE 510 -dc-
+\D 520 530 -dc: oops
+\D 530 570 -dc-
+\D 560 590 -db: bytes
+\D ." EXPECT: 4 sections :" .LABELS CR .S
+
+\ Section INDEX1 and INDEX2 are of the same type.
+: COMPATIBLE?  OVER MAKE-CURRENT DIS-XT   OVER MAKE-CURRENT DIS-XT = >R
+              OVER MAKE-CURRENT DIS-CR-XT OVER MAKE-CURRENT DIS-CR-XT  = >R
+    2DROP   R> R> AND ;
+
+\D  ." EXPECT: -1 :" 1 2 COMPATIBLE? .  CR
+\D  ." EXPECT: -1 :" 2 3 COMPATIBLE? .  CR
+\D  ." EXPECT: 0 :"  3 4 COMPATIBLE? .  CR .S
+
+\ Section INDEX1 and INDEX2 have overlap or are adjacent.
+\ Index1 must have a lower start than index2
+: OVERLAP?  SWAP MAKE-CURRENT DIS-END SWAP MAKE-CURRENT DIS-START >= ;
+
+\D ." EXPECT: 0 :"  1 2 OVERLAP? .     CR
+\D ." EXPECT: -1 :" 2 3 OVERLAP? .     CR
+\D ." EXPECT: 0 :"  1 3 OVERLAP? .     CR
+\D ." EXPECT: -1 :" 3 4 OVERLAP? .     CR .S
+
+\ Get the name of section INDEX.
+: SECTION-NAME LABELS[] CELL+ @ >NFA @ $@ ;
+
+\D  ." EXPECT: NONAME :" 1 SECTION-NAME TYPE CR
+\D ." EXPECT: oops :"    2 SECTION-NAME TYPE   CR .S
+
+\ For INDEX1 and INDEX2 leave INDEX1 and INDEX2 . Return a new NAME for
+\ the section, plus "not both ARE named"
+: NEW-NAME 2DUP SECTION-NAME 2DUP "NONAME" $= IF 2DROP SECTION-NAME -1 ELSE
+           ROT SECTION-NAME "NONAME" $= THEN ;
+
+\D  ." EXPECT -1 oops : " 1 2 NEW-NAME  . TYPE 2DROP CR
+\D  ." EXPECT -1 oops : " 2 3 NEW-NAME  . TYPE 2DROP CR
+\D  ." EXPECT -1 bytes : " 3 4 NEW-NAME  . TYPE 2DROP CR
+\D 590 5A0 -db: byt2
+\D  ." EXPECT 0 <anything> :" 3 4 NEW-NAME  . TYPE 2DROP CR .S
+
+\ For a collapsible pair of section with INDEX1 and INDEX2 return INDEX1 and
+\ INDEX2 plus a new START for the combined section.
+: NEW-DIS-START OVER MAKE-CURRENT DIS-START  OVER MAKE-CURRENT DIS-START   MIN ;
+
+\ For a collapsible pair of section with INDEX1 and INDEX2 return INDEX1 and
+\ INDEX2 plus a new END for the combined section.
+: NEW-DIS-END OVER MAKE-CURRENT DIS-END  OVER MAKE-CURRENT DIS-END   MAX ;
+
+\D  ." EXPECT 520 : " 2 3 NEW-DIS-START . 2DROP CR
+\D  ." EXPECT 590 : " 3 4 NEW-DIS-END  . 2DROP CR .S
+
+\ For a pair of sections with INDEX1 and INDEX2 return INDEX1 and
+\ INDEX2 plus "they CAN be collapsed."
+: COLLAPSIBLE?  2DUP OVERLAP? IF 2DUP COMPATIBLE? ELSE 0 THEN ;
+
+\D  ." EXPECT 0 : " 1 2 COLLAPSIBLE?    . 2DROP CR
+\D  ." EXPECT -1 : " 2 3 COLLAPSIBLE?   . 2DROP CR
+\D  ." EXPECT 0 : " 3 4 COLLAPSIBLE?   . 2DROP CR .S
+
+\ Try to collapse a pair of sections with INDEX1 and INDEX2 return INDEX1 and
+\ INDEX2 plus "they WERE collapsed."
+\ Don't collapse sections that have been carefully given names,
+\ but collapse a noname section into a named section.
+: COMBINE  COLLAPSIBLE? 0= IF 0 EXIT THEN
+    NEW-NAME 0= IF 2DROP 0 EXIT THEN   2>R
+    DIS-CR-XT >R DIS-XT >R NEW-DIS-END >R NEW-DIS-START >R
+   R> R> R> R> 2R> POSTFIX SECTION -1 ;
+
+\D  .LABELS
+\D  ." EXPECT 0  SAME ; " 3 4 COMBINE . .LABELS 2DROP CR  .S
+\D  ." EXPECT -1 1 MORE : " 2 3 COMBINE . .LABELS 2DROP CR .S
+\D  ." EXPECT 0  SAME : " 1 2 COMBINE . .LABELS  2DROP CR .S
+
+\ Replace the two sections INDEX1 and INDEX2 with the last section.
+\ Place it at index1 (which has the correct start address.)
+: REPLACE  OVER >R REMOVE-LABEL REMOVE-LABEL R> ROLL-LABEL ;
+
+\D  ." EXPECT 1 LESS : " 2 3 REPLACE .LABELS CR .S
+
+\ Collapse INDEX1 and INDEX2 if possible.
+\ It should work for increasing, but is tested for consequitive.
+: COLLAPSE(I1,I2) COMBINE IF REPLACE ELSE 2DROP THEN ;
+
+\D 59F 800 -db- .LABELS
+\D  ." EXPECT 1 LESS : " 2 3 COLLAPSE(I1,I2) .LABELS CR .S
+
+\ Collapse the label at INDEX with the next and or previous labels.
+: COLLAPSE(I1) SECTION-LABELS
+    1 OVER < IF DUP 1- OVER COLLAPSE(I1,I2) 1- ( !! section moves !!) THEN
+    LAB-UPB OVER > IF DUP OVER 1+ COLLAPSE(I1,I2) THEN
+    DROP ;
+
+\D LABELS !BAG
+\D 4FE 520 -dc-
+\D 520 530 -dc: oops
+\D 52A 570 -dc-
+\D 560 590 -db: bytes
+\D .LABELS
+\D  ." EXPECT 1 LESS : " 2 COLLAPSE(I1) .LABELS CR .S
+
+\ ------------------------------------------------------------------------
 ASSEMBLER
 
 \ Jump targets that are starting points for further crawling.
@@ -11,8 +139,6 @@ ASSEMBLER
 \ Recursion will not do here! This is because sections are not added
 \ until the end is detected.
 1000 BAG STARTERS
-
-: >= < 0= ;
 
 VARIABLE (R-XT)        \ Required xt.
 \ Return the XT that is required for the current disassembly.
@@ -28,10 +154,8 @@ NORMAL-DISASSEMBLY
 \ Add the information that ADDRESS1 to ADDRESS2 is a code section.
 \ If section labels was sorted, it remains so.
 : INSERT-SECTION   OVER SECTION-LABELS WHERE-LABEL >R
-    REQUIRED-XT 'CR+LABEL ANON-SECTION   R> ROLL-LABEL .LABELS ;
-
-\ Make section I current.
-: MAKE-CURRENT LABELS[] CELL+ @ EXECUTE ;
+    REQUIRED-XT 'CR+LABEL ANON-SECTION   R@ ROLL-LABEL .LABELS
+    R> COLLAPSE(I1) ;
 
 \ The following are auxiliary words for `` KNOWN-CODE? '' mainly.
 \ For all those section labels must be current and sorted.
