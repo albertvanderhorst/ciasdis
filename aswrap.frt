@@ -33,19 +33,23 @@ VARIABLE CP
 
 \ Address in target associated with the start of ``CODE-SPACE''.
 \ Where the code is to be located during execution.
-VARIABLE TARGET-START
+VARIABLE (TARGET-START)
+
+\ FIXME: to be renamed.
+: TARGET-START@ (TARGET-START) @ ;
 
 \ Associate ADDRESS with the start of ``CODE-SPACE''.
-: ORG      TARGET-START !   CODE-SPACE CP ! ;
+: ORG      (TARGET-START) !   CODE-SPACE CP ! ;
 
 \ Convert host memory ADDRESS. Leave target memory ADDRESS.
-: HOST>TARGET  CODE-SPACE - TARGET-START @ + ;
+: HOST>TARGET  CODE-SPACE - TARGET-START@ + ;
 
 \ Convert target memory ADDRESS. Leave host memory ADDRESS.
-: TARGET>HOST   TARGET-START @ -   CODE-SPACE +   ;
+: TARGET>HOST   TARGET-START@ -   CODE-SPACE +   ;
 
 \ Instruction pointer in assembly. View used in branches etc.
 : NEW-_AP_    CP @ HOST>TARGET ;   HOT-PATCH _AP_
+
 
 \ Swap dictionary pointer back and forth to assembler area.
 : SWAP-AS CP @ DP @    CP ! DP !  ;
@@ -56,3 +60,6 @@ VARIABLE TARGET-START
 \ Only Needed. Maybe ``CP C! 1 CP +!''
 \ Wrapper for ``C,'' such as used in assembly.
 : NEW-AS-C,    SWAP-AS C, SWAP-AS ;  HOT-PATCH AS-C,
+
+\ The end of the code area while disassembling: a target address.
+'_AP_ ALIAS TARGET-END

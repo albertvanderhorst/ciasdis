@@ -17,9 +17,9 @@ START -ORG-
 START RRR "poo" -dc \ Named section
 RRR   DUP 6 + SWAP OVER -db: bytes
 RRR 3 + LABEL RRRR
-DUP   DUP 6 + SWAP OVER -d$-
-DUP DUP 0C +  SWAP OVER -dw: words
-DUP DUP 18 + SWAP OVER -dl: longs
+( DUP)   DUP 6 + SWAP OVER -d$-
+( DUP) DUP 0C +  SWAP OVER -dw: words
+( DUP) DUP 18 + SWAP OVER -dl: longs
 END LEN16 -   -dc-            \ Unnamed section
 END LEN16 -  END  -dc16: AAP               \ Named section
 

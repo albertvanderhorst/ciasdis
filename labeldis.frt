@@ -18,11 +18,13 @@ REQUIRE 2>R
 
 \ -------------------- INTRODUCTION --------------------------------
 
+\ FIXME : probably belongs in aswrap.frt.
+
 \ Associate target ADDRESS with start of ``CODE-BUFFER''
 \ Here is something stupid  going, there may be several addresses.
 \ The valid range from the code buffer goes to ``CP @'' and is not
 \ affected.
-: -ORG- TARGET-START ! ;
+: -ORG- (TARGET-START) ! ;
 
 
 \ -------------------- generic definition of labels ----------------
@@ -452,22 +454,24 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
 : -d$-    'DUMP-$   'CR+d$ ANON-SECTION ;
 
+\ Print a remark about whether START and END fit.
+: .HOW-FIT   2DUP = IF 2DROP "\ Perfect Fit." ELSE
+   > IF "\ Overlapping sections." ELSE
+   "\ Hole between sections" THEN THEN CR TYPE CR ;
+
 \ Print a remark about whether start of the current range fits to the
 \ END of the previous range. Leave END of current range for the next check.
 \ FIXME : this one crashes!
-: HOW-FIT   DIS-START 2DUP .S = IF 2DROP " Perfect Fit." ELSE
-   > IF "Overlapping sections." ELSE
-   "Hole between sections" THEN THEN CR TYPE CR DIS-END ;
+: HOW-FIT   DIS-START .HOW-FIT DIS-END ;
 
-\ Print a remark about whether or not the disassembled ranges
-\ fit well together.
-: HOW-FIT   NEXT-CUT @ DIS-START TARGET>HOST 2DUP .S = IF 2DROP " Perfect Fit." ELSE
-   > IF "Overlapping sections." ELSE
-   "Hole between sections" THEN THEN CR TYPE CR ;
+\ Print a remark about whether the END of the previous range is really
+\ the end of the input file.
+: HOW-FIT-END    TARGET-END .HOW-FIT ;
 
 \ Disassemble all those sectors as if they were code.
-: DISASSEMBLE-ALL   NEXT-CUT!
-    SECTION-LABELS DO-LAB I CELL+ @ EXECUTE   DIS-RANGE LOOP-LAB ;
+: DISASSEMBLE-ALL   NEXT-CUT!   TARGET-START@
+    SECTION-LABELS DO-LAB I CELL+ @ EXECUTE   HOW-FIT DIS-RANGE LOOP-LAB
+    HOW-FIT-END ;
 
 \ ------------------- Generic again -------------------
 
@@ -494,7 +498,7 @@ endstruct
 \ Disassemble the current program as stored in the ``CODE-BUFFER''.
 \ Using what is known about it.
 : DISASSEMBLE-TARGET
-    TARGET-START @ . " ORG" TYPE CR   DISASSEMBLE-ALL   CP @ ADORN-ADDRESS CR ;
+    TARGET-START@ . " ORG" TYPE CR   DISASSEMBLE-ALL   CP @ ADORN-ADDRESS CR ;
 
 \ i386 dependant, should somehow be separated out.
 : DISASSEMBLE-TARGET "BITS-32" TYPE CR  DISASSEMBLE-TARGET ;
