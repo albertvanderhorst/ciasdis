@@ -23,3 +23,8 @@ PREVIOUS
 
 \ For STRING1 and STRING2 : "they ARE equal".
 : $= ROT OVER = IF CORA 0 = ELSE DROP DROP DROP 0 THEN ;
+
+\ Print STRING, as a quoted string, duly doubling the ``"'' if present.
+: ."$" BEGIN &" $S &" EMIT TYPE &" EMIT OVER 0= UNTIL 2DROP ;
+
+

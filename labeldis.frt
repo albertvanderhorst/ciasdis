@@ -32,6 +32,7 @@ REQUIRE 2>R
 \ A label-like thing is two cells: address and a payload.
 1 'DROP \ Dummy printer, dummy length
 struct LABELSTRUCT
+  F: DECOMP , FDOES> @ EXECUTE ;        \ (Re)generate source for INDEX.
   F: .PAY , FDOES> @ EXECUTE ;          \ Print payload
   F: LAB+!  FDOES> SET+! ;              \ Add to ``LABELS''
   F: LABELS   2* BUILD-BAG   LATEST THE-REGISTER BAG+! FDOES> ;
@@ -61,6 +62,9 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 \ Print the name of the label at ADDRESS , provided it is a dea.
 \ This applies to plain labels that are in fact fact constants.
 : .PAY-DEA  CELL+ @ %ID. ;
+
+\ For label INDEX return the label NAME, provided it is a dea.
+: LABEL-NAME   LABELS[] CELL+ @ >NFA @ $@ ;
 
 \ Print the addresses and payloads of the labels.
 : .LABELS  DO-LAB I @ .  I .PAY CR LOOP-LAB ;
@@ -120,8 +124,11 @@ VARIABLE LABEL-CACHE    \ Index of next label.
 
 \ ---------------- Names of labels ------------------------------
 
+\ Decompile label INDEX.
+: .EQU    LABELS[] DUP @ H. " EQU " TYPE  CELL+ @ %ID. CR ;
+
 \ Contains equ labels, i.e. structs as associate with ``LABEL''
-1000 '.PAY-DEA LABELSTRUCT EQU-LABELS        LABELS !BAG
+1000 '.PAY-DEA '.EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
 
 \ Generate a equ label at (target) ADDRESS with "NAME", this can be
 \ any symbolic constant in fact.
@@ -163,8 +170,11 @@ VARIABLE LABEL-CACHE    \ Index of next label.
 
 \ ---------------- Comment till remainder of line ------------------------------
 
-\ Contains comment labels, i.e. structs as associate with ``LABEL''
-1000 '.PAY$ LABELSTRUCT COMMENT:-LABELS LABELS !BAG
+\ Decompile comment: label INDEX.
+: .COMMENT:   LABELS[] DUP @ H. " COMMENT: " TYPE  CELL+ @ $@ TYPE CR ;
+
+\ Contains comment labels, i.e. structs as associate with ``COMMENT:''
+1000 '.PAY$ '.COMMENT: LABELSTRUCT COMMENT:-LABELS LABELS !BAG
 
 \ Generate a comment label at ADDRESS. A pointer to the
 \ remainder of the line is the payload.
@@ -207,8 +217,11 @@ VARIABLE COMMENT:-TO-BE
 
 \ ---------------- Multiple line comment in front ----------------------------
 
-\ Contains comment labels, i.e. structs as associate with ``LABEL''
-1000 '.PAY$ LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
+\ Decompile mcomment label INDEX.
+: .MCOMMENT   LABELS[] DUP CELL+ @ $@ ."$" SPACE @ H. " COMMENT " TYPE  CR ;
+
+\ Contains multiple line comment labels, i.e. structs as associate with ``COMMENT''
+1000 '.PAY$ '.MCOMMENT LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 
 \ Make STRING the comment in front of label at ADDRESS. A pointer to this
 \ string the payload.
@@ -267,9 +280,6 @@ CREATE TABLE 256 ALLOT      TABLE 256 ERASE
 
 \ Accumulates characters that may form a string.
 CREATE ACCU 100 ALLOT           ACCU 100 ERASE
-
-\ Print STRING, duly doubling the ``"'' if present.
-: ."$" BEGIN &" $S &" EMIT TYPE &" EMIT OVER 0= UNTIL 2DROP ;
 
 \D ." Expect "  """ AA""""AA """ TYPE &: EMIT " AA""AA " ."$" CR .S
 
@@ -362,7 +372,7 @@ endstruct
    DIS-START H.  SPACE DIS-END H.  " BY " TYPE DIS-XT %ID.  %ID. ;
 
 \ Contains sector specification, range plus type.
-1000 '.PAY-SECTION LABELSTRUCT SECTION-LABELS   LABELS !BAG
+1000 '.PAY-SECTION 'H. LABELSTRUCT SECTION-LABELS   LABELS !BAG
 
 \ Specify that section "name" from AD1 to AD2 uses dis-assembler DEA
 : SECTION   SECTION-LABELS DIS-STRUCT DIS-START LAB+!  LATEST LAB+!  ;
@@ -493,6 +503,12 @@ endstruct
 
 \ Sort all registered labelstructs.
 : SORT-ALL   THE-REGISTER DO-BAG   I @ EXECUTE SORT-LABELS   LOOP-BAG ;
+
+\ Decompile all labels of current labelstruct.
+: DECOMP-ONE  LAB-UPB 1+ 1 ?DO I DECOMP CR LOOP ;
+
+\ Generate the source of all labelstructs.
+: DECOMP-ALL THE-REGISTER DO-BAG   I @ EXECUTE DECOMP-ONE   LOOP-BAG ;
 
 \ Show what type of labels there are.
 : SHOW-REGISTER   THE-REGISTER DO-BAG I @ %ID. LOOP-BAG ;
