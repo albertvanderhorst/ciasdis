@@ -47,8 +47,15 @@ REQUIRE DUMP
 \ Perform the action of the program as per the spec's of ``cidis''
 : cidis   1 ARG[] FETCHED TARGET-DIS CONSULTED ;
 
+
+\ Restore all revectoring done while compiling to stand alone.
+: RESTORE-ALL  'ERROR RESTORED     'INCLUDED RESTORED      'ABORT RESTORED ; 
+
+\ Handle arguments, start interactive system if no arguments.
+: HANDLE-ARG   ARGC 1 = IF OK QUIT THEN 
+    \ second argument still obligatory for the moment.
+    ARGC ( 2) 3 4 WITHIN 0= 13 ?ERROR ; 
+
 \ The name determines what to do.
-: MAIN   'ERROR RESTORED     'INCLUDED RESTORED      'ABORT RESTORED
-    ARGC 1 = IF OK QUIT THEN
-    ARGC ( 2) 3 4 WITHIN 0= 13 ?ERROR   \ second argument still obligatory.
-    0 ARG[] &d $I IF cidis ELSE cias THEN ;
+: MAIN   RESTORE-ALL  HANDLE-ARG   0 ARG[] &d $I IF cidis ELSE cias THEN ;
+
