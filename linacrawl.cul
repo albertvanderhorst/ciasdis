@@ -1,0 +1,40 @@
+( $Id$ )
+( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
+( Uses Richard Stallmans convention. Uppercased word are parameters.    )
+
+HEX INIT-ALL
+INCLUDE elf2.cul
+
+0804,A0DC EQU semis
+0804,F82C EQU last_dea
+
+: th TARGET>HOST ;
+
+\ Align an address in the host space.
+: hALIGN 1- 3 OR 1+ ;
+
+CREATE NAME-BUFFER 256 ALLOT
+\ Prefix to NAME a prefix, return prefixed NAME in a static buffer.
+: PRE-PEND NAME-BUFFER $! NAME-BUFFER $+! NAME-BUFFER $@ ;
+
+\ Transform NAME into: NAMELABEL (prepended "N_").
+: >N_  "N_" PRE-PEND ;
+
+\ ADDRESS points to a valid name. Add a section to disassemble the name.
+: ADD-NAME-SECTION   DUP th $@ >N_ 2>R   DUP L@ hALIGN OVER + 4 + 2R> -d$ ;
+
+: IS-A-NAME L@ DUP IF ADD-NAME-SECTION _ THEN DROP ;
+
+\ : IS-HIGH-LEVEL H. "IS A HIGH LEVEL THINGY" TYPE ;
+\ : IS-NAME H. TARGET>HOST $@ TYPE "IS A NAME THINGY" TYPE CR ;
+
+\ Accumulate the information that DEA is a dea.
+: IS-A-DEA    10 + IS-A-NAME ;
+
+\     DUP L@ DUP IS-DOCOL? IF DROP DUP 4 + L@ IS-HIGH-LEVEL ELSE CRAWL THEN
+\     16 + L@ IS-A-NAME ;
+
+\ Accumulate the information from DEA as a wid.
+: IS-A-WID BEGIN DUP IS-A-DEA 0C + L@ DUP 0= UNTIL DROP ;
+
+last_dea IS-A-WID
