@@ -5,11 +5,11 @@ INCLUDE asi586.frt
 
 INCLUDE label.frt
 
-AUTOLOAD
+FIRSTPASS
 
 INCLUDE test.asm
 
-NO-AUTOLOAD
+SECONDPASS
 
 INCLUDE test.asm
 

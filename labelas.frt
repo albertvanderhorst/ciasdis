@@ -26,11 +26,11 @@ REQUIRE OLD:
     THEN THEN   ;
 
 \ Try to automatically load missing words.
-: AUTOLOAD '?ERROR-FIXING >DFA @ '?ERROR >DFA ! ;
-: NO-AUTOLOAD '?ERROR RESTORED ;  \ And off again.
+: FIRSTPASS '?ERROR-FIXING >DFA @ '?ERROR >DFA ! ;
+: SECONDPASS '?ERROR RESTORED ;  \ And off again. 
 
 ( Make a denotation for labels. They look like `` :LABEL ''             )
-( Put `` : ''them in the DENOTATION wordlist, such that it not
+( Put `` : ''them in the DENOTATION wordlist, such that it not          )
 (   interferes with the normal semicolon.                               )
 REQUIRE POSTFIX
 
