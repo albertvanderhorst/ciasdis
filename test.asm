@@ -13,6 +13,8 @@ BITS-32
 \ XXX is a target for backward jumps:
 :RRR
         db  1 ^C &C  #65 #65 #80
+        d$  1 ^C &C  "AAP"
+\        db  1 ^C &C  #65 #65 #80
         dw  1 ^C &C  #65 #65 #80
         dl  1 ^C &C  #65 #65 #80
 :XXX

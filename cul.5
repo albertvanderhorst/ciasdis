@@ -23,7 +23,7 @@ A backslash \fB\\\fR followed by a space ignores the remainder of a line.
 An open bracket \fB(\fR followed by a space ignores the remainder of the file
 until a closing bracket (so don't use in expressions!).
 Comment signs are not recognized within strings.
-The string symbol `` \fB"\fR '' is not recognized within comment.
+The string symbol \fB"\fR is not recognized within comment.
 .\"
 .SH "EXPRESSIONS"
 An atom can be a number, a character, a label or a flag.
@@ -130,11 +130,23 @@ values.
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
 \fI<name>\fR and is a section to be disassembled as long (32-bit) values.
 .TP
-\fI<expr1>\ <expr2>\fR \fB-dc16:\fR \fI<name>\fR
+\fI<expr1>\ <expr2>\fR \fB-d$:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI<name>\fR and is a section to be disassembled as a 16-bit code section.
-This command is specific to the Intel 80386.
+\fI<name>\fR and is a section to be disassembled as strings.
+This means it will be show (in order of preference):
+.TP
+.TP
+in the form \fI"<letters>"\fR for consequitive ASCII characters
+.TP
+in the form \fI&<char>\fR for isolated ASCII characters
+.TP
+in the form \fI^<char>\fR for some expected control characters
+.TP
+in the form \fI[<hex>]<hex>\fR for other numbers.
+.br
+All this is acceptable by the \fBd$\fR directive of the assembler.
+.br
 .TP
 \fI<expr1>\ <expr2>\fR \fB-dc:\fR \fI<name>\fR
 .br
@@ -142,12 +154,12 @@ The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
 \fI<name>\fR and is a section to be disassembled as a normal code section.
 For the Intel 80386 this means a 32-bit code section.
 .TP
-\fI<expr1>\ <expr2>\fR \fI<string>\fR \fB[-db|-bw|-dl|-dc|-dc16]\fR
-These commands are equivalent to \fB-db: -dw: -dl: -dc: -dc16:\fR but the
+\fI<expr1>\ <expr2>\fR \fI<string>\fR \fB[-db|-bw|-dl|-dc]\fR
+These commands are equivalent to \fB-db: -dw: -dl: -dc: \fR but the
 sections get their names from \fI<string>\fR.
 .TP
-\fI<expr1>\ <expr2>\fR \fB[-db-|-bw-|-dl-|-dc-|-dc1\fR6-]
-These commands are equivalent to \fB-db: -dw: -dl: -dc: -dc16:\fR but the
+\fI<expr1>\ <expr2>\fR \fB[-db-|-bw-|-dl-|-dc-]\fR
+These commands are equivalent to \fB-db: -dw: -dl: -dc: \fR but the
 sections are anonymous.
 .TP
 \fI<expr>\fR \fB-ORG-\fR
@@ -258,6 +270,21 @@ If \fI<expr>\fR\ is not zero,
 output the string on the error channel and exit
 \fBcidis\fR with an error code of 2.
 .\"
+.SH "INTEL 386 SPECIFIC"
+.TP
+\fI<expr1>\ <expr2>\fR \fB-dc16:\fR \fI<name>\fR
+.br
+The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
+\fI<name>\fR and is a section to be disassembled as a 16-bit code section.
+This command is specific to the Intel 80386.
+As are the corresponding \fb[-dc16|-dc16-]\fR commands.
+.\"
+.TP
+\fI<expr>\fR \fBCRAWL16\fR
+.br
+This command is like \fBCRAWL16\fR but applies to 16 bits code segments
+and generates \fB-dc16\fR family directives.
+\fBCRAWL!\fR is recognized for start addresses.
 .SH "COMMAND"
 After the command \fBASSEMBLER\fR ,
 all assembler commands can be tried

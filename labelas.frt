@@ -76,4 +76,14 @@ ASSEMBLER
 
 \ Add remainder of line to codespace, as longs (or, mostly, cells).
 : dl   !DX-SET  GET-DX-SET    L,-DX-SET  ;
+
+\ Lay down a STRING in assembler memory.
+: ($,) AS-HERE SWAP DUP AS-ALLOT MOVE ;
+
+\ Output ``DX-SET'' as longs (32-bits)
+: $,-DX-SET  BEGIN DX-SET BAG@- DUP 255 > IF DX-SET BAG@- ($,) ELSE AS-C, THEN
+    DX-SET BAG? 0= UNTIL ;
+
+\ Add remainder of line to codespace, as strings.
+: d$   !DX-SET  GET-DX-SET    $,-DX-SET  ;
 PREVIOUS

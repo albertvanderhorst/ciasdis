@@ -15,19 +15,22 @@ START -ORG-
 0505  LABEL QQQ
 050F  LABEL RRR
 START RRR "poo" -dc \ Named section
-RRR   DUP 6 + -db: bytes
+RRR   DUP 6 + SWAP OVER -db: bytes
 RRR 3 + LABEL RRRR
-RRR 6 +   DUP 0C +  -dw: words
-RRR 12 +   DUP 18 + -dl: longs
-RRR 2A +   END LEN16 -   -dc-            \ Unnamed section
+DUP   DUP 6 + SWAP OVER -db-
+DUP DUP 0C +  SWAP OVER -dw: words
+DUP DUP 18 + SWAP OVER -dl: longs
+END LEN16 -   -dc-            \ Unnamed section
 END LEN16 -  END  -dc16: AAP               \ Named section
 
-"XXX is a target for backward jumps:" 0539 COMMENT
-0539  LABEL XXX
+"XXX is a target for backward jumps:" 053F COMMENT
+053F  LABEL XXX
 \ From now on the label ``XXXX'' can be used: like this
 XXX  COMMENT:   Move a xell to register DI from memory at QQQ
-"YYY is a target for forward jumps:" 0564 COMMENT
+"YYY is a target for forward jumps:" 056A COMMENT
 END  LABEL YYY
 
 \ Oeps, forgot this one ... Shows that labels need not supplied in order.
 04FE COMMENT: First instruction
+
+\ Example of label in the middle of a section.
