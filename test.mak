@@ -347,3 +347,5 @@ test.bin : cidis cias test.asm test.asm.dat  ;
 	cidis test.bin test.asm.dat > test2.asm;
 	cias test2.asm test2.bin;
 	cmp test.bin test2.bin && cmp test.bin testresults/test.bin
+
+cidis386.zip : $(ASSRC) asi586.frt ;  zip $@ $+
