@@ -11,8 +11,8 @@
 
 START -ORG-
 1285  LABEL QQQ
-START QQQ -DC-
-QQQ END -DC-
+START QQQ -DC- poep1
+QQQ END -DC-   poep2
 
 1285  LABEL QQQ
 "XXX is a target for backward jumps:" 1294 COMMENT

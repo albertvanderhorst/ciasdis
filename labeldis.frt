@@ -55,11 +55,11 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 : DO-LAB POSTPONE LABELS POSTPONE DO-BAG ; IMMEDIATE
 : LOOP-LAB   2 CELLS POSTPONE LITERAL POSTPONE +LOOP ; IMMEDIATE
 
-\ Print the payload of the label at ADDRESS , provided it is a string.
-: .PAY$     CELL+ @ $@ TYPE   3 SPACES ;
+\ A simple printout of the payload.
+: .PAY. CELL+ ? ;
 
 \ Print the payload of the label at ADDRESS , provided it is a string.
-: .LAB     CELL+ @ $@ TYPE   3 SPACES ;
+: .PAY$     CELL+ @ $@ TYPE   3 SPACES ;
 
 \ Print the name of the label at ADDRESS , provided it is a dea.
 \ This applies to plain labels that are in fact fact constants.
@@ -212,27 +212,34 @@ JOPI"
 
 \D 12 PRINT-COMMENT CR  \ Should give nothing, not found!
 \D 12 0 HOST>TARGET - PRINT-COMMENT CR
+
 \ ---------------- Specifiers of disassembly ranges ----------------------
 
-\ A simple printout of the payload.
-: .PAY. CELL+ ? ;
+12 34 '2DROP
+struct DIS-STRUCT
+   F: START ROT , FDOES> @ ;     \ Start of range
+   F: END SWAP , FDOES> @ ;       \ End of range
+   F: DIS-RANGE , FDOES> @ >R START END R> EXECUTE ;       \ End of range
+endstruct
+
+\ ---------------- Specifiers of disassembly ranges ----------------------
 
 \ Contains sector specification, range plus type.
-1000 '.PAY. LABELSTRUCT SECTION-LABELS   LABELS !BAG
+1000 '.PAY-DEA LABELSTRUCT SECTION-LABELS   LABELS !BAG
 
-\ Define a disassembly sector from AD1 to AD2.
-: SECTION   SECTION-LABELS SWAP LAB+!  LAB+!  ;
-
-\ Target ADDRESS1 through ADDRESS2 (exclusive) is to be treated as
-\ code.
-\ ; -DC-    LABELS SET+!   'D-R LABELS SET+! ;
-'SECTION ALIAS -DC-
+\ Specify that section "name" from AD1 to AD2 uses dis-assembler DEA
+: SECTION   SECTION-LABELS DIS-STRUCT START LAB+!  LATEST LAB+!  ;
 
 \ Disassemble from target ADDRESS1 to ADDRESS2.
 : D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R ;
 
+\ Target ADDRESS1 through ADDRESS2 (exclusive) is to be treated as
+\ code with name "name".
+: -DC-    'D-R-T   SECTION ;
+
 \ Disassemble all those sectors as if they were code.
-: DISASSEMBLE-ALL   SECTION-LABELS DO-LAB I @ I CELL+ @ D-R-T LOOP-LAB ;
+: DISASSEMBLE-ALL
+    SECTION-LABELS DO-LAB I CELL+ @ EXECUTE   DIS-RANGE LOOP-LAB ;
 
 \ ------------------- Generic again -------------------
 
