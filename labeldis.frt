@@ -242,9 +242,6 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 is code with name "name".
 : -DC:    'D-R-T   SECTION ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous code section.
-: -DC-    'D-R-T   "NONAME" POSTFIX SECTION ;
-
 \ Dump bytes from target ADDRESS1 to ADDRESS2.
 : DUMP-B
     TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS
@@ -320,7 +317,34 @@ endstruct
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
 
-ASSEMBLER DEFINITIONS
+ASSEMBLER
+( Not yet definitions, these thingies must be visible in the            )
+( disassembler.                                                         )
+
+(                       SECTIONS                                        )
+
+\ Disassemble from target ADDRESS1 to ADDRESS2 as 16 bit.
+: D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T ;
+
+\ Disassemble from target ADDRESS1 to ADDRESS2 as 32 bit.
+: D-R-T-32 BITS-32 CR "BITS-32" TYPE D-R-T ;
+
+\ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
+: -DC16:    'D-R-T-16   SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-section.
+: -DC16-    'D-R-T-16   "NONAME" POSTFIX SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 is 32-bit code with name "name".
+: -DC32:    'D-R-T-32   SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous 32-bit code-section.
+: -DC32-    'D-R-T-32   "NONAME" POSTFIX SECTION ;
+
+DEFINITIONS
+
+(                       INSTRUCTIONS                                    )
+
 ( Print X as a symbolic label if possible, else as a number             )
 : .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP H. SPACE THEN ;
 

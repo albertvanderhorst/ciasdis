@@ -4,6 +4,7 @@ ASSEMBLER
 1278 ORG
 \ Here it all starts
 \ Fasten Your Seat Belts (tm)
+BITS-32
     CLD,                  \ First instruction
     MOV, X| T| DI'| MEM| XXX L,
 :QQQ
@@ -39,6 +40,7 @@ OS:,
 OS:,
 AS:,
     LEA, AX'| DW| [BX+SI]'   16 W,
+BITS-32
 INC|X,  AX|
     MOVI,   X|   DW|   [BX]   14 L,   18 IL,
 INC|X,  AX|
@@ -49,6 +51,18 @@ AS:,
     MOVI,   X|   DW|   [BX]'   20 W,   24 IL,
 AS:, OS:,
     MOVI,   X|   DW|   [BX]'   20 W,   24 IW,
+BITS-16
+INC|X,  AX|
+AS:, OS:,
+    MOVI,   X|   DW|   [BX]   14 L,   18 IL,
+INC|X,  AX|
+AS:,
+    MOVI,   X|   DW|   [BX]   14 L,   18 IW,
+INC|X,  AX|
+OS:,
+    MOVI,   X|   DW|   [BX]'   20 W,   24 IL,
+    MOVI,   X|   DW|   [BX]'   20 W,   24 IW,
+BITS-32
 \ YYY is a target for forward jumps:
 :YYY
 

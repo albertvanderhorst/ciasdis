@@ -1,4 +1,5 @@
 04FE EQU START
+5AE 587 -  EQU LEN16
 CP @ CODE-SPACE - START +   EQU END
 \ ciforth allows multiple line strings in files
 \ and double quotes in strings.
@@ -17,7 +18,8 @@ START RRR -DC: poo      \ Named section
 RRR   DUP 6 + -DB: bytes
 RRR 6 +   DUP 0C +  -DW: words
 RRR 12 +   DUP 18 + -DL: longs
-RRR 2A + END -DC-            \ Unnamed section
+RRR 2A +   END LEN16 -   -DC32-            \ Unnamed section
+END LEN16 -  END  -DC16: AAP               \ Named section
 
 "XXX is a target for backward jumps:" 0538 COMMENT
 0538  LABEL XXX
