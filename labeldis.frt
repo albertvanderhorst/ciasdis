@@ -192,12 +192,12 @@ HEX FFFF0000 CONSTANT LARGE-NUMBER-MASK
 : .0?   DUP 0A0 100 WITHIN SWAP 0A 10 WITHIN OR IF &0 EMIT THEN ;
 
 \ Print a NUMBER in hex in a smart way.
-: SMART.   DUP ABS 101 < IF DUP .0? . ELSE
-    LARGE-NUMBER-MASK OVER AND IF H. ELSE 0 4 (DH.) TYPE THEN THEN ;
+: SMART.   DUP ABS 100 < IF DUP .0? . ELSE
+    LARGE-NUMBER-MASK OVER AND IF H. ELSE 0 4 (DH.) TYPE THEN SPACE THEN ;
 
 DECIMAL
 ( Print X as a symbolic label if possible, else as a number             )
-: .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP SMART. SPACE THEN ;
+: .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP SMART. THEN ;
 
 \D 12 LABEL AAP
 \D 5 LABEL NOOT
@@ -371,13 +371,15 @@ CREATE ACCU 100 ALLOT           ACCU 100 ERASE
 \D ." EXPECT BL :"   " " ACCU $!   .ACCU CR .S
 \D ." EXPECT &Y :"   "Y" ACCU $!   .ACCU CR .S
 
-
+\ Display a BYTE in clean hex.
+: .B-CLEAN   DUP .0? 0 <# BL HOLD #S #> TYPE ;
 \ Display the non-printable character.
-: .C   .ACCU SPACE DUP IS-CTRL IF &^ EMIT &@ + EMIT ELSE 0 <# #S #> TYPE THEN  ;
+: .C   .ACCU SPACE DUP IS-CTRL IF &^ EMIT &@ + EMIT ELSE .B-CLEAN THEN  ;
 
 \D ." EXPECT ^J: "  ^J .C CR .S
 \D ." EXPECT 0: "  0 .C CR .S
 \D ." EXPECT 9A: "  HEX 9A .C CR .S DECIMAL
+\D ." EXPECT 0FA: "  HEX FA .C CR .S DECIMAL
 
 \ FIXME: to be renamd in WHERE-FLUSH
 VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
@@ -417,10 +419,10 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
      DUP CR-ADORNED  2R@ TYPE THEN REMEMBER-COMMENT: RDROP RDROP ;
 
 \ For ADDRESS : interupt byte display.
-: CR+db   "  db" CR+GENERIC ;
-: CR+dw   "  dw" CR+GENERIC ;
-: CR+dl   "  dl" CR+GENERIC ;
-: CR+d$   "  d$" CR+$ ;
+: CR+db   "  db " CR+GENERIC ;
+: CR+dw   "  dw " CR+GENERIC ;
+: CR+dl   "  dl " CR+GENERIC ;
+: CR+d$   "  d$ " CR+$ ;
 
 
 \ ---------------- Specifiers of disassembly ranges ----------------------
@@ -483,7 +485,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 'D-R-T     '-dc:   ARE-COUPLED
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 plain.
-: (DUMP-B)   DO I DUP CR+db C@ 3 .R LOOP   PRINT-OLD-COMMENT: CR ;
+: (DUMP-B)   DO I DUP CR+db C@ .B-CLEAN LOOP   PRINT-OLD-COMMENT: CR ;
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-B   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-B) ;
@@ -500,10 +502,10 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 'DUMP-B    '-db:   ARE-COUPLED \ Register the decompiler.
 
 \ Print X as a word (4 hex digits).
-: W. 0 4 (DH.) TYPE ;
+: W. 0 4 (DH.) TYPE SPACE ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2, plain.
-: (DUMP-W)   DO I DUP CR+dw @ SPACE W. 2 +LOOP   PRINT-OLD-COMMENT: CR ;
+: (DUMP-W)   DO I DUP CR+dw @ W. 2 +LOOP   PRINT-OLD-COMMENT: CR ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-W   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-W) ;
@@ -520,7 +522,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 'DUMP-W    '-dw:   ARE-COUPLED
 
 \ Dump words from target ADDRESS1 to ADDRESS2.
-: (DUMP-L)   DO I DUP CR+dl @ SPACE .LABEL/. 4 +LOOP PRINT-OLD-COMMENT: CR   ;
+: (DUMP-L)   DO I DUP CR+dl @ .LABEL/. 4 +LOOP PRINT-OLD-COMMENT: CR   ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-L) ;
