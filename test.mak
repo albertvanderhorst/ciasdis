@@ -133,24 +133,24 @@ testasalpha: aswrap.frt asgen.frt asalpha.frt testsetalpha ; \
     diff $@.diff testresults
 
 testas80: aswrap.frt asgen.frt as80.frt testset8080 ; \
-    (echo 5 LOAD; cat $+)|\
-    lina |\
+    cat $+|\
+    lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8080 >$@.diff ;\
     diff $@.diff testresults
 
 testas86: aswrap.frt asgen.frt asi86.frt testset8086 ; \
-    (echo 5 LOAD; cat $+)|\
-    lina |\
+    cat $+|\
+    lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8086 >$@.diff ;\
     diff $@.diff testresults
 
 testas386: aswrap.frt asgen.frt asi586.frt testset386 ; \
-    (echo 5 LOAD; cat $+)|\
-    lina |\
+    cat $+|\
+    lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset386 >$@.diff ;\
@@ -158,8 +158,8 @@ testas386: aswrap.frt asgen.frt asi586.frt testset386 ; \
 
 # Special test to exercise otherwise hidden instructions.
 testas386a: aswrap.frt asgen.frt asi586.frt testset386a ; \
-    (echo 5 LOAD; cat $+)|\
-    lina |\
+    cat $+|\
+    lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
     sed '/^OK$$/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
