@@ -42,13 +42,13 @@ BITS-32
 ( 0000,0575 )                  OS:, 
 ( 0000,0576 )                  LEA, AX'| XO|    [AX +4* AX] 0D L, 
 ( 0000,057D )                  AS:, 
-( 0000,057E )                  LEA, AX'| XO| [BX+SI]' 0E W, 
+( 0000,057E )                  LEA, AX'| XO| [BX+SI]% 0E W, 
 ( 0000,0582 )                  AS:, 
 ( 0000,0583 )                  OS:, 
-( 0000,0584 )                  LEA, AX'| XO| [BX+SI]' 0F W, 
+( 0000,0584 )                  LEA, AX'| XO| [BX+SI]% 0F W, 
 ( 0000,0588 )                  OS:, 
 ( 0000,0589 )                  AS:, 
-( 0000,058A )                  LEA, AX'| XO| [BX+SI]' 10 W, 
+( 0000,058A )                  LEA, AX'| XO| [BX+SI]% 10 W, 
 ( 0000,058E )                  RET, 
 ( 0000,058F )                  INC|X, AX| 
 ( 0000,0590 )                  MOVI, X| XO| [BX] 0E L, 12 IL, 
@@ -57,10 +57,10 @@ BITS-32
 ( 0000,059C )                  MOVI, X| XO| [BX] 0E L, 12 IW, 
 ( 0000,05A4 )                  INC|X, AX| 
 ( 0000,05A5 )                  AS:, 
-( 0000,05A6 )                  MOVI, X| XO| [BX]' 14 W, 18 IL, 
+( 0000,05A6 )                  MOVI, X| XO| [BX]% 14 W, 18 IL, 
 ( 0000,05AE )                  AS:, 
 ( 0000,05AF )                  OS:, 
-( 0000,05B0 )                  MOVI, X| XO| [BX]' 14 W, 18 IW, 
+( 0000,05B0 )                  MOVI, X| XO| [BX]% 14 W, 18 IW, 
 ( 0000,05B6 )                  RET, 
 BITS-16
 ( 0000,05B7 )                  INC|X, AX| 
@@ -72,8 +72,8 @@ BITS-16
 ( 0000,05C6 )                  MOVI, X| XO| [BX] 0E L, 12 IW, 
 ( 0000,05CE )                  INC|X, AX| 
 ( 0000,05CF )                  OS:, 
-( 0000,05D0 )                  MOVI, X| XO| [BX]' 14 W, 18 IL, 
-( 0000,05D8 )                  MOVI, X| XO| [BX]' 14 W, 18 IW, 
+( 0000,05D0 )                  MOVI, X| XO| [BX]% 14 W, 18 IL, 
+( 0000,05D8 )                  MOVI, X| XO| [BX]% 14 W, 18 IW, 
 ( 0000,05DE )                  RET, 
 BITS-32
 ( 0000,05DF )   :YYY :END 
