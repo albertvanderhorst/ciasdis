@@ -84,8 +84,12 @@ REQUIRE DUMP
 \ Restore all revectoring done while compiling to stand alone.
 : RESTORE-ALL  'ERROR RESTORED     'INCLUDED RESTORED      'ABORT RESTORED ;
 
+\ Start the interactive session with the splat screen and most convenient
+\ configuration. Note that ``QUIT'' is the command interpreter.
+: INTERACTIVE   ASSEMBLER   0 ORG   0 LIST OK   QUIT ;
+
 \ Handle arguments, start interactive system if no arguments.
-: HANDLE-ARG   ARGC 1 = IF 0 LIST OK QUIT THEN
+: HANDLE-ARG   ARGC 1 = IF INTERACTIVE THEN
     \ second argument still obligatory for the moment.
     ARGC ( 2) 3 4 WITHIN 0= 13 ?ERROR ;
 
