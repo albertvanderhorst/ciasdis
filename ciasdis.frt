@@ -49,6 +49,6 @@ REQUIRE DUMP
 
 \ The name determines what to do.
 : MAIN   'ERROR RESTORED     'INCLUDED RESTORED      'ABORT RESTORED
-    ARGC 1 = IF QUIT THEN
+    ARGC 1 = IF OK QUIT THEN
     ARGC ( 2) 3 4 WITHIN 0= 13 ?ERROR   \ second argument still obligatory.
     0 ARG[] &d $I IF cidis ELSE cias THEN ;
