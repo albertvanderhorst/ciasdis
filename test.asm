@@ -1,0 +1,15 @@
+
+
+1278 ORG
+ASSEMBLER
+CLD,
+MOV, X| T| DI'| MEM| XXX X,
+:QQQ
+POP|ES,
+ADD, B| F| AL'| D0| [SI]
+MOV, X| T| DI'| MEM| XXX X,
+:XXX
+MOV, X| T| DI'| MEM| QQQ X,
+JMP, XXX _AP_ 4 + - (RX,)
+JMP, XXX RX,
+PREVIOUS
