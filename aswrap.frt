@@ -60,6 +60,9 @@ VARIABLE (TARGET-START)
 \ Convert target memory ADDRESS. Leave host memory ADDRESS.
 : TARGET>HOST   TARGET-START -   CODE-SPACE +   ;
 
+\ Abbreviation.
+'TARGET>HOST ALIAS th
+
 \ Instruction pointer in assembly. View used in branches etc.
 : NEW-_AP_    CP @ HOST>TARGET ;   HOT-PATCH _AP_
 
