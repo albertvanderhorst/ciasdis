@@ -418,7 +418,10 @@ lina2 : ci86.lina.s ; gcc $+ -l 2>aap
 
 ci86.lina.s :
 
-testasalpha: asgen.frt asalpha.frt testsetalpha ; \
+testasalpha:
+
+# NOT YET!
+#testasalpha: asgen.frt asalpha.frt testsetalpha ; \
     echo CR REQUIRE INCLUDE REQUIRE DUMP REQUIRE ALIAS \'\$$\@ ALIAS @+ INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testrunalpha|\
     lina -a    |\
     sed '1,/TEST STARTS HERE/d' |\
@@ -432,7 +435,7 @@ testas80: asgen.frt as80.frt testset8080 ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8080 >$@.diff ;\
-    diff $@.diff testresults
+    rcsdiff -bBw $@.diff
 
 testas86: asgen.frt asi86.frt testset8086 ; \
     cat $+|\
@@ -440,7 +443,7 @@ testas86: asgen.frt asi86.frt testset8086 ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8086 >$@.diff ;\
-    diff $@.diff testresults
+    rcsdiff -bBw $@.diff
 
 testas386: asgen.frt asi386.frt testset386 ; \
     cat $+|\
@@ -448,7 +451,7 @@ testas386: asgen.frt asi386.frt testset386 ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset386 >$@.diff ;\
-    diff $@.diff testresults
+    rcsdiff -bBw $@.diff
 
 testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
     cat $+|\
@@ -456,7 +459,24 @@ testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testsetpentium >$@.diff ;\
-    diff $@.diff testresults
+    rcsdiff -bBw $@.diff
+
+# Special test to exercise otherwise hidden instructions.
+testas386a: asgen.frt asi386.frt testset386a ; \
+    cat $+|\
+    lina -e|\
+    sed '1,/TEST STARTS HERE/d' |\
+    sed '/^OK$$/d' |\
+    sed 's/^[0-9A-F \.,]*://' >$@       ;\
+    diff -w $@ testset386a >$@.diff ;\
+    rcsdiff -bBw $@.diff
+
+# For the moment there is doubt about test386.
+# testallpentium : testas86 testas386 test386 testaspentium
+
+testallpentium : testas86 testas386 testas386a testaspentium
+
+testasses : testasalpha testas80 testallpentium
 
 test386: asgen.frt asi386.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-32   SHOW-ALL)|\
@@ -464,13 +484,15 @@ test386: asgen.frt asi386.frt ; \
     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
     sed 's/~SIB|   1C SIB,,/[AX +1* 0]/' |\
-    sed 's/~SIB|   14 SIB,,/[AX +1* BX]/' >$@       ;\
-    diff -w $@ testset386 >$@.diff ;\
-    diff $@.diff testresults
+    sed 's/~SIB|   14 SIB,,/[AX +1* BX]/' >$@;\
+    rcsdiff -bBw -r$(RCSVERSION) $@
 
-testallpentium : testas86 testas386 test386 testaspentium
+test386.diff: test386 ; \
+    cat testset386 >tempie;\
+    diff -w $+ tempie >$@ ;\
+    rcsdiff -bBw -r$(RCSVERSION) $@
 
-testasses : testasalpa testas80 testallpentium
+testinstructionsets : test386.diff
 
 # There is a problem here: SHOW-ALL shows almost nothing
 # because asi386.frt is not loaded.
@@ -489,16 +511,6 @@ test386-16: asgen.frt asi386.frt ; \
     lina -e >$@       ;
 #   diff -w $@ testset386 >$@.diff ;\
 #   diff $@.diff testresults
-
-# Special test to exercise otherwise hidden instructions.
-testas386a: asgen.frt asi386.frt testset386a ; \
-    cat $+|\
-    lina -e|\
-    sed '1,/TEST STARTS HERE/d' |\
-    sed '/^OK$$/d' |\
-    sed 's/^[0-9A-F \.,]*://' >$@       ;\
-    diff -w $@ testset386a >$@.diff ;\
-    diff $@.diff testresults
 
 testas6809: asgen.frt as6809.frt testset6809 ; \
     (echo 5 LOAD; cat $+)|\
@@ -643,4 +655,4 @@ cidis386.zip : $(ASSRC) asi386.frt asipentium.frt ;  zip $@ $+
 testciasdis : test.bin lina405.asm rf751.asm
 
 # -----------------
-regressiontest : testasses testciasdis
+regressiontest : testasses testciasdis testinstructionsets
