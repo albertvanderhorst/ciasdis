@@ -15,7 +15,6 @@ ASSEMBLER
         DB  1 ^C &C  65 65 80
         DW  1 ^C &C  65 65 80
         DL  1 ^C &C  65 65 80
-        DB  144  144  144  144  144  144  144
 :XXX
     MOV, X| T| DI'| MEM| QQQ X,
     JMP, XXX RX,

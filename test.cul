@@ -12,14 +12,18 @@ CP @ CODE-SPACE - START +   EQU END
 
 START -ORG-
 0505  LABEL QQQ
-START QQQ -DC: poo      \ Named section
-QQQ END -DC-            \ Unnamed section
+050E  LABEL RRR
+START RRR -DC: poo      \ Named section
+RRR   DUP 6 + -DB: bytes
+RRR 6 +   DUP 0C +  -DW: words
+RRR 12 +   DUP 18 + -DL: longs
+RRR 2A + END -DC-            \ Unnamed section
 
-"XXX is a target for backward jumps:" 053F COMMENT
-053F  LABEL XXX
+"XXX is a target for backward jumps:" 0538 COMMENT
+0538  LABEL XXX
 \ From now on the label ``XXXX'' can be used: like this
 XXX  COMMENT:   Move a xell to register DI from memory at QQQ
-"YYY is a target for forward jumps:" 056A COMMENT
+"YYY is a target for forward jumps:" 0563 COMMENT
 END  LABEL YYY
 
 \ Oeps, forgot this one ... Shows that labels need not supplied in order.

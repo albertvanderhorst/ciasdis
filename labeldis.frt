@@ -245,6 +245,43 @@ endstruct
 \ Section ADDRESS1 .. ADDRESS2 is an anonymous code section.
 : -DC-    'D-R-T   "NONAME" POSTFIX SECTION ;
 
+\ Dump bytes from target ADDRESS1 to ADDRESS2.
+: DUMP-B
+    TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS
+    "        DB" TYPE DO I C@ 3 .R LOOP CR ;
+
+\ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
+: -DB:    'DUMP-B   SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous byte section.
+: -DB-    'DUMP-B   "NONAME" POSTFIX SECTION ;
+
+
+\ Print X as a word (4 hex digits).
+: W. 0 4 (DH.) TYPE ;
+
+\ Dump words from target ADDRESS1 to ADDRESS2.
+: DUMP-W
+    TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS
+    "        DW" TYPE DO I @ SPACE W. 2 +LOOP CR ;
+
+\ Section ADDRESS1 .. ADDRESS2 are words with name "name".
+: -DW:    'DUMP-W   SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous word section.
+: -DW-    'DUMP-W   "NONAME" POSTFIX SECTION ;
+
+\ Dump words from target ADDRESS1 to ADDRESS2.
+: DUMP-L
+    TARGET>HOST SWAP TARGET>HOST  DUP ADORN-ADDRESS
+    "        DL" TYPE DO I @ SPACE H. 4 +LOOP CR ;
+
+\ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
+: -DL:    'DUMP-L   SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
+: -DL-    'DUMP-L   "NONAME" POSTFIX SECTION ;
+
 \ Disassemble all those sectors as if they were code.
 : DISASSEMBLE-ALL
     SECTION-LABELS DO-LAB I CELL+ @ EXECUTE   DIS-RANGE LOOP-LAB ;
