@@ -647,7 +647,26 @@ ASSEMBLER
 
 DEFINITIONS
 
-(                       INSTRUCTIONS                                    )
+( ----------------------------------                                    )
+( generic again                                                         )
+
+\ ------------------- INSTRUCTIONS -------------------
+
+\ DEA is a commaer. Fetch proper DATA from autoincremented
+\ ``AS-POINTER''
+: AS-@+   >CNT @ >R   AS-POINTER @ R@ MC@   R> AS-POINTER +! ;
+
+\D HEX
+\D ." EXPECT 34 12 " 1234 PAD ! PAD AS-POINTER ! 'IB, DUP AS-@+ . AS-@+ .
+\D DECIMAL
+
+\ DEA is a commaer. Fetch proper signed DATA from autoincremented
+\ ``AS-POINTER''
+: AS-S-@+   >CNT @ >R   AS-POINTER @ R@ MC@-S   R> AS-POINTER +! ;
+
+\D HEX
+\D ." EXPECT -1 12 " 12FF PAD ! PAD AS-POINTER ! 'IB, DUP AS-S-@+ . AS-S-@+ .
+\D DECIMAL
 
 \ This is kept up to date during disassembly.
 \ It is useful for the code crawler.
@@ -655,11 +674,7 @@ VARIABLE LATEST-OFFSET
 
 ( Print a disassembly, for a commaer DEA , taking into account labels,  )
 ( {suitable for e.g. the commaer ``IX,''}                               )
-: .COMMA-LABEL
-    AS-POINTER @ OVER >CNT @ MC@ .LABEL/.
-    DUP >CNT @ AS-POINTER +!
-    %ID.                         ( DEA --)
-;
+: .COMMA-LABEL   DUP AS-@+ .LABEL/. %ID. ;
 
 (  For DEA print the name without the surrounding brackets.             )
 : ID.-NO()   >NFA @ $@  2 - SWAP 1 + SWAP TYPE ;
