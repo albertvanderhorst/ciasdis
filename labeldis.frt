@@ -50,6 +50,11 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 \ All indices are compatible with this.
 : LABELS[]   1- 2* CELLS LABELS CELL+ + ;
 
+\ Loop through all ``LABELS'', similar to ``DO-BAG .. DO-LOOP'' but with
+\ a stride of 2 cells and the bag built-in.
+: DO-LAB POSTPONE LABELS POSTPONE DO-BAG ; IMMEDIATE
+: LOOP-LAB   2 CELLS POSTPONE LITERAL POSTPONE +LOOP ; IMMEDIATE
+
 \ Print the payload of the label at ADDRESS , provided it is a string.
 : .PAY$     CELL+ @ $@ TYPE   3 SPACES ;
 
@@ -60,9 +65,8 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 \ This applies to plain labels that are in fact fact constants.
 : .PAY-DEA  CELL+ @ ID. ;
 
-
 \ Print the addresses and payloads of the labels.
-: .LABELS  LABELS @+ SWAP ?DO I @ .  I .PAY CR 2 CELLS +LOOP ;
+: .LABELS  DO-LAB I @ .  I .PAY CR LOOP-LAB ;
 
 \ Return LOWER and UPPER indices of the labels , inclusive.
 \ The lower index is 1 and the upper index is corresponding.
@@ -228,8 +232,7 @@ JOPI"
 : D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R ;
 
 \ Disassemble all those sectors as if they were code.
-: DISASSEMBLE-ALL   SECTOR-LABELS
-    LABELS @+ SWAP ?DO I @ I CELL+ @ D-R-T 2 CELLS +LOOP ;
+: DISASSEMBLE-ALL   SECTOR-LABELS DO-LAB I @ I CELL+ @ D-R-T LOOP-LAB ;
 
 \ ------------------- Generic again -------------------
 
