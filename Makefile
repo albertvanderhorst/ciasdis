@@ -12,8 +12,6 @@
 #.SUFFIXES:
 #.SUFFIXES:.bin.asm.m4.v.o.c
 
-FLOPPY=fd0h1440
-
 # Applicable suffixes : * are generated files
 # + are generated files if they are mentionned on the next line
 #
@@ -290,47 +288,6 @@ release : strip figdoc.zip zip msdos.zip lina.zip # as.zip
 
 #Install it. To be run as root
 install: ; @echo 'There is no "make install" ; use "lina -i <binpath> <libpath>"'
-
-# You may need to run the following run as root.
-# Make a boot floppy by filling the bootsector by a raw copy,
-# then creating a dos file system in accordance with the boot sector,
-# then copying the forth system to exact the first available cluster.
-# The option BOOTFD must be installed into alone.m4.
-boot: ci86.alone.bin
-	cp $+ /dev/$(FLOPPY) || fdformat /dev/$(FLOPPY) ; cp $+ /dev/$(FLOPPY)
-	mformat -k a:
-	mcopy $+ a:forth.com
-
-# You may need to run the following run as root.
-# Make a raw boot floppy with no respect for DOS.
-# The Forth gets its information from the boot sector,
-# that is filled in with care.
-# The option BOOTSECTRK must be installed into alonetr.m4.
-trboot: ci86.alonetr.bin lina forth.lab.wina
-	rm fdimage || true
-	echo \"ci86.alonetr.bin\" GET-FILE DROP HEX 10000 \
-	     \"fdimage\" PUT-FILE BYE | lina
-	cat forth.lab.wina >>fdimage
-	cp fdimage /dev/$(FLOPPY) || fdformat /dev/$(FLOPPY) ; cp fdimage /dev/$(FLOPPY)
-
-filler.frt: ; echo This file occupies one disk sector on IBM-PCs >$@
-
-# ciforth calculates whether the screen boundaries are off by a sector.
-# You can copy the filler by hand if this calculation fails, e.g. 5" floppies.
-# The symptom is 8 LIST show the electives screen half and half of some other screen.
-filler: ci86.alone.bin lina filler.frt
-	rm -f wc # Use the official `wc' command
-	# Have forth calculate whether we need the filler sector
-	# Use the exit command to return 1 or 0
-	(filesize=`cat ci86.alone.bin |wc -c`; \
-	x=`echo $$filesize 1 - 512 / 1 + 2 MOD . | lina`; \
-	if [ 0 = $$x ] ; then mcopy filler.frt a:filler.frt ;fi)
-
-moreboot: forth.lab.wina ci86.alone.bin  ci86.mina.bin
-	mcopy forth.lab.wina a:forth.lab
-	mcopy ci86.mina.bin      a:mina.com
-
-allboot: boot filler moreboot
 
 # Get the library file that is used while compiling.
 forth.lab : ; echo 'BLOCK-FILE $$@ GET-FILE "'$@'" PUT-FILE'|lina
@@ -661,8 +618,8 @@ test.bin : cidis cias test.asm test.cul
 lina405.asm : cidis lina405 lina405equ.cul lina405.cul lina405.asm.cmp
 	cidis lina405 lina405.cul| sed -e 's/. DROP-THIS//' >$@
 	cias lina405.asm lina405.cmp
-	diff lina405.asm lina405.asm.cmp
-	cmp lina405 lina405.cmp
+	rcsdiff -r$(RCSVERSION) lina405.asm
+	rcsdiff -r$(RCSVERSION) lina405
 
 %.bin : %.asm ; cias $< $@
 
