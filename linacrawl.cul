@@ -20,10 +20,15 @@ CREATE NAME-BUFFER 256 ALLOT
 \ Transform NAME into: NAMELABEL (prepended "N_").
 : >N_  "N_" PRE-PEND ;
 
-\ ADDRESS points to a valid name. Add a section to disassemble the name.
-: ADD-NAME-SECTION   DUP th $@ >N_ 2>R   DUP L@ hALIGN OVER + 4 + 2R> -d$ ;
+\ ADDRESS points to a valid name. Add a label to address the name.
+: ADD-NAME-LABEL   DUP th $@ >N_ LABELED ;
 
-: IS-A-NAME L@ DUP IF ADD-NAME-SECTION _ THEN DROP ;
+\ ADDRESS points to a valid name.
+\ Add an anonymous section to disassemble the name.
+: ADD-NAME-SECTION   DUP L@ hALIGN OVER + 4 + -d$- ;
+
+\ Add the information that ADDRESS is a nfa.
+: IS-A-NAME L@ DUP IF DUP ADD-NAME-LABEL ADD-NAME-SECTION _ THEN DROP ;
 
 \ : IS-HIGH-LEVEL H. "IS A HIGH LEVEL THINGY" TYPE ;
 \ : IS-NAME H. TARGET>HOST $@ TYPE "IS A NAME THINGY" TYPE CR ;
