@@ -224,6 +224,10 @@ PREFIX=0
 TITLE=QUICK REFERENCE PAGE FOR 80386 ASSEMBLER
 TESTTARGETS=*.ps testas* testlina.[0-9] testmina.[0-9] testlinux.[0-9]
 
+# How to check out, anything
+%:RCS/%,v
+	co -r$(RCSVERSION) $<
+
 # Define NASM as *the* assembler generating bin files.
 %.bin:%.asm
 	nasm -fbin $< -o $@ -l $*.lst
