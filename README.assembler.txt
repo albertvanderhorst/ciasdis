@@ -1,8 +1,9 @@
 ( $ Id: $ )
 ( Copyright{2000,2004}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 
-This is the archive of the assembler to complement the aiforth and
-ciforth Forth implementations.
+This is the archive of the
+  computer_intelligence_assembler_disassembler_386
+assembler to complement the aiforth and ciforth Forth implementations.
 See http://home.hccnet.nl/a.w.m.van.der.horst/forthimpl.frt
 Since ciforth 4.0.5, tools like struct's and bags are no longer needed
 in the assembler distribution. Don't try this with versions before 4.0.5.
@@ -13,12 +14,16 @@ binaries, could be reassembled to the exact same binary.
 This is now complemented by consult files that supply the disassembler with
 information to generate a readable and documented source with label names.
 Consult files can be built up incrementally.
+The disassemblies can be modified and reassembled, using ciasdis as a two pass
 
-The files marked * are generated
+The files marked * are generated. They can be made using the Makefile.
+Some are supplied, in particular the executable programs. You need an installed
+ciforth to build those.
 
 Meta information
 COPYING                 Copyleft
 README.assembler        This file
+Makefile
 
 Generic source
 asgen.frt      Generic assembler / disassembler.
@@ -50,7 +55,7 @@ Cludges if an OS can't inspect argument 0, or I don't know how to do it.
 cias.frt       Main program for assembler
 cidis.frt      Main program for disassembler
 
-Test sets:
+Test sets. Not supplied.
 testset8080     8080  testset
 testset8086     8086  testset
 testset386      386   testset
@@ -79,15 +84,17 @@ linacrawl.cul   Test: dedicated crawler for ciforth, adapted to lina 4.0.5
 lina405equ.cul+ Equ's generated via linacrawl.cul , included in lina405.asm
 lina405.cul+    Labels's generated via linacrawl.cul , not included in lina405.asm
 lina405.asm*    Generated from lina405 by 2 preceeding cul files.
+lina405.bin*    Generated from lina405.asm by assembling.
 
-+) These files are generated using linacrawl.cul then manually adapted.
++) These files were generated using linacrawl.cul then manually adapted.
 
 Documentation
 Read the lina handboek for the usage of the assembler, inasfar it is
 a normal Forth assembler. Read the man pages for the reverse engineering
 on top of it (pretty much independant of the processor type.
+Use ``man ./cias.1'' or install the man pages.
 forth.lab      Must be present in the current directory for mnemonic messages.
                Can be used to load tools ( DO-DEBUG DUMP LOCATE ) too.
 assembler.itxt The assembler chapter of lina in ascii.
-cias.1         manual page for computer_intelligence_assembler_disassembler
+cias.1         manual page for computer_intelligence_assembler_disassembler_386
 cul.5          the underlying language for reverse engineering
