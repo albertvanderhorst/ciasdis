@@ -51,14 +51,26 @@ operate on strings.
 
 .br
 Atoms are untyped.
+.br
+A simple expression consists of one or two atoms followed by a unary
+or binary operator,
+in a \fIpostfix\fR fashion.
+A compound expression results from replacing one or both of the atoms
+by an expression.
+.br
+Brackets are not allowed.
+They are not needed,
+because an unlimited number of atoms can be retained,
+e.g. ``\fI12<((4+5)*(8+9))\fR'' becomes
+``\fI\ \ \ 12\ 4\ 5\ +\ \ \ 8\ 9\ +\ \ \ *\ \ \ <\fR''.
+.br
 .\"verbose
 All operators, despite suggestive naming, are allowed on all data.
 Inappropriate use of operators may yield unwanted results.
 .br
 An arithmetic expression combines atom's or other expressions
 by the binary operators
-\fB+ - / * MOD\fR and the unary operator \fBNEGATE\fR
-in a postfix fashion.
+\fB+ - / * MOD\fR and the unary operator \fBNEGATE\fR.
 .br
 Arithmetic expressions can be combined using the binary operators
 \fB= <> < > <= >=\fR yielding a flag.
@@ -66,12 +78,6 @@ Arithmetic expressions can be combined using the binary operators
 A logical expression combines atom's by the bitwise binary operators
 \fBOR AND XOR\fR  and the unary operator \fBINVERT\fR ,
 again in postfix fashion.
-.br
-Brackets are not allowed.
-They are not needed,
-because an unlimited number of atoms can be retained,
-e.g. ``\fI12<((4+5)*(8+9))\fR'' becomes
-``\fI\ \ \ 12\ 4\ 5\ +\ \ \ 8\ 9\ +\ \ \ *\ \ \ <\fR''.
 .br
 Equality of strings is established by \fB$=\fR working on two strings
 (4 atoms) and yielding a flag.
@@ -89,11 +95,11 @@ preceeding expressions.
 They may also scan ahead,
 mostly for a name that is hence-to-forth known, e.g. as a label.
 .TP
-\fbFETCH\fR \fI<name>\fR
+\fBFETCH\fR \fI<name>\fR
 .br
 Fetch the binary image \fI<name>\fR to the code buffer.
 .TP
-\fbCONSULT\fR \fI<name>\fR
+\fBCONSULT\fR \fI<name>\fR
 .br
 Get the information from file \fI<name>\fR.
 It presumedly refers to the current codebuffer and is used to analyse its
@@ -134,8 +140,7 @@ The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
 \fI<name>\fR and is a section to be disassembled as strings.
-This means it will be show (in order of preference):
-.TP
+This means it will be shown (in order of preference):
 .TP
 in the form \fI"<letters>"\fR for consequitive ASCII characters
 .TP
@@ -172,6 +177,10 @@ The start of the code buffer is associated with the target address
 The string is a comment associated with the target address
 \fI<expr>\fR.
 It will be a separate line or lines in front of the disassembly.
+.br
+\fBWARNING:\fR
+Make sure multiple-line-strings result in well-formed comment,
+or it may be rejected during reassembly.
 .TP
 \fI<expr>\fR \fBCOMMENT:\fR "comment"
 .br
@@ -186,7 +195,7 @@ Disassemble the code buffer using all available information.
 \fBSORT-ALL\fR
 .br
 Sort all available information on the addresses it applies to.
-This is mandatory for DISASSEMBLE-ALL and recommended for DUMP-ALL .
+This is mandatory for \fBDISASSEMBLE-ALL\fR and recommended for \fBDUMP-ALL\fR.
 .TP
 \fBDUMP-ALL\fR
 .br
@@ -195,9 +204,9 @@ This includes all information added interactively.
 .TP
 \fBINCLUDE\fR \fI<name>\fR
 .br
-Read in the file named \fI<name>\fR and execute all commands there \fBin.
+Read in the file named \fI<name>\fR and execute all commands there in.
 .TP
-\fB[PLAIN-LABELS|SECTION-LABELS]\ BREMOVE:\fR \fI<name>\fR
+\fB[PLAIN-LABELS|SECTION-LABELS]\ REMOVE:\fR \fI<name>\fR
 .br
 Select the plain labels or the sections labels class and
 remove the label \fI<name>\fR from it.
@@ -242,24 +251,32 @@ assuming its first long-word (32 bits) is the character count.
 Get a string expression from address \fI<expr>\fR,
 assuming it ends in an ASCII zero (c-style).
 .SH "ADVANCED"
+A modest skill in the Forth language can increase the usefulness
+of \fBcidis\fR considerably.
+.br
 With the Forth commands \fBDUP SWAP OVER 2DUP 2SWAP 2OVER\fR
 writing down the same expression repeatedly can be avoided.
 See lina(1) if installed.
 .br
 A sequence of commands can be combined into a macro in the following
-fashion (which is regular Forth practice):
+fashion (regular Forth practice):
 .br
 .TP
 \fB:\ \fI<name> <sequence> \fB;\fR
 .br
-Using \fI<name>\fR will result in the execution of the commands in \fi<sequence>\fR.
-If \fI<sequence>\fR contains commands that scan ahead,
+Using \fI<name>\fR will result in the execution of the commands in \fI<sequence>\fR.
+If \fI<sequence>\fR contains commands that scan ahead (e.g. \fI-db:\fR)
 the scanning will be done when \fI<name>\fR is invoked;
 this can be confusing for novices.
 .TP
+\fBLABEL-STRUCT\fR
+This command can be used to add a new class of labels.
+All classes of labels are registered automatically.
+See the source \fBlabeldis.frt\fR.
+.TP
 \fBSHOW-REGISTER\fR
 .br
-List the names of all registered objects of the class labels.
+List the names of all registered classes of labels.
 A class can be made current by typing its name
 and then its content can be
 printed using \fB.LABELS\fR.
@@ -277,7 +294,7 @@ output the string on the error channel and exit
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
 \fI<name>\fR and is a section to be disassembled as a 16-bit code section.
 This command is specific to the Intel 80386.
-As are the corresponding \fb[-dc16|-dc16-]\fR commands.
+As are the corresponding \fB[-dc16|-dc16-]\fR commands.
 .\"
 .TP
 \fI<expr>\fR \fBCRAWL16\fR
@@ -300,12 +317,16 @@ A \fBBYE\fR command ends an interactive session.
 .SH "AVAILABILITY"
 \fBcias / cdis\fR is based on \fBciforth\fR.
 .br
-The generic system can be fetched from
+The underlying Forth system can be fetched from
 .IP
 \fI http://home.hccnet.nl/a.w.m.van.der.horst/ciforth.html\fR
 .PP
-MS-DOS, "windows" , stand alone and Alpha Linux
-binary versions are available.
+The binary distribution of
+\fBcias / cdis\fR
+is for Intel-Linux,
+so not for the
+MS-DOS, "windows" , stand alone and Alpha Linux versions
+of \fBciforth\fR.
 .\"
 .SH "EXAMPLE"
 A typical consult file to disassemble
@@ -317,7 +338,7 @@ a c-program could contain:
 .br
  \ \ \ 148 COMMENT: entry point
 .br
- \ \ \ 148 2008 -db : text
+ \ \ \ 148 2008 -db: text
 .br
  \ \ \ "Data area" 2008 COMMENT
 .br
@@ -372,7 +393,6 @@ lina(1) Linux Native version of ciforth.
 Mistakes in Forth mode can easily crash \fBcias / cidis\fR.
 
 \fBcias / cdis\fR is case sensitive.
-.\"
 .SH "AUTHOR"
 Copyright \(co 2004
 Albert van der Horst \fI albert@spenarnc.xs4all.nl\fR.
