@@ -1,0 +1,330 @@
+1,20c1,6
+< 
+< 80386 ciforth 4.0.5 
+< 
+< SCR # 0 
+< COPYRIGHT (c) 2000-2002 Albert van der Horst, THE NETHERLANDS  
+<                    LICENSE                                     
+< This program is free software; you can redistribute it and/or  
+< modify it under the terms of version 2 of the GNU General      
+< Public License as published by the Free Software Foundation.   
+<                                                                
+< This program is distributed in the hope that it will be useful,
+< but WITHOUT ANY WARRANTY; without even the implied warranty of 
+< MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   
+< GNU General Public License for more details.                   
+<                                                                
+< You should have received a copy of the GNU General Public      
+< License along with this program; if not, write to the          
+<             Free Software Foundation, Inc.,                    
+<    59 Temple Place, Suite 330, Boston, MA 02111, USA.          
+<                                                                
+---
+> ASSEMBLER
+> : firstset ." First set" ;
+> !TALLY
+> HEX
+> 10 AS-HERE 10 MOD - AS-ALLOT ( To get a nice DUMP)
+> AS-HERE
+89a76
+> firstset
+21326,21613c21313,21322
+< ~SIB,   [MEM   +8*   DI]   14 L,   
+< ~SIB,   [MEM   +8*   SI]   14 L,   
+< ~SIB,   [MEM   +8*   BP]   14 L,   
+< ~SIB,   [MEM   +8*   0]   14 L,   
+< ~SIB,   [MEM   +8*   BX]   14 L,   
+< ~SIB,   [MEM   +8*   DX]   14 L,   
+< ~SIB,   [MEM   +8*   CX]   14 L,   
+< ~SIB,   [MEM   +8*   AX]   14 L,   
+< ~SIB,   [MEM   +4*   DI]   14 L,   
+< ~SIB,   [MEM   +4*   SI]   14 L,   
+< ~SIB,   [MEM   +4*   BP]   14 L,   
+< ~SIB,   [MEM   +4*   0]   14 L,   
+< ~SIB,   [MEM   +4*   BX]   14 L,   
+< ~SIB,   [MEM   +4*   DX]   14 L,   
+< ~SIB,   [MEM   +4*   CX]   14 L,   
+< ~SIB,   [MEM   +4*   AX]   14 L,   
+< ~SIB,   [MEM   +2*   DI]   14 L,   
+< ~SIB,   [MEM   +2*   SI]   14 L,   
+< ~SIB,   [MEM   +2*   BP]   14 L,   
+< ~SIB,   [MEM   +2*   0]   14 L,   
+< ~SIB,   [MEM   +2*   BX]   14 L,   
+< ~SIB,   [MEM   +2*   DX]   14 L,   
+< ~SIB,   [MEM   +2*   CX]   14 L,   
+< ~SIB,   [MEM   +2*   AX]   14 L,   
+< ~SIB,   [MEM   +1*   DI]   14 L,   
+< ~SIB,   [MEM   +1*   SI]   14 L,   
+< ~SIB,   [MEM   +1*   BP]   14 L,   
+< ~SIB,   [MEM   +1*   0]   14 L,   
+< ~SIB,   [MEM   +1*   BX]   14 L,   
+< ~SIB,   [MEM   +1*   DX]   14 L,   
+< ~SIB,   [MEM   +1*   CX]   14 L,   
+< ~SIB,   [MEM   +1*   AX]   14 L,   
+< ~SIB,   [BP   +8*   DI]   
+< ~SIB,   [BP   +8*   SI]   
+< ~SIB,   [BP   +8*   BP]   
+< ~SIB,   [BP   +8*   0]   
+< ~SIB,   [BP   +8*   BX]   
+< ~SIB,   [BP   +8*   DX]   
+< ~SIB,   [BP   +8*   CX]   
+< ~SIB,   [BP   +8*   AX]   
+< ~SIB,   [BP   +4*   DI]   
+< ~SIB,   [BP   +4*   SI]   
+< ~SIB,   [BP   +4*   BP]   
+< ~SIB,   [BP   +4*   0]   
+< ~SIB,   [BP   +4*   BX]   
+< ~SIB,   [BP   +4*   DX]   
+< ~SIB,   [BP   +4*   CX]   
+< ~SIB,   [BP   +4*   AX]   
+< ~SIB,   [BP   +2*   DI]   
+< ~SIB,   [BP   +2*   SI]   
+< ~SIB,   [BP   +2*   BP]   
+< ~SIB,   [BP   +2*   0]   
+< ~SIB,   [BP   +2*   BX]   
+< ~SIB,   [BP   +2*   DX]   
+< ~SIB,   [BP   +2*   CX]   
+< ~SIB,   [BP   +2*   AX]   
+< ~SIB,   [BP   +1*   DI]   
+< ~SIB,   [BP   +1*   SI]   
+< ~SIB,   [BP   +1*   BP]   
+< ~SIB,   [BP   +1*   0]   
+< ~SIB,   [BP   +1*   BX]   
+< ~SIB,   [BP   +1*   DX]   
+< ~SIB,   [BP   +1*   CX]   
+< ~SIB,   [BP   +1*   AX]   
+< ~SIB,   [DI   +8*   DI]   
+< ~SIB,   [DI   +8*   SI]   
+< ~SIB,   [DI   +8*   BP]   
+< ~SIB,   [DI   +8*   0]   
+< ~SIB,   [DI   +8*   BX]   
+< ~SIB,   [DI   +8*   DX]   
+< ~SIB,   [DI   +8*   CX]   
+< ~SIB,   [DI   +8*   AX]   
+< ~SIB,   [DI   +4*   DI]   
+< ~SIB,   [DI   +4*   SI]   
+< ~SIB,   [DI   +4*   BP]   
+< ~SIB,   [DI   +4*   0]   
+< ~SIB,   [DI   +4*   BX]   
+< ~SIB,   [DI   +4*   DX]   
+< ~SIB,   [DI   +4*   CX]   
+< ~SIB,   [DI   +4*   AX]   
+< ~SIB,   [DI   +2*   DI]   
+< ~SIB,   [DI   +2*   SI]   
+< ~SIB,   [DI   +2*   BP]   
+< ~SIB,   [DI   +2*   0]   
+< ~SIB,   [DI   +2*   BX]   
+< ~SIB,   [DI   +2*   DX]   
+< ~SIB,   [DI   +2*   CX]   
+< ~SIB,   [DI   +2*   AX]   
+< ~SIB,   [DI   +1*   DI]   
+< ~SIB,   [DI   +1*   SI]   
+< ~SIB,   [DI   +1*   BP]   
+< ~SIB,   [DI   +1*   0]   
+< ~SIB,   [DI   +1*   BX]   
+< ~SIB,   [DI   +1*   DX]   
+< ~SIB,   [DI   +1*   CX]   
+< ~SIB,   [DI   +1*   AX]   
+< ~SIB,   [SI   +8*   DI]   
+< ~SIB,   [SI   +8*   SI]   
+< ~SIB,   [SI   +8*   BP]   
+< ~SIB,   [SI   +8*   0]   
+< ~SIB,   [SI   +8*   BX]   
+< ~SIB,   [SI   +8*   DX]   
+< ~SIB,   [SI   +8*   CX]   
+< ~SIB,   [SI   +8*   AX]   
+< ~SIB,   [SI   +4*   DI]   
+< ~SIB,   [SI   +4*   SI]   
+< ~SIB,   [SI   +4*   BP]   
+< ~SIB,   [SI   +4*   0]   
+< ~SIB,   [SI   +4*   BX]   
+< ~SIB,   [SI   +4*   DX]   
+< ~SIB,   [SI   +4*   CX]   
+< ~SIB,   [SI   +4*   AX]   
+< ~SIB,   [SI   +2*   DI]   
+< ~SIB,   [SI   +2*   SI]   
+< ~SIB,   [SI   +2*   BP]   
+< ~SIB,   [SI   +2*   0]   
+< ~SIB,   [SI   +2*   BX]   
+< ~SIB,   [SI   +2*   DX]   
+< ~SIB,   [SI   +2*   CX]   
+< ~SIB,   [SI   +2*   AX]   
+< ~SIB,   [SI   +1*   DI]   
+< ~SIB,   [SI   +1*   SI]   
+< ~SIB,   [SI   +1*   BP]   
+< ~SIB,   [SI   +1*   0]   
+< ~SIB,   [SI   +1*   BX]   
+< ~SIB,   [SI   +1*   DX]   
+< ~SIB,   [SI   +1*   CX]   
+< ~SIB,   [SI   +1*   AX]   
+< ~SIB,   [SP   +8*   DI]   
+< ~SIB,   [SP   +8*   SI]   
+< ~SIB,   [SP   +8*   BP]   
+< ~SIB,   [SP   +8*   0]   
+< ~SIB,   [SP   +8*   BX]   
+< ~SIB,   [SP   +8*   DX]   
+< ~SIB,   [SP   +8*   CX]   
+< ~SIB,   [SP   +8*   AX]   
+< ~SIB,   [SP   +4*   DI]   
+< ~SIB,   [SP   +4*   SI]   
+< ~SIB,   [SP   +4*   BP]   
+< ~SIB,   [SP   +4*   0]   
+< ~SIB,   [SP   +4*   BX]   
+< ~SIB,   [SP   +4*   DX]   
+< ~SIB,   [SP   +4*   CX]   
+< ~SIB,   [SP   +4*   AX]   
+< ~SIB,   [SP   +2*   DI]   
+< ~SIB,   [SP   +2*   SI]   
+< ~SIB,   [SP   +2*   BP]   
+< ~SIB,   [SP   +2*   0]   
+< ~SIB,   [SP   +2*   BX]   
+< ~SIB,   [SP   +2*   DX]   
+< ~SIB,   [SP   +2*   CX]   
+< ~SIB,   [SP   +2*   AX]   
+< ~SIB,   [SP   +1*   DI]   
+< ~SIB,   [SP   +1*   SI]   
+< ~SIB,   [SP   +1*   BP]   
+< ~SIB,   [SP   +1*   0]   
+< ~SIB,   [SP   +1*   BX]   
+< ~SIB,   [SP   +1*   DX]   
+< ~SIB,   [SP   +1*   CX]   
+< ~SIB,   [SP   +1*   AX]   
+< ~SIB,   [BX   +8*   DI]   
+< ~SIB,   [BX   +8*   SI]   
+< ~SIB,   [BX   +8*   BP]   
+< ~SIB,   [BX   +8*   0]   
+< ~SIB,   [BX   +8*   BX]   
+< ~SIB,   [BX   +8*   DX]   
+< ~SIB,   [BX   +8*   CX]   
+< ~SIB,   [BX   +8*   AX]   
+< ~SIB,   [BX   +4*   DI]   
+< ~SIB,   [BX   +4*   SI]   
+< ~SIB,   [BX   +4*   BP]   
+< ~SIB,   [BX   +4*   0]   
+< ~SIB,   [BX   +4*   BX]   
+< ~SIB,   [BX   +4*   DX]   
+< ~SIB,   [BX   +4*   CX]   
+< ~SIB,   [BX   +4*   AX]   
+< ~SIB,   [BX   +2*   DI]   
+< ~SIB,   [BX   +2*   SI]   
+< ~SIB,   [BX   +2*   BP]   
+< ~SIB,   [BX   +2*   0]   
+< ~SIB,   [BX   +2*   BX]   
+< ~SIB,   [BX   +2*   DX]   
+< ~SIB,   [BX   +2*   CX]   
+< ~SIB,   [BX   +2*   AX]   
+< ~SIB,   [BX   +1*   DI]   
+< ~SIB,   [BX   +1*   SI]   
+< ~SIB,   [BX   +1*   BP]   
+< ~SIB,   [BX   +1*   0]   
+< ~SIB,   [BX   +1*   BX]   
+< ~SIB,   [BX   +1*   DX]   
+< ~SIB,   [BX   +1*   CX]   
+< ~SIB,   [BX   +1*   AX]   
+< ~SIB,   [DX   +8*   DI]   
+< ~SIB,   [DX   +8*   SI]   
+< ~SIB,   [DX   +8*   BP]   
+< ~SIB,   [DX   +8*   0]   
+< ~SIB,   [DX   +8*   BX]   
+< ~SIB,   [DX   +8*   DX]   
+< ~SIB,   [DX   +8*   CX]   
+< ~SIB,   [DX   +8*   AX]   
+< ~SIB,   [DX   +4*   DI]   
+< ~SIB,   [DX   +4*   SI]   
+< ~SIB,   [DX   +4*   BP]   
+< ~SIB,   [DX   +4*   0]   
+< ~SIB,   [DX   +4*   BX]   
+< ~SIB,   [DX   +4*   DX]   
+< ~SIB,   [DX   +4*   CX]   
+< ~SIB,   [DX   +4*   AX]   
+< ~SIB,   [DX   +2*   DI]   
+< ~SIB,   [DX   +2*   SI]   
+< ~SIB,   [DX   +2*   BP]   
+< ~SIB,   [DX   +2*   0]   
+< ~SIB,   [DX   +2*   BX]   
+< ~SIB,   [DX   +2*   DX]   
+< ~SIB,   [DX   +2*   CX]   
+< ~SIB,   [DX   +2*   AX]   
+< ~SIB,   [DX   +1*   DI]   
+< ~SIB,   [DX   +1*   SI]   
+< ~SIB,   [DX   +1*   BP]   
+< ~SIB,   [DX   +1*   0]   
+< ~SIB,   [DX   +1*   BX]   
+< ~SIB,   [DX   +1*   DX]   
+< ~SIB,   [DX   +1*   CX]   
+< ~SIB,   [DX   +1*   AX]   
+< ~SIB,   [CX   +8*   DI]   
+< ~SIB,   [CX   +8*   SI]   
+< ~SIB,   [CX   +8*   BP]   
+< ~SIB,   [CX   +8*   0]   
+< ~SIB,   [CX   +8*   BX]   
+< ~SIB,   [CX   +8*   DX]   
+< ~SIB,   [CX   +8*   CX]   
+< ~SIB,   [CX   +8*   AX]   
+< ~SIB,   [CX   +4*   DI]   
+< ~SIB,   [CX   +4*   SI]   
+< ~SIB,   [CX   +4*   BP]   
+< ~SIB,   [CX   +4*   0]   
+< ~SIB,   [CX   +4*   BX]   
+< ~SIB,   [CX   +4*   DX]   
+< ~SIB,   [CX   +4*   CX]   
+< ~SIB,   [CX   +4*   AX]   
+< ~SIB,   [CX   +2*   DI]   
+< ~SIB,   [CX   +2*   SI]   
+< ~SIB,   [CX   +2*   BP]   
+< ~SIB,   [CX   +2*   0]   
+< ~SIB,   [CX   +2*   BX]   
+< ~SIB,   [CX   +2*   DX]   
+< ~SIB,   [CX   +2*   CX]   
+< ~SIB,   [CX   +2*   AX]   
+< ~SIB,   [CX   +1*   DI]   
+< ~SIB,   [CX   +1*   SI]   
+< ~SIB,   [CX   +1*   BP]   
+< ~SIB,   [CX   +1*   0]   
+< ~SIB,   [CX   +1*   BX]   
+< ~SIB,   [CX   +1*   DX]   
+< ~SIB,   [CX   +1*   CX]   
+< ~SIB,   [CX   +1*   AX]   
+< ~SIB,   [AX   +8*   DI]   
+< ~SIB,   [AX   +8*   SI]   
+< ~SIB,   [AX   +8*   BP]   
+< ~SIB,   [AX   +8*   0]   
+< ~SIB,   [AX   +8*   BX]   
+< ~SIB,   [AX   +8*   DX]   
+< ~SIB,   [AX   +8*   CX]   
+< ~SIB,   [AX   +8*   AX]   
+< ~SIB,   [AX   +4*   DI]   
+< ~SIB,   [AX   +4*   SI]   
+< ~SIB,   [AX   +4*   BP]   
+< ~SIB,   [AX   +4*   0]   
+< ~SIB,   [AX   +4*   BX]   
+< ~SIB,   [AX   +4*   DX]   
+< ~SIB,   [AX   +4*   CX]   
+< ~SIB,   [AX   +4*   AX]   
+< ~SIB,   [AX   +2*   DI]   
+< ~SIB,   [AX   +2*   SI]   
+< ~SIB,   [AX   +2*   BP]   
+< ~SIB,   [AX   +2*   0]   
+< ~SIB,   [AX   +2*   BX]   
+< ~SIB,   [AX   +2*   DX]   
+< ~SIB,   [AX   +2*   CX]   
+< ~SIB,   [AX   +2*   AX]   
+< ~SIB,   [AX   +1*   DI]   
+< ~SIB,   [AX   +1*   SI]   
+< ~SIB,   [AX   +1*   BP]   
+< ~SIB,   [AX   +1*   0]   
+< ~SIB,   [AX   +1*   BX]   
+< ~SIB,   [AX   +1*   DX]   
+< ~SIB,   [AX   +1*   CX]   
+< ~SIB,   [AX   +1*   AX]   
+---
+> 
+> 
+> AS-HERE
+> 10 AS-ALLOT
+> DUP 10 ERASE    \ Padding for dump
+> ." TEST STARTS HERE"
+> 2DUP OVER - DUMP
+> 2DUP OVER - "test386.bin" PUT-FILE
+> DISASSEMBLE-RANGE
+> BYE
