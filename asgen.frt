@@ -612,10 +612,9 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 ( Based on what is currently left in `TALLY!' )
 ( Leave a POINTER pointing after that instruction. )
 : ((DISASSEMBLE))
-    SWAP
-    >R R@ POINTER !
+    SWAP 
+    DUP ADORN-ADDRESS    DUP POINTER !   >R 
     ( startdea -- ) BEGIN
-        ADORN-ADDRESS
         DIS-PI DIS-xFI DIS-DFI DIS-DFIR DIS-FIR DIS-COMMA
         >NEXT%
 (       DUP ID. ." : "  DISS-VECTOR @ EXECUTE                                 )

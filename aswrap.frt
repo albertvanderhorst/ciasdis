@@ -22,8 +22,11 @@ VARIABLE TARGET-START
 \ Associate ADDRESS with the start of ``CODE-SPACE''.
 : ORG      TARGET-START !   CODE-SPACE CP ! ;
 
+\ Convert host memory ADDRESS. Leave target memory ADDRESS.
+: HOST>TARGET  CODE-SPACE - TARGET-START @ + ;  
+
 \ Instruction pointer in assembly. View used in branches etc.
-: _AP_    CP @ CODE-SPACE - TARGET-START @ + ;
+: _AP_    CP @ HOST>TARGET ;
 
 \ Swap dictionary pointer back and forth to assembler area.
 : SWAP-AS CP @ DP @    CP ! DP !  ;
@@ -41,5 +44,5 @@ VARIABLE TARGET-START
 : AS-C,       SWAP-AS C, SWAP-AS ;
 
 \ Adorn the ADDRESS we are currently disassembling with data
-\ from a disassembly data file. Leave ADDRESS.
-: ADORN-ADDRESS ; 
+\ from a disassembly data file.
+: ADORN-ADDRESS DROP ;

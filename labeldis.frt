@@ -14,15 +14,15 @@ REQUIRE BIN-SEARCH
 
 : \D ;
 
-\ Contains labels, i.e. dea's tokens of things that leave a number.
+\ Contains labels, i.e. dea's of things that leave a number
    1000 SET LABELS   LABELS !SET
 
 \ Associate ADDRES with "NAME". (Store it in ``LABELS'')
-: LABEL CONSTANT   LATEST LABELS SET+! ;
+: LABEL   CONSTANT   LATEST LABELS SET+! ;
 
 \ For I return the dea of the ith LABEL . 1 returns the first label.
 \ All indices are compatible with this.
-: LABELS[] CELLS LABELS + @ ;
+: LABELS[]   CELLS LABELS + @ ;
 
 \D 12 LABEL AAP
 \D 5 LABEL NOOT
@@ -57,17 +57,29 @@ VARIABLE C
 : L<    LABELS[] EXECUTE   C @   < ;
 
 \ Find the first label that is equal to (or greater than) VALUE
-\ Return INDEX.
-: FIND-LABEL   C !   LABELS BAG-BOUNDS 1+ 'L<   BIN-SEARCH ;
+\ Return INDEX or zero if not found.
+\ Note ``BIN-SEARCH'' returns the non-inclusive upper bound if not found.
+: FIND-LABEL   C !   LABELS BAG-BOUNDS 1+  DUP >R
+    'L<   BIN-SEARCH   DUP R> <> AND ;
 
 \ Find ADDRESS in the label table. Return DEA of an exact
 \ matching label or zero if not found.
-: >LABEL   FIND-LABEL LABELS[]  DUP EXECUTE C @ - IF DROP 0 THEN ;
+: >LABEL   FIND-LABEL DUP IF LABELS[]  DUP EXECUTE C @ - IF DROP 0 THEN THEN ;
 
-\D LABELS .LABELS
+\ Adorn the ADDRESS we are currently disassembling with a label
+\ if any.
+: ADORN-WITH-LABEL   HOST>TARGET  >LABEL DUP IF &: EMIT ID. _ THEN DROP ;
+
+'ADORN-WITH-LABEL >DFA @   'ADORN-ADDRESS >DFA !
+
+\D LABELS .LABELS CR
 \D SORT-LABELS
-\D LABELS .LABELS
+\D LABELS .LABELS CR
 
+\D 200 FIND-LABEL . CR
 \D AAP FIND-LABEL  LABELS[] ID. CR
-\D AAP >LABEL H. CR
+\D AAP 1- FIND-LABEL  LABELS[] ID. CR
+\D AAP >LABEL ID. CR
 \D AAP 1- >LABEL H. CR
+\D AAP ADORN-WITH-LABEL  .S CR  \ Should fail!
+\D AAP 0 HOST>TARGET - ADORN-WITH-LABEL  .S CR
