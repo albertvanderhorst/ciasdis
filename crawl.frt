@@ -193,7 +193,7 @@ NORMAL-DISASSEMBLY
 
 : ANALYSE-INSTRUCTION   LATEST-INSTRUCTION @ JUMPS IN-BAG? IF
     JUMP-TARGET DUP ?INSERT-EQU?
-    STARTER? IF JUMP-TARGET STARTERS BAG+! THEN THEN ;
+    STARTER? IF JUMP-TARGET STARTERS SET+ THEN THEN ;
 
 \ Analyse the code range from ADDRESS up to an unconditional transfer.
 \ Add information about jumps to ``STARTERS'' and new sections to ``LABELS''.
