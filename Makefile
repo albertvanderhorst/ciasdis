@@ -105,6 +105,7 @@ ciasdis.frt  \
 crawl.frt    \
 labelas.frt  \
 labeldis.frt \
+tools.frt    \
 # That's all folks!
 
 # Plug ins for stand alone assembler

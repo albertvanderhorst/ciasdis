@@ -29,6 +29,7 @@ REQUIRE OLD:    REQUIRE $=
 \ --------------------------------------------------------------
 
 INCLUDE class.frt
+INCLUDE tools.frt
 INCLUDE asgen.frt
 INCLUDE aswrap.frt      \ neater if put here
 INCLUDE asi386.frt

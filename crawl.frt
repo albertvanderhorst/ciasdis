@@ -11,16 +11,6 @@ REQUIRE BAG
 
 \ : \D ;
 
-
-\ Make the output disappear till the end of the calling word.
-    : 2DROP'  2DROP ;      \ Need a high level word here.
-: SHUTUP   '2DROP' >DFA @  'TYPE >DFA !    CO   'TYPE RESTORED ;
-
-\ Make ADDRESS return some label NAME, static memory so use immediately.
-: INVENT-NAME   "L" PAD $!   0 8 (DH.) PAD $+! PAD $@ ;
-
-\D HEX ." EXPECT: L0000,0042 " 42 INVENT-NAME TYPE CR
-
 \ Insert the equ-label ADDRESS1 with an NAME.
 \ If equ labels was sorted, it remains so.
 : INSERT-EQU 2>R DUP EQU-LABELS WHERE-LABEL SWAP 2R> LABELED
