@@ -325,6 +325,15 @@ testlinux : $(TESTLINUX) ci86.linux.rawtest ciforthc forth.lab ;
 	sed $(TEMPFILE) -e '1,/Split here for test/d' >$@.2
 	rm $(TEMPFILE)
 
-testdis : labeltest.frt bag.frt struct.frt test.asm test.asm.dat aswrap.frt asgen.frt asi586.frt testset386 \
-labelas.frt labeldis.frt ;   cat labeltest.frt | lina -e > $@
-	diff -b -B $@ testresults
+ciasdis : ciasdis.frt bag.frt struct.frt aswrap.frt asgen.frt labelas.frt labeldis.frt crawl.frt \
+	; lina -c ciasdis.frt
+cias : ciasdis ; ln -f ciasdis cias
+cidis : ciasdis ; ln -f ciasdis cidis
+
+
+
+test.bin : cidis cias test.asm test.asm.dat  ;
+	cias test.asm test.bin;
+	cidis test.bin test.asm.dat > test2.asm;
+	cias test2.asm test2.bin;
+	cmp test.bin test2.bin && cmp test.bin testresults/test.bin

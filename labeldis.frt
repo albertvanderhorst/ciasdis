@@ -317,9 +317,13 @@ endstruct
 : DISASSEMBLE-TARGET
     TARGET-START @ . " ORG" TYPE CR   DISASSEMBLE-ALL   CP @ ADORN-ADDRESS CR ;
 
-\ Using (only) information from "file",
+\ Using (only) information from file with NAME,
 \ disassemble the current program as stored in the ``CODE-BUFFER''.
-: CONSULT   INIT-ALL   HEX INCLUDE ( file)   SORT-ALL   DISASSEMBLE-TARGET DECIMAL ;
+: CONSULTED   INIT-ALL   HEX INCLUDED ( file)   SORT-ALL
+    DISASSEMBLE-TARGET DECIMAL ;
+
+\ Consult "file" as per ``CONSULT''
+: CONSULT   (WORD) CONSULTED ;
 
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
