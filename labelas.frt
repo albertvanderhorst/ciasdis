@@ -6,41 +6,45 @@
 
 REQUIRE BAG             \ Simple bag facility
 REQUIRE DO-BAG          \ More advanced bag facility
+REQUIRE POSTFIX
 
 ( Make sure undefined labels don't fool up the first pass of the        )
 (   assembly                                                            )
-\ Compile words that are unknown
-\ as a _ ,i.e. it generates a don't care value.
-\ Supposedly these are labels that have not been compiled.
+\ Replace not found FLAG , by a valid DEA with the stack effect of a label.
+\ The result is that unknown words are compiled as a _ , i.e. it
+\ generates a don't care value.
+\ Supposedly these are labels that have not been defined yet.
 \ Go on compiling.
 \ Loading the same code another time will give correct code.
 : FIX-DEA DROP '_ ;
-\ Skip the remainder of the misspelled number.
-\ This may be empty, so in order to use (WORD) , we backspace one char.
+( Make sure undefined labels that looks like numbers,                   )
+(   don't fool up the first pass of the assembly.                       )
+( Not that we endorse the idea to name labels like 250HUP.              )
+\ All of a word may have been scanned, so before using (WORD) ,
+\ we backspace one char.
 \ Afterwards we backspace again, such that the number routine we return
 \ to concludes it is ready.
 \ We leave some random number, which is okay, but it must be single precision!
 : FIX-NMB   -1 IN +!   (WORD) 2DROP   -1 IN +!   0 DPL ! ;
 
+\ If FLAG we have a misspelled number, skip its remainder.
 : ERROR10 DROP IF  FIX-NMB THEN ;
+\ If FLAG we have an unknown word, treat it as a label.
 : ERROR12 DROP IF  FIX-DEA THEN ;
 
 REQUIRE OLD:
-\ Replacement for ?ERROR. Fix up errors, see FIX-NMB FIX-DEA.
+\ Replacement for ?ERROR, if FLAG, give error NUMBER.
+\ Fix up errors, see FIX-NMB FIX-DEA.
 : ?ERROR-FIXING
     DUP 10 = IF ERROR10 ELSE
     DUP 12 = IF ERROR12 ELSE
     OLD: ?ERROR
     THEN THEN   ;
 
-\ Try to automatically load missing words.
-: FIRSTPASS '?ERROR-FIXING >DFA @ '?ERROR >DFA ! ;
-: SECONDPASS '?ERROR RESTORED ;  \ And off again.
-
-( Make a denotation for labels. They look like `` :LABEL ''             )
-( Put `` : '' in the ONLY wordlist, such that it doesn't                )
-( interfere with the normal semicolon.                                  )
-REQUIRE POSTFIX
+\ Ignore undefined labels during first pass ...
+: FIRSTPASS   '?ERROR-FIXING >DFA @ '?ERROR >DFA ! ;
+\   but not any more in the second pass.
+: SECONDPASS   '?ERROR RESTORED ;
 
 \ For NAME: "name REPRESENTS a label."
 : IS-A-LABEL? FOUND DUP IF >CFA @ 'BL >CFA @ = THEN ;
@@ -53,9 +57,9 @@ REQUIRE POSTFIX
     ETYPE 2DUP ETYPE CR THEN THEN
 R> ;
 
-( Making ONLY the CONTEXT is dangerous! This will do.                   )
-'ONLY >WID CURRENT !
-
+( Make a denotation for labels. They look like `` :LABEL ''             )
+( Put `` : '' in the ONLY wordlist, such that it doesn't                )
+( interfere with the normal semicolon.                                  )
 \ A word starting with a ``:'' is a label definition denotation.
 \ The part after the ``:'' may be defined already, but if it is
 \ a label it must have the value of the current program counter.
@@ -63,10 +67,10 @@ R> ;
 \ This is very tricky, but the assembler programmer must not be
 \ restricted by what words are in Forth.
 \ Note: this is actually an abuse of the denotation mechanism.
-: : (WORD) KNOWN-LABEL? IF 2DROP ELSE 2>R _AP_ 2R> POSTFIX CONSTANT THEN ;
-LATEST >FFA 12 TOGGLE    \ Immediate and denotation.
-
-CONTEXT @ CURRENT !
+'ONLY >WID CURRENT !  \ Making ONLY the CONTEXT is dangerous! This will do.
+: : (WORD)
+    KNOWN-LABEL? IF 2DROP ELSE 2>R _AP_ 2R> POSTFIX CONSTANT THEN
+; PREFIX IMMEDIATE    DEFINITIONS
 
 ( Handle constant data in assembler )
 
