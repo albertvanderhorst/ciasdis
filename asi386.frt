@@ -20,17 +20,17 @@
 ( Where there is a placeholder ``_'' the execution token is filled in   )
 ( later. )
 
-0 2 0000 0100 ' W, COMMAER OW,    ( obligatory word     )
-0 4 0000 0080 ' L, COMMAER (RX,) ( cell relative to IP )
-0 1 0000 0040 ' AS-C, COMMAER (RB,) ( byte relative to IP )
-0 2 0000 0020 ' W, COMMAER SG,   (  Segment: WORD      )
-0 1 0000 0010 ' AS-C, COMMAER P,    ( port number ; byte     )
-0 1 0000 0008 ' AS-C, COMMAER IS,    ( Single -obl-  byte )
-0 4 0002 0004 ' L, COMMAER IX,   ( immediate data : cell)
-0 1 0001 0004 ' AS-C, COMMAER IB,   ( immediate byte data)
-0 4 0008 0002 ' L, COMMAER X,    ( immediate data : address/offset )
-0 1 0004 0002 ' AS-C, COMMAER B,    ( immediate byte : address/offset )
-_ 1 0000 0001 _    COMMAER SIB,, ( An instruction with in an instruction )
+0 2 0000 0,0100 ' W, COMMAER OW,    ( obligatory word     )
+0 4 0000 0,0080 ' L, COMMAER (RX,) ( cell relative to IP )
+0 1 0000 0,0040 ' AS-C, COMMAER (RB,) ( byte relative to IP )
+0 2 0000 0,0020 ' W, COMMAER SG,   (  Segment: WORD      )
+0 1 0000 0,0010 ' AS-C, COMMAER P,    ( port number ; byte     )
+0 1 0000 0,0008 ' AS-C, COMMAER IS,    ( Single -obl-  byte )
+0 4 0002 0,0004 ' L, COMMAER IX,   ( immediate data : cell)
+0 1 0001 0,0004 ' AS-C, COMMAER IB,   ( immediate byte data)
+0 4 0008 0,0002 ' L, COMMAER X,    ( immediate data : address/offset )
+0 1 0004 0,0002 ' AS-C, COMMAER B,    ( immediate byte : address/offset )
+_ 1 0000 0,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 
 
 ( Meaning of the bits in TALLY-BA :                                     )
@@ -39,19 +39,16 @@ _ 1 0000 0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 ( By setting 0020 an opcode can force a memory reference, e.g. CALLFARO )
 (               0010 Register op         0020 Memory op                 )
 (               0040 D0|                 0080 [BP]' {16} [BP]      {32} )
-(  sib:       0100 no ..             0200 [AX +8*| DI]                  )
-(  logical    0400 no ..             0800 Y| Y'| Z| Z'|                 )
-(  segment    1000 no ..             2000 ES| ..                        )
-( test/debug 4,0000 no ..            8,0000 CR0 ..DB0                   )
+(  sib:         0100 no ..             0200 [AX +8*| DI]                )
+(  logical      0400 no ..             0800 Y| Y'| Z| Z'|               )
+(  segment      1000 no ..             2000 ES| ..                      )
+(  16 bit Addr  4000                   8000 32 bit Address              )
+(  16 bit Op   1,0000                2,0000 32 bit Operand              )
+(  Use debug   4,0000 no ..          8,0000 CR0 ..DB0                   )
 
 ( Names *ending* in primes BP|' -- not BP'| the prime registers -- are  )
 ( only valid for 0016 bits real mode, in combination with an address    )
-( overwite. Use W, L, and end the line in TALLY! to defeat checks.      )
-
-( Like xFIR but without any checks and unfindable for the disassembler  )
-( Use for 0016 bit mode instructions.                                     )
-: xFIR16   CHECK31 CREATE-- , , , , DOES> FIXUP< ;
-: xFAMILY|R16   0000 DO   DUP >R T@ R> xFIR16  OVER + LOOP DROP DROP ;
+( overwite. Use W, L, appropriately.                                    )
 
 0200 0 38 T!R
  08 00 8 FAMILY|R AX] CX] DX] BX] 0] BP] SI] DI]
@@ -62,13 +59,15 @@ _ 1 0000 0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 0280 00 0100,0007 05 FIR [BP   ( Fits in the hole, safe inconsistency check)
 0240 02 0100,0007 05 FIR [MEM  ( Fits in the hole, safe inconsistency check)
 
-0120 0 07 T!R
-  0100,0000 00 8
-    xFAMILY|R16 [BX+SI]' [BX+DI]' [BP+SI]' [BP+DI]' [SI]' [DI]' -- [BX]'
-00A0 0000 0720,0000 0600,0000 xFIR16 [BP]'  ( Fits in the hole, safe inconsistency check)
+4120 0 07 T!R
+  01 00 8
+    FAMILY|R [BX+SI]' [BX+DI]' [BP+SI]' [BP+DI]' [SI]' [DI]' -- [BX]'
+40A0 0000 2007 06 FIR [BP]'  ( Fits in the hole, safe inconsistency check)
+8120 0 07 T!R
  01 00 4 FAMILY|R [AX] [CX] [DX] [BX]
-0120 01 07 04 FIR ~SIB|   ( Fits in the hole, requires also ~SIB, )
-01A0 00 07 05 FIR [BP]   ( Fits in the hole, safe inconsistency check)
+8120 01 07 04 FIR ~SIB|   ( Fits in the hole, but requires ~SIB, )
+81A0 00 07 05 FIR [BP]   ( Fits in the hole, but disallow D0| )
+8120 0 07 T!R
  01 06 2 FAMILY|R [SI] [DI]
 
 0111 0 07 T!R
@@ -79,8 +78,8 @@ _ 1 0000 0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 0124 02 C0 40 FIR      DB|
 0128 02 C0 80 FIR      DW|
 0110 00 C0 C0 FIR      R|
-0008 02 C700,0000 0600,0000 xFIR16    MEM|' ( Overrules D0| [BP]')
-0108 02 C7 05 FIR      MEM| ( Overrules D0| [BP] )
+4008 02 C7 06 FIR      MEM|' ( Overrules D0| [BP]')
+8108 02 C7 05 FIR      MEM| ( Overrules D0| [BP] )
 
 04,1101 0000 38 T!R
  08 00 8 FAMILY|R AL'| CL'| DL'| BL'| AH'| CH'| DH'| BH'|
@@ -223,9 +222,9 @@ _ 1 0000 0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 ( Disassemble the sib byte where the disassembler sits now.             )
 ( [ `FORCED-DISASSEMBLY' takes care itself of incrementing the          )
 (   disassembly pointer. ]                                              )
-: DIS-SIB DROP 
+: DIS-SIB DROP
     LATEST-INSTRUCTION @        \ We don't want sib visible.
-    [ % ~SIB, ] LITERAL FORCED-DISASSEMBLY  
+    [ % ~SIB, ] LITERAL FORCED-DISASSEMBLY
     LATEST-INSTRUCTION !
 ;
 
@@ -248,5 +247,10 @@ _ 1 0000 0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 ' .COMMA-SIGNED   % (RB,) >DIS !
 ' .COMMA-SIGNED   % (RX,) >DIS !
 
+( Require instructions as per a 32 resp. 16 bits segment.               )
+: BITS-32   2,8000 BA-DEFAULT ! ;
+: BITS-16   1,4000 BA-DEFAULT ! ;
+
+BITS-32
 PREVIOUS DEFINITIONS DECIMAL
 ( ############## 8086 ASSEMBLER POST ################################## )

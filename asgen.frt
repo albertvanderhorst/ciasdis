@@ -172,7 +172,9 @@ REQUIRE POSTFIX
 VARIABLE TALLY-BI  ( Bits that needs fixed up)
 VARIABLE TALLY-BY  ( Bits represent a commaer that is to be supplied)
 VARIABLE TALLY-BA  ( State bits, bad if two consequitive bits are up)
-VARIABLE BA-DEFAULT    0 BA-DEFAULT ! ( Default not implemented. )
+( Bits set in the default can be used to exclude certain classes of     )
+( instructions, e.g. because they are not implemented.                  )
+VARIABLE BA-DEFAULT    0 BA-DEFAULT ! 
 VARIABLE OLDCOMMA ( Previous comma, or zero)
 VARIABLE ISS  ( Start of current instruction)
 VARIABLE ISL  ( Lenghth of current instruction)
