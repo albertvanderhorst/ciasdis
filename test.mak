@@ -9,6 +9,19 @@ PREFIX=0
 TITLE=QUICK REFERENCE PAGE FOR 80386 ASSEMBLER
 TESTTARGETS=*.ps testas* testlina.[0-9] testmina.[0-9] testlinux.[0-9]
 
+# Source for stand alone assembler
+ASSRC= \
+aswrap.frt   \
+asgen.frt    \
+bag.frt      \
+ciasdis.frt  \
+crawl.frt    \
+decsharp.frt \
+labelas.frt  \
+labeldis.frt \
+struct.frt   \
+# That's all folks!
+
 testclean: ; rm -f $(TESTTARGETS)
 
 # WARNING : the generation of postscript and pdf use the same files
@@ -325,12 +338,9 @@ testlinux : $(TESTLINUX) ci86.linux.rawtest ciforthc forth.lab ;
 	sed $(TEMPFILE) -e '1,/Split here for test/d' >$@.2
 	rm $(TEMPFILE)
 
-ciasdis : ciasdis.frt bag.frt struct.frt aswrap.frt asgen.frt labelas.frt labeldis.frt crawl.frt \
-	; lina -c ciasdis.frt
+ciasdis : $(ASSRC) ; lina -c ciasdis.frt
 cias : ciasdis ; ln -f ciasdis cias
 cidis : ciasdis ; ln -f ciasdis cidis
-
-
 
 test.bin : cidis cias test.asm test.asm.dat  ;
 	cias test.asm test.bin;
