@@ -9,7 +9,7 @@
 REQUIRE H.
 REQUIRE BAG
 
-\ : \D ;
+: \D ;
 
 \ Insert the equ-label ADDRESS1 with an NAME.
 \ If equ labels was sorted, it remains so.
@@ -30,18 +30,17 @@ REQUIRE BAG
 \D 42 ?INSERT-EQU?
 \D ." EXPECT: L0000,0042 NOT added again " EQU-LABELS .LABELS     CR .S
 
+\D HEX
 \D SECTION-LABELS       LABELS !BAG
 \D 4FE 510 -dc-
 \D 520 530 -dc: oops
 \D 530 570 -dc-
 \D 560 590 -db: bytes
 \D ." EXPECT: 4 sections :" .LABELS CR .S
+\D DECIMAL
 
-\ Section INDEX is of the same type as the previous one.
-: COMPATIBLE?
-    DUP MAKE-CURRENT DIS-XT   OVER 1-   MAKE-CURRENT DIS-XT = >R
-    DUP MAKE-CURRENT DIS-CR-XT OVER 1-  MAKE-CURRENT DIS-CR-XT  = >R
-    DROP   R> R> AND ;
+\ For section INDEX : "it IS of the same type as the previous one".
+: COMPATIBLE?   DUP MAKE-CURRENT DIS-XT   SWAP 1- MAKE-CURRENT DIS-XT  = ;
 
 \D ." EXPECT: -1 :" 2 COMPATIBLE? . CR
 \D ." EXPECT: -1 :" 3 COMPATIBLE? . CR
@@ -61,8 +60,9 @@ REQUIRE BAG
 \ INDEX2 plus a new END for the combined section.
 : NEW-DIS-END OVER MAKE-CURRENT DIS-END  OVER MAKE-CURRENT DIS-END   MAX ;
 
-\D  ." EXPECT 520 : " 2 3 NEW-DIS-START . 2DROP CR
-\D  ." EXPECT 590 : " 3 4 NEW-DIS-END  . 2DROP CR .S
+\D REQUIRE H.
+\D  ." EXPECT 520 : " 2 3 NEW-DIS-START H. 2DROP CR
+\D  ." EXPECT 590 : " 3 4 NEW-DIS-END  H. 2DROP CR .S
 
 \ Replace the two sections INDEX1 and INDEX2 with the last section.
 \ Place it at index1 (which has the correct start address.)
@@ -218,7 +218,7 @@ REQUIRE BAG
 \ ------------------------------------------------------------------------
 ASSEMBLER
 
-        \ Jump targets that are starting points for further crawling.
+\ Jump targets that are starting points for further crawling.
 \ Adding and removing from this bag ressembles a recursive action.
 \ Recursion will not do here! This is because sections are not added
 \ until the end is detected.
@@ -326,3 +326,4 @@ NORMAL-DISASSEMBLY
 : CRAWL16  'D-R-T-16 (R-XT) ! BITS-16 CRAWL NORMAL-DISASSEMBLY ;
 
 PREVIOUS
+: \D ;

@@ -389,18 +389,6 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 \ place to break. (String enders like ^J and 0 are not printable.)
 : ACCU-$C+   DUP C@ ACCU $C+   ACCU @ 64 = IF 1+ ELSE 2 + THEN NEXT-CUT ! ;
 
-\ Print all chars from ADDR1 to ADDR2 appropriately.
-\ Try to combine, playing with the next flush.
-: (DUMP-$)
-    DO  I ADORN-ADDRESS
-        I C@ IS-PRINT   IF I ACCU-$C+ ELSE I C@ .C THEN
-    LOOP  .ACCU ;
-
-\D "AAP" $, ^J C, ^M C, &A C, &A C, BL C, &P C, 0 C, 1 C, BL C, 2 C, 3 C,
-\D HERE
-\D ." EXPECT"  "``3 0 0 0 ""AAP"" XX ^J ^M ""AA P"" 0 1 BL 2 3 '':" TYPE
-\D .S (DUMP-$) CR .S
-
 
 \ ---------------- Things to print at the start of a line --------------------------------------
 
@@ -408,7 +396,12 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 : .TARGET-ADDRESS "( " TYPE DUP HOST>TARGET H. " )   " TYPE ;
 
 \ Start a new line, with printing the decompiled ADDRESS as seen
-: CR+ADDRESS CR .TARGET-ADDRESS ADORN-WITH-LABEL ;
+: CR-ADORNED
+    PRINT-OLD-COMMENT:
+    DUP PRINT-COMMENT
+    CR .TARGET-ADDRESS
+    ADORN-WITH-LABEL ;
+
 
 \ Initialise to the start of the code space.
 : NEXT-CUT!   CODE-SPACE NEXT-CUT ! ;
@@ -420,18 +413,18 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 \ interrupt the laying down of memory classes by a new line and possibly
 \ a label, when appropriate.
 
-: CR+GENERIC   2>R DUP REMEMBER-COMMENT: DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF
-     CR+ADDRESS  2R@ TYPE _ THEN DROP RDROP RDROP ;
+: CR+GENERIC   2>R DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF
+     DUP CR-ADORNED  2R@ TYPE THEN REMEMBER-COMMENT: RDROP RDROP ;
 
-: CR+$         2>R DUP REMEMBER-COMMENT: DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF .ACCU
-     CR+ADDRESS  2R@ TYPE _ THEN DROP RDROP RDROP ;
+: CR+$         2>R DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF .ACCU
+     DUP CR-ADORNED  2R@ TYPE THEN REMEMBER-COMMENT: RDROP RDROP ;
 
 \ For ADDRESS : interupt byte display.
 : CR+db   "  db" CR+GENERIC ;
 : CR+dw   "  dw" CR+GENERIC ;
 : CR+dl   "  dl" CR+GENERIC ;
 : CR+d$   "  d$" CR+$ ;
-: CR+LABEL   CR+ADDRESS ;
+: CR+LABEL   CR-ADORNED ;
 
 
 \ ---------------- Specifiers of disassembly ranges ----------------------
@@ -442,28 +435,20 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 \ where address2 is exclusive.
 
 \ Define a section.
-12 34 '2DROP 'DROP
+12 34 '2DROP
 class DIS-STRUCT
-   >R >R >R >R          \ Get them in reverse order.
+   >R >R >R          \ Get them in reverse order.
    M: DIS-START @ M; R> ,     \ Start of range
    M: DIS-END! ! M;       \ End of range
    M: DIS-END   @ M; R> ,       \ End of range
    M: DIS-STRIDE   @ M; 1 ,  \ For the moment FIXME!
    M: DIS-XT   @ M;
    M: DIS-RANGE   @ >R DIS-START DIS-END R> EXECUTE M; R> ,       \ End of range
-   M: DIS-CR-XT   @ M;       \ Which xt?
-   M: DIS-CR   @ EXECUTE M; R> ,      \ What to do at line boundaries.
 endclass
-
-\ Print out everything we know about ADDRESS.
-: (ADORN-ADDRESS)
-    PRINT-OLD-COMMENT:
-    DUP PRINT-COMMENT
-    DIS-CR ( disassembly type dependant action ) ;
 
 \ To be shown at the end of each range.
         ASSEMBLER
-: SHOW-END AS-POINTER @ ADORN-ADDRESS CR ;
+: SHOW-END AS-POINTER @ CR-ADORNED CR ;
         PREVIOUS
 
 : .PAY-SECTION CELL+ @ DUP EXECUTE
@@ -484,8 +469,8 @@ endclass
 \ Contains sector specification, range plus type.
 MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !BAG
 
-\ Create a disassembly section from AD1 to AD2 using dis-assembler DEA1 and
-\ end-of-line action DEA2 with NAME. Register it as a labeled section.
+\ Create a disassembly section from AD1 to AD2 using dis-assembler DEA1
+\ with NAME. Register it as a labeled section.
 : SECTION   POSTFIX  DIS-STRUCT   SECTION-LABELS   DIS-START LAB+!   LATEST LAB+! ;
 \ Create a disassembly section from AD1 to AD2 using dis-assembler DEA1 and
 \ end-of-line action DEA2 without a name. Register it as a labeled section.
@@ -495,7 +480,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 : D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R SHOW-END ;
 
 \ Section ADDRESS1 .. ADDRESS2 is code with name NAME.
-: -dc    2>R 'D-R-T   'CR+LABEL 2R> SECTION ;
+: -dc    2>R 'D-R-T   2R> SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is code with name "name".
 : -dc:    (WORD) -dc ;
@@ -512,7 +497,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 : DUMP-B   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-B) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are bytes with name NAME.
-: -db    2>R 'DUMP-B 'CR+db 2R> SECTION ;
+: -db    2>R 'DUMP-B 2R> SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
 : -db:    (WORD) -db ;
@@ -532,7 +517,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 : DUMP-W   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-W) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are words with name NAME.
-: -dw    2>R 'DUMP-W 'CR+dw 2R> SECTION ;
+: -dw    2>R 'DUMP-W 2R> SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 are words with name "name".
 : -dw:    (WORD) -dw ;
@@ -549,7 +534,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 : DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-L) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are longs with name NAME.
-: -dl    2>R 'DUMP-L 'CR+dl 2R> SECTION ;
+: -dl    2>R 'DUMP-L 2R> SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
 : -dl:    (WORD) -dl ;
@@ -559,11 +544,23 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 
 'DUMP-L    '-dl:   ARE-COUPLED
 
+\ Print all chars to ADDR1 from ADDR2 appropriately.
+\ Try to combine, playing with the next flush.
+: (DUMP-$)
+    DO  I CR+d$
+        I C@ IS-PRINT   IF I ACCU-$C+ ELSE I C@ .C THEN
+    LOOP  .ACCU ;
+
+\D "AAP" $, ^J C, ^M C, &A C, &A C, BL C, &P C, 0 C, 1 C, BL C, 2 C, 3 C,
+\D HERE
+\D " EXPECT  ``3 0 0 0 ""AAP"" XX ^J ^M ""AA P"" 0 1 BL 2 3 '':" TYPE
+\D .S SWAP (DUMP-$) CR .S
+
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-$   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-$) ;
 
 \ Section ADDRESS1 .. ADDRESS2 are longs with name NAME.
-: -d$    2>R 'DUMP-$ 'CR+d$ 2R> SECTION ;
+: -d$    2>R 'DUMP-$ 2R> SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
 : -d$:    (WORD) -d$ ;
@@ -594,14 +591,12 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 
 \ ------------------- Generic again -------------------
 
-\ Print out everything we know about ADDRESS.
-: (ADORN-ADDRESS)
-    PRINT-OLD-COMMENT:
-    DUP PRINT-COMMENT
-    DIS-CR ( disassembly type dependant action ) ;
+\ During assembly there is no decision needed whether to have a new line.
+\ Just do new line at ADDRESS, and get the eol-comment, if any.
+: (ADORN-ADDRESS)       DUP CR-ADORNED   REMEMBER-COMMENT: ;
 
 \ Revector ``ADORN-ADDRESS'' used in "asgen.frt".
-'(ADORN-ADDRESS) >DFA @   'ADORN-ADDRESS >DFA !
+'CR-ADORNED >DFA @   'ADORN-ADDRESS >DFA !
 
 \ Initialise all registered labelclasses.
 : INIT-ALL   THE-REGISTER DO-BAG   I @ EXECUTE LABELS !BAG   LOOP-BAG
@@ -644,7 +639,7 @@ ASSEMBLER
 : D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" TYPE SHOW-END ;
 
 \ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name NAME.
-: -dc16    2>R 'D-R-T-16   'CR+LABEL 2R> SECTION ;
+: -dc16    2>R 'D-R-T-16   2R> SECTION ;
 
 \ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
 : -dc16:   (WORD) -dc16 ;
