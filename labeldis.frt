@@ -17,7 +17,7 @@ REQUIRE BAG             \ Simple bag facility
 
 1000 CONSTANT MAX-LABEL
 
-: \D POSTPONE \ ;
+\ : \D ;
 
 \ -------------------- INTRODUCTION --------------------------------
 
@@ -206,6 +206,36 @@ MAX-LABEL '.PAY-DEA '.EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
 \D 12 ADORN-WITH-LABEL  .S CR  \ Should give zero, not found!
 \D 12 0 HOST>TARGET - ADORN-WITH-LABEL  CR
 
+\ For label INDEX , return its XT.
+: @LABEL    LABELS[] CELL+ @ ;
+
+\D 5 DUP INVENT-NAME LABELED
+\D SORT-LABELS .LABELS .S CR
+\D .LABELS .S CR
+\D ." EXPECT 5: " 5 FIND-LABEL @LABEL EXECUTE . .S CR
+
+\ For labels INDEX1 and INDEX2 return "they ARE equal".
+: LABEL=   @LABEL EXECUTE   SWAP @LABEL EXECUTE   = ;
+
+\D ." EXPECT -1:" 5 FIND-LABEL .S DUP 1+ .S LABEL= .S CR
+
+\ Get rid of a label with INDEX if trivial . Return next INDEX to try.
+: REMOVE-TRIVIAL   DUP @LABEL DUP EXECUTE SWAP >NFA @ $@ INVENTED-NAME? IF
+    DUP REMOVE-LABEL ELSE 1+ THEN ;
+
+\D 5 FIND-LABEL DUP REMOVE-TRIVIAL   REMOVE-TRIVIAL
+\D .LABELS .S CR
+
+\ Get rid of superfluous equ labels
+: CLEAN-LABELS   EQU-LABELS
+    2 BEGIN DUP LAB-UPB < WHILE DUP DUP 1- LABEL= >R DUP DUP 1+ LABEL= R> OR IF
+    REMOVE-TRIVIAL ELSE 1+ THEN REPEAT DROP ;
+
+\D 5 DUP INVENT-NAME LABELED  SORT-LABELS
+\D .LABELS .S CR
+\D CLEAN-LABELS
+\D .LABELS .S CR
+
 \ ---------------- Comment till remainder of line ------------------------------
 
 \ Decompile comment: label INDEX.
@@ -337,7 +367,7 @@ CREATE ACCU 100 ALLOT           ACCU 100 ERASE
 
 \D ." EXPECT ^J: "  ^J .C CR .S
 \D ." EXPECT 0: "  0 .C CR .S
-\D ." EXPECT 9A: "  9A .C CR .S
+\D ." EXPECT 9A: "  HEX 9A .C CR .S DECIMAL
 
 \ FIXME: to be renamd in WHERE-FLUSH
 VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
