@@ -39,7 +39,7 @@
 (                0004 OFFSET  IS BYTE     0008 OFFSET  IS CELL  W/L
 ( By setting 0020 an opcode can force a memory reference, e.g. CALLFARO )
 (               0010 Register op         0020 Memory op                 )
-(               0040 ZO|                 0080 [BP]' {16} [BP] [BP  {32} )
+(               0040 ZO|                 0080 [BP]% {16} [BP] [BP  {32} )
 (  sib:         0100 no ..             0200 [AX +8*| DI]                )
 (  logical      0400 no ..             0800 Y| Y'| Z| Z'|               )
 (  segment      1000 no ..             2000 ES| ..                      )
@@ -48,7 +48,7 @@
 (  Use debug   4,0000 no ..          8,0000 CR0 ..DB0                   )
 (  FP:        10,0000 FP-specific   20,0000 Not FP                      )
 
-( Names *ending* in primes BP|' -- not BP'| the prime registers -- are  )
+( Names *ending* in percent BP|% -- not BP'| the prime registers -- are )
 ( only valid for 16 bits mode, or with an address overwite. Use W, L,   )
 ( appropriately.                                                        )
 
@@ -63,8 +63,8 @@
 
 4120 0 07 T!R
   01 00 8
-    FAMILY|R [BX+SI]' [BX+DI]' [BP+SI]' [BP+DI]' [SI]' [DI]' -- [BX]'
-40A0 0000 07 06 FIR [BP]'  ( Fits in the hole, safe inconsistency check)
+    FAMILY|R [BX+SI]% [BX+DI]% [BP+SI]% [BP+DI]% [SI]% [DI]% -- [BX]%
+40A0 0000 07 06 FIR [BP]%  ( Fits in the hole, safe inconsistency check)
 8120 0 07 T!R
  01 00 4 FAMILY|R [AX] [CX] [DX] [BX]
 8120 01 07 04 FIR ~SIB|   ( Fits in the hole, but requires ~SIB, )
@@ -80,7 +80,7 @@
 0124 02 C0 40 FIR      BO|
 0128 02 C0 80 FIR      XO|
 20,0110 00 C0 C0 FIR      R|
-20,4048 02 C7 06 FIR      MEM|' ( Overrules ZO| [BP]')
+20,4048 02 C7 06 FIR      MEM|% ( Overrules ZO| [BP]% )
 20,8108 02 C7 05 FIR      MEM| ( Overrules ZO| [BP] )
 
 24,1101 0000 38 T!R
@@ -123,8 +123,8 @@
 0 04 C701 00C6 2PI MOVI,
 0012 0 0007 T!   0008 40 4 1FAMILY, INC|X, DEC|X, PUSH|X, POP|X,
 0012 0 0007 90 1PI XCHG|AX,
-0011 04 0007 B0 1PI MOVI|BR,
-0012 04 0007 B8 1PI MOVI|XR,
+0011 04 0007 B0 1PI MOVI|B,
+0012 04 0007 B8 1PI MOVI|X,
 0 04 C701 T!
  0800 0080 8 2FAMILY, ADDI, ORI, ADCI, SBBI, ANDI, SUBI, XORI, CMPI,
 0002 08 C700 T!
