@@ -217,7 +217,7 @@ HEX
 : >BY %>BODY 2 CELLS + ;                 ( OR!    OR!       AND!      )
 : >BA %>BODY  3 CELLS + ;                ( OR!U   OR!U      OR!U      )
 : >CNT %>BODY 4 CELLS + ;   ( `HERE' advances with count )
-: >DIS %>BODY 5 CELLS + ;   ( disassembler only for COMMA)
+: >DIS %>BODY 5 CELLS + ; ( disassembler only for COMMA , 0 -> default  )
 
 ( Adjust `HERE' for actual instruction length after `DO-POST' did `,' )
 : CORRECT,- ISL @   1 CELLS -  AS-ALLOT ;
@@ -572,9 +572,17 @@ VARIABLE POINTER       HERE POINTER !
     %ID.                         ( DEA -- )
 ;
 
+( Print a signed disassembly for the commaer DEA.                       )
+: .COMMA-SIGNED
+    POINTER @ @ OVER >CNT @ FIRSTBYTES .
+    DUP >CNT @ POINTER +!
+    %ID.                         ( DEA -- )
+;
+
 ( Print the disassembly for the commaer DEA, advancing `POINTER' past   )
 ( the comma-content                                                     )
-: .COMMA   DUP >CNT @ IF   .COMMA-STANDARD   ELSE   >DIS @ EXECUTE   THEN ;
+: .COMMA   DUP >DIS @ IF   DUP >DIS @ EXECUTE   ELSE
+    .COMMA-STANDARD   THEN ;
 
 ( Print the DEA but with suppression, i.e. ignore those starting in '~' )
 : %~ID. DUP IGNORE? IF DROP ELSE %ID. THEN  ;
