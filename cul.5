@@ -125,6 +125,11 @@ Add \fI<name>\fR to the plain labels with value \fI<expr>\fR.
 If \fIexpr\fR is known as a plain label print the label,
 otherwise print its value in hex.
 .TP
+\fI<expr1>\ <expr2>\fR \fB-dn:\fR \fI<name>\fR
+.br
+The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
+\fI<name>\fR and is a section to be disassembled as uninitialised space.
+.TP
 \fI<expr1>\ <expr2>\fR \fB-db:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
@@ -166,18 +171,25 @@ The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
 \fI<name>\fR and is a section to be disassembled as a normal code section.
 For the Intel 80386 this means a 32-bit code section.
 .TP
-\fI<expr1>\ <expr2>\fR \fI<string>\fR \fB[-db|-bw|-dl|-dc]\fR
-These commands are equivalent to \fB-db: -dw: -dl: -dc: \fR but the
+\fI<expr1>\ <expr2>\fR \fI<string>\fR \fB[-dn|-db|-bw|-dl|-dc|-d$]\fR
+These commands are equivalent to \fB-dn: -db: -dw: -dl: -dc: -d$: \fR but the
 sections get their names from \fI<string>\fR.
 .TP
-\fI<expr1>\ <expr2>\fR \fB[-db-|-bw-|-dl-|-dc-]\fR
-These commands are equivalent to \fB-db: -dw: -dl: -dc: \fR but the
+\fI<expr1>\ <expr2>\fR \fB[-dn-|-db-|-bw-|-dl-|-dc-|-d$-]\fR
+These commands are equivalent to \fB-dn: -db: -dw: -dl: -dc: -d$: \fR but the
 sections are anonymous.
+.TP
+\fI<expr>\fR \fBORG\fR
+.br
+Clear the code buffer and associate its start with the target address
+\fI<expr>\fR.
 .TP
 \fI<expr>\fR \fB-ORG-\fR
 .br
 The start of the code buffer is associated with the target address
-\fI<expr>\fR.
+\fI<expr>\fR without affecting its content.
+(\fBNote:\fR this is messy and will probably be replaced by assembly segments
+and one \fB-ORG-\fR per segment.)
 .TP
 \fI<string>\fR \fI<expr>\fR \fBCOMMENT\fR
 .br
@@ -202,9 +214,9 @@ Disassemble the code buffer using all available information.
 \fBSORT-ALL\fR
 .br
 Sort all available information on the addresses it applies to.
-This is mandatory for \fBDISASSEMBLE-ALL\fR and recommended for \fBDUMP-ALL\fR.
+This is mandatory for \fBDISASSEMBLE-ALL\fR and recommended for \fBMAKE-CUL\fR.
 .TP
-\fBDUMP-ALL\fR
+\fBMAKE-CUL\fR
 .br
 Output all available information to standard output.
 This includes all information added interactively.
@@ -255,7 +267,7 @@ Get an 8 bit, 16 bit or 32 bit value from target address \fI<addr>\fR,
 in a big-endian (Intel) fashion.
 .br
 Note the conflict with the built-in \fBL@\fR .
-The old \fBL@\fR is available under the name \fBFAR@\R.
+The old \fBL@\fR is available under the name \fBFAR@\fR.
 .TP
 \fI<addr>\fR \fBTARGET>HOST\fR
 Transform the target address to a host address.
@@ -339,7 +351,6 @@ After the command \fBFORTH\fR
 you have a full Forth environment available (see lina(1))
 
 A \fBBYE\fR command ends an interactive session.
-
 
 .\"
 .SH "AVAILABILITY"
