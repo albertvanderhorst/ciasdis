@@ -426,6 +426,7 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
      DUP CR-ADORNED  2R@ TYPE THEN REMEMBER-COMMENT: RDROP RDROP ;
 
 \ For ADDRESS : interupt byte display.
+: CR+dn   "  " CR+GENERIC ;
 : CR+db   "  db " CR+GENERIC ;
 : CR+dw   "  dw " CR+GENERIC ;
 : CR+dl   "  dl " CR+GENERIC ;
@@ -491,6 +492,24 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 
 'D-R-T     '-dc:   ARE-COUPLED
 
+\ Dump storage with unspecified content to ADDRESS2 from ADDRESS1.
+: (DUMP-N)   DUP CR+dn - .LABEL/. " RESB" TYPE CR   ;
+
+\ Dump such from target ADDRESS1 to ADDRESS2 where only address1 may be
+\ adorned with with a label.
+: DUMP-N   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-N) ;
+
+\ Section ADDRESS1 .. ADDRESS2 are such with name NAME.
+: -dn    2>R 'DUMP-N 2R> SECTION ;
+
+\ Section ADDRESS1 .. ADDRESS2 are such with name "name".
+: -dn:    (WORD) -dn ;
+
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous such section.
+: -dn-    NONAME$ -dn ;
+
+'DUMP-N    '-dn:   ARE-COUPLED
+
 \ Dump bytes from target ADDRESS1 to ADDRESS2 plain.
 : (DUMP-B)   DO I DUP CR+db C@ .B-CLEAN LOOP   PRINT-OLD-COMMENT: CR ;
 
@@ -511,7 +530,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Print X as a word (4 hex digits).
 : W. 0 4 (DH.) TYPE SPACE ;
 
-\ Dump words from target ADDRESS1 to ADDRESS2, plain.
+\ Dump words to ADDRESS1 from ADDRESS2, plain.
 : (DUMP-W)   DO I DUP CR+dw @ W. 2 +LOOP   PRINT-OLD-COMMENT: CR ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
@@ -528,7 +547,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 
 'DUMP-W    '-dw:   ARE-COUPLED
 
-\ Dump words from target ADDRESS1 to ADDRESS2.
+\ Dump longs to ADDRESS1 from ADDRESS2, plain.
 : (DUMP-L)   DO I DUP CR+dl @ .LABEL/. 4 +LOOP PRINT-OLD-COMMENT: CR   ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
@@ -632,7 +651,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ disassemble.
 VARIABLE DEFAULT-DISASSEMBLY
 '-d$- DEFAULT-DISASSEMBLY !
-: -dn- DEFAULT-DISASSEMBLY @ EXECUTE ;
+: -ddef- DEFAULT-DISASSEMBLY @ EXECUTE ;
 
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )

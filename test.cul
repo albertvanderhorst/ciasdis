@@ -25,7 +25,9 @@ RRR 3 + LABEL RRRR
 ( DUP) DUP 0C +  SWAP OVER -dw: words
 ( DUP) DUP 18 + SWAP OVER -dl: longs
     YY       -dc-            \ Unnamed section
-YY YY 100 +        -db-            \ Another unnamed section
+YY YY  80 +        -db-            \ Bytes: show labels.
+YY 80 +   YY 100 +        -dn-      \ No labels shown.
+YY 0C0 + LABEL THIS-SHOULD-NOT-SHOW-UP
 YY 100 +  END LEN16 -   -dc-            \ Unnamed section
 END LEN16 -  END  -dc16: AAP               \ Named section
 

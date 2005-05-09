@@ -181,7 +181,7 @@ REQUIRE BAG
 \D ." EXPECT: 3 3 10 30 :" LAB-UPB . 2 KILL-OVERLAP LAB-UPB . 1 MAKE-CURRENT DIS-START . DIS-END . CR
 
 \ Introduce char section to fill the gap at INDEX. Note that the result is unordered.
-: FILL-GAP DUP GAP? IF   DUP END+START -dn-   DUP 1+ LAB-UPB MAX KILL-OVERLAP
+: FILL-GAP DUP GAP? IF   DUP END+START -ddef-   DUP 1+ LAB-UPB MAX KILL-OVERLAP
     DUP KILL-OVERLAP THEN DROP ;
 \D ." EXPECT: 3 4 28 30 :" LAB-UPB . 3 FILL-GAP LAB-UPB . 4 MAKE-CURRENT DIS-START . DIS-END . CR
 \D ." EXPECT: 4 4 20 28 :" LAB-UPB . 2 FILL-GAP LAB-UPB . 2 MAKE-CURRENT DIS-START . DIS-END . CR
@@ -198,18 +198,18 @@ REQUIRE BAG
 
 \ Plug a hole at the first section.
 : PLUG-FIRST   1 MAKE-CURRENT TARGET-START DIS-START 2DUP <> IF
-   -dn- _ _ THEN 2DROP ;
+   -ddef- _ _ THEN 2DROP ;
 
 \ Plug a hole at the last section.
 : PLUG-LAST    LAB-UPB MAKE-CURRENT DIS-END TARGET-END 2DUP <> IF
-   -dn- _ _ THEN 2DROP ;
+   -ddef- _ _ THEN 2DROP ;
 
 \ If there are no sections at all, make the buffer into a default section.
 \ Else check last and first sections.
 \ Note that plugging results in a change of the number of sections,
 \ interfering with other plugging.
 : PLUG-SPECIAL  LAB-UPB IF PLUG-LAST PLUG-FIRST ELSE
-    TARGET-START TARGET-END -dn- THEN ;
+    TARGET-START TARGET-END -ddef- THEN ;
 
 \ Fill any holes with character sections.
 : PLUG-HOLES  SECTION-LABELS LAB-UPB 1+ 2
