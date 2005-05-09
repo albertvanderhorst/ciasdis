@@ -79,3 +79,12 @@ VARIABLE (TARGET-START)
 \ Only Needed. Maybe ``CP C! 1 CP +!''
 \ Wrapper for ``C,'' such as used in assembly.
 : NEW-AS-C,    SWAP-AS C, SWAP-AS ;  HOT-PATCH AS-C,
+
+\ Reserve X bytes, without specifying a content.
+: RESB   AS-HERE OVER AS-ALLOT    SWAP ERASE ;
+
+\ Reserve bytes till target ADDRES. (Compare ``ORG''.)
+: RES-TIL   AS-HERE SWAP -   AS-ALLOT ;
+
+\ Align to a target address, that is multiple of N.
+: AS-ALIGN   AS-HERE   BEGIN 2DUP SWAP MOD WHILE 1+ REPEAT   RES-TIL ;
