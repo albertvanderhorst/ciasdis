@@ -127,8 +127,11 @@
 0012 04 0007 B8 1PI MOVI|X,
 0 04 C701 T!
  0800 0080 8 2FAMILY, ADDI, ORI, ADCI, SBBI, ANDI, SUBI, XORI, CMPI,
+( It is dubious but fairly intractible whether the logical operation    )
+( with sign extended bytes belong in the 386 instruction set.           )
+( They are certainly there in the Pentium.                              )
 0002 08 C700 T!
- 0800 0083 8 2FAMILY, ADDSI, -- ADCSI, SBBSI, -- SUBSI, -- CMPSI,
+ 0800 0083 8 2FAMILY, ADDSI, ORSI, ADCSI, SBBSI, ANDSI, SUBSI, XORSI, CMPSI,
 0000 0 C701 T!
  0800 10F6 6 2FAMILY, NOT, NEG, MUL|AD, IMUL|AD, DIV|AD, IDIV|AD,
  0800 00FE 2 2FAMILY, INC, DEC,
