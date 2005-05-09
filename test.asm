@@ -27,8 +27,16 @@ AS:, JMP, XXX RW,
     JMPS, XXX 1- RB,
     JMP, YYY RL,
     JMP, YYY 1- RL,
-    JMPS, YYY RB,
-    JMPS, YYY 1- RB,
+    JMPS, YY RB,
+    JMPS, YY 1- RB,
+:YY
+    10 AS-ALIGN
+:BUFFER10
+    _AP_ 10 + RES-TIL
+:BUFFERTILL
+    0EA RESB
+:BUFFERTILL-END
+
     LEA, AX'| BO| [AX +4* AX] 0 B,
     LEA, AX'| XO| [AX +4* AX] #12 L,
 OS:,
@@ -67,7 +75,7 @@ OS:,
     MOVI,   X|   XO|   [BX]%   #20 W,   #24 IW,
     RET,
 BITS-32
-\ YYY is a target for forward jumps:
+\ Y Y is a target for forward jumps:
 :YYY
 
 PREVIOUS

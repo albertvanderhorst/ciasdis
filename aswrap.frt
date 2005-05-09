@@ -84,7 +84,7 @@ VARIABLE (TARGET-START)
 : RESB   AS-HERE OVER AS-ALLOT    SWAP ERASE ;
 
 \ Reserve bytes till target ADDRES. (Compare ``ORG''.)
-: RES-TIL   AS-HERE SWAP -   AS-ALLOT ;
+: RES-TIL   _AP_ -   AS-ALLOT ;
 
 \ Align to a target address, that is multiple of N.
-: AS-ALIGN   AS-HERE   BEGIN 2DUP SWAP MOD WHILE 1+ REPEAT   RES-TIL ;
+: AS-ALIGN   _AP_   BEGIN 2DUP SWAP MOD WHILE 1+ REPEAT   RES-TIL DROP ;

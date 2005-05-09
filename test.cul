@@ -1,5 +1,5 @@
 04FE EQU START
-5D9 5B1 -  EQU LEN16
+6D9 6B1 -  EQU LEN16
 CP @ CODE-SPACE - START +   EQU END
 \ ciforth allows multiple line strings in files
 \ and double quotes in strings.
@@ -14,20 +14,26 @@ CP @ CODE-SPACE - START +   EQU END
 START -ORG-
 0505  LABEL QQQ
 050F  LABEL RRR
+56A   LABEL YY
+0570 LABEL BUFFER10
+0580 LABEL BUFFERTILL
+066A LABEL BUFFERTILL-END
 START RRR "poo" -dc \ Named section
 RRR   DUP 6 + SWAP OVER -db: bytes
 RRR 3 + LABEL RRRR
 ( DUP)   DUP 6 + SWAP OVER -d$-
 ( DUP) DUP 0C +  SWAP OVER -dw: words
 ( DUP) DUP 18 + SWAP OVER -dl: longs
-END LEN16 -   -dc-            \ Unnamed section
+    YY       -dc-            \ Unnamed section
+YY YY 100 +        -db-            \ Another unnamed section
+YY 100 +  END LEN16 -   -dc-            \ Unnamed section
 END LEN16 -  END  -dc16: AAP               \ Named section
 
 "XXX is a target for backward jumps:" 053F COMMENT
 053F  LABEL XXX
 \ From now on the label ``XXXX'' can be used: like this
 XXX  COMMENT:   Move a xell to register DI from memory at QQQ
-"YYY is a target for forward jumps:" 056A COMMENT
+"YYY is a target for forward jumps:" YY 100 +  COMMENT
 END  LABEL YYY
 
 \ Oeps, forgot this one ... Shows that labels need not supplied in order.
