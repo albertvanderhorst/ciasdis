@@ -21310,7 +21310,7 @@ ADD, B| F| AL'| ZO| [BX]
 ADD, B| F| AL'| ZO| [DX]
 ADD, B| F| AL'| ZO| [CX]
 ADD, B| F| AL'| ZO| [AX]
-ADDSI, MEM| C L, 10 IS,
+ANDSI, MEM| C L, 10 IS,
 ANDSI, R| DI| 10 IS,
 ANDSI, R| SI| 10 IS,
 ANDSI, R| BP| 10 IS,
