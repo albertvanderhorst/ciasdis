@@ -628,6 +628,12 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ i386 dependant, should somehow be separated out.
 : DISASSEMBLE-TARGET "BITS-32" TYPE CR  DISASSEMBLE-TARGET CR  ;
 
+\ This is used to plug holes, where the user doesn't specify how to
+\ disassemble.
+VARIABLE DEFAULT-DISASSEMBLY
+'-d$- DEFAULT-DISASSEMBLY !
+: -dn- DEFAULT-DISASSEMBLY @ EXECUTE ;
+
 ( ----------------------------------                                    )
 ( asi386 dependant part, does it belong here?                           )
 
