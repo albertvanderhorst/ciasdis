@@ -414,6 +414,7 @@ CREATE ACCU 100 ALLOT           ACCU 100 ERASE
 
 \ FIXME: to be renamd in WHERE-FLUSH
 VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
+VARIABLE CUT-SIZE    16 CUT-SIZE !   \ Chunks for data-disassembly.
 
 \ For ADDR of a (printable) char, add it to the accumulated range.
 \ Force an immediate flush, if the range is full.
@@ -437,7 +438,7 @@ VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 
 
 \ For ADDRESS: "it IS at next cut." If so, advance.
-: NEXT-CUT?   NEXT-CUT @ =  DUP IF 16 NEXT-CUT +! THEN ;
+: NEXT-CUT?   NEXT-CUT @ =  DUP IF CUT-SIZE @ NEXT-CUT +! THEN ;
 
 \ For ADDRESS and assembler directive STRING (such "db") ,
 \ interrupt the laying down of memory classes by a new line and possibly
