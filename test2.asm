@@ -29,13 +29,13 @@ BITS-32
 ( 0000,054A )                  AS:, 
 ( 0000,054B )                  JMP, XXX RW,
 ( 0000,054E )                  JMP, XXX RL,
-( 0000,0553 )                  JMP, -1A (RL,) 
+( 0000,0553 )                  JMP, XXX 1 - RL,
 ( 0000,0558 )                  JMPS, XXX RB,
-( 0000,055A )                  JMPS, -1E (RB,) 
-( 0000,055C )                  JMP, YYY RL,
-( 0000,0561 )                  JMP, 178 (RL,) 
+( 0000,055A )                  JMPS, XXX 1 + RB,
+( 0000,055C )                  JMP, END RL,
+( 0000,0561 )                  JMP, 170 (RL,) 
 ( 0000,0566 )                  JMPS, YY RB,
-( 0000,0568 )                  JMPS, -1 (RB,) 
+( 0000,0568 )                  JMPS, YY 1 - RB,
 ( 0000,056A )   :YY   db 0 0 0 0 0 0 
 ( 0000,0570 )   :BUFFER10   db 0 0 0 0 0 0 0 0 0 0 
 ( 0000,057A )                 db 0 0 0 0 0 0 

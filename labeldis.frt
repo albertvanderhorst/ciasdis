@@ -142,9 +142,28 @@ VARIABLE LABEL-CACHE    \ Index of next label.
 \ Note ``BIN-SEARCH'' returns the non-inclusive upper bound if not found.
 : FIND-LABEL   WHERE-LABEL   DUP LAB-UPB 1+ <> AND    DUP LABEL-CACHE ! ;
 
-\ Find ADDRESS in the label table. Return ADDRESS of an exact
+\ Find ADDRESS in the label table. Return table ADDRESS of an exact
 \ matching label or zero if not found.
-: >LABEL   FIND-LABEL DUP IF LABELS[]  DUP @  CONT @ - IF DROP 0 THEN THEN ;
+: >LABEL   DUP >R   FIND-LABEL DUP IF LABELS[]  DUP @  R@ <> IF DROP 0 THEN THEN
+        RDROP ;
+
+VARIABLE MAX-DEV-P   -8 MAX-DEV-P !        \ Max deviation acceptable with previous
+VARIABLE MAX-DEV-N   8  MAX-DEV-N !        \ Max deviation acceptable with next
+
+\ Find ADDRESS in the label table. Return INDEX of an approximately
+\ matching label or zero if not found.
+: (~LABEL)   DUP MAX-DEV-P @ + FIND-LABEL     DUP 0= IF 2DROP 0 ELSE
+    OVER MAX-DEV-N @ + OVER LABELS[] @  < IF 2DROP 0 ELSE
+    SWAP DROP THEN THEN ;
+
+\ For ADDRES and INDEX return ADDRES and INDEX where the deviation is
+\ minimal.
+: IMPROVE-LABEL
+    BEGIN DUP LAB-UPB <> IF 2DUP 1+ LABELS[] @ < 0= ELSE 0 THEN WHILE 1+ REPEAT ;
+
+\ Find target ADDRESS in the label table. Return table ADDRESS of an
+\ approximately matching label, or zero if not found, plus the OFFSET.
+: ~LABEL   DUP (~LABEL) DUP 0= IF 2DROP 0 0 ELSE IMPROVE-LABEL  LABELS[] SWAP OVER @ - THEN ;
 
 \ Roll the last label to place INDEX.
 \ A label occupies two consecutive places!
@@ -202,9 +221,14 @@ HEX FFFF0000 CONSTANT LARGE-NUMBER-MASK
 : SMART.   DUP ABS 100 < IF DUP .0? . ELSE
     LARGE-NUMBER-MASK OVER AND IF H. ELSE 0 4 (DH.) TYPE THEN SPACE THEN ;
 
+\ For label INDEX and OFFSET print the label with offset.
+: .~LABEL   SWAP .PAY   ?DUP IF
+    DUP 0< IF NEGATE . "- " TYPE ELSE . "+ " TYPE THEN
+THEN ;
+
 DECIMAL
 ( Print X as a symbolic label if possible, else as a number             )
-: .LABEL/.   EQU-LABELS DUP >LABEL DUP IF .PAY DROP ELSE DROP SMART. THEN ;
+: .LABEL/.   EQU-LABELS DUP ~LABEL OVER IF .~LABEL DROP ELSE 2DROP SMART. THEN ;
 
 \D 12 LABEL AAP
 \D 5 LABEL NOOT
@@ -478,8 +502,11 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ end-of-line action DEA2 without a name. Register it as a labeled section.
 : ANON-SECTION   NONAME$ SECTION ;
 
+\ Disassemble to ADDRESS2 from ADDRESS1.
+: (D-R-T) SWAP D-R ;
+
 \ Disassemble from target ADDRESS1 to ADDRESS2.
-: D-R-T SWAP TARGET>HOST SWAP TARGET>HOST  D-R ;
+: D-R-T TARGET>HOST SWAP TARGET>HOST (D-R-T) ;
 
 \ Section ADDRESS1 .. ADDRESS2 is code with name NAME.
 : -dc    2>R 'D-R-T   2R> SECTION ;
@@ -727,8 +754,8 @@ VARIABLE LATEST-OFFSET
 ( For the relative branch commaer DEA print the target ADDRESS as a     )
 ( symbolic label if possible else print the branch offset, followed     )
 ( by an appropriate commaer for each case.                              )
-: .BRANCH/.  EQU-LABELS
-  >LABEL DUP IF   .PAY ID.-NO() ELSE   DROP DUP GET-OFFSET . %ID. THEN  ;
+: .BRANCH/.  EQU-LABELS   ~LABEL OVER IF .~LABEL ID.-NO() ELSE
+    2DROP DUP GET-OFFSET . %ID. THEN  ;
 
 ( Print a disassembly for a relative branch DEA .                       )
 ( This relies on the convention that the commaer that consumes an       )

@@ -24,9 +24,9 @@ AS:, JMP, XXX RW,
     JMP, XXX _AP_ 4 + - (RL,)
     JMP, XXX 1- RL,
     JMPS, XXX RB,
-    JMPS, XXX 1- RB,
+    JMPS, XXX 1+ RB,
     JMP, YYY RL,
-    JMP, YYY 1- RL,
+    JMP, YYY 9 - RL,
     JMPS, YY RB,
     JMPS, YY 1- RB,
 :YY
