@@ -191,15 +191,15 @@ The start of the code buffer is associated with the target address
 (\fBNote:\fR this is messy and will probably be replaced by assembly segments
 and one \fB-ORG-\fR per segment.)
 .TP
-\fI<string>\fR \fI<expr>\fR \fBCOMMENT\fR
+\fI<string>\fR \fI<expr>\fR \fBDIRECTIVE\fR
 .br
-The string is a comment associated with the target address
+The string is a directive associated with the target address 
 \fI<expr>\fR.
 It will be a separate line or lines in front of the disassembly.
 .br
-\fBWARNING:\fR
-Make sure multiple-line-strings result in well-formed comment,
-or it may be rejected during reassembly.
+\fBNote:\fR
+This can be a multiple-line-comment,       
+provided it is laid out as comment.
 .TP
 \fI<expr>\fR \fBCOMMENT:\fR "comment"
 .br

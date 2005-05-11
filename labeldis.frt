@@ -324,7 +324,7 @@ VARIABLE COMMENT:-TO-BE
 \D 12 REMEMBER-COMMENT: PRINT-OLD-COMMENT: CR  \ Should give nothing, not found!
 \D 12 0 HOST>TARGET - REMEMBER-COMMENT: PRINT-OLD-COMMENT: CR
 
-\ ---------------- Multiple line comment in front ----------------------------
+\ ---------------- Multiple line comment/command in front -------------------
 
 \ Decompile mcomment label INDEX.
 : .MCOMMENT   LABELS[] DUP CELL+ @ $@ ."$" SPACE @ H. " COMMENT " TYPE  CR ;
@@ -334,11 +334,15 @@ MAX-LABEL '.PAY$ '.MCOMMENT LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 
 \ Make STRING the comment in front of label at ADDRESS. A pointer to this
 \ string the payload.
-: COMMENT   MCOMMENT-LABELS   LAB+!  $, LAB+! ;
+: COMMENT   MCOMMENT-LABELS   LAB+! "\ "  PAD $!   PAD $+!  PAD $@ $, LAB+! ;
+
+\ Make STRING the command in front of label at ADDRESS. A pointer to this
+\ string the payload.
+: DIRECTIVE   MCOMMENT-LABELS LAB+! $, LAB+! ;
 
 \ Print comment for instruction at ADDRESS , if any.
-: PRINT-COMMENT MCOMMENT-LABELS  HOST>TARGET  >LABEL DUP IF
-   CR   "\ " TYPE   .PAY _ THEN DROP ;
+: PRINT-DIRECTIVE MCOMMENT-LABELS  HOST>TARGET  >LABEL DUP IF
+   CR   .PAY _ THEN DROP ;
 
 \D "AAP" 12 COMMENT
 \D "NOOT" 5 COMMENT
@@ -357,8 +361,8 @@ MAX-LABEL '.PAY$ '.MCOMMENT LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 \D 12 >LABEL .PAY CR
 \D 12 1- >LABEL H. CR
 
-\D 12 PRINT-COMMENT CR  \ Should give nothing, not found!
-\D 12 0 HOST>TARGET - PRINT-COMMENT CR
+\D 12 PRINT-DIRECTIVE CR  \ Should give nothing, not found!
+\D 12 0 HOST>TARGET - PRINT-DIRECTIVE CR
 
 \ ---------------- The special printing of strings.     --------------------------------------
 
@@ -432,7 +436,7 @@ VARIABLE CUT-SIZE    16 CUT-SIZE !   \ Chunks for data-disassembly.
 \ Start a new line, with printing the decompiled ADDRESS as seen
 : CR-ADORNED
     PRINT-OLD-COMMENT:
-    DUP PRINT-COMMENT
+    DUP PRINT-DIRECTIVE
     CR .TARGET-ADDRESS
     ADORN-WITH-LABEL ;
 
