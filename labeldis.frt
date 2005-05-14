@@ -327,10 +327,10 @@ VARIABLE COMMENT:-TO-BE
 \ ---------------- Multiple line comment/command in front -------------------
 
 \ Decompile mcomment label INDEX.
-: .MCOMMENT   LABELS[] DUP CELL+ @ $@ ."$" SPACE @ H. " COMMENT " TYPE  CR ;
+: .MDIRECTIVE   LABELS[] DUP CELL+ @ $@ ."$" SPACE @ H. " DIRECTIVE " TYPE  CR ;
 
 \ Contains multiple line comment labels, i.e. classes as associate with ``COMMENT''
-MAX-LABEL '.PAY$ '.MCOMMENT LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
+MAX-LABEL '.PAY$ '.MDIRECTIVE LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 
 \ Make STRING the comment in front of label at ADDRESS. A pointer to this
 \ string the payload.

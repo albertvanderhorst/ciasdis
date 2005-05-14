@@ -137,7 +137,6 @@
 0804,85D2 EQU N_: 
 0804,85D4 EQU X_: 
 0804,85E5 EQU H_mliteral 
-0804,85E5 EQU last_dea_macro 
 0804,85ED EQU N_mliteral 
 0804,85F5 EQU X_mliteral 
 0804,860A EQU H_forth 
@@ -179,7 +178,6 @@
 0804,8794 EQU X_d0 
 0804,8799 EQU V_d0 
 0804,879D EQU H_base 
-0804,879D EQU last_dea_forth 
 0804,87A5 EQU N_base 
 0804,87AA EQU X_base 
 0804,87AF EQU V_base 
@@ -209,7 +207,7 @@
 0804,87CB COMMENT:   Last word in dictionary
 0804,87CF COMMENT:   Last word in 'forth'
 0804,87D3 COMMENT:   Last word in 'macro'
-"DROP-THIS INCLUDE rf751equ.cul" 0804,8000 COMMENT 
+"INCLUDE rf751equ.cul" 0804,8000 DIRECTIVE 
 0804,8000 0804,8010 -d$:   NONAME
 0804,8010 0804,8014 -dw:   NONAME
 0804,8014 0804,8028 -dl:   NONAME

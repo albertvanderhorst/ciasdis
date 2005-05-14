@@ -643,7 +643,7 @@ rf751.cul : cidis rf751equ.cul rfcrawl.cul elf.cul
 
 rf751.asm : cidis rf751 rf751equ.cul rf751.cul
 	make rf751
-	cidis rf751 rf751.cul| sed -e 's/. DROP-THIS//' >$@
+	cidis rf751 rf751.cul>$@
 	rcsdiff -bBw -r$(RCSVERSION) rf751.asm
 	cias rf751.asm rf751
 	rcsdiff -r$(RCSVERSION) rf751

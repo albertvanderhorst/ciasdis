@@ -6,9 +6,11 @@
 HEX INIT-ALL
 INCLUDE elf.cul
 
+\ Don't want them to show up as labels.
+0804,879D CONSTANT last_dea_forth
+0804,85E5 CONSTANT last_dea_macro
+
 0804,839C  LABEL dovar
-0804,879D EQU last_dea_forth
-0804,85E5 EQU last_dea_macro
 0804,80BF EQU X_bye
 0804,80C6 EQU H_syscall
 
@@ -89,9 +91,9 @@ dovar CRAWL
 0804,839B CRAWL
 0804,8191 CRAWL
 
-\ The following surely is some manual work.
+\ The equ file results from manual work.
 
-"DROP-THIS INCLUDE rf751equ.cul" 0804,8000 COMMENT
+"INCLUDE rf751equ.cul" 0804,8000 DIRECTIVE
 
 V_base
 4 + DUP EQU  tail               DUP COMMENT:   Allow tail-calls?
