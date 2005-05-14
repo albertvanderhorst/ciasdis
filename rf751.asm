@@ -1,7 +1,7 @@
 BITS-32
 8048000  ORG
 
- INCLUDE rf751equ.cul   
+INCLUDE rf751equ.cul   
 ( 0804,8000 )   :e_ident   d$  7F  "ELF" 1 
 ( 0804,8005 )                 d$  1  1  0  0  0  0  0  0  0  0  0 
 
@@ -9,7 +9,7 @@ BITS-32
 ( 0804,8012 )   :e_machine   dw 0003 
 
 ( 0804,8014 )   :e_version   dl 1 
-( 0804,8018 )   :e_entry   dl p_headerend 
+( 0804,8018 )   :e_entry   dl _start 
 ( 0804,801C )   :e_phoff   dl 34 
 ( 0804,8020 )   :e_shoff   dl 0 
 ( 0804,8024 )   :e_flags   dl 0 
@@ -23,8 +23,8 @@ BITS-32
 
 ( 0804,8034 )   :p_type :e_headerend   dl 1 
 ( 0804,8038 )   :p_offset   dl 54 
-( 0804,803C )   :p_vaddr   dl p_headerend 
-( 0804,8040 )   :p_paddr   dl p_headerend 
+( 0804,803C )   :p_vaddr   dl _start 
+( 0804,8040 )   :p_paddr   dl _start 
 ( 0804,8044 )   :p_filesz   dl filesz 
 ( 0804,8048 )   :p_memsz   dl 0006,2563 
 ( 0804,804C )   :p_flags   dl 7 
@@ -350,8 +350,8 @@ BITS-32
 ( 0804,82DA )   :L0804,82DA    MOV, X| T| CX'| MEM| source L, 
 ( 0804,82E0 )                  OR, X| F| CX'| R| CX| 
 ( 0804,82E2 )                  J, Z| N| L0804,8317 RB,
-( 0804,82E4 )                  MOVI, X| MEM| tp L, tib IL, 
-( 0804,82EE )                  MOVI, X| MEM| tin L, tib IL, 
+( 0804,82E4 )                  MOVI, X| MEM| tp L, _end IL, 
+( 0804,82EE )                  MOVI, X| MEM| tin L, _end IL, 
 ( 0804,82F8 )   :L0804,82F8    CALL, X_key RL,
 ( 0804,82FD )                  CMPI|A, B'| 0D IB, 
 ( 0804,82FF )                  J, Z| Y| L0804,8315 RB,
@@ -596,7 +596,7 @@ BITS-32
 ( 0804,85D4 )   :X_:    CALL, X_create RL,
 ( 0804,85D9 )                  SUBSI, MEM| V_h0 L, 5 IS, 
 ( 0804,85E0 )                  JMP, X_] RL,
-( 0804,85E5 )   :H_mliteral :last_dea_macro   dl H_m; X_mliteral 
+( 0804,85E5 )   :H_mliteral   dl H_m; X_mliteral 
 
 ( 0804,85ED )   :N_mliteral   d$  7  "literal"
 
@@ -756,7 +756,7 @@ BITS-32
 
 ( 0804,8794 )   :X_d0    CALL, dovar RL,
 ( 0804,8799 )   :V_d0   dl d0 
-( 0804,879D )   :H_base :last_dea_forth   dl H_d0 X_base 
+( 0804,879D )   :H_base   dl H_d0 X_base 
 
 ( 0804,87A5 )   :N_base   d$  4  "base"
 
@@ -766,7 +766,7 @@ BITS-32
 ( 0804,87B7 )   :buffer   dl 0 \   Buffer (for ports to use as needed)
 ( 0804,87BB )   :source   dl 0 \   Evaluate from RAM or KBD
 ( 0804,87BF )   :tin   dl 0 \   >IN
-( 0804,87C3 )   :tp   dl tib \   TP (pointer to input buffer)
+( 0804,87C3 )   :tp   dl _end \   TP (pointer to input buffer)
 
 ( 0804,87C7 )   :bases   db 10 2 8 0FF \   $hex %bin &oct 'ascii
 
