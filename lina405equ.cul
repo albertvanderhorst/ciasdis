@@ -38,3 +38,6 @@
 
 \ Manual addition
 _end e_ident - EQU filesz
+
+\ 100 is too large for user variables
+10 SMALL-LABEL-LIMIT !

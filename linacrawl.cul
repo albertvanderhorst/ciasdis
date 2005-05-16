@@ -5,8 +5,8 @@
 HEX INIT-ALL
 INCLUDE elf.cul
 
-0804,A0DC EQU semis
-0804,B7AC EQU semiscode
+0804,A0DC CONSTANT semis           \ Not EQU, to prevent duplicate labels.
+0804,B7AC CONSTANT semiscode       \ Not EQU, to prevent duplicate labels.
 
 0804,A664 EQU docol
 0804,BE3C  LABEL donumber
