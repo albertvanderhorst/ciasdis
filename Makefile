@@ -630,7 +630,7 @@ test.bin : cidis cias test.asm test.cul
 
 lina405.asm : cidis lina405equ.cul lina405.cul
 	make lina405
-	cidis lina405 lina405.cul| sed -e 's/. DROP-THIS//' >$@
+	cidis lina405 lina405.cul >$@
 	cias lina405.asm lina405
 	rcsdiff -r$(RCSVERSION) lina405
 	rcsdiff -b -B -r$(RCSVERSION) lina405.asm
