@@ -227,9 +227,16 @@ HEX FFFF0000 CONSTANT LARGE-NUMBER-MASK
 THEN ;
 
 DECIMAL
-( Print X as a symbolic label if possible, else as a number             )
-: .LABEL/.   EQU-LABELS DUP ~LABEL OVER IF .~LABEL DROP ELSE 2DROP SMART. THEN ;
+VARIABLE SMALL-LABEL-LIMIT   100 SMALL-LABEL-LIMIT !
 
+( Print X as a symbolic label if possible, else as a number             )
+: .LABEL/.   EQU-LABELS
+    DUP ABS SMALL-LABEL-LIMIT @ < IF SMART.
+    ELSE DUP ~LABEL OVER IF .~LABEL DROP
+    ELSE 2DROP SMART.
+    THEN THEN ;
+
+\D 0 SMALL-LABEL-LIMIT !
 \D 12 LABEL AAP
 \D 5 LABEL NOOT
 \D 2 LABEL MIES
