@@ -11,7 +11,7 @@
 : HOT-PATCH   LATEST   (WORD) FOUND   3 CELLS MOVE ;
 
 VARIABLE STUB   \ Example for `` DELAYED-BUFFFER ''.
-\ Create a buffer of N items. Execute: return buffer address.
+\ Create a buffer of N items with "name" Execute: return buffer address.
 \ The buffer is allocated at run time, preventing static buffers in load
 \ images.
 : DELAYED-BUFFER   CREATE ,   DOES>   >R HERE 'STUB >DFA !
@@ -23,19 +23,22 @@ VARIABLE STUB   \ Example for `` DELAYED-BUFFFER ''.
 VARIABLE CODE-LENGTH
 2,000,000 CODE-LENGTH !
 
-CODE-LENGTH @    DELAYED-BUFFER (CODE-SPACE)
+\ A bag with the dea's of all segments.
+100 BAG SEGMENT-REGISTRY
 
-\ Create segment with TARGETADDRESS and CODESPACE
-0  \ Overwritten anyway
+\ Create segment with FILEOFFSET TARGETADDRESS and CODESPACE
+0 0 0  \ Overwritten anyway
 class SEGMENT
+LATEST SEGMENT-REGISTRY BAG+!
 M: CP M; DUP ,           \ The local dictionary pointer ("code pointer")
 M: CODE-SPACE @ M;  ,    \ Start of the code space
 \ M: (TARGET-START)  M;
 M: -ORG- ! M;            \ Define corresponding target addres.
 M: TARGET-START @ M; ,   \ Return corresponding target addres.
+M: FILE-OFFSET @ M; ,      \ Return corresponding files addres.
 endclass
 
-0 (CODE-SPACE) SEGMENT the-one-segment
+SEGMENT-REGISTRY !BAG       \ Get rid of dummy registration.
 
 \ ``HERE'' such as used in assembly.
 : NEW-AS-HERE    CP @ ;   HOT-PATCH AS-HERE

@@ -16,7 +16,7 @@
 \ This name might later be changed.
 : NONAME$ "NONAME" ;
 
-REQUIRE OLD:    REQUIRE $=      REQUIRE class
+REQUIRE OLD:    REQUIRE $=      REQUIRE class   REQUIRE W/O
 
 \ Patch the word ``PRESENT'' such that no name words are no longer
 \ considered present. This prevent zillion error messages.
@@ -48,17 +48,47 @@ REQUIRE #-PREFIX
 \ In behalf of building an executable.
 REQUIRE ARGC
 
-\ Assemble file NAME. Leave compiled BUFFER LENGTH.
-: ASSEMBLED
-   POSTPONE ONLY POSTPONE FORTH POSTPONE ASSEMBLER HEX
-    FIRSTPASS 2DUP INCLUDED  SECONDPASS INCLUDED
-   CODE-SPACE CP @ OVER - ;
+CODE-LENGTH @    DELAYED-BUFFER DEFAULT-BUFFER
+
+\ Define at least one segment lest the user forgets.
+: DEFAULT-SEGMENT
+    0   \ File start address
+    0   \ Target start address
+    DEFAULT-BUFFER
+    \ Host start address
+    "the-default-segment" POSTFIX SEGMENT ;
+
+\ Write current segment to FILEHANDLE. Leave FILEHANDLE.
+: WRITE-ONE-SEGMENT
+   >R   FILE-OFFSET 0 R@ REPOSITION-FILE THROW
+   CODE-SPACE CP @ OVER - R@ WRITE-FILE THROW R> ;
+
+\ Write all segments to FILEHANDLE. Leave FILEHANDLE.
+: WRITE-SEGMENTS   SEGMENT-REGISTRY DO-BAG I @ EXECUTE WRITE-ONE-SEGMENT
+    LOOP-BAG ;
+
+\ Open NAME, return FILEHANDLE.
+: OPEN-IT W/O OPEN-FILE THROW ;
+
+\ Close FILEHANDLE.
+: CLOSE-IT CLOSE-FILE THROW ;
+
+\ Return the NAME of the source file.
+: SOURCE-AS 1 ARG[] ;
 
 \ Return the NAME of the target file.
 : TARGET-AS 2 ARG[] ;
 
+\ Write all segments to file NAME.
+: WRITE-IT   OPEN-IT WRITE-SEGMENTS CLOSE-IT ;
+
+\ Assemble file NAME. Leave in default or file-specified segments.
+: ASSEMBLED
+   POSTPONE ONLY POSTPONE FORTH POSTPONE ASSEMBLER HEX
+    FIRSTPASS 2DUP INCLUDED  SECONDPASS INCLUDED ;
+
 \ Perform the action of the program as per the spec's of ``cias''
-: cias   1 ARG[] ASSEMBLED   TARGET-AS PUT-FILE ;
+: cias   DEFAULT-SEGMENT SOURCE-AS ASSEMBLED   TARGET-AS WRITE-IT ;
 
 \ Fetch file NAME to the code buffer.
 : FETCHED    GET-FILE CODE-SPACE SWAP    2DUP + CP !   MOVE ;
@@ -79,7 +109,8 @@ REQUIRE DUMP
 : CONSULT   (WORD) CONSULTED ;
 
 \ Perform the action of the program as per the spec's of ``cidis''
-: cidis   1 ARG[] FETCHED TARGET-DIS CONSULTED ;
+
+: cidis   DEFAULT-SEGMENT 1 ARG[] FETCHED TARGET-DIS CONSULTED ;
 
 \ Restore all revectoring done while compiling to stand alone.
 : RESTORE-ALL  'ERROR RESTORED     'INCLUDED RESTORED      'ABORT RESTORED ;
