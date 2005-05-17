@@ -23,20 +23,27 @@ VARIABLE STUB   \ Example for `` DELAYED-BUFFFER ''.
 VARIABLE CODE-LENGTH
 2,000,000 CODE-LENGTH !
 
-CODE-LENGTH @    DELAYED-BUFFER CODE-SPACE
+CODE-LENGTH @    DELAYED-BUFFER (CODE-SPACE)
 
-\ Point into CODE-SPACE, used to assemble
-VARIABLE CP
+\ Create segment with TARGETADDRESS and CODESPACE
+0  \ Overwritten anyway
+class SEGMENT
+M: CP M; DUP ,           \ The local dictionary pointer ("code pointer")
+M: CODE-SPACE @ M;  ,    \ Start of the code space
+\ M: (TARGET-START)  M;
+M: -ORG- ! M;            \ Define corresponding target addres.
+M: TARGET-START @ M; ,   \ Return corresponding target addres.
+endclass
+
+0 (CODE-SPACE) SEGMENT the-one-segment
 
 \ ``HERE'' such as used in assembly.
 : NEW-AS-HERE    CP @ ;   HOT-PATCH AS-HERE
 
 \ Address in target associated with the start of ``CODE-SPACE''.
 \ Where the code is to be located during execution.
-VARIABLE (TARGET-START)
 
-\ Return the START of the file as a target address.
-: TARGET-START (TARGET-START) @ ;
+
 
 \ Use only while disassembling.
 \ Return the END of the file as a target address (non-inclusive).
@@ -52,10 +59,9 @@ VARIABLE (TARGET-START)
 \ Associate target ADDRESS with start of ``CODE-BUFFER''
 \ The valid range from the code buffer goes to ``CP @'' and is not
 \ affected.
-: -ORG- (TARGET-START) ! ;
 
 \ Associate ADDRESS with the start of ``CODE-SPACE''.
-: ORG      (TARGET-START) !   CODE-SPACE CP ! ;
+: ORG      -ORG-              CODE-SPACE CP ! ;
 
 \ Convert host memory ADDRESS. Leave target memory ADDRESS.
 : HOST>TARGET  CODE-SPACE - TARGET-START + ;
