@@ -68,7 +68,7 @@ CODE-LENGTH @    DELAYED-BUFFER DEFAULT-BUFFER
     LOOP-BAG ;
 
 \ Open NAME, return FILEHANDLE.
-: OPEN-IT W/O OPEN-FILE THROW ;
+: OPEN-IT $1ED CREATE-FILE THROW ;
 
 \ Close FILEHANDLE.
 : CLOSE-IT CLOSE-FILE THROW ;
@@ -120,7 +120,7 @@ REQUIRE DUMP
 \ In that case suppress the splat screen.
 \ Note that ``QUIT'' is the command interpreter.
 : INTERACTIVE    'OK DUP >DFA @ SWAP >PHA = IF 0 LIST OK THEN
-        ASSEMBLER   0 ORG   QUIT ;
+        ASSEMBLER   DEFAULT-SEGMENT 0 ORG   QUIT ;
 
 \ Handle arguments, start interactive system if no arguments.
 : HANDLE-ARG   ARGC 1 = IF INTERACTIVE THEN
