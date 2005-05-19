@@ -17,6 +17,12 @@ REQUIRE POSTFIX
 \ Go on compiling.
 \ Loading the same code another time will give correct code.
 : FIX-DEA DROP '_ ;
+
+
+\ Backspace a character, but not if we are at the end of input.
+\ We find out by trial reading another character, then bakc two up.
+: BACKSPACE-IN   IN[] IF -2 IN +! THEN DROP ;
+
 ( Make sure undefined labels that looks like numbers,                   )
 (   don't fool up the first pass of the assembly.                       )
 ( Not that we endorse the idea to name labels like 250HUP.              )
@@ -25,7 +31,7 @@ REQUIRE POSTFIX
 \ Afterwards we backspace again, such that the number routine we return
 \ to concludes it is ready.
 \ We leave some random number, which is okay, but it must be single precision!
-: FIX-NMB   -1 IN +!   (WORD) 2DROP   -1 IN +!   0 DPL ! ;
+: FIX-NMB   -1 IN +!   (WORD) 2DROP   BACKSPACE-IN   0 DPL ! ;
 
 \ If FLAG we have a misspelled number, skip its remainder.
 : ERROR10 DROP IF  FIX-NMB THEN ;
