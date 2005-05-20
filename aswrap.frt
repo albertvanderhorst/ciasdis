@@ -40,6 +40,14 @@ endclass
 
 SEGMENT-REGISTRY !BAG       \ Get rid of dummy registration.
 
+\ Define at least one segment lest the user forgets.
+: DEFAULT-SEGMENT
+    0   \ File start address
+    0   \ Target start address
+    HERE CODE-LENGTH @ ALLOT
+    \ Host start address
+    "the-default-segment" POSTFIX SEGMENT ;
+
 \ ``HERE'' such as used in assembly.
 : NEW-AS-HERE    CP @ ;   HOT-PATCH AS-HERE
 

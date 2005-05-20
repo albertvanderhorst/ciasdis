@@ -48,16 +48,6 @@ REQUIRE #-PREFIX
 \ In behalf of building an executable.
 REQUIRE ARGC
 
-CODE-LENGTH @    DELAYED-BUFFER DEFAULT-BUFFER
-
-\ Define at least one segment lest the user forgets.
-: DEFAULT-SEGMENT
-    0   \ File start address
-    0   \ Target start address
-    DEFAULT-BUFFER
-    \ Host start address
-    "the-default-segment" POSTFIX SEGMENT ;
-
 \ Write current segment to FILEHANDLE. Leave FILEHANDLE.
 : WRITE-ONE-SEGMENT
    >R   FILE-OFFSET 0 R@ REPOSITION-FILE THROW
@@ -88,7 +78,7 @@ CODE-LENGTH @    DELAYED-BUFFER DEFAULT-BUFFER
     FIRSTPASS 2DUP INCLUDED  SECONDPASS INCLUDED ;
 
 \ Perform the action of the program as per the spec's of ``cias''
-: cias   DEFAULT-SEGMENT SOURCE-AS ASSEMBLED   TARGET-AS WRITE-IT ;
+: cias   SOURCE-AS ASSEMBLED   TARGET-AS WRITE-IT ; 
 
 \ Fetch file NAME to the code buffer.
 : FETCHED    GET-FILE CODE-SPACE SWAP    2DUP + CP !   MOVE ;
@@ -110,7 +100,7 @@ REQUIRE DUMP
 
 \ Perform the action of the program as per the spec's of ``cidis''
 
-: cidis   DEFAULT-SEGMENT 1 ARG[] FETCHED TARGET-DIS CONSULTED ;
+: cidis   1 ARG[] FETCHED TARGET-DIS CONSULTED ; 
 
 \ Restore all revectoring done while compiling to stand alone.
 : RESTORE-ALL  'ERROR RESTORED     'INCLUDED RESTORED      'ABORT RESTORED ;
@@ -120,7 +110,7 @@ REQUIRE DUMP
 \ In that case suppress the splat screen.
 \ Note that ``QUIT'' is the command interpreter.
 : INTERACTIVE    'OK DUP >DFA @ SWAP >PHA = IF 0 LIST OK THEN
-        ASSEMBLER   DEFAULT-SEGMENT 0 ORG   QUIT ;
+        ASSEMBLER   0 ORG   QUIT ; 
 
 \ Handle arguments, start interactive system if no arguments.
 : HANDLE-ARG   ARGC 1 = IF INTERACTIVE THEN
@@ -136,4 +126,6 @@ REQUIRE DUMP
 "forth.lab" BLOCK-FILE $!
 
 \ The name determines what to do.
-: MAIN   RESTORE-ALL  HANDLE-ARG   0 ARG[] CONTAINS-D? IF cidis ELSE cias THEN ;
+: MAIN   RESTORE-ALL  DEFAULT-SEGMENT HANDLE-ARG   
+    0 ARG[] CONTAINS-D? IF cidis ELSE cias THEN ;
+
