@@ -47,10 +47,19 @@ REQUIRE OLD:
     OLD: ?ERROR
     THEN THEN   ;
 
+\ Ignore FILEOFFSET and TARGET address. Make segment "name" current,
+\ and reset its allocation pointer. Like ``SEGMENT'' but this
+\ behaviour is appropriate for the second pass.
+: RESET-SEGMENT   2DROP   (WORD) EVALUATE   CODE-SPACE CP ! ;
+
 \ Ignore undefined labels during first pass ...
-: FIRSTPASS   '?ERROR-FIXING >DFA @ '?ERROR >DFA ! ;
-\   but not any more in the second pass.
-: SECONDPASS   '?ERROR RESTORED ;
+\ Define segments in the first pass ...
+: FIRSTPASS     '?ERROR-FIXING >DFA @ '?ERROR >DFA !
+                'SEGMENT RESTORED ;
+
+\   ... but just start segment, and have normal errors in the second pass.
+: SECONDPASS    'RESET-SEGMENT >DFA @ 'SEGMENT >DFA !
+                '?ERROR RESTORED ;
 
 \ For NAME: "name REPRESENTS a label."
 : IS-A-LABEL? FOUND DUP IF >CFA @ 'BL >CFA @ = THEN ;

@@ -1,5 +1,6 @@
 ASSEMBLER
-#1278 ORG
+0 #1278 SEGMENT mine:
+\ mine: not needed.
 \ Here it all starts
 \ Fasten Your Seat Belts (tm)
 BITS-32

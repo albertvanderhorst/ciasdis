@@ -10,13 +10,6 @@
 \ words already using that word.
 : HOT-PATCH   LATEST   (WORD) FOUND   3 CELLS MOVE ;
 
-VARIABLE STUB   \ Example for `` DELAYED-BUFFFER ''.
-\ Create a buffer of N items with "name" Execute: return buffer address.
-\ The buffer is allocated at run time, preventing static buffers in load
-\ images.
-: DELAYED-BUFFER   CREATE ,   DOES>   >R HERE 'STUB >DFA !
-    R@ BODY>  'STUB SWAP 3 CELLS MOVE   HERE R> @ ALLOT ;
-
 \ ------------------------- library definitions end ---------------------
 
 \ Length of the code buffer.
@@ -28,11 +21,10 @@ VARIABLE CODE-LENGTH
 
 \ Create segment with FILEOFFSET TARGETADDRESS and CODESPACE
 0 0 0  \ Overwritten anyway
-class SEGMENT
+class (SEGMENT)
 LATEST SEGMENT-REGISTRY BAG+!
 M: CP M; DUP ,           \ The local dictionary pointer ("code pointer")
 M: CODE-SPACE @ M;  ,    \ Start of the code space
-\ M: (TARGET-START)  M;
 M: -ORG- ! M;            \ Define corresponding target addres.
 M: TARGET-START @ M; ,   \ Return corresponding target addres.
 M: FILE-OFFSET @ M; ,      \ Return corresponding files addres.
@@ -40,21 +32,19 @@ endclass
 
 SEGMENT-REGISTRY !BAG       \ Get rid of dummy registration.
 
+\ Create segment with FILEOFFSET TARGETADDRESS.
+\ Assign ample code space. Leave it current.
+: SEGMENT  HERE   CODE-LENGTH @ ALLOT (SEGMENT) ;
+
 \ Define at least one segment lest the user forgets.
 : DEFAULT-SEGMENT
     0   \ File start address
     0   \ Target start address
-    HERE CODE-LENGTH @ ALLOT
-    \ Host start address
-    "the-default-segment" POSTFIX SEGMENT ;
+    HERE CODE-LENGTH @ ALLOT \ Host start address
+    "the-default-segment" POSTFIX (SEGMENT) ;
 
 \ ``HERE'' such as used in assembly.
 : NEW-AS-HERE    CP @ ;   HOT-PATCH AS-HERE
-
-\ Address in target associated with the start of ``CODE-SPACE''.
-\ Where the code is to be located during execution.
-
-
 
 \ Use only while disassembling.
 \ Return the END of the file as a target address (non-inclusive).
