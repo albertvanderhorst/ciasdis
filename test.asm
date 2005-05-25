@@ -4,6 +4,7 @@ ASSEMBLER
 \ Here it all starts
 \ Fasten Your Seat Belts (tm)
 BITS-32
+:START
     CLD,                  \ First instruction
     MOV, X| T| DI'| MEM| XXX L,
 :QQQ
@@ -78,5 +79,6 @@ OS:,
 BITS-32
 \ Y Y is a target for forward jumps:
 :YYY
-
+1000 0A7B8,C7D8 SEGMENT fives:
+    dl   5555,5555 5555,5555
 PREVIOUS
