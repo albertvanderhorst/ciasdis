@@ -339,13 +339,25 @@ VARIABLE COMMENT:-TO-BE
 \ Contains multiple line comment labels, i.e. classes as associate with ``COMMENT''
 MAX-LABEL '.PAY$ '.MDIRECTIVE LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 
-\ Make STRING the comment in front of label at ADDRESS. A pointer to this
-\ string the payload.
-: COMMENT   MCOMMENT-LABELS   LAB+! "\ "  PAD $!   PAD $+!  PAD $@ $, LAB+! ;
+\ New directive STRING at ADDRESS. (See ``DIRECTIVE'').
+\ Primitive, doesn't keep it sorted.
+: NEW-DIRECTIVE   LAB+! $, LAB+! ;
+
+\ Directive STRING to old ADDRESS. Append. (See ``DIRECTIVE'').
+: OLD-DIRECTIVE   >LABEL CELL+ DUP >R
+    @ $@ PAD $!   ^J PAD $C+   PAD $+!   PAD $@ $, R> ! ;
 
 \ Make STRING the command in front of label at ADDRESS. A pointer to this
+\ string the payload. If there is already a directive there, this one is
+\ appended. Keep things sorted.
+
+: DIRECTIVE   MCOMMENT-LABELS >R
+    R@ >LABEL IF   R@ OLD-DIRECTIVE   ELSE
+    R@ NEW-DIRECTIVE   R@ WHERE-LABEL ROLL-LABEL THEN RDROP ;
+
+\ Make STRING the comment in front of label at ADDRESS. A pointer to this
 \ string the payload.
-: DIRECTIVE   MCOMMENT-LABELS LAB+! $, LAB+! ;
+: COMMENT   >R "\ "  PAD $!   PAD $+!  PAD $@  R> DIRECTIVE ;
 
 \ Print comment for instruction at ADDRESS , if any.
 : PRINT-DIRECTIVE MCOMMENT-LABELS  HOST>TARGET  >LABEL DUP IF

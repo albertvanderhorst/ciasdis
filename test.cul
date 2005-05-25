@@ -1,6 +1,6 @@
 04FE EQU START
 6D9 6B1 -  EQU LEN16
-6DF EQU END        
+6DF EQU END
 \ ciforth allows multiple line strings in files
 \ and double quotes in strings.
 
@@ -18,6 +18,8 @@ START -ORG-
 0570 LABEL BUFFER10
 0580 LABEL BUFFERTILL
 "   10 AS-ALIGN" BUFFERTILL DIRECTIVE
+"\  First line" BUFFER10 DIRECTIVE
+"\  Second line" BUFFER10 DIRECTIVE
 066A LABEL BUFFERTILL-END
 START RRR "poo" -dc \ Named section
 RRR   DUP 6 + SWAP OVER -db: bytes

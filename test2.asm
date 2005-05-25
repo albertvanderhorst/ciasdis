@@ -37,6 +37,8 @@ BITS-32
 ( 0000,0566 )                  JMPS, YY RB,
 ( 0000,0568 )                  JMPS, YY 1 - RB,
 ( 0000,056A )   :YY   db 0 0 0 0 0 0 
+\  First line
+\  Second line   
 ( 0000,0570 )   :BUFFER10   db 0 0 0 0 0 0 0 0 0 0 
 ( 0000,057A )                 db 0 0 0 0 0 0 
    10 AS-ALIGN   
