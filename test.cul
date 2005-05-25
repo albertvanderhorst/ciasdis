@@ -1,6 +1,6 @@
 04FE EQU START
 6D9 6B1 -  EQU LEN16
-CP @ CODE-SPACE - START +   EQU END
+6DF EQU END        
 \ ciforth allows multiple line strings in files
 \ and double quotes in strings.
 
@@ -37,7 +37,7 @@ END LEN16 -  END  -dc16: AAP               \ Named section
 \ From now on the label ``XXXX'' can be used: like this
 XXX  COMMENT:   Move a xell to register DI from memory at QQQ
 "YYY is a target for forward jumps:" YY 100 +  COMMENT
-END  LABEL YYY
+END LABEL YYY
 
 \ Oeps, forgot this one ... Shows that labels need not supplied in order.
 04FE COMMENT: First instruction
