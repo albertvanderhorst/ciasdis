@@ -1,8 +1,8 @@
 BITS-32
 8049000  ORG
 
-\   _end e_ident - EQU filesz      
- INCLUDE lina405equ.cul   
+_end e_ident - EQU filesz
+INCLUDE lina405equ.cul   
 ( 0804,9000 )   :e_ident   d$  7F  "ELF" 1 
 ( 0804,9005 )                 d$  1  1  0  0  0  0  0  0  0  0  0 
 
@@ -11,7 +11,7 @@ BITS-32
 
 ( 0804,9014 )   :e_version   dl 1 
 ( 0804,9018 )   :e_entry   dl _start 
-( 0804,901C )   :e_phoff   dl 34 
+( 0804,901C )   :e_phoff   dl H_WHERE 4 + 
 ( 0804,9020 )   :e_shoff   dl 6890 
 ( 0804,9024 )   :e_flags   dl 0 
 
@@ -57,181 +57,181 @@ BITS-32
 ( 0804,90A4 )   :N__'   d$  1  0  0  0  &' 90 
 ( 0804,90AA )                 d$  90  90 
 
-( 0804,90AC )   :X__'   dl docol H_['] H_R0 0 
+( 0804,90AC )   :X__'   dl docol H_['] 0C 0 
 ( 0804,90BC )                 dl N__' 0 
 ( 0804,90C4 )   :H_[']   dl X_' X_LITERAL 
-( 0804,90CC )                 dl semis 
+( 0804,90CC )                 dl X_(;) 
 
 ( 0804,90D0 )   :N_&   d$  1  0  0  0  && 90 
 ( 0804,90D6 )                 d$  90  90 
 
-( 0804,90D8 )   :X_&   dl docol H_& H_R0 X__' 
+( 0804,90D8 )   :X_&   dl docol H_& 0C X__' 
 ( 0804,90E8 )                 dl N_& 0 
 ( 0804,90F0 )   :H_&   dl X_IN[] X_SWAP 
 ( 0804,90F8 )                 dl X_DROP X_DUP X_?BLANK X_LIT 
 ( 0804,9108 )                 dl 0A X_?ERROR X_LITERAL X_?DELIM 
-( 0804,9118 )                 dl semis 
+( 0804,9118 )                 dl X_(;) 
 
 ( 0804,911C )   :N_^   d$  1  0  0  0  &^ 90 
 ( 0804,9122 )                 d$  90  90 
 
-( 0804,9124 )   :X_^   dl docol H_^ H_R0 X_& 
+( 0804,9124 )   :X_^   dl docol H_^ 0C X_& 
 ( 0804,9134 )                 dl N_^ 0 
 ( 0804,913C )   :H_^   dl X_IN[] X_SWAP 
 ( 0804,9144 )                 dl X_DROP X_DUP X_?BLANK X_LIT 
 ( 0804,9154 )                 dl 0A X_?ERROR X_LIT H_C/L 
-( 0804,9164 )                 dl X_- X_LITERAL X_?DELIM semis 
+( 0804,9164 )                 dl X_- X_LITERAL X_?DELIM X_(;) 
 
 ( 0804,9174 )   :N__0   d$  1  0  0  0  &0 90 
 ( 0804,917A )                 d$  90  90 
 
-( 0804,917C )   :X__0   dl docol donumber H_R0 X_^ 
+( 0804,917C )   :X__0   dl docol donumber 0C X_^ 
 ( 0804,918C )                 dl N__0 0 
 
 ( 0804,9194 )   :N__1   d$  1  0  0  0  &1 90 
 ( 0804,919A )                 d$  90  90 
 
-( 0804,919C )   :X__1   dl docol donumber H_R0 X__0 
+( 0804,919C )   :X__1   dl docol donumber 0C X__0 
 ( 0804,91AC )                 dl N__1 0 
 
 ( 0804,91B4 )   :N__2   d$  1  0  0  0  &2 90 
 ( 0804,91BA )                 d$  90  90 
 
-( 0804,91BC )   :X__2   dl docol donumber H_R0 X__1 
+( 0804,91BC )   :X__2   dl docol donumber 0C X__1 
 ( 0804,91CC )                 dl N__2 0 
 
 ( 0804,91D4 )   :N_3   d$  1  0  0  0  &3 90 
 ( 0804,91DA )                 d$  90  90 
 
-( 0804,91DC )   :X_3   dl docol donumber H_R0 X__2 
+( 0804,91DC )   :X_3   dl docol donumber 0C X__2 
 ( 0804,91EC )                 dl N_3 0 
 
 ( 0804,91F4 )   :N_4   d$  1  0  0  0  &4 90 
 ( 0804,91FA )                 d$  90  90 
 
-( 0804,91FC )   :X_4   dl docol donumber H_R0 X_3 
+( 0804,91FC )   :X_4   dl docol donumber 0C X_3 
 ( 0804,920C )                 dl N_4 0 
 
 ( 0804,9214 )   :N_5   d$  1  0  0  0  &5 90 
 ( 0804,921A )                 d$  90  90 
 
-( 0804,921C )   :X_5   dl docol donumber H_R0 X_4 
+( 0804,921C )   :X_5   dl docol donumber 0C X_4 
 ( 0804,922C )                 dl N_5 0 
 
 ( 0804,9234 )   :N_6   d$  1  0  0  0  &6 90 
 ( 0804,923A )                 d$  90  90 
 
-( 0804,923C )   :X_6   dl docol donumber H_R0 X_5 
+( 0804,923C )   :X_6   dl docol donumber 0C X_5 
 ( 0804,924C )                 dl N_6 0 
 
 ( 0804,9254 )   :N_7   d$  1  0  0  0  &7 90 
 ( 0804,925A )                 d$  90  90 
 
-( 0804,925C )   :X_7   dl docol donumber H_R0 X_6 
+( 0804,925C )   :X_7   dl docol donumber 0C X_6 
 ( 0804,926C )                 dl N_7 0 
 
 ( 0804,9274 )   :N_8   d$  1  0  0  0  &8 90 
 ( 0804,927A )                 d$  90  90 
 
-( 0804,927C )   :X_8   dl docol donumber H_R0 X_7 
+( 0804,927C )   :X_8   dl docol donumber 0C X_7 
 ( 0804,928C )                 dl N_8 0 
 
 ( 0804,9294 )   :N_9   d$  1  0  0  0  &9 90 
 ( 0804,929A )                 d$  90  90 
 
-( 0804,929C )   :X_9   dl docol donumber H_R0 X_8 
+( 0804,929C )   :X_9   dl docol donumber 0C X_8 
 ( 0804,92AC )                 dl N_9 0 
 
 ( 0804,92B4 )   :N_A   d$  1  0  0  0  &A 90 
 ( 0804,92BA )                 d$  90  90 
 
-( 0804,92BC )   :X_A   dl docol donumber H_R0 X_9 
+( 0804,92BC )   :X_A   dl docol donumber 0C X_9 
 ( 0804,92CC )                 dl N_A 0 
 
 ( 0804,92D4 )   :N_B   d$  1  0  0  0  &B 90 
 ( 0804,92DA )                 d$  90  90 
 
-( 0804,92DC )   :X_B   dl docol donumber H_R0 X_A 
+( 0804,92DC )   :X_B   dl docol donumber 0C X_A 
 ( 0804,92EC )                 dl N_B 0 
 
 ( 0804,92F4 )   :N_C   d$  1  0  0  0  &C 90 
 ( 0804,92FA )                 d$  90  90 
 
-( 0804,92FC )   :X_C   dl docol donumber H_R0 X_B 
+( 0804,92FC )   :X_C   dl docol donumber 0C X_B 
 ( 0804,930C )                 dl N_C 0 
 
 ( 0804,9314 )   :N_D   d$  1  0  0  0  &D 90 
 ( 0804,931A )                 d$  90  90 
 
-( 0804,931C )   :X_D   dl docol donumber H_R0 X_C 
+( 0804,931C )   :X_D   dl docol donumber 0C X_C 
 ( 0804,932C )                 dl N_D 0 
 
 ( 0804,9334 )   :N_E   d$  1  0  0  0  &E 90 
 ( 0804,933A )                 d$  90  90 
 
-( 0804,933C )   :X_E   dl docol donumber H_R0 X_D 
+( 0804,933C )   :X_E   dl docol donumber 0C X_D 
 ( 0804,934C )                 dl N_E 0 
 
 ( 0804,9354 )   :N_F   d$  1  0  0  0  &F 90 
 ( 0804,935A )                 d$  90  90 
 
-( 0804,935C )   :X_F   dl docol donumber H_R0 X_E 
+( 0804,935C )   :X_F   dl docol donumber 0C X_E 
 ( 0804,936C )                 dl N_F 0 
 
 ( 0804,9374 )   :N__-   d$  1  0  0  0  &- 90 
 ( 0804,937A )                 d$  90  90 
 
-( 0804,937C )   :X__-   dl docol H__- H_R0 X_F 
+( 0804,937C )   :X__-   dl docol H__- 0C X_F 
 ( 0804,938C )                 dl N__- 0 
 ( 0804,9394 )   :H__-   dl X_(NUMBER) X_DNEGATE 
-( 0804,939C )                 dl X_SDLITERAL semis 
+( 0804,939C )                 dl X_SDLITERAL X_(;) 
 
 ( 0804,93A4 )   :N__+   d$  1  0  0  0  &+ 90 
 ( 0804,93AA )                 d$  90  90 
 
-( 0804,93AC )   :X__+   dl docol H__+ H_R0 X__- 
+( 0804,93AC )   :X__+   dl docol H__+ 0C X__- 
 ( 0804,93BC )                 dl N__+ 0 
 ( 0804,93C4 )   :H__+   dl X_(NUMBER) X_SDLITERAL 
-( 0804,93CC )                 dl semis 
+( 0804,93CC )                 dl X_(;) 
 
 ( 0804,93D0 )   :N_"   d$  1  0  0  0  &" 90 
 ( 0804,93D6 )                 d$  90  90 
 
-( 0804,93D8 )   :X_"   dl docol H_" H_R0 X__+ 
+( 0804,93D8 )   :X_"   dl docol H_" 0C X__+ 
 ( 0804,93E8 )                 dl N_" 0 
 ( 0804,93F0 )   :H_"   dl X_LIT X_SKIP 
 ( 0804,93F8 )                 dl X_, X_HERE X_>R X_0 
-( 0804,9408 )                 dl X_, X_LIT 22 X_(PARSE) 
-( 0804,9418 )                 dl X_IN[] X_DUP X_LIT 22 
+( 0804,9408 )                 dl X_, X_LIT H_FENCE 2 + X_(PARSE) 
+( 0804,9418 )                 dl X_IN[] X_DUP X_LIT H_FENCE 2 + 
 ( 0804,9428 )                 dl X_= X_0BRANCH H_FENCE X_2DROP 
 ( 0804,9438 )                 dl X_1+ X_DUP X_ALLOT X_R@ 
 ( 0804,9448 )                 dl X_$+! X_BRANCH -48 X_?BLANK 
 ( 0804,9458 )                 dl X_0= X_LIT 0A X_?ERROR 
 ( 0804,9468 )                 dl X_DROP X_DUP X_ALLOT X_R@ 
 ( 0804,9478 )                 dl X_$+! X_ALIGN X_R> X_$@ 
-( 0804,9488 )                 dl X_DLITERAL semis 
+( 0804,9488 )                 dl X_DLITERAL X_(;) 
 
 ( 0804,9490 )   :N_FORTH   d$  5  0  0  0  "FORTH" 90 
 ( 0804,949A )                 d$  90  90 
 
-( 0804,949C )   :X_FORTH   dl dodoes H_FORTH H_U0 UNKNOWN1 
+( 0804,949C )   :X_FORTH   dl dodoes H_FORTH 4 UNKNOWN1 
 ( 0804,94AC )                 dl N_FORTH 0 
 ( 0804,94B4 )   :H_FORTH   dl DOVOC 0 
-( 0804,94BC )                 dl 0 0 1 last_dea 
+( 0804,94BC )                 dl 0 0 1 X_TASK 
 ( 0804,94CC )                 dl 0 0 
 
 ( 0804,94D4 )   :N_CORE   d$  4  0  0  0  "CORE"
 
 ( 0804,94DC )   :X_CORE   dl docol H_CORE 0 0 
 ( 0804,94EC )                 dl N_CORE 0 
-( 0804,94F4 )   :H_CORE   dl X_0 semis 
+( 0804,94F4 )   :H_CORE   dl X_0 X_(;) 
 
 ( 0804,94FC )   :N_CPU   d$  3  0  0  0  "CPU" 90 
 
 ( 0804,9504 )   :X_CPU   dl docol H_CPU 0 X_CORE 
 ( 0804,9514 )                 dl N_CPU 0 
 ( 0804,951C )   :H_CPU   dl X_LIT 00CD,1856 
-( 0804,9524 )                 dl X_0 semis 
+( 0804,9524 )                 dl X_0 X_(;) 
 
 ( 0804,952C )   :N_VERSION   d$  7  0  0  0  "VERSION" 90 
 
@@ -239,7 +239,7 @@ BITS-32
 ( 0804,9548 )                 dl N_VERSION 0 
 ( 0804,9550 )   :H_VERSION   dl X_SKIP 5 
 ( 0804,9558 )   :NAME1   dl 2E30,2E34 9090,9035 X_LIT NAME1 
-( 0804,9568 )                 dl X_LIT 5 semis 
+( 0804,9568 )                 dl X_LIT 5 X_(;) 
 
 ( 0804,9574 )   :N_NAME   d$  4  0  0  0  "NAME"
 
@@ -247,7 +247,7 @@ BITS-32
 ( 0804,958C )                 dl N_NAME 0 
 ( 0804,9594 )   :H_NAME   dl X_SKIP 7 
 ( 0804,959C )   :NAME2   dl 6F66,6963 9068,7472 X_LIT NAME2 
-( 0804,95AC )                 dl X_LIT 7 semis 
+( 0804,95AC )                 dl X_LIT 7 X_(;) 
 
 ( 0804,95B8 )   :N_SUPPLIER   d$  8  0  0  0  "SUPPLIER"
 
@@ -256,12 +256,12 @@ BITS-32
 ( 0804,95DC )   :H_SUPPLIER   dl X_SKIP H_RUBOUT 
 ( 0804,95E4 )   :NAME3   dl 6562,6C41 7620,7472 6420,6E61 4820,7265 
 ( 0804,95F4 )                 dl 7473,726F X_LIT NAME3 X_LIT 
-( 0804,9604 )                 dl H_RUBOUT semis 
+( 0804,9604 )                 dl H_RUBOUT X_(;) 
 
 ( 0804,960C )   :N_DENOTATION   d$  ^J 0  0  0  "DENOTATION" 90 
 ( 0804,961B )                 d$  90 
 
-( 0804,961C )   :X_DENOTATION   dl dodoes H_DENOTATION H_U0 X_FORTH 
+( 0804,961C )   :X_DENOTATION   dl dodoes H_DENOTATION 4 X_FORTH 
 ( 0804,962C )                 dl N_DENOTATION 0 
 ( 0804,9634 )   :H_DENOTATION   dl DOVOC X_FORTH 
 ( 0804,963C )   :UNKNOWN1   dl 0 0 1 X_" 
@@ -269,10 +269,10 @@ BITS-32
 
 ( 0804,9654 )   :N_ENVIRONMENT   d$  0B  0  0  0  "ENVIRONMENT" 90 
 
-( 0804,9664 )   :X_ENVIRONMENT   dl dodoes H_ENVIRONMENT H_U0 X_DENOTATION 
+( 0804,9664 )   :X_ENVIRONMENT   dl dodoes H_ENVIRONMENT 4 X_DENOTATION 
 ( 0804,9674 )                 dl N_ENVIRONMENT 0 
 ( 0804,967C )   :H_ENVIRONMENT   dl DOVOC X_DENOTATION 
-( 0804,9684 )                 dl 0 0 1 X_SUPPLIER 
+( 0804,9684 )                 dl 0 0 1 last_dea_envir 
 ( 0804,9694 )                 dl 0 0 
 
 ( 0804,969C )   :N_NOOP   d$  4  0  0  0  "NOOP"
@@ -306,10 +306,10 @@ BITS-32
 
 ( 0804,9710 )   :N_RECURSE   d$  7  0  0  0  "RECURSE" 90 
 
-( 0804,971C )   :X_RECURSE   dl docol H_RECURSE H_U0 X_EXECUTE 
+( 0804,971C )   :X_RECURSE   dl docol H_RECURSE 4 X_EXECUTE 
 ( 0804,972C )                 dl N_RECURSE 0 
 ( 0804,9734 )   :H_RECURSE   dl X_LATEST X_, 
-( 0804,973C )                 dl semis 
+( 0804,973C )                 dl X_(;) 
 
 ( 0804,9740 )   :N_BRANCH   d$  6  0  0  0  "BRANCH" 90 
 ( 0804,974B )                 d$  90 
@@ -339,7 +339,7 @@ BITS-32
 ( 0804,97B4 )   :H_0BRANCH    POP|X, AX| 
 ( 0804,97B5 )                  OR, X| F| AX'| R| AX| 
 ( 0804,97B7 )                  J, Z| Y| L0804,9784 RB,
-( 0804,97B9 )                  LEA, SI'| BO| [SI] H_U0 B, 
+( 0804,97B9 )                  LEA, SI'| BO| [SI] 4 B, 
 ( 0804,97BC )                  LODS, X'| 
 ( 0804,97BD )                  JMPO, ZO| [AX] 
 ( 0804,97BF )                 d$  90 
@@ -353,11 +353,11 @@ BITS-32
 ( 0804,97E4 )   :H_(LOOP)    MOVI|X, BX| 1 IL, 
 ( 0804,97E9 )   :L0804,97E9    ADD, X| F| BX'| BO| [BP] 0 B, 
 ( 0804,97EC )                  MOV, X| T| AX'| BO| [BP] 0 B, 
-( 0804,97EF )                  SUB, X| T| AX'| BO| [BP] H_U0 B, 
+( 0804,97EF )                  SUB, X| T| AX'| BO| [BP] 4 B, 
 ( 0804,97F2 )                  XOR, X| F| BX'| R| AX| 
 ( 0804,97F4 )                  J, S| Y| L0804,9784 RB,
-( 0804,97F6 )                  LEA, BP'| BO| [BP] H_R0 B, 
-( 0804,97F9 )                  LEA, SI'| BO| [SI] H_U0 B, 
+( 0804,97F6 )                  LEA, BP'| BO| [BP] 0C B, 
+( 0804,97F9 )                  LEA, SI'| BO| [SI] 4 B, 
 ( 0804,97FC )                  LODS, X'| 
 ( 0804,97FD )                  JMPO, ZO| [AX] 
 ( 0804,97FF )                 d$  90 
@@ -430,7 +430,7 @@ BITS-32
 ( 0804,98C8 )   :X_J   dl H_J H_J 0 X_I 
 ( 0804,98D8 )                 dl N_J 0 
 
-( 0804,98E0 )   :H_J    MOV, X| T| AX'| BO| [BP] H_R0 B, 
+( 0804,98E0 )   :H_J    MOV, X| T| AX'| BO| [BP] 0C B, 
 ( 0804,98E3 )                  PUSH|X, AX| 
 ( 0804,98E4 )                  LODS, X'| 
 ( 0804,98E5 )                  JMPO, ZO| [AX] 
@@ -439,22 +439,22 @@ BITS-32
 ( 0804,98E8 )   :N_UNLOOP   d$  6  0  0  0  "UNLOOP" 90 
 ( 0804,98F3 )                 d$  90 
 
-( 0804,98F4 )   :X_UNLOOP   dl docol H_UNLOOP H_U0 X_J 
+( 0804,98F4 )   :X_UNLOOP   dl docol H_UNLOOP 4 X_J 
 ( 0804,9904 )                 dl N_UNLOOP 0 
 ( 0804,990C )   :H_UNLOOP   dl X_LIT X_RDROP 
 ( 0804,9914 )                 dl X_, X_LIT X_RDROP X_, 
-( 0804,9924 )                 dl X_LIT X_RDROP X_, semis 
+( 0804,9924 )                 dl X_LIT X_RDROP X_, X_(;) 
 
 ( 0804,9934 )   :N_+ORIGIN   d$  7  0  0  0  "+ORIGIN" 90 
 
 ( 0804,9940 )   :X_+ORIGIN   dl docol H_+ORIGIN 0 X_UNLOOP 
 ( 0804,9950 )                 dl N_+ORIGIN 0 
 ( 0804,9958 )   :H_+ORIGIN   dl X_LIT init_user 
-( 0804,9960 )                 dl X_+ semis 
+( 0804,9960 )                 dl X_+ X_(;) 
 ( 0804,9968 )   :init_user   dl 0C04,6F38 
 ( 0804,996C )   :U0_INIT   dl 0C04,6F38 
 ( 0804,9970 )   :SP_INIT   dl 0C03,6F38 
-( 0804,9974 )   :RP_INIT   dl 0C04,6F38 0C03,6F38 H_#BUFF 
+( 0804,9974 )   :RP_INIT   dl 0C04,6F38 0C03,6F38 8 
 ( 0804,9980 )                 dl 0 1 _end _end 
 ( 0804,9990 )                 dl X_ENVIRONMENT 0 0 0 
 ( 0804,99A0 )                 dl 0 0C03,6F38 0 0 
@@ -512,12 +512,12 @@ BITS-32
 ( 0804,9B00 )                 dl H_(>IN) X_DROP X_R@ X_>NFA 
 ( 0804,9B10 )                 dl X_@ X_@ X_OVER X_- 
 ( 0804,9B20 )                 dl X_DUP X_0< X_R@ X_>FFA 
-( 0804,9B30 )                 dl X_@ X_LIT H_#BUFF X_AND 
+( 0804,9B30 )                 dl X_@ X_LIT 8 X_AND 
 ( 0804,9B40 )                 dl X_AND X_0= X_AND X_0= 
 ( 0804,9B50 )                 dl X_DUP X_0BRANCH H_FENCE X_DROP 
 ( 0804,9B60 )                 dl X_OVER X_R@ X_>NFA X_@ 
 ( 0804,9B70 )                 dl X_$@ X_CORA X_0= X_R> 
-( 0804,9B80 )                 dl X_SWAP semis 
+( 0804,9B80 )                 dl X_SWAP X_(;) 
 
 ( 0804,9B88 )   :N_?BLANK   d$  6  0  0  0  "?BLANK" 90 
 ( 0804,9B93 )                 d$  90 
@@ -525,7 +525,7 @@ BITS-32
 ( 0804,9B94 )   :X_?BLANK   dl docol H_?BLANK 0 X_(MATCH) 
 ( 0804,9BA4 )                 dl N_?BLANK 0 
 ( 0804,9BAC )   :H_?BLANK   dl X_BL X_1+ 
-( 0804,9BB4 )                 dl X_< semis 
+( 0804,9BB4 )                 dl X_< X_(;) 
 
 ( 0804,9BBC )   :N_IN[]   d$  4  0  0  0  "IN[]"
 
@@ -533,9 +533,9 @@ BITS-32
 ( 0804,9BD4 )                 dl N_IN[] 0 
 ( 0804,9BDC )   :H_IN[]   dl X_SRC X_CELL+ 
 ( 0804,9BE4 )                 dl X_2@ X_OVER X_= X_0BRANCH 
-( 0804,9BF4 )                 dl H_R0 X_0 X_BRANCH H_RUBOUT 
+( 0804,9BF4 )                 dl 0C X_0 X_BRANCH H_RUBOUT 
 ( 0804,9C04 )                 dl X_DUP X_C@ X_1 X_IN 
-( 0804,9C14 )                 dl X_+! semis 
+( 0804,9C14 )                 dl X_+! X_(;) 
 
 ( 0804,9C1C )   :N_(WORD)   d$  6  0  0  0  "(WORD)" 90 
 ( 0804,9C27 )                 d$  90 
@@ -547,7 +547,7 @@ BITS-32
 ( 0804,9C58 )                 dl X_CELL+ X_@ X_- X_AND 
 ( 0804,9C68 )                 dl X_0= X_0BRANCH -30 X__ 
 ( 0804,9C78 )                 dl X_DROP X_IN[] X_?BLANK X_0BRANCH 
-( 0804,9C88 )                 dl -14 X_OVER X_- semis 
+( 0804,9C88 )                 dl -14 X_OVER X_- X_(;) 
 
 ( 0804,9C98 )   :N_(PARSE)   d$  7  0  0  0  "(PARSE)" 90 
 
@@ -557,7 +557,7 @@ BITS-32
 ( 0804,9CC4 )                 dl X_2@ X_OVER X_- X_ROT 
 ( 0804,9CD4 )                 dl X_$S X_2SWAP X_0= X_0BRANCH 
 ( 0804,9CE4 )                 dl H_TIB X_DROP X_SRC X_CELL+ 
-( 0804,9CF4 )                 dl X_@ X_IN X_! semis 
+( 0804,9CF4 )                 dl X_@ X_IN X_! X_(;) 
 
 ( 0804,9D04 )   :N_SRC   d$  3  0  0  0  "SRC" 90 
 
@@ -571,7 +571,7 @@ BITS-32
 ( 0804,9D40 )                 dl N_SOURCE 0 
 ( 0804,9D48 )   :H_SOURCE   dl X_SRC X_@ 
 ( 0804,9D50 )                 dl X_SRC X_CELL+ X_@ X_OVER 
-( 0804,9D60 )                 dl X_- semis 
+( 0804,9D60 )                 dl X_- X_(;) 
 
 ( 0804,9D68 )   :N_>IN   d$  3  0  0  0  ">IN" 90 
 
@@ -579,7 +579,7 @@ BITS-32
 ( 0804,9D80 )                 dl N_>IN 0 
 ( 0804,9D88 )   :H_>IN   dl X_IN X_@ 
 ( 0804,9D90 )                 dl X_SRC X_@ X_- X_(>IN) 
-( 0804,9DA0 )                 dl X_! X_(>IN) semis 
+( 0804,9DA0 )                 dl X_! X_(>IN) X_(;) 
 
 ( 0804,9DAC )   :N_CR   d$  2  0  0  0  "CR" 90 
 ( 0804,9DB3 )                 d$  90 
@@ -588,7 +588,7 @@ BITS-32
 ( 0804,9DC4 )                 dl N_CR 0 
 ( 0804,9DCC )   :H_CR   dl X_LIT 0A 
 ( 0804,9DD4 )                 dl X_EMIT X_0 X_OUT X_! 
-( 0804,9DE4 )                 dl semis 
+( 0804,9DE4 )                 dl X_(;) 
 
 ( 0804,9DE8 )   :N_CMOVE   d$  5  0  0  0  "CMOVE" 90 
 ( 0804,9DF2 )                 d$  90  90 
@@ -770,8 +770,8 @@ BITS-32
 ( 0804,9FFC )   :X_DEPTH   dl docol H_DEPTH 0 X_DSP! 
 ( 0804,A00C )                 dl N_DEPTH 0 
 ( 0804,A014 )   :H_DEPTH   dl X_S0 X_@ 
-( 0804,A01C )                 dl X_DSP@ X_- X_LIT H_U0 
-( 0804,A02C )                 dl X_/ X_1- semis 
+( 0804,A01C )                 dl X_DSP@ X_- X_LIT 4 
+( 0804,A02C )                 dl X_/ X_1- X_(;) 
 
 ( 0804,A038 )   :N_RSP@   d$  4  0  0  0  "RSP@"
 
@@ -795,7 +795,7 @@ BITS-32
 ( 0804,A098 )                 dl N_EXIT 0 
 
 ( 0804,A0A0 )   :L0804,A0A0    MOV, X| T| SI'| BO| [BP] 0 B, 
-( 0804,A0A3 )                  LEA, BP'| BO| [BP] H_U0 B, 
+( 0804,A0A3 )                  LEA, BP'| BO| [BP] 4 B, 
 ( 0804,A0A6 )                  LODS, X'| 
 ( 0804,A0A7 )                  JMPO, ZO| [AX] 
 ( 0804,A0A9 )                 d$  90  90  90 
@@ -813,16 +813,16 @@ BITS-32
 
 ( 0804,A0D4 )   :N_(;)   d$  3  0  0  0  "(;)" 90 
 
-( 0804,A0DC )   :semis :X_(;)   dl L0804,A0A0 N_LEAVE 0 X_CO 
+( 0804,A0DC )   :X_(;)   dl L0804,A0A0 N_LEAVE 0 X_CO 
 ( 0804,A0EC )                 dl N_(;) 0 
 
 ( 0804,A0F4 )   :N_LEAVE   d$  5  0  0  0  "LEAVE" 90 
 ( 0804,A0FE )                 d$  90  90 
 
-( 0804,A100 )   :X_LEAVE   dl docol H_LEAVE 0 semis 
+( 0804,A100 )   :X_LEAVE   dl docol H_LEAVE 0 X_(;) 
 ( 0804,A110 )                 dl N_LEAVE 0 
 ( 0804,A118 )   :H_LEAVE   dl X_RDROP X_RDROP 
-( 0804,A120 )                 dl X_RDROP semis 
+( 0804,A120 )                 dl X_RDROP X_(;) 
 
 ( 0804,A128 )   :N_>R   d$  2  0  0  0  ">R" 90 
 ( 0804,A12F )                 d$  90 
@@ -844,7 +844,7 @@ BITS-32
 ( 0804,A16C )                 dl N_R> 0 
 
 ( 0804,A174 )   :H_R>    MOV, X| T| AX'| BO| [BP] 0 B, 
-( 0804,A177 )                  LEA, BP'| BO| [BP] H_U0 B, 
+( 0804,A177 )                  LEA, BP'| BO| [BP] 4 B, 
 ( 0804,A17A )                  PUSH|X, AX| 
 ( 0804,A17B )                  LODS, X'| 
 ( 0804,A17C )                  JMPO, ZO| [AX] 
@@ -856,7 +856,7 @@ BITS-32
 ( 0804,A18C )   :X_RDROP   dl H_RDROP H_RDROP 0 X_R> 
 ( 0804,A19C )                 dl N_RDROP 0 
 
-( 0804,A1A4 )   :H_RDROP    LEA, BP'| BO| [BP] H_U0 B, 
+( 0804,A1A4 )   :H_RDROP    LEA, BP'| BO| [BP] 4 B, 
 ( 0804,A1A7 )                  LODS, X'| 
 ( 0804,A1A8 )                  JMPO, ZO| [AX] 
 ( 0804,A1AA )                 d$  90  90 
@@ -1129,7 +1129,7 @@ BITS-32
 
 ( 0804,A500 )   :H_2@    POP|X, BX| 
 ( 0804,A501 )                  MOV, X| T| AX'| ZO| [BX] 
-( 0804,A503 )                  MOV, X| T| DX'| BO| [BX] H_U0 B, 
+( 0804,A503 )                  MOV, X| T| DX'| BO| [BX] 4 B, 
 ( 0804,A506 )                  PUSH|X, DX| 
 ( 0804,A507 )                  PUSH|X, AX| 
 ( 0804,A508 )                  LODS, X'| 
@@ -1172,7 +1172,7 @@ BITS-32
 ( 0804,A57D )                  POP|X, AX| 
 ( 0804,A57E )                  MOV, X| F| AX'| ZO| [BX] 
 ( 0804,A580 )                  POP|X, AX| 
-( 0804,A581 )                  MOV, X| F| AX'| BO| [BX] H_U0 B, 
+( 0804,A581 )                  MOV, X| F| AX'| BO| [BX] 4 B, 
 ( 0804,A584 )                  LODS, X'| 
 ( 0804,A585 )                  JMPO, ZO| [AX] 
 ( 0804,A587 )                 d$  90 
@@ -1184,7 +1184,7 @@ BITS-32
 ( 0804,A5A4 )                 dl N_WITHIN 0 
 ( 0804,A5AC )   :H_WITHIN   dl X_OVER X_- 
 ( 0804,A5B4 )                 dl X_>R X_- X_R> X_U< 
-( 0804,A5C4 )                 dl semis 
+( 0804,A5C4 )                 dl X_(;) 
 
 ( 0804,A5C8 )   :N_L@   d$  2  0  0  0  "L@" 90 
 ( 0804,A5CF )                 d$  90 
@@ -1227,30 +1227,30 @@ BITS-32
 ( 0804,A640 )                 dl N_: 0 
 ( 0804,A648 )   :H_:   dl X_!CSP X_(WORD) 
 ( 0804,A650 )                 dl X_(CREATE) X_LATEST X_HIDDEN X_] 
-( 0804,A660 )                 dl semiscode 
+( 0804,A660 )                 dl X_(;CODE) 
 
 ( 0804,A664 )   :docol    LEA, BP'| BO| [BP] 0FC B, 
 ( 0804,A667 )                  MOV, X| F| SI'| BO| [BP] 0 B, 
-( 0804,A66A )                  MOV, X| T| SI'| BO| [AX] H_U0 B, 
+( 0804,A66A )                  MOV, X| T| SI'| BO| [AX] 4 B, 
 ( 0804,A66D )                  LODS, X'| 
 ( 0804,A66E )                  JMPO, ZO| [AX] 
 ( 0804,A670 )   :N_;   d$  1  0  0  0  &; 90 
 ( 0804,A676 )                 d$  90  90 
 
-( 0804,A678 )   :X_;   dl docol H_; H_U0 X_: 
+( 0804,A678 )   :X_;   dl docol H_; 4 X_: 
 ( 0804,A688 )                 dl N_; 0 
 ( 0804,A690 )   :H_;   dl X_?CSP X_LIT 
-( 0804,A698 )                 dl semis X_, X_LATEST X_HIDDEN 
-( 0804,A6A8 )                 dl X_[ semis 
+( 0804,A698 )                 dl X_(;) X_, X_LATEST X_HIDDEN 
+( 0804,A6A8 )                 dl X_[ X_(;) 
 
 ( 0804,A6B0 )   :N_CONSTANT   d$  8  0  0  0  "CONSTANT"
 
 ( 0804,A6BC )   :X_CONSTANT   dl docol H_CONSTANT 0 X_; 
 ( 0804,A6CC )                 dl N_CONSTANT 0 
 ( 0804,A6D4 )   :H_CONSTANT   dl X_(WORD) X_(CREATE) 
-( 0804,A6DC )                 dl X_LATEST X_>DFA X_! semiscode 
+( 0804,A6DC )                 dl X_LATEST X_>DFA X_! X_(;CODE) 
 
-( 0804,A6EC )   :doconstant    MOV, X| T| AX'| BO| [AX] H_U0 B, 
+( 0804,A6EC )   :doconstant    MOV, X| T| AX'| BO| [AX] 4 B, 
 ( 0804,A6EF )                  PUSH|X, AX| 
 ( 0804,A6F0 )                  LODS, X'| 
 ( 0804,A6F1 )                  JMPO, ZO| [AX] 
@@ -1261,9 +1261,9 @@ BITS-32
 ( 0804,A700 )   :X_VARIABLE   dl docol H_VARIABLE 0 X_CONSTANT 
 ( 0804,A710 )                 dl N_VARIABLE 0 
 ( 0804,A718 )   :H_VARIABLE   dl X_(WORD) X_(CREATE) 
-( 0804,A720 )                 dl X_0 X_, semiscode 
+( 0804,A720 )                 dl X_0 X_, X_(;CODE) 
 
-( 0804,A72C )   :dovar    MOV, X| T| AX'| BO| [AX] H_U0 B, 
+( 0804,A72C )   :dovar    MOV, X| T| AX'| BO| [AX] 4 B, 
 ( 0804,A72F )                  PUSH|X, AX| 
 ( 0804,A730 )                  LODS, X'| 
 ( 0804,A731 )                  JMPO, ZO| [AX] 
@@ -1273,9 +1273,9 @@ BITS-32
 
 ( 0804,A73C )   :X_USER   dl docol H_USER 0 X_VARIABLE 
 ( 0804,A74C )                 dl N_USER 0 
-( 0804,A754 )   :H_USER   dl X_CONSTANT semiscode 
+( 0804,A754 )   :H_USER   dl X_CONSTANT X_(;CODE) 
 
-( 0804,A75C )   :douse    MOV, X| T| BX'| BO| [AX] H_U0 B, 
+( 0804,A75C )   :douse    MOV, X| T| BX'| BO| [AX] 4 B, 
 ( 0804,A75F )                  MOV, X| T| DI'| MEM| init_user L, 
 ( 0804,A765 )                  LEA, AX'| ZO|    [BX +1* DI] 
 ( 0804,A768 )                  PUSH|X, AX| 
@@ -1338,7 +1338,7 @@ BITS-32
 ( 0804,A838 )   :X_$@   dl docol H_$@ 0 X_BL 
 ( 0804,A848 )                 dl N_$@ 0 
 ( 0804,A850 )   :H_$@   dl X_DUP X_CELL+ 
-( 0804,A858 )                 dl X_SWAP X_@ semis 
+( 0804,A858 )                 dl X_SWAP X_@ X_(;) 
 
 ( 0804,A864 )   :N_$!   d$  2  0  0  0  "$!" 90 
 ( 0804,A86B )                 d$  90 
@@ -1346,7 +1346,7 @@ BITS-32
 ( 0804,A86C )   :X_$!   dl docol H_$! 0 X_$@ 
 ( 0804,A87C )                 dl N_$! 0 
 ( 0804,A884 )   :H_$!   dl X_2DUP X_! 
-( 0804,A88C )                 dl X_CELL+ X_SWAP X_CMOVE semis 
+( 0804,A88C )                 dl X_CELL+ X_SWAP X_CMOVE X_(;) 
 
 ( 0804,A89C )   :N_$!-BD   d$  5  0  0  0  "$!-BD" 90 
 ( 0804,A8A6 )                 d$  90  90 
@@ -1354,7 +1354,7 @@ BITS-32
 ( 0804,A8A8 )   :X_$!-BD   dl docol H_$!-BD 0 X_$! 
 ( 0804,A8B8 )                 dl N_$!-BD 0 
 ( 0804,A8C0 )   :H_$!-BD   dl X_2DUP X_C! 
-( 0804,A8C8 )                 dl X_1+ X_SWAP X_CMOVE semis 
+( 0804,A8C8 )                 dl X_1+ X_SWAP X_CMOVE X_(;) 
 
 ( 0804,A8D8 )   :N_$+!   d$  3  0  0  0  "$+!" 90 
 
@@ -1363,7 +1363,7 @@ BITS-32
 ( 0804,A8F8 )   :H_$+!   dl X_DUP X_@ 
 ( 0804,A900 )                 dl X_>R X_2DUP X_+! X_CELL+ 
 ( 0804,A910 )                 dl X_R> X_+ X_SWAP X_CMOVE 
-( 0804,A920 )                 dl semis 
+( 0804,A920 )                 dl X_(;) 
 
 ( 0804,A924 )   :N_$C+   d$  3  0  0  0  "$C+" 90 
 
@@ -1372,7 +1372,7 @@ BITS-32
 ( 0804,A944 )   :H_$C+   dl X_DUP X_>R 
 ( 0804,A94C )                 dl X_DUP X_@ X_+ X_CELL+ 
 ( 0804,A95C )                 dl X_C! X_1 X_R> X_+! 
-( 0804,A96C )                 dl semis 
+( 0804,A96C )                 dl X_(;) 
 
 ( 0804,A970 )   :N_$,   d$  2  0  0  0  "$," 90 
 ( 0804,A977 )                 d$  90 
@@ -1381,7 +1381,7 @@ BITS-32
 ( 0804,A988 )                 dl N_$, 0 
 ( 0804,A990 )   :H_$,   dl X_HERE X_>R 
 ( 0804,A998 )                 dl X_DUP X_CELL+ X_ALLOT X_R@ 
-( 0804,A9A8 )                 dl X_$! X_R> X_ALIGN semis 
+( 0804,A9A8 )                 dl X_$! X_R> X_ALIGN X_(;) 
 
 ( 0804,A9B8 )   :N_C/L   d$  3  0  0  0  "C/L" 90 
 
@@ -1421,19 +1421,19 @@ BITS-32
 ( 0804,AA84 )   :N_U0   d$  2  0  0  0  "U0" 90 
 ( 0804,AA8B )                 d$  90 
 
-( 0804,AA8C )   :X_U0   dl douse H_U0 0 X_B/BUF 
+( 0804,AA8C )   :X_U0   dl douse 4 0 X_B/BUF 
 ( 0804,AA9C )                 dl N_U0 0 
 
 ( 0804,AAA4 )   :N_S0   d$  2  0  0  0  "S0" 90 
 ( 0804,AAAB )                 d$  90 
 
-( 0804,AAAC )   :X_S0   dl douse H_#BUFF 0 X_U0 
+( 0804,AAAC )   :X_S0   dl douse 8 0 X_U0 
 ( 0804,AABC )                 dl N_S0 0 
 
 ( 0804,AAC4 )   :N_R0   d$  2  0  0  0  "R0" 90 
 ( 0804,AACB )                 d$  90 
 
-( 0804,AACC )   :X_R0   dl douse H_R0 0 X_S0 
+( 0804,AACC )   :X_R0   dl douse 0C 0 X_S0 
 ( 0804,AADC )                 dl N_R0 0 
 
 ( 0804,AAE4 )   :N_TIB   d$  3  0  0  0  "TIB" 90 
@@ -1578,15 +1578,15 @@ BITS-32
 ( 0804,AE44 )   :X_1+   dl docol H_CHAR+ 0 X_CONTEXT 
 ( 0804,AE54 )                 dl N_1+ 0 
 ( 0804,AE5C )   :H_CHAR+   dl X_1 X_+ 
-( 0804,AE64 )                 dl semis 
+( 0804,AE64 )                 dl X_(;) 
 
 ( 0804,AE68 )   :N_CELL+   d$  5  0  0  0  "CELL+" 90 
 ( 0804,AE72 )                 d$  90  90 
 
 ( 0804,AE74 )   :X_CELL+   dl docol H_CELL+ 0 X_1+ 
 ( 0804,AE84 )                 dl N_CELL+ 0 
-( 0804,AE8C )   :H_CELL+   dl X_LIT H_U0 
-( 0804,AE94 )                 dl X_+ semis 
+( 0804,AE8C )   :H_CELL+   dl X_LIT 4 
+( 0804,AE94 )                 dl X_+ X_(;) 
 
 ( 0804,AE9C )   :N_CELLS   d$  5  0  0  0  "CELLS" 90 
 ( 0804,AEA6 )                 d$  90  90 
@@ -1594,7 +1594,7 @@ BITS-32
 ( 0804,AEA8 )   :X_CELLS   dl docol H_CELLS 0 X_CELL+ 
 ( 0804,AEB8 )                 dl N_CELLS 0 
 ( 0804,AEC0 )   :H_CELLS   dl X_2 X_LSHIFT 
-( 0804,AEC8 )                 dl semis 
+( 0804,AEC8 )                 dl X_(;) 
 
 ( 0804,AECC )   :N_CHAR+   d$  5  0  0  0  "CHAR+" 90 
 ( 0804,AED6 )                 d$  90  90 
@@ -1605,17 +1605,17 @@ BITS-32
 ( 0804,AEF0 )   :N_CHARS   d$  5  0  0  0  "CHARS" 90 
 ( 0804,AEFA )                 d$  90  90 
 
-( 0804,AEFC )   :X_CHARS   dl docol H_CHARS H_U0 X_CHAR+ 
+( 0804,AEFC )   :X_CHARS   dl docol H_CHARS 4 X_CHAR+ 
 ( 0804,AF0C )                 dl N_CHARS 0 
-( 0804,AF14 )   :H_CHARS   dl semis 
+( 0804,AF14 )   :H_CHARS   dl X_(;) 
 
 ( 0804,AF18 )   :N_ALIGN   d$  5  0  0  0  "ALIGN" 90 
 ( 0804,AF22 )                 d$  90  90 
 
-( 0804,AF24 )   :X_ALIGN   dl docol H_ALIGN H_U0 X_CHARS 
+( 0804,AF24 )   :X_ALIGN   dl docol H_ALIGN 4 X_CHARS 
 ( 0804,AF34 )                 dl N_ALIGN 0 
 ( 0804,AF3C )   :H_ALIGN   dl X_DP X_@ 
-( 0804,AF44 )                 dl X_ALIGNED X_DP X_! semis 
+( 0804,AF44 )                 dl X_ALIGNED X_DP X_! X_(;) 
 
 ( 0804,AF54 )   :N_ALIGNED   d$  7  0  0  0  "ALIGNED" 90 
 
@@ -1636,7 +1636,7 @@ BITS-32
 ( 0804,AF8C )   :X_HERE   dl docol H_HERE 0 X_ALIGNED 
 ( 0804,AF9C )                 dl N_HERE 0 
 ( 0804,AFA4 )   :H_HERE   dl X_DP X_@ 
-( 0804,AFAC )                 dl semis 
+( 0804,AFAC )                 dl X_(;) 
 
 ( 0804,AFB0 )   :N_ALLOT   d$  5  0  0  0  "ALLOT" 90 
 ( 0804,AFBA )                 d$  90  90 
@@ -1644,7 +1644,7 @@ BITS-32
 ( 0804,AFBC )   :X_ALLOT   dl docol H_ALLOT 0 X_HERE 
 ( 0804,AFCC )                 dl N_ALLOT 0 
 ( 0804,AFD4 )   :H_ALLOT   dl X_DP X_+! 
-( 0804,AFDC )                 dl semis 
+( 0804,AFDC )                 dl X_(;) 
 
 ( 0804,AFE0 )   :N_,   d$  1  0  0  0  &, 90 
 ( 0804,AFE6 )                 d$  90  90 
@@ -1652,7 +1652,7 @@ BITS-32
 ( 0804,AFE8 )   :X_,   dl docol H_, 0 X_ALLOT 
 ( 0804,AFF8 )                 dl N_, 0 
 ( 0804,B000 )   :H_,   dl X_HERE X_! 
-( 0804,B008 )                 dl X_LIT H_U0 X_ALLOT semis 
+( 0804,B008 )                 dl X_LIT 4 X_ALLOT X_(;) 
 
 ( 0804,B018 )   :N_C,   d$  2  0  0  0  "C," 90 
 ( 0804,B01F )                 d$  90 
@@ -1660,7 +1660,7 @@ BITS-32
 ( 0804,B020 )   :X_C,   dl docol H_C, 0 X_, 
 ( 0804,B030 )                 dl N_C, 0 
 ( 0804,B038 )   :H_C,   dl X_HERE X_C! 
-( 0804,B040 )                 dl X_1 X_ALLOT semis 
+( 0804,B040 )                 dl X_1 X_ALLOT X_(;) 
 
 ( 0804,B04C )   :N_-   d$  1  0  0  0  &- 90 
 ( 0804,B052 )                 d$  90  90 
@@ -1680,7 +1680,7 @@ BITS-32
 ( 0804,B07C )   :X_=   dl docol H_= 0 X_- 
 ( 0804,B08C )                 dl N_= 0 
 ( 0804,B094 )   :H_=   dl X_- X_0= 
-( 0804,B09C )                 dl semis 
+( 0804,B09C )                 dl X_(;) 
 
 ( 0804,B0A0 )   :N_<   d$  1  0  0  0  &< 90 
 ( 0804,B0A6 )                 d$  90  90 
@@ -1720,7 +1720,7 @@ BITS-32
 ( 0804,B104 )   :X_>   dl docol H_> 0 X_U< 
 ( 0804,B114 )                 dl N_> 0 
 ( 0804,B11C )   :H_>   dl X_SWAP X_< 
-( 0804,B124 )                 dl semis 
+( 0804,B124 )                 dl X_(;) 
 
 ( 0804,B128 )   :N_<>   d$  2  0  0  0  "<>" 90 
 ( 0804,B12F )                 d$  90 
@@ -1728,7 +1728,7 @@ BITS-32
 ( 0804,B130 )   :X_<>   dl docol H_<> 0 X_> 
 ( 0804,B140 )                 dl N_<> 0 
 ( 0804,B148 )   :H_<>   dl X_- X_0= 
-( 0804,B150 )                 dl X_0= semis 
+( 0804,B150 )                 dl X_0= X_(;) 
 
 ( 0804,B158 )   :N_ROT   d$  3  0  0  0  "ROT" 90 
 
@@ -1751,14 +1751,14 @@ BITS-32
 ( 0804,B190 )   :X_SPACE   dl docol H_SPACE 0 X_ROT 
 ( 0804,B1A0 )                 dl N_SPACE 0 
 ( 0804,B1A8 )   :H_SPACE   dl X_BL X_EMIT 
-( 0804,B1B0 )                 dl semis 
+( 0804,B1B0 )                 dl X_(;) 
 
 ( 0804,B1B4 )   :N_?DUP   d$  4  0  0  0  "?DUP"
 
 ( 0804,B1BC )   :X_?DUP   dl docol H_?DUP 0 X_SPACE 
 ( 0804,B1CC )                 dl N_?DUP 0 
 ( 0804,B1D4 )   :H_?DUP   dl X_DUP X_0BRANCH 
-( 0804,B1DC )                 dl H_U0 X_DUP semis 
+( 0804,B1DC )                 dl 4 X_DUP X_(;) 
 
 ( 0804,B1E8 )   :N_LATEST   d$  6  0  0  0  "LATEST" 90 
 ( 0804,B1F3 )                 d$  90 
@@ -1766,56 +1766,56 @@ BITS-32
 ( 0804,B1F4 )   :X_LATEST   dl docol H_LATEST 0 X_?DUP 
 ( 0804,B204 )                 dl N_LATEST 0 
 ( 0804,B20C )   :H_LATEST   dl X_CURRENT X_@ 
-( 0804,B214 )                 dl X_>LFA X_@ semis 
+( 0804,B214 )                 dl X_>LFA X_@ X_(;) 
 
 ( 0804,B220 )   :N_>CFA   d$  4  0  0  0  ">CFA"
 
 ( 0804,B228 )   :X_>CFA   dl docol H_>CFA 0 X_LATEST 
 ( 0804,B238 )                 dl N_>CFA 0 
 ( 0804,B240 )   :H_>CFA   dl X_LIT 0 
-( 0804,B248 )                 dl X_+ semis 
+( 0804,B248 )                 dl X_+ X_(;) 
 
 ( 0804,B250 )   :N_>DFA   d$  4  0  0  0  ">DFA"
 
 ( 0804,B258 )   :X_>DFA   dl docol H_>DFA 0 X_>CFA 
 ( 0804,B268 )                 dl N_>DFA 0 
-( 0804,B270 )   :H_>DFA   dl X_LIT H_U0 
-( 0804,B278 )                 dl X_+ semis 
+( 0804,B270 )   :H_>DFA   dl X_LIT 4 
+( 0804,B278 )                 dl X_+ X_(;) 
 
 ( 0804,B280 )   :N_>FFA   d$  4  0  0  0  ">FFA"
 
 ( 0804,B288 )   :X_>FFA   dl docol H_>FFA 0 X_>DFA 
 ( 0804,B298 )                 dl N_>FFA 0 
-( 0804,B2A0 )   :H_>FFA   dl X_LIT H_#BUFF 
-( 0804,B2A8 )                 dl X_+ semis 
+( 0804,B2A0 )   :H_>FFA   dl X_LIT 8 
+( 0804,B2A8 )                 dl X_+ X_(;) 
 
 ( 0804,B2B0 )   :N_>LFA   d$  4  0  0  0  ">LFA"
 
 ( 0804,B2B8 )   :X_>LFA   dl docol H_>LFA 0 X_>FFA 
 ( 0804,B2C8 )                 dl N_>LFA 0 
-( 0804,B2D0 )   :H_>LFA   dl X_LIT H_R0 
-( 0804,B2D8 )                 dl X_+ semis 
+( 0804,B2D0 )   :H_>LFA   dl X_LIT 0C 
+( 0804,B2D8 )                 dl X_+ X_(;) 
 
 ( 0804,B2E0 )   :N_>NFA   d$  4  0  0  0  ">NFA"
 
 ( 0804,B2E8 )   :X_>NFA   dl docol H_>NFA 0 X_>LFA 
 ( 0804,B2F8 )                 dl N_>NFA 0 
 ( 0804,B300 )   :H_>NFA   dl X_LIT H_TIB 
-( 0804,B308 )                 dl X_+ semis 
+( 0804,B308 )                 dl X_+ X_(;) 
 
 ( 0804,B310 )   :N_>SFA   d$  4  0  0  0  ">SFA"
 
 ( 0804,B318 )   :X_>SFA   dl docol H_>SFA 0 X_>NFA 
 ( 0804,B328 )                 dl N_>SFA 0 
 ( 0804,B330 )   :H_>SFA   dl X_LIT H_RUBOUT 
-( 0804,B338 )                 dl X_+ semis 
+( 0804,B338 )                 dl X_+ X_(;) 
 
 ( 0804,B340 )   :N_>PHA   d$  4  0  0  0  ">PHA"
 
 ( 0804,B348 )   :X_>PHA   dl docol H_>PHA 0 X_>SFA 
 ( 0804,B358 )                 dl N_>PHA 0 
-( 0804,B360 )   :H_>PHA   dl X_LIT 18 
-( 0804,B368 )                 dl X_+ semis 
+( 0804,B360 )   :H_>PHA   dl X_LIT H_RUBOUT 4 + 
+( 0804,B368 )                 dl X_+ X_(;) 
 
 ( 0804,B370 )   :N_>BODY   d$  5  0  0  0  ">BODY" 90 
 ( 0804,B37A )                 d$  90  90 
@@ -1823,7 +1823,7 @@ BITS-32
 ( 0804,B37C )   :X_>BODY   dl docol H_>BODY 0 X_>PHA 
 ( 0804,B38C )                 dl N_>BODY 0 
 ( 0804,B394 )   :H_>BODY   dl X_CFA> X_>DFA 
-( 0804,B39C )                 dl X_@ X_CELL+ semis 
+( 0804,B39C )                 dl X_@ X_CELL+ X_(;) 
 
 ( 0804,B3A8 )   :N_BODY>   d$  5  0  0  0  "BODY>" 90 
 ( 0804,B3B2 )                 d$  90  90 
@@ -1831,34 +1831,34 @@ BITS-32
 ( 0804,B3B4 )   :X_BODY>   dl docol H_BODY> 0 X_>BODY 
 ( 0804,B3C4 )                 dl N_BODY> 0 
 ( 0804,B3CC )   :H_BODY>   dl X_LIT H_WARNING 
-( 0804,B3D4 )                 dl X_- semis 
+( 0804,B3D4 )                 dl X_- X_(;) 
 
 ( 0804,B3DC )   :N_CFA>   d$  4  0  0  0  "CFA>"
 
 ( 0804,B3E4 )   :X_CFA>   dl docol H_CFA> 0 X_BODY> 
 ( 0804,B3F4 )                 dl N_CFA> 0 
 ( 0804,B3FC )   :H_CFA>   dl X_LIT 0 
-( 0804,B404 )                 dl X_- semis 
+( 0804,B404 )                 dl X_- X_(;) 
 
 ( 0804,B40C )   :N_>WID   d$  4  0  0  0  ">WID"
 
 ( 0804,B414 )   :X_>WID   dl docol H_>WID 0 X_CFA> 
 ( 0804,B424 )                 dl N_>WID 0 
 ( 0804,B42C )   :H_>WID   dl X_>BODY X_CELL+ 
-( 0804,B434 )                 dl semis 
+( 0804,B434 )                 dl X_(;) 
 
 ( 0804,B438 )   :N_>VFA   d$  4  0  0  0  ">VFA"
 
 ( 0804,B440 )   :X_>VFA   dl docol H_>VFA 0 X_>WID 
 ( 0804,B450 )                 dl N_>VFA 0 
-( 0804,B458 )   :H_>VFA   dl X_>BODY semis 
+( 0804,B458 )   :H_>VFA   dl X_>BODY X_(;) 
 
 ( 0804,B460 )   :N_!CSP   d$  4  0  0  0  "!CSP"
 
 ( 0804,B468 )   :X_!CSP   dl docol H_!CSP 0 X_>VFA 
 ( 0804,B478 )                 dl N_!CSP 0 
 ( 0804,B480 )   :H_!CSP   dl X_DSP@ X_CSP 
-( 0804,B488 )                 dl X_! semis 
+( 0804,B488 )                 dl X_! X_(;) 
 
 ( 0804,B490 )   :N_?ERROR   d$  6  0  0  0  "?ERROR" 90 
 ( 0804,B49B )                 d$  90 
@@ -1868,7 +1868,7 @@ BITS-32
 ( 0804,B4B4 )   :H_?ERROR   dl X_SWAP X_0BRANCH 
 ( 0804,B4BC )                 dl H_DP X_IN X_@ X_SRC 
 ( 0804,B4CC )                 dl X_@ X_WHERE X_2! X_THROW 
-( 0804,B4DC )                 dl X_BRANCH H_U0 X_DROP semis 
+( 0804,B4DC )                 dl X_BRANCH 4 X_DROP X_(;) 
 
 ( 0804,B4EC )   :N_?ERRUR   d$  6  0  0  0  "?ERRUR" 90 
 ( 0804,B4F7 )                 d$  90 
@@ -1876,7 +1876,7 @@ BITS-32
 ( 0804,B4F8 )   :X_?ERRUR   dl docol H_?ERRUR 0 X_?ERROR 
 ( 0804,B508 )                 dl N_?ERRUR 0 
 ( 0804,B510 )   :H_?ERRUR   dl X_0 X_MIN 
-( 0804,B518 )                 dl X_DUP X_?ERROR semis 
+( 0804,B518 )                 dl X_DUP X_?ERROR X_(;) 
 
 ( 0804,B524 )   :N_?DELIM   d$  6  0  0  0  "?DELIM" 90 
 ( 0804,B52F )                 d$  90 
@@ -1885,7 +1885,7 @@ BITS-32
 ( 0804,B540 )                 dl N_?DELIM 0 
 ( 0804,B548 )   :H_?DELIM   dl X_IN[] X_?BLANK 
 ( 0804,B550 )                 dl X_0= X_LIT 0A X_?ERROR 
-( 0804,B560 )                 dl X_DROP semis 
+( 0804,B560 )                 dl X_DROP X_(;) 
 
 ( 0804,B568 )   :N_?CSP   d$  4  0  0  0  "?CSP"
 
@@ -1893,7 +1893,7 @@ BITS-32
 ( 0804,B580 )                 dl N_?CSP 0 
 ( 0804,B588 )   :H_?CSP   dl X_DSP@ X_CSP 
 ( 0804,B590 )                 dl X_@ X_- X_LIT H_RUBOUT 
-( 0804,B5A0 )                 dl X_?ERROR semis 
+( 0804,B5A0 )                 dl X_?ERROR X_(;) 
 
 ( 0804,B5A8 )   :N_?COMP   d$  5  0  0  0  "?COMP" 90 
 ( 0804,B5B2 )                 d$  90  90 
@@ -1901,8 +1901,8 @@ BITS-32
 ( 0804,B5B4 )   :X_?COMP   dl docol H_?COMP 0 X_?CSP 
 ( 0804,B5C4 )                 dl N_?COMP 0 
 ( 0804,B5CC )   :H_?COMP   dl X_STATE X_@ 
-( 0804,B5D4 )                 dl X_0= X_LIT 11 X_?ERROR 
-( 0804,B5E4 )                 dl semis 
+( 0804,B5D4 )                 dl X_0= X_LIT H_TIB 1 + X_?ERROR 
+( 0804,B5E4 )                 dl X_(;) 
 
 ( 0804,B5E8 )   :N_?EXEC   d$  5  0  0  0  "?EXEC" 90 
 ( 0804,B5F2 )                 d$  90  90 
@@ -1910,7 +1910,7 @@ BITS-32
 ( 0804,B5F4 )   :X_?EXEC   dl docol H_?EXEC 0 X_?COMP 
 ( 0804,B604 )                 dl N_?EXEC 0 
 ( 0804,B60C )   :H_?EXEC   dl X_STATE X_@ 
-( 0804,B614 )                 dl X_LIT 12 X_?ERROR semis 
+( 0804,B614 )                 dl X_LIT H_TIB 2 + X_?ERROR X_(;) 
 
 ( 0804,B624 )   :N_?PAIRS   d$  6  0  0  0  "?PAIRS" 90 
 ( 0804,B62F )                 d$  90 
@@ -1918,23 +1918,23 @@ BITS-32
 ( 0804,B630 )   :X_?PAIRS   dl docol H_?PAIRS 0 X_?EXEC 
 ( 0804,B640 )                 dl N_?PAIRS 0 
 ( 0804,B648 )   :H_?PAIRS   dl X_- X_LIT 
-( 0804,B650 )                 dl 13 X_?ERROR semis 
+( 0804,B650 )                 dl H_TIB 3 + X_?ERROR X_(;) 
 
 ( 0804,B65C )   :N_?LOADING   d$  8  0  0  0  "?LOADING"
 
 ( 0804,B668 )   :X_?LOADING   dl docol H_?LOADING 0 X_?PAIRS 
 ( 0804,B678 )                 dl N_?LOADING 0 
 ( 0804,B680 )   :H_?LOADING   dl X_BLK X_@ 
-( 0804,B688 )                 dl X_0= X_LIT 16 X_?ERROR 
-( 0804,B698 )                 dl semis 
+( 0804,B688 )                 dl X_0= X_LIT H_RUBOUT 2 + X_?ERROR 
+( 0804,B698 )                 dl X_(;) 
 
 ( 0804,B69C )   :N_[   d$  1  0  0  0  &[ 90 
 ( 0804,B6A2 )                 d$  90  90 
 
-( 0804,B6A4 )   :X_[   dl docol H_[ H_U0 X_?LOADING 
+( 0804,B6A4 )   :X_[   dl docol H_[ 4 X_?LOADING 
 ( 0804,B6B4 )                 dl N_[ 0 
 ( 0804,B6BC )   :H_[   dl X_0 X_STATE 
-( 0804,B6C4 )                 dl X_! semis 
+( 0804,B6C4 )                 dl X_! X_(;) 
 
 ( 0804,B6CC )   :N_]   d$  1  0  0  0  &] 90 
 ( 0804,B6D2 )                 d$  90  90 
@@ -1942,7 +1942,7 @@ BITS-32
 ( 0804,B6D4 )   :X_]   dl docol H_] 0 X_[ 
 ( 0804,B6E4 )                 dl N_] 0 
 ( 0804,B6EC )   :H_]   dl X_1 X_STATE 
-( 0804,B6F4 )                 dl X_! semis 
+( 0804,B6F4 )                 dl X_! X_(;) 
 
 ( 0804,B6FC )   :N_HIDDEN   d$  6  0  0  0  "HIDDEN" 90 
 ( 0804,B707 )                 d$  90 
@@ -1950,46 +1950,46 @@ BITS-32
 ( 0804,B708 )   :X_HIDDEN   dl docol H_HIDDEN 0 X_] 
 ( 0804,B718 )                 dl N_HIDDEN 0 
 ( 0804,B720 )   :H_HIDDEN   dl X_>FFA X_LIT 
-( 0804,B728 )                 dl 2 X_TOGGLE semis 
+( 0804,B728 )                 dl 2 X_TOGGLE X_(;) 
 
 ( 0804,B734 )   :N_HEX   d$  3  0  0  0  "HEX" 90 
 
 ( 0804,B73C )   :X_HEX   dl docol H_HEX 0 X_HIDDEN 
 ( 0804,B74C )                 dl N_HEX 0 
 ( 0804,B754 )   :H_HEX   dl X_LIT H_TIB 
-( 0804,B75C )                 dl X_BASE X_! semis 
+( 0804,B75C )                 dl X_BASE X_! X_(;) 
 
 ( 0804,B768 )   :N_DECIMAL   d$  7  0  0  0  "DECIMAL" 90 
 
 ( 0804,B774 )   :X_DECIMAL   dl docol H_DECIMAL 0 X_HEX 
 ( 0804,B784 )                 dl N_DECIMAL 0 
 ( 0804,B78C )   :H_DECIMAL   dl X_LIT 0A 
-( 0804,B794 )                 dl X_BASE X_! semis 
+( 0804,B794 )                 dl X_BASE X_! X_(;) 
 
 ( 0804,B7A0 )   :N_(;CODE)   d$  7  0  0  0  "(;CODE)" 90 
 
-( 0804,B7AC )   :semiscode :X_(;CODE)   dl docol H_(;CODE) 0 X_DECIMAL 
+( 0804,B7AC )   :X_(;CODE)   dl docol H_(;CODE) 0 X_DECIMAL 
 ( 0804,B7BC )                 dl N_(;CODE) 0 
 ( 0804,B7C4 )   :H_(;CODE)   dl X_R> X_LATEST 
-( 0804,B7CC )                 dl X_>CFA X_! semis 
+( 0804,B7CC )                 dl X_>CFA X_! X_(;) 
 
 ( 0804,B7D8 )   :N_CREATE   d$  6  0  0  0  "CREATE" 90 
 ( 0804,B7E3 )                 d$  90 
 
-( 0804,B7E4 )   :X_CREATE   dl docol H_CREATE 0 semiscode 
+( 0804,B7E4 )   :X_CREATE   dl docol H_CREATE 0 X_(;CODE) 
 ( 0804,B7F4 )                 dl N_CREATE 0 
 ( 0804,B7FC )   :H_CREATE   dl X_(WORD) X_(CREATE) 
-( 0804,B804 )                 dl X_LIT (DODOES) X_, semiscode 
+( 0804,B804 )                 dl X_LIT (DODOES) X_, X_(;CODE) 
 
 ( 0804,B814 )   :dodoes    LEA, BP'| BO| [BP] 0FC B, 
 ( 0804,B817 )                  MOV, X| F| SI'| BO| [BP] 0 B, 
-( 0804,B81A )                  MOV, X| T| SI'| BO| [AX] H_U0 B, 
-( 0804,B81D )                  LEA, AX'| BO| [SI] H_U0 B, 
+( 0804,B81A )                  MOV, X| T| SI'| BO| [AX] 4 B, 
+( 0804,B81D )                  LEA, AX'| BO| [SI] 4 B, 
 ( 0804,B820 )                  MOV, X| T| SI'| ZO| [SI] 
 ( 0804,B822 )                  PUSH|X, AX| 
 ( 0804,B823 )                  LODS, X'| 
 ( 0804,B824 )                  JMPO, ZO| [AX] 
-( 0804,B826 )   :(DODOES)   dl semis 
+( 0804,B826 )   :(DODOES)   dl X_(;) 
 
 ( 0804,B82A )                 d$  90  90 
 
@@ -1999,7 +1999,7 @@ BITS-32
 ( 0804,B838 )   :X_DOES>   dl docol H_DOES> 0 X_CREATE 
 ( 0804,B848 )                 dl N_DOES> 0 
 ( 0804,B850 )   :H_DOES>   dl X_R> X_LATEST 
-( 0804,B858 )                 dl X_>DFA X_@ X_! semis 
+( 0804,B858 )                 dl X_>DFA X_@ X_! X_(;) 
 
 ( 0804,B868 )   :N_COUNT   d$  5  0  0  0  "COUNT" 90 
 ( 0804,B872 )                 d$  90  90 
@@ -2007,7 +2007,7 @@ BITS-32
 ( 0804,B874 )   :X_COUNT   dl docol H_COUNT 0 X_DOES> 
 ( 0804,B884 )                 dl N_COUNT 0 
 ( 0804,B88C )   :H_COUNT   dl X_DUP X_1+ 
-( 0804,B894 )                 dl X_SWAP X_C@ semis 
+( 0804,B894 )                 dl X_SWAP X_C@ X_(;) 
 
 ( 0804,B8A0 )   :N_-TRAILING   d$  ^I 0  0  0  "-TRAILING" 90 
 ( 0804,B8AE )                 d$  90  90 
@@ -2015,36 +2015,36 @@ BITS-32
 ( 0804,B8B0 )   :X_-TRAILING   dl docol H_-TRAILING 0 X_COUNT 
 ( 0804,B8C0 )                 dl N_-TRAILING 0 
 ( 0804,B8C8 )   :H_-TRAILING   dl X_DUP X_0 
-( 0804,B8D0 )                 dl X_(?DO) 3C X_OVER X_OVER 
+( 0804,B8D0 )                 dl X_(?DO) H_REMAINDER 4 + X_OVER X_OVER 
 ( 0804,B8E0 )                 dl X_+ X_1 X_- X_C@ 
-( 0804,B8F0 )                 dl X_?BLANK X_0= X_0BRANCH H_U0 
+( 0804,B8F0 )                 dl X_?BLANK X_0= X_0BRANCH 4 
 ( 0804,B900 )                 dl X_LEAVE X_1 X_- X_(LOOP) 
-( 0804,B910 )                 dl -3C semis 
+( 0804,B910 )                 dl -3C X_(;) 
 
 ( 0804,B918 )   :N_S"   d$  2  0  0  0  "S""" 90 
 ( 0804,B91F )                 d$  90 
 
-( 0804,B920 )   :X_S"   dl docol H_S" H_U0 X_-TRAILING 
+( 0804,B920 )   :X_S"   dl docol H_S" 4 X_-TRAILING 
 ( 0804,B930 )                 dl N_S" 0 
-( 0804,B938 )   :H_S"   dl X_" semis 
+( 0804,B938 )   :H_S"   dl X_" X_(;) 
 
 ( 0804,B940 )   :N_."   d$  2  0  0  0  ".""" 90 
 ( 0804,B947 )                 d$  90 
 
-( 0804,B948 )   :X_."   dl docol H_." H_U0 X_S" 
+( 0804,B948 )   :X_."   dl docol H_." 4 X_S" 
 ( 0804,B958 )                 dl N_." 0 
 ( 0804,B960 )   :H_."   dl X_" X_STATE 
 ( 0804,B968 )                 dl X_@ X_0BRANCH H_RUBOUT X_LIT 
-( 0804,B978 )                 dl X_TYPE X_, X_BRANCH H_U0 
-( 0804,B988 )                 dl X_TYPE semis 
+( 0804,B978 )                 dl X_TYPE X_, X_BRANCH 4 
+( 0804,B988 )                 dl X_TYPE X_(;) 
 
 ( 0804,B990 )   :N_.(   d$  2  0  0  0  ".(" 90 
 ( 0804,B997 )                 d$  90 
 
-( 0804,B998 )   :X_.(   dl docol H_.( H_U0 X_." 
+( 0804,B998 )   :X_.(   dl docol H_.( 4 X_." 
 ( 0804,B9A8 )                 dl N_.( 0 
-( 0804,B9B0 )   :H_.(   dl X_LIT 29 
-( 0804,B9B8 )                 dl X_(PARSE) X_TYPE semis 
+( 0804,B9B0 )   :H_.(   dl X_LIT H_VOC-LINK 1 + 
+( 0804,B9B8 )                 dl X_(PARSE) X_TYPE X_(;) 
 
 ( 0804,B9C4 )   :N_SET-SRC   d$  7  0  0  0  "SET-SRC" 90 
 
@@ -2052,7 +2052,7 @@ BITS-32
 ( 0804,B9E0 )                 dl N_SET-SRC 0 
 ( 0804,B9E8 )   :H_SET-SRC   dl X_OVER X_+ 
 ( 0804,B9F0 )                 dl X_SWAP X_SRC X_2! X_SRC 
-( 0804,BA00 )                 dl X_@ X_IN X_! semis 
+( 0804,BA00 )                 dl X_@ X_IN X_! X_(;) 
 
 ( 0804,BA10 )   :N_EVALUATE   d$  8  0  0  0  "EVALUATE"
 
@@ -2060,7 +2060,7 @@ BITS-32
 ( 0804,BA2C )                 dl N_EVALUATE 0 
 ( 0804,BA34 )   :H_EVALUATE   dl X_SAVE X_SET-SRC 
 ( 0804,BA3C )                 dl X_LIT X_INTERPRET X_CATCH X_RESTORE 
-( 0804,BA4C )                 dl X_THROW semis 
+( 0804,BA4C )                 dl X_THROW X_(;) 
 
 ( 0804,BA54 )   :N_FILL   d$  4  0  0  0  "FILL"
 
@@ -2154,7 +2154,7 @@ BITS-32
 ( 0804,BB38 )   :X_ERASE   dl docol H_ERASE 0 X_$S 
 ( 0804,BB48 )                 dl N_ERASE 0 
 ( 0804,BB50 )   :H_ERASE   dl X_0 X_FILL 
-( 0804,BB58 )                 dl semis 
+( 0804,BB58 )                 dl X_(;) 
 
 ( 0804,BB5C )   :N_BLANK   d$  5  0  0  0  "BLANK" 90 
 ( 0804,BB66 )                 d$  90  90 
@@ -2162,7 +2162,7 @@ BITS-32
 ( 0804,BB68 )   :X_BLANK   dl docol H_BLANK 0 X_ERASE 
 ( 0804,BB78 )                 dl N_BLANK 0 
 ( 0804,BB80 )   :H_BLANK   dl X_BL X_FILL 
-( 0804,BB88 )                 dl semis 
+( 0804,BB88 )                 dl X_(;) 
 
 ( 0804,BB8C )   :N_HOLD   d$  4  0  0  0  "HOLD"
 
@@ -2170,14 +2170,14 @@ BITS-32
 ( 0804,BBA4 )                 dl N_HOLD 0 
 ( 0804,BBAC )   :H_HOLD   dl X_LIT -1 
 ( 0804,BBB4 )                 dl X_HLD X_+! X_HLD X_@ 
-( 0804,BBC4 )                 dl X_C! semis 
+( 0804,BBC4 )                 dl X_C! X_(;) 
 
 ( 0804,BBCC )   :N_PAD   d$  3  0  0  0  "PAD" 90 
 
 ( 0804,BBD4 )   :X_PAD   dl docol H_PAD 0 X_HOLD 
 ( 0804,BBE4 )                 dl N_PAD 0 
 ( 0804,BBEC )   :H_PAD   dl X_HERE X_LIT 
-( 0804,BBF4 )                 dl 0114 X_+ semis 
+( 0804,BBF4 )                 dl 0114 X_+ X_(;) 
 
 ( 0804,BC00 )   :N_WORD   d$  4  0  0  0  "WORD"
 
@@ -2187,26 +2187,26 @@ BITS-32
 ( 0804,BC28 )                 dl X_= X_0BRANCH H_TIB X_DROP 
 ( 0804,BC38 )                 dl X_(WORD) X_BRANCH H_C/L X_>R 
 ( 0804,BC48 )                 dl X_IN[] X_R@ X_= X_0BRANCH 
-( 0804,BC58 )                 dl H_R0 X_DROP X_BRANCH -20 
+( 0804,BC58 )                 dl 0C X_DROP X_BRANCH -20 
 ( 0804,BC68 )                 dl X_DROP X_LIT -1 X_IN 
 ( 0804,BC78 )                 dl X_+! X_R> X_(PARSE) X_HERE 
-( 0804,BC88 )                 dl X_LIT 22 X_BLANK X_HERE 
-( 0804,BC98 )                 dl X_$!-BD X_HERE semis 
+( 0804,BC88 )                 dl X_LIT H_FENCE 2 + X_BLANK X_HERE 
+( 0804,BC98 )                 dl X_$!-BD X_HERE X_(;) 
 
 ( 0804,BCA4 )   :N_CHAR   d$  4  0  0  0  "CHAR"
 
 ( 0804,BCAC )   :X_CHAR   dl docol H_CHAR 0 X_WORD 
 ( 0804,BCBC )                 dl N_CHAR 0 
 ( 0804,BCC4 )   :H_CHAR   dl X_(WORD) X_DROP 
-( 0804,BCCC )                 dl X_C@ semis 
+( 0804,BCCC )                 dl X_C@ X_(;) 
 
 ( 0804,BCD4 )   :N_[CHAR]   d$  6  0  0  0  "[CHAR]" 90 
 ( 0804,BCDF )                 d$  90 
 
-( 0804,BCE0 )   :X_[CHAR]   dl docol H_[CHAR] H_U0 X_CHAR 
+( 0804,BCE0 )   :X_[CHAR]   dl docol H_[CHAR] 4 X_CHAR 
 ( 0804,BCF0 )                 dl N_[CHAR] 0 
 ( 0804,BCF8 )   :H_[CHAR]   dl X_CHAR X_LITERAL 
-( 0804,BD00 )                 dl semis 
+( 0804,BD00 )                 dl X_(;) 
 
 ( 0804,BD04 )   :N_(NUMBER)   d$  8  0  0  0  "(NUMBER)"
 
@@ -2214,9 +2214,9 @@ BITS-32
 ( 0804,BD20 )                 dl N_(NUMBER) 0 
 ( 0804,BD28 )   :H_(NUMBER)   dl X_0 X_0 
 ( 0804,BD30 )                 dl X_0 X_DPL X_! X_IN[] 
-( 0804,BD40 )                 dl X_DUP X_LIT 2E X_= 
-( 0804,BD50 )                 dl X_0BRANCH 18 X_DROP X_DPL 
-( 0804,BD60 )                 dl X_! X_0 X_BRANCH 9C 
+( 0804,BD40 )                 dl X_DUP X_LIT H_OFFSET 2 + X_= 
+( 0804,BD50 )                 dl X_0BRANCH H_RUBOUT 4 + X_DROP X_DPL 
+( 0804,BD60 )                 dl X_! X_0 X_BRANCH H_CONTEXT 8 + 
 ( 0804,BD70 )                 dl X_DUP X_LIT H_OFFSET X_= 
 ( 0804,BD80 )                 dl X_0BRANCH H_TIB X_2DROP X_0 
 ( 0804,BD90 )                 dl X_BRANCH H_IN X_DUP X_?BLANK 
@@ -2227,7 +2227,7 @@ BITS-32
 ( 0804,BDE0 )                 dl X_SWAP X_BASE X_@ X_UM* 
 ( 0804,BDF0 )                 dl X_DROP X_ROT X_BASE X_@ 
 ( 0804,BE00 )                 dl X_UM* X_D+ X_0 X_0BRANCH 
-( 0804,BE10 )                 dl -D8 semis 
+( 0804,BE10 )                 dl -D8 X_(;) 
 
 ( 0804,BE18 )   :N_NUMBER   d$  6  0  0  0  "NUMBER" 90 
 ( 0804,BE23 )                 d$  90 
@@ -2236,7 +2236,7 @@ BITS-32
 ( 0804,BE34 )                 dl N_NUMBER 0 
 ( 0804,BE3C )   :donumber   dl X_LIT -1 
 ( 0804,BE44 )                 dl X_IN X_+! X_(NUMBER) X_SDLITERAL 
-( 0804,BE54 )                 dl semis 
+( 0804,BE54 )                 dl X_(;) 
 
 ( 0804,BE58 )   :N_>NUMBER   d$  7  0  0  0  ">NUMBER" 90 
 
@@ -2245,13 +2245,13 @@ BITS-32
 ( 0804,BE7C )   :H_>NUMBER   dl X_2DUP X_+ 
 ( 0804,BE84 )                 dl X_>R X_0 X_(?DO) H_(BLK) 
 ( 0804,BE94 )                 dl X_DUP X_C@ X_BASE X_@ 
-( 0804,BEA4 )                 dl X_DIGIT X_0= X_0BRANCH H_#BUFF 
+( 0804,BEA4 )                 dl X_DIGIT X_0= X_0BRANCH 8 
 ( 0804,BEB4 )                 dl X_DROP X_LEAVE X_SWAP X_>R 
 ( 0804,BEC4 )                 dl X_SWAP X_BASE X_@ X_UM* 
 ( 0804,BED4 )                 dl X_DROP X_ROT X_BASE X_@ 
 ( 0804,BEE4 )                 dl X_UM* X_D+ X_R> X_1+ 
 ( 0804,BEF4 )                 dl X_(LOOP) -68 X_R> X_OVER 
-( 0804,BF04 )                 dl X_- semis 
+( 0804,BF04 )                 dl X_- X_(;) 
 
 ( 0804,BF0C )   :N_FOUND   d$  5  0  0  0  "FOUND" 90 
 ( 0804,BF16 )                 d$  90  90 
@@ -2265,7 +2265,7 @@ BITS-32
 ( 0804,BF68 )                 dl X_- X_0BRANCH H_RUBOUT X_R> 
 ( 0804,BF78 )                 dl X_CELL+ X_>R X_BRANCH -50 
 ( 0804,BF88 )                 dl X_0 X_RDROP X_SWAP X_DROP 
-( 0804,BF98 )                 dl X_SWAP X_DROP semis 
+( 0804,BF98 )                 dl X_SWAP X_DROP X_(;) 
 
 ( 0804,BFA4 )   :N_PRESENT   d$  7  0  0  0  "PRESENT" 90 
 
@@ -2275,7 +2275,7 @@ BITS-32
 ( 0804,BFD0 )                 dl X_FOUND X_DUP X_0BRANCH H_WARNING 
 ( 0804,BFE0 )                 dl X_DUP X_>NFA X_@ X_@ 
 ( 0804,BFF0 )                 dl X_R@ X_= X_AND X_RDROP 
-( 0804,C000 )                 dl semis 
+( 0804,C000 )                 dl X_(;) 
 
 ( 0804,C004 )   :N_FIND   d$  4  0  0  0  "FIND"
 
@@ -2285,9 +2285,9 @@ BITS-32
 ( 0804,C02C )                 dl X_PRESENT X_DUP X_0BRANCH H_C/L 
 ( 0804,C03C )                 dl X_SWAP X_DROP X_DUP X_>CFA 
 ( 0804,C04C )                 dl X_SWAP X_>FFA X_@ X_LIT 
-( 0804,C05C )                 dl H_U0 X_AND X_LIT -1 
-( 0804,C06C )                 dl X_SWAP X_0BRANCH H_U0 X_NEGATE 
-( 0804,C07C )                 dl semis 
+( 0804,C05C )                 dl 4 X_AND X_LIT -1 
+( 0804,C06C )                 dl X_SWAP X_0BRANCH 4 X_NEGATE 
+( 0804,C07C )                 dl X_(;) 
 
 ( 0804,C080 )   :N_(FIND)   d$  6  0  0  0  "(FIND)" 90 
 ( 0804,C08B )                 d$  90 
@@ -2297,7 +2297,7 @@ BITS-32
 ( 0804,C0A4 )   :H_(FIND)   dl X_DUP X_0BRANCH 
 ( 0804,C0AC )                 dl H_FENCE X_(MATCH) X_0= X_0BRANCH 
 ( 0804,C0BC )                 dl H_TIB X_>LFA X_@ X_BRANCH 
-( 0804,C0CC )                 dl -2C semis 
+( 0804,C0CC )                 dl -2C X_(;) 
 
 ( 0804,C0D4 )   :N_ERROR   d$  5  0  0  0  "ERROR" 90 
 ( 0804,C0DE )                 d$  90  90 
@@ -2307,14 +2307,14 @@ BITS-32
 ( 0804,C0F8 )   :H_ERROR   dl X_WHERE X_2@ 
 ( 0804,C100 )                 dl X_OVER X_LIT H_RUBOUT X_- 
 ( 0804,C110 )                 dl X_MAX X_SWAP X_OVER X_- 
-( 0804,C120 )                 dl X_ETYPE X_SKIP 12 
+( 0804,C120 )                 dl X_ETYPE X_SKIP H_TIB 2 + 
 ( 0804,C12C )   :NAME4   dl 6963,203F 
 ( 0804,C130 )                 dl 7472,6F66 5245,2068 2052,4F52 9090,2023 
-( 0804,C140 )                 dl X_LIT NAME4 X_LIT 12 
+( 0804,C140 )                 dl X_LIT NAME4 X_LIT H_TIB 2 + 
 ( 0804,C150 )                 dl X_ETYPE X_BASE X_@ X_DECIMAL 
 ( 0804,C160 )                 dl X_OVER X_S>D X_0 X_(D.R) 
 ( 0804,C170 )                 dl X_ETYPE X_BASE X_! X_MESSAGE 
-( 0804,C180 )                 dl semis 
+( 0804,C180 )                 dl X_(;) 
 
 ( 0804,C184 )   :N_CATCH   d$  5  0  0  0  "CATCH" 90 
 ( 0804,C18E )                 d$  90  90 
@@ -2325,7 +2325,7 @@ BITS-32
 ( 0804,C1B0 )                 dl X_>R X_HANDLER X_@ X_>R 
 ( 0804,C1C0 )                 dl X_RSP@ X_HANDLER X_! X_EXECUTE 
 ( 0804,C1D0 )                 dl X_R> X_HANDLER X_! X_RDROP 
-( 0804,C1E0 )                 dl X_0 semis 
+( 0804,C1E0 )                 dl X_0 X_(;) 
 
 ( 0804,C1E8 )   :N_THROW   d$  5  0  0  0  "THROW" 90 
 ( 0804,C1F2 )                 d$  90  90 
@@ -2334,12 +2334,12 @@ BITS-32
 ( 0804,C204 )                 dl N_THROW 0 
 ( 0804,C20C )   :H_THROW   dl X_DUP X_0BRANCH 
 ( 0804,C214 )                 dl H_R# X_HANDLER X_@ X_0= 
-( 0804,C224 )                 dl X_0BRANCH 18 X_ERROR X_EMPTY-BUFFERS 
+( 0804,C224 )                 dl X_0BRANCH H_RUBOUT 4 + X_ERROR X_EMPTY-BUFFERS 
 ( 0804,C234 )                 dl X_S0 X_@ X_DSP! X_QUIT 
 ( 0804,C244 )                 dl X_HANDLER X_@ X_RSP! X_R> 
 ( 0804,C254 )                 dl X_HANDLER X_! X_R> X_SWAP 
 ( 0804,C264 )                 dl X_>R X_DSP! X_R> X__ 
-( 0804,C274 )                 dl X_DROP semis 
+( 0804,C274 )                 dl X_DROP X_(;) 
 
 ( 0804,C27C )   :N_(ABORT")   d$  8  0  0  0  "(ABORT"")"
 
@@ -2347,15 +2347,15 @@ BITS-32
 ( 0804,C298 )                 dl N_(ABORT") 0 
 ( 0804,C2A0 )   :H_(ABORT")   dl X_ROT X_0BRANCH 
 ( 0804,C2A8 )                 dl H_RUBOUT X_ETYPE X_.SIGNON X_ABORT 
-( 0804,C2B8 )                 dl X_BRANCH H_U0 X_2DROP semis 
+( 0804,C2B8 )                 dl X_BRANCH 4 X_2DROP X_(;) 
 
 ( 0804,C2C8 )   :N_ABORT"   d$  6  0  0  0  "ABORT""" 90 
 ( 0804,C2D3 )                 d$  90 
 
-( 0804,C2D4 )   :X_ABORT"   dl docol H_ABORT" H_U0 X_(ABORT") 
+( 0804,C2D4 )   :X_ABORT"   dl docol H_ABORT" 4 X_(ABORT") 
 ( 0804,C2E4 )                 dl N_ABORT" 0 
 ( 0804,C2EC )   :H_ABORT"   dl X_?COMP X_" 
-( 0804,C2F4 )                 dl X_LIT X_(ABORT") X_, semis 
+( 0804,C2F4 )                 dl X_LIT X_(ABORT") X_, X_(;) 
 
 ( 0804,C304 )   :N_ID.   d$  3  0  0  0  "ID." 90 
 
@@ -2365,8 +2365,8 @@ BITS-32
 ( 0804,C32C )                 dl X_@ X_LIT 1 X_XOR 
 ( 0804,C33C )                 dl X_0BRANCH H_DP X_>NFA X_@ 
 ( 0804,C34C )                 dl X_$@ X_TYPE X_SPACE X_SPACE 
-( 0804,C35C )                 dl X_SPACE X_BRANCH H_U0 X_DROP 
-( 0804,C36C )                 dl semis 
+( 0804,C35C )                 dl X_SPACE X_BRANCH 4 X_DROP 
+( 0804,C36C )                 dl X_(;) 
 
 ( 0804,C370 )   :N_(CREATE)   d$  8  0  0  0  "(CREATE)"
 
@@ -2376,7 +2376,7 @@ BITS-32
 ( 0804,C39C )                 dl X_LIT 5 X_?ERROR X_2DUP 
 ( 0804,C3AC )                 dl X_PRESENT X_DUP X_0BRANCH H_FENCE 
 ( 0804,C3BC )                 dl X_>NFA X_@ X_$@ X_ETYPE 
-( 0804,C3CC )                 dl X_LIT H_U0 X_MESSAGE X__ 
+( 0804,C3CC )                 dl X_LIT 4 X_MESSAGE X__ 
 ( 0804,C3DC )                 dl X_DROP X_ALIGN X_$, X_ALIGN 
 ( 0804,C3EC )                 dl X_HERE X_>R X_R@ X_>PHA 
 ( 0804,C3FC )                 dl X_, X_R@ X_>PHA X_, 
@@ -2384,55 +2384,55 @@ BITS-32
 ( 0804,C41C )                 dl X_>LFA X_DUP X_@ X_, 
 ( 0804,C42C )                 dl X_R@ X_SWAP X_! X_, 
 ( 0804,C43C )                 dl X_BLK X_@ X_DUP X_0= 
-( 0804,C44C )                 dl X_0BRANCH H_R0 X_DROP X_IN 
-( 0804,C45C )                 dl X_@ X_, X_RDROP semis 
+( 0804,C44C )                 dl X_0BRANCH 0C X_DROP X_IN 
+( 0804,C45C )                 dl X_@ X_, X_RDROP X_(;) 
 
 ( 0804,C46C )   :N_[COMPILE]   d$  ^I 0  0  0  "[COMPILE]" 90 
 ( 0804,C47A )                 d$  90  90 
 
-( 0804,C47C )   :X_[COMPILE]   dl docol H_[COMPILE] H_U0 X_(CREATE) 
+( 0804,C47C )   :X_[COMPILE]   dl docol H_[COMPILE] 4 X_(CREATE) 
 ( 0804,C48C )                 dl N_[COMPILE] 0 
 ( 0804,C494 )   :H_[COMPILE]   dl X_(WORD) X_PRESENT 
 ( 0804,C49C )                 dl X_DUP X_0= X_LIT H_TIB 
-( 0804,C4AC )                 dl X_?ERROR X_>CFA X_, semis 
+( 0804,C4AC )                 dl X_?ERROR X_>CFA X_, X_(;) 
 
 ( 0804,C4BC )   :N_POSTPONE   d$  8  0  0  0  "POSTPONE"
 
-( 0804,C4C8 )   :X_POSTPONE   dl docol H_POSTPONE H_U0 X_[COMPILE] 
+( 0804,C4C8 )   :X_POSTPONE   dl docol H_POSTPONE 4 X_[COMPILE] 
 ( 0804,C4D8 )                 dl N_POSTPONE 0 
 ( 0804,C4E0 )   :H_POSTPONE   dl X_(WORD) X_PRESENT 
 ( 0804,C4E8 )                 dl X_DUP X_0= X_LIT 0F 
 ( 0804,C4F8 )                 dl X_?ERROR X_DUP X_>FFA X_@ 
-( 0804,C508 )                 dl X_LIT H_U0 X_AND X_0= 
+( 0804,C508 )                 dl X_LIT 4 X_AND X_0= 
 ( 0804,C518 )                 dl X_0BRANCH H_DP X_LIT X_LIT 
 ( 0804,C528 )                 dl X_, X_, X_LIT X_, 
-( 0804,C538 )                 dl X_, X_BRANCH H_U0 X_, 
-( 0804,C548 )                 dl semis 
+( 0804,C538 )                 dl X_, X_BRANCH 4 X_, 
+( 0804,C548 )                 dl X_(;) 
 
 ( 0804,C54C )   :N_LITERAL   d$  7  0  0  0  "LITERAL" 90 
 
-( 0804,C558 )   :X_LITERAL   dl docol H_LITERAL H_U0 X_POSTPONE 
+( 0804,C558 )   :X_LITERAL   dl docol H_LITERAL 4 X_POSTPONE 
 ( 0804,C568 )                 dl N_LITERAL 0 
 ( 0804,C570 )   :H_LITERAL   dl X_STATE X_@ 
 ( 0804,C578 )                 dl X_0BRANCH H_TIB X_LIT X_LIT 
-( 0804,C588 )                 dl X_, X_, semis 
+( 0804,C588 )                 dl X_, X_, X_(;) 
 
 ( 0804,C594 )   :N_DLITERAL   d$  8  0  0  0  "DLITERAL"
 
-( 0804,C5A0 )   :X_DLITERAL   dl docol H_DLITERAL H_U0 X_LITERAL 
+( 0804,C5A0 )   :X_DLITERAL   dl docol H_DLITERAL 4 X_LITERAL 
 ( 0804,C5B0 )                 dl N_DLITERAL 0 
 ( 0804,C5B8 )   :H_DLITERAL   dl X_STATE X_@ 
-( 0804,C5C0 )                 dl X_0BRANCH H_R0 X_SWAP X_LITERAL 
-( 0804,C5D0 )                 dl X_LITERAL semis 
+( 0804,C5C0 )                 dl X_0BRANCH 0C X_SWAP X_LITERAL 
+( 0804,C5D0 )                 dl X_LITERAL X_(;) 
 
 ( 0804,C5D8 )   :N_SDLITERAL   d$  ^I 0  0  0  "SDLITERAL" 90 
 ( 0804,C5E6 )                 d$  90  90 
 
-( 0804,C5E8 )   :X_SDLITERAL   dl docol H_SDLITERAL H_U0 X_DLITERAL 
+( 0804,C5E8 )   :X_SDLITERAL   dl docol H_SDLITERAL 4 X_DLITERAL 
 ( 0804,C5F8 )                 dl N_SDLITERAL 0 
 ( 0804,C600 )   :H_SDLITERAL   dl X_DPL X_@ 
-( 0804,C608 )                 dl X_0BRANCH H_R0 X_DLITERAL X_BRANCH 
-( 0804,C618 )                 dl H_#BUFF X_DROP X_LITERAL semis 
+( 0804,C608 )                 dl X_0BRANCH 0C X_DLITERAL X_BRANCH 
+( 0804,C618 )                 dl 8 X_DROP X_LITERAL X_(;) 
 
 ( 0804,C628 )   :N_?STACK   d$  6  0  0  0  "?STACK" 90 
 ( 0804,C633 )                 d$  90 
@@ -2443,7 +2443,7 @@ BITS-32
 ( 0804,C654 )                 dl X_@ X_SWAP X_U< X_1 
 ( 0804,C664 )                 dl X_?ERROR X_DSP@ X_HERE X_LIT 
 ( 0804,C674 )                 dl H_HANDLER X_+ X_U< X_LIT 
-( 0804,C684 )                 dl 7 X_?ERROR semis 
+( 0804,C684 )                 dl 7 X_?ERROR X_(;) 
 
 ( 0804,C690 )   :N_INTERPRET   d$  ^I 0  0  0  "INTERPRET" 90 
 ( 0804,C69E )                 d$  90  90 
@@ -2453,16 +2453,16 @@ BITS-32
 ( 0804,C6B8 )   :H_INTERPRET   dl X_(WORD) X_DUP 
 ( 0804,C6C0 )                 dl X_0BRANCH 0A8 X_OVER X_>R 
 ( 0804,C6D0 )                 dl X_FOUND X_DUP X_0= X_LIT 
-( 0804,C6E0 )                 dl H_R0 X_?ERROR X_DUP X_>FFA 
-( 0804,C6F0 )                 dl X_@ X_DUP X_LIT H_#BUFF 
+( 0804,C6E0 )                 dl 0C X_?ERROR X_DUP X_>FFA 
+( 0804,C6F0 )                 dl X_@ X_DUP X_LIT 8 
 ( 0804,C700 )                 dl X_AND X_0BRANCH H_FENCE X_OVER 
 ( 0804,C710 )                 dl X_>NFA X_@ X_@ X_R@ 
 ( 0804,C720 )                 dl X_+ X_IN X_! X_RDROP 
-( 0804,C730 )                 dl X_LIT H_U0 X_AND X_STATE 
+( 0804,C730 )                 dl X_LIT 4 X_AND X_STATE 
 ( 0804,C740 )                 dl X_@ X_0= X_OR X_0BRANCH 
-( 0804,C750 )                 dl H_R0 X_EXECUTE X_BRANCH H_U0 
+( 0804,C750 )                 dl 0C X_EXECUTE X_BRANCH 4 
 ( 0804,C760 )                 dl X_, X_?STACK X_BRANCH -B8 
-( 0804,C770 )                 dl X_DROP X_DROP semis 
+( 0804,C770 )                 dl X_DROP X_DROP X_(;) 
 
 ( 0804,C77C )   :N_IMMEDIATE   d$  ^I 0  0  0  "IMMEDIATE" 90 
 ( 0804,C78A )                 d$  90  90 
@@ -2470,7 +2470,7 @@ BITS-32
 ( 0804,C78C )   :X_IMMEDIATE   dl docol H_IMMEDIATE 0 X_INTERPRET 
 ( 0804,C79C )                 dl N_IMMEDIATE 0 
 ( 0804,C7A4 )   :H_IMMEDIATE   dl X_LATEST X_>FFA 
-( 0804,C7AC )                 dl X_LIT H_U0 X_TOGGLE semis 
+( 0804,C7AC )                 dl X_LIT 4 X_TOGGLE X_(;) 
 
 ( 0804,C7BC )   :N_VOCABULARY   d$  ^J 0  0  0  "VOCABULARY" 90 
 ( 0804,C7CB )                 d$  90 
@@ -2483,14 +2483,14 @@ BITS-32
 ( 0804,C80C )                 dl X_, X_LIT 1 X_, 
 ( 0804,C81C )                 dl X_0 X_, X_DOES> 
 ( 0804,C828 )   :DOVOC   dl X_ALSO 
-( 0804,C82C )                 dl X_CELL+ X_CONTEXT X_! semis 
+( 0804,C82C )                 dl X_CELL+ X_CONTEXT X_! X_(;) 
 
 ( 0804,C83C )   :N_DEFINITIONS   d$  0B  0  0  0  "DEFINITIONS" 90 
 
 ( 0804,C84C )   :X_DEFINITIONS   dl docol H_DEFINITIONS 0 X_VOCABULARY 
 ( 0804,C85C )                 dl N_DEFINITIONS 0 
 ( 0804,C864 )   :H_DEFINITIONS   dl X_CONTEXT X_@ 
-( 0804,C86C )                 dl X_CURRENT X_! semis 
+( 0804,C86C )                 dl X_CURRENT X_! X_(;) 
 
 ( 0804,C878 )   :N_ALSO   d$  4  0  0  0  "ALSO"
 
@@ -2499,7 +2499,7 @@ BITS-32
 ( 0804,C898 )   :H_ALSO   dl X_CONTEXT X_DUP 
 ( 0804,C8A0 )                 dl X_CELL+ X_LIT H_WARNING X_MOVE 
 ( 0804,C8B0 )                 dl X_LIT X_FORTH X_CONTEXT X_LIT 
-( 0804,C8C0 )                 dl H_FENCE X_+ X_! semis 
+( 0804,C8C0 )                 dl H_FENCE X_+ X_! X_(;) 
 
 ( 0804,C8D0 )   :N_PREVIOUS   d$  8  0  0  0  "PREVIOUS"
 
@@ -2507,7 +2507,7 @@ BITS-32
 ( 0804,C8EC )                 dl N_PREVIOUS 0 
 ( 0804,C8F4 )   :H_PREVIOUS   dl X_CONTEXT X_DUP 
 ( 0804,C8FC )                 dl X_CELL+ X_SWAP X_LIT H_FENCE 
-( 0804,C90C )                 dl X_MOVE semis 
+( 0804,C90C )                 dl X_MOVE X_(;) 
 
 ( 0804,C914 )   :N_ONLY   d$  4  0  0  0  "ONLY"
 
@@ -2516,24 +2516,24 @@ BITS-32
 ( 0804,C934 )   :H_ONLY   dl X_LIT X_FORTH 
 ( 0804,C93C )                 dl X_CONTEXT X_! X_CONTEXT X_DUP 
 ( 0804,C94C )                 dl X_CELL+ X_LIT H_WARNING X_CMOVE 
-( 0804,C95C )                 dl semis 
+( 0804,C95C )                 dl X_(;) 
 
 ( 0804,C960 )   :N_(   d$  1  0  0  0  &( 90 
 ( 0804,C966 )                 d$  90  90 
 
-( 0804,C968 )   :X_(   dl docol H_( H_U0 X_ONLY 
+( 0804,C968 )   :X_(   dl docol H_( 4 X_ONLY 
 ( 0804,C978 )                 dl N_( 0 
-( 0804,C980 )   :H_(   dl X_LIT 29 
-( 0804,C988 )                 dl X_(PARSE) X_2DROP semis 
+( 0804,C980 )   :H_(   dl X_LIT H_VOC-LINK 1 + 
+( 0804,C988 )                 dl X_(PARSE) X_2DROP X_(;) 
 
 ( 0804,C994 )   :N_\   d$  1  0  0  0  &\ 90 
 ( 0804,C99A )                 d$  90  90 
 
-( 0804,C99C )   :X_\   dl docol H_\ H_U0 X_( 
+( 0804,C99C )   :X_\   dl docol H_\ 4 X_( 
 ( 0804,C9AC )                 dl N_\ 0 
 ( 0804,C9B4 )   :H_\   dl X_LIT -1 
 ( 0804,C9BC )                 dl X_IN X_+! X_LIT 0A 
-( 0804,C9CC )                 dl X_(PARSE) X_2DROP semis 
+( 0804,C9CC )                 dl X_(PARSE) X_2DROP X_(;) 
 
 ( 0804,C9D8 )   :N_QUIT   d$  4  0  0  0  "QUIT"
 
@@ -2541,9 +2541,9 @@ BITS-32
 ( 0804,C9F0 )                 dl N_QUIT 0 
 ( 0804,C9F8 )   :H_QUIT   dl X_[ X_R0 
 ( 0804,CA00 )                 dl X_@ X_RSP! X_LIT X_(ACCEPT) 
-( 0804,CA10 )                 dl X_CATCH X_0BRANCH H_U0 X_BYE 
+( 0804,CA10 )                 dl X_CATCH X_0BRANCH 4 X_BYE 
 ( 0804,CA20 )                 dl X_SET-SRC X_INTERPRET X_OK X_BRANCH 
-( 0804,CA30 )                 dl -38 semis 
+( 0804,CA30 )                 dl -38 X_(;) 
 
 ( 0804,CA38 )   :N_OK   d$  2  0  0  0  "OK" 90 
 ( 0804,CA3F )                 d$  90 
@@ -2555,7 +2555,7 @@ BITS-32
 ( 0804,CA70 )                 dl 3 
 ( 0804,CA74 )   :NAME5   dl 904B,4F20 X_LIT NAME5 
 ( 0804,CA80 )                 dl X_LIT 3 X_TYPE X_CR 
-( 0804,CA90 )                 dl semis 
+( 0804,CA90 )                 dl X_(;) 
 
 ( 0804,CA94 )   :N_ABORT   d$  5  0  0  0  "ABORT" 90 
 ( 0804,CA9E )                 d$  90  90 
@@ -2565,7 +2565,7 @@ BITS-32
 ( 0804,CAB8 )   :H_ABORT   dl X_S0 X_@ 
 ( 0804,CAC0 )                 dl X_DSP! X_0 X_HANDLER X_! 
 ( 0804,CAD0 )                 dl X_DECIMAL X_ONLY X_FORTH X_DEFINITIONS 
-( 0804,CAE0 )                 dl X_QUIT semis 
+( 0804,CAE0 )                 dl X_QUIT X_(;) 
 
 ( 0804,CAE8 )                  MOVI|X, SI| LWARM IL, 
 ( 0804,CAED )                  LODS, X'| 
@@ -2577,7 +2577,7 @@ BITS-32
 ( 0804,CAFC )   :X_WARM   dl docol H_WARM 0 X_ABORT 
 ( 0804,CB0C )                 dl N_WARM 0 
 ( 0804,CB14 )   :H_WARM   dl X_EMPTY-BUFFERS X_.SIGNON 
-( 0804,CB1C )                 dl X_ABORT semis 
+( 0804,CB1C )                 dl X_ABORT X_(;) 
 
 ( 0804,CB24 )   :N_OPTIONS   d$  7  0  0  0  "OPTIONS" 90 
 
@@ -2587,12 +2587,12 @@ BITS-32
 ( 0804,CB50 )                 dl X_CELL+ X_CELL+ X_@ X_DUP 
 ( 0804,CB60 )                 dl X_0BRANCH H_(BLK) X_@ X_DUP 
 ( 0804,CB70 )                 dl X_LIT 0FF X_AND X_LIT 
-( 0804,CB80 )                 dl 2D X_<> X_0BRANCH H_WARNING 
+( 0804,CB80 )                 dl H_OFFSET 1 + X_<> X_0BRANCH H_WARNING 
 ( 0804,CB90 )                 dl X_LIT 3 X_DUP X_ERROR 
 ( 0804,CBA0 )                 dl X_EXIT-CODE X_! X_BYE X_LIT 
-( 0804,CBB0 )                 dl H_#BUFF X_RSHIFT X_LIT 1F 
+( 0804,CBB0 )                 dl 8 X_RSHIFT X_LIT H_WARNING 3 + 
 ( 0804,CBC0 )                 dl X_AND X_LOAD X_0 X_SWAP 
-( 0804,CBD0 )                 dl X_DROP semis 
+( 0804,CBD0 )                 dl X_DROP X_(;) 
 
 ( 0804,CBD8 )   :N_COLD   d$  4  0  0  0  "COLD"
 
@@ -2606,12 +2606,12 @@ BITS-32
 ( 0804,CC40 )                 dl X_LIT 0 X_BLOCK-INIT X_DECIMAL 
 ( 0804,CC50 )                 dl X_ONLY X_FORTH X_DEFINITIONS X_1 
 ( 0804,CC60 )                 dl X_0 X_LIT 5401 X_TERMIO 
-( 0804,CC70 )                 dl X_LIT 36 X_LINOS X_0< 
+( 0804,CC70 )                 dl X_LIT H_WHERE 6 + X_LINOS X_0< 
 ( 0804,CC80 )                 dl X_0BRANCH H_DP X_DROP X_0 
 ( 0804,CC90 )                 dl X_LIT X_NOOP X_LIT X_OK 
-( 0804,CCA0 )                 dl X_LIT H_R0 X_CMOVE X_OPTIONS 
-( 0804,CCB0 )                 dl X_0BRANCH H_U0 X_.SIGNON X_ABORT 
-( 0804,CCC0 )                 dl X_BYE semis 
+( 0804,CCA0 )                 dl X_LIT 0C X_CMOVE X_OPTIONS 
+( 0804,CCB0 )                 dl X_0BRANCH 4 X_.SIGNON X_ABORT 
+( 0804,CCC0 )                 dl X_BYE X_(;) 
 
 ( 0804,CCC8 )   :N_S>D   d$  3  0  0  0  "S>D" 90 
 
@@ -2634,30 +2634,30 @@ BITS-32
 ( 0804,CD00 )   :X_ABS   dl docol H_ABS 0 X_S>D 
 ( 0804,CD10 )                 dl N_ABS 0 
 ( 0804,CD18 )   :H_ABS   dl X_DUP X_0< 
-( 0804,CD20 )                 dl X_0BRANCH H_U0 X_NEGATE semis 
+( 0804,CD20 )                 dl X_0BRANCH 4 X_NEGATE X_(;) 
 
 ( 0804,CD30 )   :N_DABS   d$  4  0  0  0  "DABS"
 
 ( 0804,CD38 )   :X_DABS   dl docol H_DABS 0 X_ABS 
 ( 0804,CD48 )                 dl N_DABS 0 
 ( 0804,CD50 )   :H_DABS   dl X_DUP X_0< 
-( 0804,CD58 )                 dl X_0BRANCH H_U0 X_DNEGATE semis 
+( 0804,CD58 )                 dl X_0BRANCH 4 X_DNEGATE X_(;) 
 
 ( 0804,CD68 )   :N_MIN   d$  3  0  0  0  "MIN" 90 
 
 ( 0804,CD70 )   :X_MIN   dl docol H_MIN 0 X_DABS 
 ( 0804,CD80 )                 dl N_MIN 0 
 ( 0804,CD88 )   :H_MIN   dl X_2DUP X_> 
-( 0804,CD90 )                 dl X_0BRANCH H_U0 X_SWAP X_DROP 
-( 0804,CDA0 )                 dl semis 
+( 0804,CD90 )                 dl X_0BRANCH 4 X_SWAP X_DROP 
+( 0804,CDA0 )                 dl X_(;) 
 
 ( 0804,CDA4 )   :N_MAX   d$  3  0  0  0  "MAX" 90 
 
 ( 0804,CDAC )   :X_MAX   dl docol H_MAX 0 X_MIN 
 ( 0804,CDBC )                 dl N_MAX 0 
 ( 0804,CDC4 )   :H_MAX   dl X_2DUP X_< 
-( 0804,CDCC )                 dl X_0BRANCH H_U0 X_SWAP X_DROP 
-( 0804,CDDC )                 dl semis 
+( 0804,CDCC )                 dl X_0BRANCH 4 X_SWAP X_DROP 
+( 0804,CDDC )                 dl X_(;) 
 
 ( 0804,CDE0 )   :N_LSHIFT   d$  6  0  0  0  "LSHIFT" 90 
 ( 0804,CDEB )                 d$  90 
@@ -2721,7 +2721,7 @@ BITS-32
 ( 0804,CE9C )   :X_2/   dl docol H_2/ 0 X_SM/REM 
 ( 0804,CEAC )                 dl N_2/ 0 
 ( 0804,CEB4 )   :H_2/   dl X_S>D X_2 
-( 0804,CEBC )                 dl X_FM/MOD X_SWAP X_DROP semis 
+( 0804,CEBC )                 dl X_FM/MOD X_SWAP X_DROP X_(;) 
 
 ( 0804,CECC )   :N_2*   d$  2  0  0  0  "2*" 90 
 ( 0804,CED3 )                 d$  90 
@@ -2729,7 +2729,7 @@ BITS-32
 ( 0804,CED4 )   :X_2*   dl docol H_2* 0 X_2/ 
 ( 0804,CEE4 )                 dl N_2* 0 
 ( 0804,CEEC )   :H_2*   dl X_2 X_* 
-( 0804,CEF4 )                 dl semis 
+( 0804,CEF4 )                 dl X_(;) 
 
 ( 0804,CEF8 )   :N_1-   d$  2  0  0  0  "1-" 90 
 ( 0804,CEFF )                 d$  90 
@@ -2737,7 +2737,7 @@ BITS-32
 ( 0804,CF00 )   :X_1-   dl docol H_1- 0 X_2* 
 ( 0804,CF10 )                 dl N_1- 0 
 ( 0804,CF18 )   :H_1-   dl X_1 X_- 
-( 0804,CF20 )                 dl semis 
+( 0804,CF20 )                 dl X_(;) 
 
 ( 0804,CF24 )   :N_FM/MOD   d$  6  0  0  0  "FM/MOD" 90 
 ( 0804,CF2F )                 d$  90 
@@ -2749,8 +2749,8 @@ BITS-32
 ( 0804,CF60 )                 dl X_R> X_0< X_0BRANCH H_OFFSET 
 ( 0804,CF70 )                 dl X_OVER X_0BRANCH H_FENCE X_1 
 ( 0804,CF80 )                 dl X_- X_SWAP X_R> X_+ 
-( 0804,CF90 )                 dl X_SWAP X_BRANCH H_U0 X_RDROP 
-( 0804,CFA0 )                 dl semis 
+( 0804,CF90 )                 dl X_SWAP X_BRANCH 4 X_RDROP 
+( 0804,CFA0 )                 dl X_(;) 
 
 ( 0804,CFA4 )   :N_*   d$  1  0  0  0  &* 90 
 ( 0804,CFAA )                 d$  90  90 
@@ -2758,14 +2758,14 @@ BITS-32
 ( 0804,CFAC )   :X_*   dl docol H_* 0 X_FM/MOD 
 ( 0804,CFBC )                 dl N_* 0 
 ( 0804,CFC4 )   :H_*   dl X_M* X_DROP 
-( 0804,CFCC )                 dl semis 
+( 0804,CFCC )                 dl X_(;) 
 
 ( 0804,CFD0 )   :N_/MOD   d$  4  0  0  0  "/MOD"
 
 ( 0804,CFD8 )   :X_/MOD   dl docol H_/MOD 0 X_* 
 ( 0804,CFE8 )                 dl N_/MOD 0 
 ( 0804,CFF0 )   :H_/MOD   dl X_>R X_S>D 
-( 0804,CFF8 )                 dl X_R> X_SM/REM semis 
+( 0804,CFF8 )                 dl X_R> X_SM/REM X_(;) 
 
 ( 0804,D004 )   :N_/   d$  1  0  0  0  &/ 90 
 ( 0804,D00A )                 d$  90  90 
@@ -2773,14 +2773,14 @@ BITS-32
 ( 0804,D00C )   :X_/   dl docol H_/ 0 X_/MOD 
 ( 0804,D01C )                 dl N_/ 0 
 ( 0804,D024 )   :H_/   dl X_/MOD X_SWAP 
-( 0804,D02C )                 dl X_DROP semis 
+( 0804,D02C )                 dl X_DROP X_(;) 
 
 ( 0804,D034 )   :N_MOD   d$  3  0  0  0  "MOD" 90 
 
 ( 0804,D03C )   :X_MOD   dl docol H_MOD 0 X_/ 
 ( 0804,D04C )                 dl N_MOD 0 
 ( 0804,D054 )   :H_MOD   dl X_/MOD X_DROP 
-( 0804,D05C )                 dl semis 
+( 0804,D05C )                 dl X_(;) 
 
 ( 0804,D060 )   :N_*/MOD   d$  5  0  0  0  "*/MOD" 90 
 ( 0804,D06A )                 d$  90  90 
@@ -2788,7 +2788,7 @@ BITS-32
 ( 0804,D06C )   :X_*/MOD   dl docol H_*/MOD 0 X_MOD 
 ( 0804,D07C )                 dl N_*/MOD 0 
 ( 0804,D084 )   :H_*/MOD   dl X_>R X_M* 
-( 0804,D08C )                 dl X_R> X_SM/REM semis 
+( 0804,D08C )                 dl X_R> X_SM/REM X_(;) 
 
 ( 0804,D098 )   :N_*/   d$  2  0  0  0  "*/" 90 
 ( 0804,D09F )                 d$  90 
@@ -2796,7 +2796,7 @@ BITS-32
 ( 0804,D0A0 )   :X_*/   dl docol H_*/ 0 X_*/MOD 
 ( 0804,D0B0 )                 dl N_*/ 0 
 ( 0804,D0B8 )   :H_*/   dl X_*/MOD X_SWAP 
-( 0804,D0C0 )                 dl X_DROP semis 
+( 0804,D0C0 )                 dl X_DROP X_(;) 
 
 ( 0804,D0C8 )   :N_M/MOD   d$  5  0  0  0  "M/MOD" 90 
 ( 0804,D0D2 )                 d$  90  90 
@@ -2805,7 +2805,7 @@ BITS-32
 ( 0804,D0E4 )                 dl N_M/MOD 0 
 ( 0804,D0EC )   :H_M/MOD   dl X_>R X_0 
 ( 0804,D0F4 )                 dl X_R@ X_UM/MOD X_R> X_SWAP 
-( 0804,D104 )                 dl X_>R X_UM/MOD X_R> semis 
+( 0804,D104 )                 dl X_>R X_UM/MOD X_R> X_(;) 
 
 ( 0804,D114 )   :N_(LINE)   d$  6  0  0  0  "(LINE)" 90 
 ( 0804,D11F )                 d$  90 
@@ -2815,7 +2815,7 @@ BITS-32
 ( 0804,D138 )   :H_(LINE)   dl X_>R X_LIT 
 ( 0804,D140 )                 dl H_C/L X_M* X_B/BUF X_FM/MOD 
 ( 0804,D150 )                 dl X_R> X_+ X_BLOCK X_+ 
-( 0804,D160 )                 dl X_LIT 3F semis 
+( 0804,D160 )                 dl X_LIT H_REMAINDER 7 + X_(;) 
 
 ( 0804,D16C )   :N_ERRSCR   d$  6  0  0  0  "ERRSCR" 90 
 ( 0804,D177 )                 d$  90 
@@ -2831,9 +2831,9 @@ BITS-32
 ( 0804,D1A0 )   :X_MESSAGE   dl docol H_MESSAGE 0 X_ERRSCR 
 ( 0804,D1B0 )                 dl N_MESSAGE 0 
 ( 0804,D1B8 )   :H_MESSAGE   dl X_WARNING X_@ 
-( 0804,D1C0 )                 dl X_0BRANCH 18 X_ERRSCR X_@ 
+( 0804,D1C0 )                 dl X_0BRANCH H_RUBOUT 4 + X_ERRSCR X_@ 
 ( 0804,D1D0 )                 dl X_(LINE) X_1+ X_ETYPE X__ 
-( 0804,D1E0 )                 dl X_DROP semis 
+( 0804,D1E0 )                 dl X_DROP X_(;) 
 
 ( 0804,D1E8 )   :N_PC@   d$  3  0  0  0  "PC@" 90 
 
@@ -2903,18 +2903,18 @@ BITS-32
 ( 0804,D2D4 )   :N_#BUFF   d$  5  0  0  0  "#BUFF" 90 
 ( 0804,D2DE )                 d$  90  90 
 
-( 0804,D2E0 )   :X_#BUFF   dl doconstant H_#BUFF 0 X_PREV 
+( 0804,D2E0 )   :X_#BUFF   dl doconstant 8 0 X_PREV 
 ( 0804,D2F0 )                 dl N_#BUFF 0 
 
 ( 0804,D2F8 )   :N_+BUF   d$  4  0  0  0  "+BUF"
 
 ( 0804,D300 )   :X_+BUF   dl docol H_+BUF 0 X_#BUFF 
 ( 0804,D310 )                 dl N_+BUF 0 
-( 0804,D318 )   :H_+BUF   dl X_LIT 0408 
+( 0804,D318 )   :H_+BUF   dl X_LIT H_B/BUF 8 + 
 ( 0804,D320 )                 dl X_+ X_DUP X_LIMIT X_= 
-( 0804,D330 )                 dl X_0BRANCH H_#BUFF X_DROP X_FIRST 
+( 0804,D330 )                 dl X_0BRANCH 8 X_DROP X_FIRST 
 ( 0804,D340 )                 dl X_DUP X_PREV X_@ X_- 
-( 0804,D350 )                 dl semis 
+( 0804,D350 )                 dl X_(;) 
 
 ( 0804,D354 )   :N_UPDATE   d$  6  0  0  0  "UPDATE" 90 
 ( 0804,D35F )                 d$  90 
@@ -2924,7 +2924,7 @@ BITS-32
 ( 0804,D378 )   :H_UPDATE   dl X_PREV X_@ 
 ( 0804,D380 )                 dl X_DUP X_CELL+ X_CELL+ X_SWAP 
 ( 0804,D390 )                 dl X_@ X_OFFSET X_@ X_+ 
-( 0804,D3A0 )                 dl X_0 X_R\W semis 
+( 0804,D3A0 )                 dl X_0 X_R\W X_(;) 
 
 ( 0804,D3AC )   :N_EMPTY-BUFFERS   d$  ^M 0  0  0  "EMPTY-BUFFERS" 90 
 ( 0804,D3BE )                 d$  90  90 
@@ -2932,7 +2932,7 @@ BITS-32
 ( 0804,D3C0 )   :X_EMPTY-BUFFERS   dl docol H_FLUSH 0 X_UPDATE 
 ( 0804,D3D0 )                 dl N_EMPTY-BUFFERS 0 
 ( 0804,D3D8 )   :H_FLUSH   dl X_FIRST X_LIMIT 
-( 0804,D3E0 )                 dl X_OVER X_- X_ERASE semis 
+( 0804,D3E0 )                 dl X_OVER X_- X_ERASE X_(;) 
 
 ( 0804,D3F0 )   :N_(BUFFER)   d$  8  0  0  0  "(BUFFER)"
 
@@ -2940,7 +2940,7 @@ BITS-32
 ( 0804,D40C )                 dl N_(BUFFER) 0 
 ( 0804,D414 )   :H_(BUFFER)   dl X_PREV X_@ 
 ( 0804,D41C )                 dl X_>R X_R@ X_@ X_OVER 
-( 0804,D42C )                 dl X_= X_0BRANCH H_R0 X_DROP 
+( 0804,D42C )                 dl X_= X_0BRANCH 0C X_DROP 
 ( 0804,D43C )                 dl X_R> X_EXIT X_R> X_+BUF 
 ( 0804,D44C )                 dl X_0= X_0BRANCH -3C X_DROP 
 ( 0804,D45C )                 dl X_STALEST X_@ X_>R X_R@ 
@@ -2949,7 +2949,7 @@ BITS-32
 ( 0804,D48C )                 dl X_0BRANCH -28 X_STALEST X_! 
 ( 0804,D49C )                 dl X_R@ X_! X_0 X_R@ 
 ( 0804,D4AC )                 dl X_CELL+ X_! X_R@ X_PREV 
-( 0804,D4BC )                 dl X_! X_R> semis 
+( 0804,D4BC )                 dl X_! X_R> X_(;) 
 
 ( 0804,D4C8 )   :N_BLOCK   d$  5  0  0  0  "BLOCK" 90 
 ( 0804,D4D2 )                 d$  90  90 
@@ -2963,7 +2963,7 @@ BITS-32
 ( 0804,D524 )                 dl X_+ X_1 X_R\W X_1 
 ( 0804,D534 )                 dl X_OVER X_CELL+ X_! X_DUP 
 ( 0804,D544 )                 dl X_PREV X_! X_CELL+ X_CELL+ 
-( 0804,D554 )                 dl semis 
+( 0804,D554 )                 dl X_(;) 
 
 ( 0804,D558 )   :N_FLUSH   d$  5  0  0  0  "FLUSH" 90 
 ( 0804,D562 )                 d$  90  90 
@@ -2973,8 +2973,8 @@ BITS-32
 
 ( 0804,D57C )                 dl X_LIMIT X_FIRST X_CELL+ X_(DO) 
 ( 0804,D58C )                 dl H_WARNING X_0 X_I X_! 
-( 0804,D59C )                 dl X_LIT 0408 X_+LOOP -18 
-( 0804,D5AC )                 dl semis 
+( 0804,D59C )                 dl X_LIT H_B/BUF 8 + X_+LOOP -18 
+( 0804,D5AC )                 dl X_(;) 
 
 ( 0804,D5B0 )   :N_SAVE   d$  4  0  0  0  "SAVE"
 
@@ -2982,7 +2982,7 @@ BITS-32
 ( 0804,D5C8 )                 dl N_SAVE 0 
 ( 0804,D5D0 )   :H_SAVE   dl X_R> X_SRC 
 ( 0804,D5D8 )                 dl X_2@ X_IN X_@ X_>R 
-( 0804,D5E8 )                 dl X_>R X_>R X_>R semis 
+( 0804,D5E8 )                 dl X_>R X_>R X_>R X_(;) 
 
 ( 0804,D5F8 )   :N_RESTORE   d$  7  0  0  0  "RESTORE" 90 
 
@@ -2990,7 +2990,7 @@ BITS-32
 ( 0804,D614 )                 dl N_RESTORE 0 
 ( 0804,D61C )   :H_RESTORE   dl X_R> X_R> 
 ( 0804,D624 )                 dl X_R> X_R> X_IN X_! 
-( 0804,D634 )                 dl X_SRC X_2! X_>R semis 
+( 0804,D634 )                 dl X_SRC X_2! X_>R X_(;) 
 
 ( 0804,D644 )   :N_SAVE-INPUT   d$  ^J 0  0  0  "SAVE-INPUT" 90 
 ( 0804,D653 )                 d$  90 
@@ -2999,7 +2999,7 @@ BITS-32
 ( 0804,D664 )                 dl N_SAVE-INPUT 0 
 ( 0804,D66C )   :H_SAVE-INPUT   dl X_SRC X_2@ 
 ( 0804,D674 )                 dl X_IN X_@ X_LIT 3 
-( 0804,D684 )                 dl semis 
+( 0804,D684 )                 dl X_(;) 
 
 ( 0804,D688 )   :N_RESTORE-INPUT   d$  ^M 0  0  0  "RESTORE-INPUT" 90 
 ( 0804,D69A )                 d$  90  90 
@@ -3008,15 +3008,15 @@ BITS-32
 ( 0804,D6AC )                 dl N_RESTORE-INPUT 0 
 ( 0804,D6B4 )   :H_RESTORE-INPUT   dl X_DROP X_IN 
 ( 0804,D6BC )                 dl X_! X_SRC X_2! X_LIT 
-( 0804,D6CC )                 dl -1 semis 
+( 0804,D6CC )                 dl -1 X_(;) 
 
 ( 0804,D6D4 )   :N_LOCK   d$  4  0  0  0  "LOCK"
 
 ( 0804,D6DC )   :X_LOCK   dl docol H_LOCK 0 X_RESTORE-INPUT 
 ( 0804,D6EC )                 dl N_LOCK 0 
 ( 0804,D6F4 )   :H_LOCK   dl X_BLOCK X_LIT 
-( 0804,D6FC )                 dl H_U0 X_- X_LIT -2 
-( 0804,D70C )                 dl X_SWAP X_+! semis 
+( 0804,D6FC )                 dl 4 X_- X_LIT -2 
+( 0804,D70C )                 dl X_SWAP X_+! X_(;) 
 
 ( 0804,D718 )   :N_UNLOCK   d$  6  0  0  0  "UNLOCK" 90 
 ( 0804,D723 )                 d$  90 
@@ -3024,15 +3024,15 @@ BITS-32
 ( 0804,D724 )   :X_UNLOCK   dl docol H_UNLOCK 0 X_LOCK 
 ( 0804,D734 )                 dl N_UNLOCK 0 
 ( 0804,D73C )   :H_UNLOCK   dl X_BLOCK X_LIT 
-( 0804,D744 )                 dl H_U0 X_- X_2 X_SWAP 
-( 0804,D754 )                 dl X_+! semis 
+( 0804,D744 )                 dl 4 X_- X_2 X_SWAP 
+( 0804,D754 )                 dl X_+! X_(;) 
 
 ( 0804,D75C )   :N_LOAD   d$  4  0  0  0  "LOAD"
 
 ( 0804,D764 )   :X_LOAD   dl docol H_LOAD 0 X_UNLOCK 
 ( 0804,D774 )                 dl N_LOAD 0 
 ( 0804,D77C )   :H_LOAD   dl X_DUP X_THRU 
-( 0804,D784 )                 dl semis 
+( 0804,D784 )                 dl X_(;) 
 
 ( 0804,D788 )   :N_THRU   d$  4  0  0  0  "THRU"
 
@@ -3045,7 +3045,7 @@ BITS-32
 ( 0804,D7E0 )                 dl X_CATCH X_I X_UNLOCK X_?DUP 
 ( 0804,D7F0 )                 dl X_0BRANCH H_RUBOUT X_RDROP X_RDROP 
 ( 0804,D800 )                 dl X_RDROP X_RESTORE X_THROW X_(LOOP) 
-( 0804,D810 )                 dl -58 X_RESTORE semis 
+( 0804,D810 )                 dl -58 X_RESTORE X_(;) 
 
 ( 0804,D81C )   :N_BLK   d$  3  0  0  0  "BLK" 90 
 
@@ -3056,19 +3056,19 @@ BITS-32
 ( 0804,D854 )                 dl X_2@ X_- X_LIT H_B/BUF 
 ( 0804,D864 )                 dl X_= X_AND X_0BRANCH H_FENCE 
 ( 0804,D874 )                 dl X_SRC X_@ X_2 X_CELLS 
-( 0804,D884 )                 dl X_- X_@ X_BRANCH H_U0 
+( 0804,D884 )                 dl X_- X_@ X_BRANCH 4 
 ( 0804,D894 )                 dl X_0 X_(BLK) X_! X_(BLK) 
-( 0804,D8A4 )                 dl semis 
+( 0804,D8A4 )                 dl X_(;) 
 
 ( 0804,D8A8 )   :N_-->   d$  3  0  0  0  "-->" 90 
 
-( 0804,D8B0 )   :X_-->   dl docol H_--> H_U0 X_BLK 
+( 0804,D8B0 )   :X_-->   dl docol H_--> 4 X_BLK 
 ( 0804,D8C0 )                 dl N_--> 0 
 ( 0804,D8C8 )   :H_-->   dl X_?LOADING X_BLK 
 ( 0804,D8D0 )                 dl X_@ X_DUP X_UNLOCK X_1+ 
 ( 0804,D8E0 )                 dl X_DUP X_LOCK X_DUP X_BLK 
 ( 0804,D8F0 )                 dl X_! X_BLOCK X_LIT H_B/BUF 
-( 0804,D900 )                 dl X_SET-SRC semis 
+( 0804,D900 )                 dl X_SET-SRC X_(;) 
 
 ( 0804,D908 )   :N_LINOS   d$  5  0  0  0  "LINOS" 90 
 ( 0804,D912 )                 d$  90  90 
@@ -3102,7 +3102,7 @@ BITS-32
 ( 0804,D967 )                  POP|X, BX| 
 ( 0804,D968 )                  INT, H_HANDLER IB, 
 ( 0804,D96A )                  MOV, X| T| SI'| BO| [BP] 0 B, 
-( 0804,D96D )                  LEA, BP'| BO| [BP] H_U0 B, 
+( 0804,D96D )                  LEA, BP'| BO| [BP] 4 B, 
 ( 0804,D970 )                  PUSH|X, AX| 
 ( 0804,D971 )                  LODS, X'| 
 ( 0804,D972 )                  JMPO, ZO| [AX] 
@@ -3115,8 +3115,8 @@ BITS-32
 ( 0804,D99C )                 dl X_LIT 000F,4240 X_*/MOD X_LIT 
 ( 0804,D9AC )                 dl SOMEBUFFER1 X_2! X_0 X_0 
 ( 0804,D9BC )                 dl X_0 X_0 X_LIT SOMEBUFFER1 
-( 0804,D9CC )                 dl X_LIT 8E X_LINOS5 X_?ERRUR 
-( 0804,D9DC )                 dl semis 
+( 0804,D9CC )                 dl X_LIT H_CURRENT 6 + X_LINOS5 X_?ERRUR 
+( 0804,D9DC )                 dl X_(;) 
 
 ( 0804,D9E0 )   :SOMEBUFFER1   d$  0  0  0  0  0  0  0  0 
 
@@ -3165,7 +3165,7 @@ BITS-32
 ( 0804,DC24 )                 dl N_ZEN 0 
 ( 0804,DC2C )   :H_ZEN   dl X_RWBUF X_$! 
 ( 0804,DC34 )                 dl X_0 X_RWBUF X_$C+ X_RWBUF 
-( 0804,DC44 )                 dl X_CELL+ semis 
+( 0804,DC44 )                 dl X_CELL+ X_(;) 
 
 ( 0804,DC4C )   :N_OPEN-FILE   d$  ^I 0  0  0  "OPEN-FILE" 90 
 ( 0804,DC5A )                 d$  90  90 
@@ -3175,7 +3175,7 @@ BITS-32
 ( 0804,DC74 )   :H_OPEN-FILE   dl X_>R X_ZEN 
 ( 0804,DC7C )                 dl X_R> X__ X_LIT 5 
 ( 0804,DC8C )                 dl X_LINOS X_DUP X_0 X_MIN 
-( 0804,DC9C )                 dl semis 
+( 0804,DC9C )                 dl X_(;) 
 
 ( 0804,DCA0 )   :N_CLOSE-FILE   d$  ^J 0  0  0  "CLOSE-FILE" 90 
 ( 0804,DCAF )                 d$  90 
@@ -3183,7 +3183,7 @@ BITS-32
 ( 0804,DCB0 )   :X_CLOSE-FILE   dl docol H_CLOSE-FILE 0 X_OPEN-FILE 
 ( 0804,DCC0 )                 dl N_CLOSE-FILE 0 
 ( 0804,DCC8 )   :H_CLOSE-FILE   dl X__ X__ 
-( 0804,DCD0 )                 dl X_LIT 6 X_LINOS semis 
+( 0804,DCD0 )                 dl X_LIT 6 X_LINOS X_(;) 
 
 ( 0804,DCE0 )   :N_CREATE-FILE   d$  0B  0  0  0  "CREATE-FILE" 90 
 
@@ -3191,9 +3191,9 @@ BITS-32
 ( 0804,DD00 )                 dl N_CREATE-FILE 0 
 ( 0804,DD08 )   :H_CREATE-FILE   dl X_>R X_2DUP 
 ( 0804,DD10 )                 dl X_DELETE-FILE X_DROP X_ZEN X_R> 
-( 0804,DD20 )                 dl X__ X_LIT H_#BUFF X_LINOS 
+( 0804,DD20 )                 dl X__ X_LIT 8 X_LINOS 
 ( 0804,DD30 )                 dl X_DUP X_0 X_MAX X_SWAP 
-( 0804,DD40 )                 dl X_0 X_MIN semis 
+( 0804,DD40 )                 dl X_0 X_MIN X_(;) 
 
 ( 0804,DD4C )   :N_DELETE-FILE   d$  0B  0  0  0  "DELETE-FILE" 90 
 
@@ -3201,7 +3201,7 @@ BITS-32
 ( 0804,DD6C )                 dl N_DELETE-FILE 0 
 ( 0804,DD74 )   :H_DELETE-FILE   dl X_ZEN X__ 
 ( 0804,DD7C )                 dl X__ X_LIT 0A X_LINOS 
-( 0804,DD8C )                 dl semis 
+( 0804,DD8C )                 dl X_(;) 
 
 ( 0804,DD90 )   :N_READ-FILE   d$  ^I 0  0  0  "READ-FILE" 90 
 ( 0804,DD9E )                 d$  90  90 
@@ -3211,7 +3211,7 @@ BITS-32
 ( 0804,DDB8 )   :H_READ-FILE   dl X_ROT X_ROT 
 ( 0804,DDC0 )                 dl X_LIT 3 X_LINOS X_DUP 
 ( 0804,DDD0 )                 dl X_0 X_MAX X_SWAP X_0 
-( 0804,DDE0 )                 dl X_MIN semis 
+( 0804,DDE0 )                 dl X_MIN X_(;) 
 
 ( 0804,DDE8 )   :N_REPOSITION-FILE   d$  0F  0  0  0  "REPOSITION-FILE" 90 
 
@@ -3219,8 +3219,8 @@ BITS-32
 ( 0804,DE0C )                 dl N_REPOSITION-FILE 0 
 ( 0804,DE14 )   :H_REPOSITION-FILE   dl X_>R X_DROP 
 ( 0804,DE1C )                 dl X_R> X_SWAP X_LIT 0 
-( 0804,DE2C )                 dl X_LIT 13 X_LINOS X_0 
-( 0804,DE3C )                 dl X_MIN semis 
+( 0804,DE2C )                 dl X_LIT H_TIB 3 + X_LINOS X_0 
+( 0804,DE3C )                 dl X_MIN X_(;) 
 
 ( 0804,DE44 )   :N_WRITE-FILE   d$  ^J 0  0  0  "WRITE-FILE" 90 
 ( 0804,DE53 )                 d$  90 
@@ -3228,8 +3228,8 @@ BITS-32
 ( 0804,DE54 )   :X_WRITE-FILE   dl docol H_WRITE-FILE 0 X_REPOSITION-FILE 
 ( 0804,DE64 )                 dl N_WRITE-FILE 0 
 ( 0804,DE6C )   :H_WRITE-FILE   dl X_ROT X_ROT 
-( 0804,DE74 )                 dl X_LIT H_U0 X_LINOS X_0 
-( 0804,DE84 )                 dl X_MIN semis 
+( 0804,DE74 )                 dl X_LIT 4 X_LINOS X_0 
+( 0804,DE84 )                 dl X_MIN X_(;) 
 
 ( 0804,DE8C )   :N_GET-FILE   d$  8  0  0  0  "GET-FILE"
 
@@ -3243,7 +3243,7 @@ BITS-32
 ( 0804,DEF8 )                 dl X_LIT 03E8 X_- X_R@ 
 ( 0804,DF08 )                 dl X_READ-FILE X_THROW X_R> X_CLOSE-FILE 
 ( 0804,DF18 )                 dl X_THROW X_2DUP X_+ X_DP 
-( 0804,DF28 )                 dl X_! semis 
+( 0804,DF28 )                 dl X_! X_(;) 
 
 ( 0804,DF30 )   :N_PUT-FILE   d$  8  0  0  0  "PUT-FILE"
 
@@ -3252,7 +3252,7 @@ BITS-32
 ( 0804,DF54 )   :H_PUT-FILE   dl X_LIT 01ED 
 ( 0804,DF5C )                 dl X_CREATE-FILE X_THROW X_DUP X_>R 
 ( 0804,DF6C )                 dl X_WRITE-FILE X_THROW X_R> X_CLOSE-FILE 
-( 0804,DF7C )                 dl X_THROW semis 
+( 0804,DF7C )                 dl X_THROW X_(;) 
 
 ( 0804,DF84 )   :N_INCLUDED   d$  8  0  0  0  "INCLUDED"
 
@@ -3260,9 +3260,9 @@ BITS-32
 ( 0804,DFA0 )                 dl N_INCLUDED 0 
 ( 0804,DFA8 )   :H_INCLUDED   dl X_HERE X_>R 
 ( 0804,DFB0 )                 dl X_LIT X_GET-FILE X_CATCH X_DUP 
-( 0804,DFC0 )                 dl X_0BRANCH 18 X_R> X_DP 
-( 0804,DFD0 )                 dl X_! X_THROW X_BRANCH H_#BUFF 
-( 0804,DFE0 )                 dl X_RDROP X_DROP X_EVALUATE semis 
+( 0804,DFC0 )                 dl X_0BRANCH H_RUBOUT 4 + X_R> X_DP 
+( 0804,DFD0 )                 dl X_! X_THROW X_BRANCH 8 
+( 0804,DFE0 )                 dl X_RDROP X_DROP X_EVALUATE X_(;) 
 
 ( 0804,DFF0 )   :N_REFILL-TIB   d$  ^J 0  0  0  "REFILL-TIB" 90 
 ( 0804,DFFF )                 d$  90 
@@ -3276,7 +3276,7 @@ BITS-32
 ( 0804,E050 )                 dl X_DUP X_0= X_LIT -20 
 ( 0804,E060 )                 dl X_AND X_?ERRUR X_TIB X_@ 
 ( 0804,E070 )                 dl X_SWAP X_R> X_+ X_REMAINDER 
-( 0804,E080 )                 dl X_2! semis 
+( 0804,E080 )                 dl X_2! X_(;) 
 
 ( 0804,E088 )   :N_ACCEPT   d$  6  0  0  0  "ACCEPT" 90 
 ( 0804,E093 )                 d$  90 
@@ -3285,7 +3285,7 @@ BITS-32
 ( 0804,E0A4 )                 dl N_ACCEPT 0 
 ( 0804,E0AC )   :H_ACCEPT   dl X_(ACCEPT) X_2SWAP 
 ( 0804,E0B4 )                 dl X_ROT X_MIN X_DUP X_>R 
-( 0804,E0C4 )                 dl X_MOVE X_R> semis 
+( 0804,E0C4 )                 dl X_MOVE X_R> X_(;) 
 
 ( 0804,E0D0 )   :N_(ACCEPT)   d$  8  0  0  0  "(ACCEPT)"
 
@@ -3299,7 +3299,7 @@ BITS-32
 ( 0804,E13C )                 dl X_! X_REFILL-TIB X_BRANCH -58 
 ( 0804,E14C )                 dl X_REMAINDER X_2@ X_LIT 0A 
 ( 0804,E15C )                 dl X_$S X_2SWAP X_REMAINDER X_2! 
-( 0804,E16C )                 dl semis 
+( 0804,E16C )                 dl X_(;) 
 
 ( 0804,E170 )   :N_KEY   d$  3  0  0  0  "KEY" 90 
 
@@ -3311,7 +3311,7 @@ BITS-32
 ( 0804,E1B8 )                 dl 3 X_LINOS X_DUP X_?ERRUR 
 ( 0804,E1C8 )                 dl X_0= X_LIT -20 X_AND 
 ( 0804,E1D8 )                 dl X_?ERRUR X_1 X_LIT 0A 
-( 0804,E1E8 )                 dl X_SET-TERM semis 
+( 0804,E1E8 )                 dl X_SET-TERM X_(;) 
 
 ( 0804,E1F0 )   :N_KEY?   d$  4  0  0  0  "KEY?"
 
@@ -3322,9 +3322,9 @@ BITS-32
 ( 0804,E228 )                 dl L0804,E288 X_1 X_OVER X_! 
 ( 0804,E238 )                 dl X_0 X_0 X_0 X_0 
 ( 0804,E248 )                 dl X_LIT SOMEBUFFER1 X_2! X_LIT 
-( 0804,E258 )                 dl SOMEBUFFER1 X_LIT 8E X_LINOS5 
+( 0804,E258 )                 dl SOMEBUFFER1 X_LIT H_CURRENT 6 + X_LINOS5 
 ( 0804,E268 )                 dl X_DUP X_?ERRUR X_NEGATE X_0 
-( 0804,E278 )                 dl X_LIT 0A X_SET-TERM semis 
+( 0804,E278 )                 dl X_LIT 0A X_SET-TERM X_(;) 
 
 ( 0804,E288 )   :L0804,E288   d$  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
 ( 0804,E298 )                 d$  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
@@ -3341,7 +3341,7 @@ BITS-32
 ( 0804,E320 )                 dl N_TYPE 0 
 ( 0804,E328 )   :H_TYPE   dl X_DUP X_OUT 
 ( 0804,E330 )                 dl X_+! X_1 X_WRITE-FILE X_DROP 
-( 0804,E340 )                 dl semis 
+( 0804,E340 )                 dl X_(;) 
 
 ( 0804,E344 )   :N_ETYPE   d$  5  0  0  0  "ETYPE" 90 
 ( 0804,E34E )                 d$  90  90 
@@ -3349,7 +3349,7 @@ BITS-32
 ( 0804,E350 )   :X_ETYPE   dl docol H_ETYPE 0 X_TYPE 
 ( 0804,E360 )                 dl N_ETYPE 0 
 ( 0804,E368 )   :H_ETYPE   dl X_2 X_WRITE-FILE 
-( 0804,E370 )                 dl X_DROP semis 
+( 0804,E370 )                 dl X_DROP X_(;) 
 
 ( 0804,E378 )   :N_TERMIO   d$  6  0  0  0  "TERMIO" 90 
 ( 0804,E383 )                 d$  90 
@@ -3371,15 +3371,15 @@ BITS-32
 ( 0804,E3FC )   :H_SET-TERM   dl X_LIT L0804,E3A8 
 ( 0804,E404 )                 dl X_SWAP X_TOGGLE X_LIT L0804,E3B3 
 ( 0804,E414 )                 dl X_C! X_0 X_LIT 5402 
-( 0804,E424 )                 dl X_TERMIO X_LIT 36 X_LINOS 
-( 0804,E434 )                 dl X_?ERRUR semis 
+( 0804,E424 )                 dl X_TERMIO X_LIT H_WHERE 6 + X_LINOS 
+( 0804,E434 )                 dl X_?ERRUR X_(;) 
 
 ( 0804,E43C )   :N_EMIT   d$  4  0  0  0  "EMIT"
 
 ( 0804,E444 )   :X_EMIT   dl docol H_EMIT 0 X_SET-TERM 
 ( 0804,E454 )                 dl N_EMIT 0 
 ( 0804,E45C )   :H_EMIT   dl X_DSP@ X_1 
-( 0804,E464 )                 dl X_TYPE X_DROP semis 
+( 0804,E464 )                 dl X_TYPE X_DROP X_(;) 
 
 ( 0804,E470 )   :N_DISK-ERROR   d$  ^J 0  0  0  "DISK-ERROR" 90 
 ( 0804,E47F )                 d$  90 
@@ -3424,8 +3424,8 @@ BITS-32
 
 ( 0804,E600 )   :X_?DISK-ERROR   dl docol H_?DISK-ERROR 0 X_BLOCK-HANDLE 
 ( 0804,E610 )                 dl N_?DISK-ERROR 0 
-( 0804,E618 )   :H_?DISK-ERROR   dl X_LIT H_#BUFF 
-( 0804,E620 )                 dl X_?ERROR semis 
+( 0804,E618 )   :H_?DISK-ERROR   dl X_LIT 8 
+( 0804,E620 )                 dl X_?ERROR X_(;) 
 
 ( 0804,E628 )   :N_BLOCK-INIT   d$  ^J 0  0  0  "BLOCK-INIT" 90 
 ( 0804,E637 )                 d$  90 
@@ -3435,7 +3435,7 @@ BITS-32
 ( 0804,E650 )   :H_BLOCK-INIT   dl X_BLOCK-FILE X_$@ 
 ( 0804,E658 )                 dl X_ROT X_OPEN-FILE X_0= X_NEGATE 
 ( 0804,E668 )                 dl X_WARNING X_@ X_MIN X_WARNING 
-( 0804,E678 )                 dl X_! X_BLOCK-HANDLE X_! semis 
+( 0804,E678 )                 dl X_! X_BLOCK-HANDLE X_! X_(;) 
 
 ( 0804,E688 )   :N_BLOCK-EXIT   d$  ^J 0  0  0  "BLOCK-EXIT" 90 
 ( 0804,E697 )                 d$  90 
@@ -3445,7 +3445,7 @@ BITS-32
 ( 0804,E6B0 )   :H_BLOCK-EXIT   dl X_FLUSH X_BLOCK-HANDLE 
 ( 0804,E6B8 )                 dl X_@ X_CLOSE-FILE X_0 X_WARNING 
 ( 0804,E6C8 )                 dl X_! X_LIT -1 X_BLOCK-HANDLE 
-( 0804,E6D8 )                 dl X_! X_?DISK-ERROR semis 
+( 0804,E6D8 )                 dl X_! X_?DISK-ERROR X_(;) 
 
 ( 0804,E6E4 )   :N_SEEK   d$  4  0  0  0  "SEEK"
 
@@ -3453,7 +3453,7 @@ BITS-32
 ( 0804,E6FC )                 dl N_SEEK 0 
 ( 0804,E704 )   :H_SEEK   dl X_B/BUF X_UM* 
 ( 0804,E70C )                 dl X_BLOCK-HANDLE X_@ X_REPOSITION-FILE X_?DISK-ERROR 
-( 0804,E71C )                 dl semis 
+( 0804,E71C )                 dl X_(;) 
 
 ( 0804,E720 )   :N_R\W   d$  3  0  0  0  "R\W" 90 
 
@@ -3462,8 +3462,8 @@ BITS-32
 ( 0804,E740 )   :H_R\W   dl X_>R X_SEEK 
 ( 0804,E748 )                 dl X_B/BUF X_BLOCK-HANDLE X_@ X_R> 
 ( 0804,E758 )                 dl X_0BRANCH H_RUBOUT X_READ-FILE X_SWAP 
-( 0804,E768 )                 dl X_DROP X_BRANCH H_U0 X_WRITE-FILE 
-( 0804,E778 )                 dl X_?DISK-ERROR semis 
+( 0804,E768 )                 dl X_DROP X_BRANCH 4 X_WRITE-FILE 
+( 0804,E778 )                 dl X_?DISK-ERROR X_(;) 
 
 ( 0804,E780 )   :N_SHELL   d$  5  0  0  0  "SHELL" 90 
 ( 0804,E78A )                 d$  90  90 
@@ -3501,16 +3501,16 @@ BITS-32
 ( 0804,E8F0 )                 dl X_LIT -1 X_SHELL X_+! 
 ( 0804,E900 )                 dl X__ X__ X__ X_LIT 
 ( 0804,E910 )                 dl 2 X_LINOS X_DUP X_?ERRUR 
-( 0804,E920 )                 dl X_DUP X_0= X_0BRANCH 44 
+( 0804,E920 )                 dl X_DUP X_0= X_0BRANCH H_C/L 4 + 
 ( 0804,E930 )                 dl X_SHELL X_CELL+ X_LIT L0804,EACB 
 ( 0804,E940 )                 dl X_ARGS X_@ X_$@ X_1+ 
 ( 0804,E950 )                 dl X_CELLS X_+ X_LIT 0B 
 ( 0804,E960 )                 dl X_LINOS X_LIT -7F X_?ERRUR 
 ( 0804,E970 )                 dl X_BYE X_DUP X_LIT L0804,E9C0 
 ( 0804,E980 )                 dl X_0 X_LIT 7 X_LINOS 
-( 0804,E990 )                 dl X_DUP X_LIT H_U0 X_= 
-( 0804,E9A0 )                 dl X_BRANCH H_R0 X_DROP X_0BRANCH 
-( 0804,E9B0 )                 dl -40 X_?ERRUR X_2DROP semis 
+( 0804,E990 )                 dl X_DUP X_LIT 4 X_= 
+( 0804,E9A0 )                 dl X_BRANCH 0C X_DROP X_0BRANCH 
+( 0804,E9B0 )                 dl -40 X_?ERRUR X_2DROP X_(;) 
 
 ( 0804,E9C0 )   :L0804,E9C0   d$  0  0  0  0 
 ( 0804,E9C4 )   :L0804,E9C4   d$  "-c" 0 
@@ -3544,11 +3544,11 @@ BITS-32
 ( 0804,EAF4 )                 dl N_' 0 
 ( 0804,EAFC )   :H_'   dl X_(WORD) X_PRESENT 
 ( 0804,EB04 )                 dl X_DUP X_0= X_LIT 0B 
-( 0804,EB14 )                 dl X_?ERROR semis 
+( 0804,EB14 )                 dl X_?ERROR X_(;) 
 
 ( 0804,EB1C )   :N_[']   d$  3  0  0  0  "[']" 90 
 
-( 0804,EB24 )   :X_[']   dl docol H_['] H_U0 X_' 
+( 0804,EB24 )   :X_[']   dl docol H_['] 4 X_' 
 ( 0804,EB34 )                 dl N_['] 0 
 
 ( 0804,EB3C )   :N_FORGET-VOC   d$  ^J 0  0  0  "FORGET-VOC" 90 
@@ -3557,13 +3557,13 @@ BITS-32
 ( 0804,EB4C )   :X_FORGET-VOC   dl docol H_FORGET-VOC 0 X_['] 
 ( 0804,EB5C )                 dl N_FORGET-VOC 0 
 ( 0804,EB64 )   :H_FORGET-VOC   dl X_2DUP X_SWAP 
-( 0804,EB6C )                 dl X_U< X_0BRANCH 44 X_SWAP 
+( 0804,EB6C )                 dl X_U< X_0BRANCH H_C/L 4 + X_SWAP 
 ( 0804,EB7C )                 dl X_>R X_>WID X_DUP X_>LFA 
 ( 0804,EB8C )                 dl X_@ X_DUP X_R@ X_U< 
 ( 0804,EB9C )                 dl X_0BRANCH -1C X_SWAP X_>LFA 
 ( 0804,EBAC )                 dl X_! X_R> X_BRANCH H_WARNING 
 ( 0804,EBBC )                 dl X_>VFA X_@ X_VOC-LINK X_! 
-( 0804,EBCC )                 dl X_ONLY X_FORTH X_DEFINITIONS semis 
+( 0804,EBCC )                 dl X_ONLY X_FORTH X_DEFINITIONS X_(;) 
 
 ( 0804,EBDC )   :N_FORGET   d$  6  0  0  0  "FORGET" 90 
 ( 0804,EBE7 )                 d$  90 
@@ -3572,16 +3572,16 @@ BITS-32
 ( 0804,EBF8 )                 dl N_FORGET 0 
 ( 0804,EC00 )   :H_FORGET   dl X__' X_DUP 
 ( 0804,EC08 )                 dl X_FENCE X_@ X_< X_LIT 
-( 0804,EC18 )                 dl 15 X_?ERROR X_LIT X_FORGET-VOC 
+( 0804,EC18 )                 dl H_RUBOUT 1 + X_?ERROR X_LIT X_FORGET-VOC 
 ( 0804,EC28 )                 dl X_FOR-VOCS X_>NFA X_@ X_DP 
-( 0804,EC38 )                 dl X_! semis 
+( 0804,EC38 )                 dl X_! X_(;) 
 
 ( 0804,EC40 )   :N_(BACK   d$  5  0  0  0  "(BACK" 90 
 ( 0804,EC4A )                 d$  90  90 
 
 ( 0804,EC4C )   :X_(BACK   dl docol H_(BACK 0 X_FORGET 
 ( 0804,EC5C )                 dl N_(BACK 0 
-( 0804,EC64 )   :H_(BACK   dl X_HERE semis 
+( 0804,EC64 )   :H_(BACK   dl X_HERE X_(;) 
 
 ( 0804,EC6C )   :N_BACK)   d$  5  0  0  0  "BACK)" 90 
 ( 0804,EC76 )                 d$  90  90 
@@ -3589,14 +3589,14 @@ BITS-32
 ( 0804,EC78 )   :X_BACK)   dl docol H_BACK) 0 X_(BACK 
 ( 0804,EC88 )                 dl N_BACK) 0 
 ( 0804,EC90 )   :H_BACK)   dl X_HERE X_CELL+ 
-( 0804,EC98 )                 dl X_- X_, semis 
+( 0804,EC98 )                 dl X_- X_, X_(;) 
 
 ( 0804,ECA4 )   :N_(FORWARD   d$  8  0  0  0  "(FORWARD"
 
 ( 0804,ECB0 )   :X_(FORWARD   dl docol H_(FORWARD 0 X_BACK) 
 ( 0804,ECC0 )                 dl N_(FORWARD 0 
 ( 0804,ECC8 )   :H_(FORWARD   dl X_HERE X__ 
-( 0804,ECD0 )                 dl X_, semis 
+( 0804,ECD0 )                 dl X_, X_(;) 
 
 ( 0804,ECD8 )   :N_FORWARD)   d$  8  0  0  0  "FORWARD)"
 
@@ -3604,111 +3604,111 @@ BITS-32
 ( 0804,ECF4 )                 dl N_FORWARD) 0 
 ( 0804,ECFC )   :H_FORWARD)   dl X_HERE X_OVER 
 ( 0804,ED04 )                 dl X_CELL+ X_- X_SWAP X_! 
-( 0804,ED14 )                 dl semis 
+( 0804,ED14 )                 dl X_(;) 
 
 ( 0804,ED18 )   :N_BEGIN   d$  5  0  0  0  "BEGIN" 90 
 ( 0804,ED22 )                 d$  90  90 
 
-( 0804,ED24 )   :X_BEGIN   dl docol H_BEGIN H_U0 X_FORWARD) 
+( 0804,ED24 )   :X_BEGIN   dl docol H_BEGIN 4 X_FORWARD) 
 ( 0804,ED34 )                 dl N_BEGIN 0 
 ( 0804,ED3C )   :H_BEGIN   dl X_(BACK X_?COMP 
-( 0804,ED44 )                 dl X_1 semis 
+( 0804,ED44 )                 dl X_1 X_(;) 
 
 ( 0804,ED4C )   :N_THEN   d$  4  0  0  0  "THEN"
 
-( 0804,ED54 )   :X_THEN   dl docol H_THEN H_U0 X_BEGIN 
+( 0804,ED54 )   :X_THEN   dl docol H_THEN 4 X_BEGIN 
 ( 0804,ED64 )                 dl N_THEN 0 
 ( 0804,ED6C )   :H_THEN   dl X_?COMP X_2 
-( 0804,ED74 )                 dl X_?PAIRS X_FORWARD) semis 
+( 0804,ED74 )                 dl X_?PAIRS X_FORWARD) X_(;) 
 
 ( 0804,ED80 )   :N_DO   d$  2  0  0  0  "DO" 90 
 ( 0804,ED87 )                 d$  90 
 
-( 0804,ED88 )   :X_DO   dl docol H_DO H_U0 X_THEN 
+( 0804,ED88 )   :X_DO   dl docol H_DO 4 X_THEN 
 ( 0804,ED98 )                 dl N_DO 0 
 ( 0804,EDA0 )   :H_DO   dl X_LIT X_(DO) 
 ( 0804,EDA8 )                 dl X_, X_(FORWARD X_(BACK X_LIT 
-( 0804,EDB8 )                 dl 3 semis 
+( 0804,EDB8 )                 dl 3 X_(;) 
 
 ( 0804,EDC0 )   :N_?DO   d$  3  0  0  0  "?DO" 90 
 
-( 0804,EDC8 )   :X_?DO   dl docol H_?DO H_U0 X_DO 
+( 0804,EDC8 )   :X_?DO   dl docol H_?DO 4 X_DO 
 ( 0804,EDD8 )                 dl N_?DO 0 
 ( 0804,EDE0 )   :H_?DO   dl X_LIT X_(?DO) 
 ( 0804,EDE8 )                 dl X_, X_(FORWARD X_(BACK X_LIT 
-( 0804,EDF8 )                 dl 3 semis 
+( 0804,EDF8 )                 dl 3 X_(;) 
 
 ( 0804,EE00 )   :N_LOOP   d$  4  0  0  0  "LOOP"
 
-( 0804,EE08 )   :X_LOOP   dl docol H_LOOP H_U0 X_?DO 
+( 0804,EE08 )   :X_LOOP   dl docol H_LOOP 4 X_?DO 
 ( 0804,EE18 )                 dl N_LOOP 0 
 ( 0804,EE20 )   :H_LOOP   dl X_LIT 3 
 ( 0804,EE28 )                 dl X_?PAIRS X_LIT X_(LOOP) X_, 
-( 0804,EE38 )                 dl X_BACK) X_FORWARD) semis 
+( 0804,EE38 )                 dl X_BACK) X_FORWARD) X_(;) 
 
 ( 0804,EE44 )   :N_+LOOP   d$  5  0  0  0  "+LOOP" 90 
 ( 0804,EE4E )                 d$  90  90 
 
-( 0804,EE50 )   :X_+LOOP   dl docol H_+LOOP H_U0 X_LOOP 
+( 0804,EE50 )   :X_+LOOP   dl docol H_+LOOP 4 X_LOOP 
 ( 0804,EE60 )                 dl N_+LOOP 0 
 ( 0804,EE68 )   :H_+LOOP   dl X_LIT 3 
 ( 0804,EE70 )                 dl X_?PAIRS X_LIT X_(+LOOP) X_, 
-( 0804,EE80 )                 dl X_BACK) X_FORWARD) semis 
+( 0804,EE80 )                 dl X_BACK) X_FORWARD) X_(;) 
 
 ( 0804,EE8C )   :N_UNTIL   d$  5  0  0  0  "UNTIL" 90 
 ( 0804,EE96 )                 d$  90  90 
 
-( 0804,EE98 )   :X_UNTIL   dl docol H_UNTIL H_U0 X_+LOOP 
+( 0804,EE98 )   :X_UNTIL   dl docol H_UNTIL 4 X_+LOOP 
 ( 0804,EEA8 )                 dl N_UNTIL 0 
 ( 0804,EEB0 )   :H_UNTIL   dl X_1 X_?PAIRS 
 ( 0804,EEB8 )                 dl X_LIT X_0BRANCH X_, X_BACK) 
-( 0804,EEC8 )                 dl semis 
+( 0804,EEC8 )                 dl X_(;) 
 
 ( 0804,EECC )   :N_AGAIN   d$  5  0  0  0  "AGAIN" 90 
 ( 0804,EED6 )                 d$  90  90 
 
-( 0804,EED8 )   :X_AGAIN   dl docol H_AGAIN H_U0 X_UNTIL 
+( 0804,EED8 )   :X_AGAIN   dl docol H_AGAIN 4 X_UNTIL 
 ( 0804,EEE8 )                 dl N_AGAIN 0 
 ( 0804,EEF0 )   :H_AGAIN   dl X_1 X_?PAIRS 
 ( 0804,EEF8 )                 dl X_LIT X_BRANCH X_, X_BACK) 
-( 0804,EF08 )                 dl semis 
+( 0804,EF08 )                 dl X_(;) 
 
 ( 0804,EF0C )   :N_REPEAT   d$  6  0  0  0  "REPEAT" 90 
 ( 0804,EF17 )                 d$  90 
 
-( 0804,EF18 )   :X_REPEAT   dl docol H_REPEAT H_U0 X_AGAIN 
+( 0804,EF18 )   :X_REPEAT   dl docol H_REPEAT 4 X_AGAIN 
 ( 0804,EF28 )                 dl N_REPEAT 0 
 ( 0804,EF30 )   :H_REPEAT   dl X_1 X_?PAIRS 
 ( 0804,EF38 )                 dl X_LIT X_BRANCH X_, X_BACK) 
-( 0804,EF48 )                 dl X_?COMP X_LIT H_U0 X_?PAIRS 
-( 0804,EF58 )                 dl X_FORWARD) semis 
+( 0804,EF48 )                 dl X_?COMP X_LIT 4 X_?PAIRS 
+( 0804,EF58 )                 dl X_FORWARD) X_(;) 
 
 ( 0804,EF60 )   :N_IF   d$  2  0  0  0  "IF" 90 
 ( 0804,EF67 )                 d$  90 
 
-( 0804,EF68 )   :X_IF   dl docol H_IF H_U0 X_REPEAT 
+( 0804,EF68 )   :X_IF   dl docol H_IF 4 X_REPEAT 
 ( 0804,EF78 )                 dl N_IF 0 
 ( 0804,EF80 )   :H_IF   dl X_LIT X_0BRANCH 
-( 0804,EF88 )                 dl X_, X_(FORWARD X_2 semis 
+( 0804,EF88 )                 dl X_, X_(FORWARD X_2 X_(;) 
 
 ( 0804,EF98 )   :N_ELSE   d$  4  0  0  0  "ELSE"
 
-( 0804,EFA0 )   :X_ELSE   dl docol H_ELSE H_U0 X_IF 
+( 0804,EFA0 )   :X_ELSE   dl docol H_ELSE 4 X_IF 
 ( 0804,EFB0 )                 dl N_ELSE 0 
 ( 0804,EFB8 )   :H_ELSE   dl X_?COMP X_2 
 ( 0804,EFC0 )                 dl X_?PAIRS X_LIT X_BRANCH X_, 
 ( 0804,EFD0 )                 dl X_(FORWARD X_SWAP X_FORWARD) X_2 
-( 0804,EFE0 )                 dl semis 
+( 0804,EFE0 )                 dl X_(;) 
 
 ( 0804,EFE4 )   :N_WHILE   d$  5  0  0  0  "WHILE" 90 
 ( 0804,EFEE )                 d$  90  90 
 
-( 0804,EFF0 )   :X_WHILE   dl docol H_WHILE H_U0 X_ELSE 
+( 0804,EFF0 )   :X_WHILE   dl docol H_WHILE 4 X_ELSE 
 ( 0804,F000 )                 dl N_WHILE 0 
 ( 0804,F008 )   :H_WHILE   dl X_>R X_>R 
 ( 0804,F010 )                 dl X_LIT X_0BRANCH X_, X_(FORWARD 
-( 0804,F020 )                 dl X_LIT H_U0 X_R> X_R> 
-( 0804,F030 )                 dl semis 
+( 0804,F020 )                 dl X_LIT 4 X_R> X_R> 
+( 0804,F030 )                 dl X_(;) 
 
 ( 0804,F034 )   :N_SPACES   d$  6  0  0  0  "SPACES" 90 
 ( 0804,F03F )                 d$  90 
@@ -3716,8 +3716,8 @@ BITS-32
 ( 0804,F040 )   :X_SPACES   dl docol H_SPACES 0 X_WHILE 
 ( 0804,F050 )                 dl N_SPACES 0 
 ( 0804,F058 )   :H_SPACES   dl X_0 X_MAX 
-( 0804,F060 )                 dl X_0 X_(?DO) H_R0 X_SPACE 
-( 0804,F070 )                 dl X_(LOOP) -C semis 
+( 0804,F060 )                 dl X_0 X_(?DO) 0C X_SPACE 
+( 0804,F070 )                 dl X_(LOOP) -C X_(;) 
 
 ( 0804,F07C )   :N_<#   d$  2  0  0  0  "<#" 90 
 ( 0804,F083 )                 d$  90 
@@ -3725,7 +3725,7 @@ BITS-32
 ( 0804,F084 )   :X_<#   dl docol H_<# 0 X_SPACES 
 ( 0804,F094 )                 dl N_<# 0 
 ( 0804,F09C )   :H_<#   dl X_PAD X_HLD 
-( 0804,F0A4 )                 dl X_! semis 
+( 0804,F0A4 )                 dl X_! X_(;) 
 
 ( 0804,F0AC )   :N_#>   d$  2  0  0  0  "#>" 90 
 ( 0804,F0B3 )                 d$  90 
@@ -3734,15 +3734,15 @@ BITS-32
 ( 0804,F0C4 )                 dl N_#> 0 
 ( 0804,F0CC )   :H_#>   dl X_DROP X_DROP 
 ( 0804,F0D4 )                 dl X_HLD X_@ X_PAD X_OVER 
-( 0804,F0E4 )                 dl X_- semis 
+( 0804,F0E4 )                 dl X_- X_(;) 
 
 ( 0804,F0EC )   :N_SIGN   d$  4  0  0  0  "SIGN"
 
 ( 0804,F0F4 )   :X_SIGN   dl docol H_SIGN 0 X_#> 
 ( 0804,F104 )                 dl N_SIGN 0 
 ( 0804,F10C )   :H_SIGN   dl X_0< X_0BRANCH 
-( 0804,F114 )                 dl H_R0 X_LIT 2D X_HOLD 
-( 0804,F124 )                 dl semis 
+( 0804,F114 )                 dl 0C X_LIT H_OFFSET 1 + X_HOLD 
+( 0804,F124 )                 dl X_(;) 
 
 ( 0804,F128 )   :N_#   d$  1  0  0  0  &# 90 
 ( 0804,F12E )                 d$  90  90 
@@ -3751,9 +3751,9 @@ BITS-32
 ( 0804,F140 )                 dl N_# 0 
 ( 0804,F148 )   :H_#   dl X_BASE X_@ 
 ( 0804,F150 )                 dl X_M/MOD X_ROT X_LIT 9 
-( 0804,F160 )                 dl X_OVER X_< X_0BRANCH H_R0 
+( 0804,F160 )                 dl X_OVER X_< X_0BRANCH 0C 
 ( 0804,F170 )                 dl X_LIT 7 X_+ X_LIT 
-( 0804,F180 )                 dl H_WHERE X_+ X_HOLD semis 
+( 0804,F180 )                 dl H_WHERE X_+ X_HOLD X_(;) 
 
 ( 0804,F190 )   :N_#S   d$  2  0  0  0  "#S" 90 
 ( 0804,F197 )                 d$  90 
@@ -3762,7 +3762,7 @@ BITS-32
 ( 0804,F1A8 )                 dl N_#S 0 
 ( 0804,F1B0 )   :H_#S   dl X_# X_OVER 
 ( 0804,F1B8 )                 dl X_OVER X_OR X_0= X_0BRANCH 
-( 0804,F1C8 )                 dl -1C semis 
+( 0804,F1C8 )                 dl -1C X_(;) 
 
 ( 0804,F1D0 )   :N_(D.R)   d$  5  0  0  0  "(D.R)" 90 
 ( 0804,F1DA )                 d$  90  90 
@@ -3775,14 +3775,14 @@ BITS-32
 ( 0804,F21C )                 dl X_OVER X_- X_0 X_MAX 
 ( 0804,F22C )                 dl X_0 X_(?DO) H_TIB X_BL 
 ( 0804,F23C )                 dl X_HOLD X_(LOOP) -10 X_#> 
-( 0804,F24C )                 dl semis 
+( 0804,F24C )                 dl X_(;) 
 
 ( 0804,F250 )   :N_D.R   d$  3  0  0  0  "D.R" 90 
 
 ( 0804,F258 )   :X_D.R   dl docol H_D.R 0 X_(D.R) 
 ( 0804,F268 )                 dl N_D.R 0 
 ( 0804,F270 )   :H_D.R   dl X_(D.R) X_TYPE 
-( 0804,F278 )                 dl semis 
+( 0804,F278 )                 dl X_(;) 
 
 ( 0804,F27C )   :N_.R   d$  2  0  0  0  ".R" 90 
 ( 0804,F283 )                 d$  90 
@@ -3790,7 +3790,7 @@ BITS-32
 ( 0804,F284 )   :X_.R   dl docol H_.R 0 X_D.R 
 ( 0804,F294 )                 dl N_.R 0 
 ( 0804,F29C )   :H_.R   dl X_>R X_S>D 
-( 0804,F2A4 )                 dl X_R> X_D.R semis 
+( 0804,F2A4 )                 dl X_R> X_D.R X_(;) 
 
 ( 0804,F2B0 )   :N_D.   d$  2  0  0  0  "D." 90 
 ( 0804,F2B7 )                 d$  90 
@@ -3798,7 +3798,7 @@ BITS-32
 ( 0804,F2B8 )   :X_D.   dl docol H_D. 0 X_.R 
 ( 0804,F2C8 )                 dl N_D. 0 
 ( 0804,F2D0 )   :H_D.   dl X_0 X_D.R 
-( 0804,F2D8 )                 dl X_SPACE semis 
+( 0804,F2D8 )                 dl X_SPACE X_(;) 
 
 ( 0804,F2E0 )   :N_.   d$  1  0  0  0  &. 90 
 ( 0804,F2E6 )                 d$  90  90 
@@ -3806,7 +3806,7 @@ BITS-32
 ( 0804,F2E8 )   :X_.   dl docol H_. 0 X_D. 
 ( 0804,F2F8 )                 dl N_. 0 
 ( 0804,F300 )   :H_.   dl X_S>D X_D. 
-( 0804,F308 )                 dl semis 
+( 0804,F308 )                 dl X_(;) 
 
 ( 0804,F30C )   :N_?   d$  1  0  0  0  &? 90 
 ( 0804,F312 )                 d$  90  90 
@@ -3814,7 +3814,7 @@ BITS-32
 ( 0804,F314 )   :X_?   dl docol H_? 0 X_. 
 ( 0804,F324 )                 dl N_? 0 
 ( 0804,F32C )   :H_?   dl X_@ X_. 
-( 0804,F334 )                 dl semis 
+( 0804,F334 )                 dl X_(;) 
 
 ( 0804,F338 )   :N_U.   d$  2  0  0  0  "U." 90 
 ( 0804,F33F )                 d$  90 
@@ -3822,7 +3822,7 @@ BITS-32
 ( 0804,F340 )   :X_U.   dl docol H_U. 0 X_? 
 ( 0804,F350 )                 dl N_U. 0 
 ( 0804,F358 )   :H_U.   dl X_0 X_D. 
-( 0804,F360 )                 dl semis 
+( 0804,F360 )                 dl X_(;) 
 
 ( 0804,F364 )   :N_FOR-WORDS   d$  ^I 0  0  0  "FOR-WORDS" 90 
 ( 0804,F372 )                 d$  90  90 
@@ -3833,7 +3833,7 @@ BITS-32
 ( 0804,F394 )                 dl X_>R X_R> X_R@ X_OVER 
 ( 0804,F3A4 )                 dl X_>LFA X_@ X_>R X_EXECUTE 
 ( 0804,F3B4 )                 dl X_R@ X_0= X_0BRANCH -2C 
-( 0804,F3C4 )                 dl X_RDROP X_RDROP semis 
+( 0804,F3C4 )                 dl X_RDROP X_RDROP X_(;) 
 
 ( 0804,F3D0 )   :N_FOR-VOCS   d$  8  0  0  0  "FOR-VOCS"
 
@@ -3843,7 +3843,7 @@ BITS-32
 ( 0804,F3FC )                 dl X_@ X_>R X_R> X_R@ 
 ( 0804,F40C )                 dl X_OVER X_>VFA X_@ X_>R 
 ( 0804,F41C )                 dl X_EXECUTE X_R@ X_0= X_0BRANCH 
-( 0804,F42C )                 dl -2C X_RDROP X_RDROP semis 
+( 0804,F42C )                 dl -2C X_RDROP X_RDROP X_(;) 
 
 ( 0804,F43C )   :N_WORDS   d$  5  0  0  0  "WORDS" 90 
 ( 0804,F446 )                 d$  90  90 
@@ -3852,7 +3852,7 @@ BITS-32
 ( 0804,F458 )                 dl N_WORDS 0 
 ( 0804,F460 )   :H_WORDS   dl X_C/L X_OUT 
 ( 0804,F468 )                 dl X_! X_LIT X_ID. X_CONTEXT 
-( 0804,F478 )                 dl X_@ X_FOR-WORDS semis 
+( 0804,F478 )                 dl X_@ X_FOR-WORDS X_(;) 
 
 ( 0804,F484 )   :N_EXIT-CODE   d$  ^I 0  0  0  "EXIT-CODE" 90 
 ( 0804,F492 )                 d$  90  90 
@@ -3868,7 +3868,7 @@ BITS-32
 ( 0804,F4C8 )                 dl N_BYE 0 
 ( 0804,F4D0 )   :H_BYE   dl X_EXIT-CODE X_@ 
 ( 0804,F4D8 )                 dl X__ X__ X_1 X_LINOS 
-( 0804,F4E8 )                 dl semis 
+( 0804,F4E8 )                 dl X_(;) 
 
 ( 0804,F4EC )   :N_LIST   d$  4  0  0  0  "LIST"
 
@@ -3884,20 +3884,20 @@ BITS-32
 ( 0804,F564 )                 dl X_LIT H_B/BUF X_LIT 0A 
 ( 0804,F574 )                 dl X_$S X_CR X_TYPE X_OVER 
 ( 0804,F584 )                 dl X_0= X_0BRANCH -24 X_2DROP 
-( 0804,F594 )                 dl semis 
+( 0804,F594 )                 dl X_(;) 
 
 ( 0804,F598 )   :N_INDEX   d$  5  0  0  0  "INDEX" 90 
 ( 0804,F5A2 )                 d$  90  90 
 
 ( 0804,F5A4 )   :X_INDEX   dl docol H_INDEX 0 X_LIST 
 ( 0804,F5B4 )                 dl N_INDEX 0 
-( 0804,F5BC )   :H_INDEX   dl X_LIT H_R0 
+( 0804,F5BC )   :H_INDEX   dl X_LIT 0C 
 ( 0804,F5C4 )                 dl X_EMIT X_CR X_1+ X_SWAP 
 ( 0804,F5D4 )                 dl X_(DO) H_C/L X_CR X_I 
 ( 0804,F5E4 )                 dl X_LIT 3 X_.R X_SPACE 
 ( 0804,F5F4 )                 dl X_0 X_I X_(LINE) X_TYPE 
-( 0804,F604 )                 dl X_KEY? X_0BRANCH H_U0 X_LEAVE 
-( 0804,F614 )                 dl X_(LOOP) -40 semis 
+( 0804,F604 )                 dl X_KEY? X_0BRANCH 4 X_LEAVE 
+( 0804,F614 )                 dl X_(LOOP) -40 X_(;) 
 
 ( 0804,F620 )   :N_.S   d$  2  0  0  0  ".S" 90 
 ( 0804,F627 )                 d$  90 
@@ -3905,14 +3905,14 @@ BITS-32
 ( 0804,F628 )   :X_.S   dl docol H_.S 0 X_INDEX 
 ( 0804,F638 )                 dl N_.S 0 
 ( 0804,F640 )   :H_.S   dl X_CR X_LIT 
-( 0804,F648 )                 dl 53 X_EMIT X_LIT 5B 
+( 0804,F648 )                 dl H_DPL 3 + X_EMIT X_LIT H_CSP 3 + 
 ( 0804,F658 )                 dl X_EMIT X_SPACE X_DSP@ X_S0 
 ( 0804,F668 )                 dl X_@ X_OVER X_OVER X_= 
 ( 0804,F678 )                 dl X_0= X_0BRANCH H_FENCE X_0 
 ( 0804,F688 )                 dl X_CELL+ X_- X_DUP X_@ 
 ( 0804,F698 )                 dl X_. X_BRANCH -38 X_DROP 
-( 0804,F6A8 )                 dl X_DROP X_LIT 5D X_EMIT 
-( 0804,F6B8 )                 dl semis 
+( 0804,F6A8 )                 dl X_DROP X_LIT H_R# 1 + X_EMIT 
+( 0804,F6B8 )                 dl X_(;) 
 
 ( 0804,F6BC )   :N_ENVIRONMENT?   d$  ^L 0  0  0  "ENVIRONMENT?"
 
@@ -3920,22 +3920,22 @@ BITS-32
 ( 0804,F6DC )                 dl N_ENVIRONMENT? 0 
 ( 0804,F6E4 )   :H_ENVIRONMENT?   dl X_LIT X_ENVIRONMENT 
 ( 0804,F6EC )                 dl X_>WID X_(FIND) X_>R X_2DROP 
-( 0804,F6FC )                 dl X_R> X_DUP X_0BRANCH H_R0 
-( 0804,F70C )                 dl X_EXECUTE X_LIT -1 semis 
+( 0804,F6FC )                 dl X_R> X_DUP X_0BRANCH 0C 
+( 0804,F70C )                 dl X_EXECUTE X_LIT -1 X_(;) 
 
 ( 0804,F71C )   :N_TRIAD   d$  5  0  0  0  "TRIAD" 90 
 ( 0804,F726 )                 d$  90  90 
 
 ( 0804,F728 )   :X_TRIAD   dl docol H_TRIAD 0 X_ENVIRONMENT? 
 ( 0804,F738 )                 dl N_TRIAD 0 
-( 0804,F740 )   :H_TRIAD   dl X_LIT H_R0 
+( 0804,F740 )   :H_TRIAD   dl X_LIT 0C 
 ( 0804,F748 )                 dl X_EMIT X_LIT 3 X_/ 
 ( 0804,F758 )                 dl X_LIT 3 X_* X_LIT 
 ( 0804,F768 )                 dl 3 X_OVER X_+ X_SWAP 
 ( 0804,F778 )                 dl X_(DO) H_DP X_CR X_I 
-( 0804,F788 )                 dl X_LIST X_KEY? X_0BRANCH H_U0 
+( 0804,F788 )                 dl X_LIST X_KEY? X_0BRANCH 4 
 ( 0804,F798 )                 dl X_LEAVE X_(LOOP) -24 X_CR 
-( 0804,F7A8 )                 dl X_0 X_MESSAGE semis 
+( 0804,F7A8 )                 dl X_0 X_MESSAGE X_(;) 
 
 ( 0804,F7B4 )   :N_.SIGNON   d$  7  0  0  0  ".SIGNON" 90 
 
@@ -3946,13 +3946,13 @@ BITS-32
 ( 0804,F7F0 )                 dl X_! X_CPU X_D. X_BASE 
 ( 0804,F800 )                 dl X_! X_NAME X_TYPE X_SPACE 
 ( 0804,F810 )                 dl X_VERSION X_TYPE X_SPACE X_CR 
-( 0804,F820 )                 dl semis 
+( 0804,F820 )                 dl X_(;) 
 
 ( 0804,F824 )   :N_TASK   d$  4  0  0  0  "TASK"
 
 ( 0804,F82C )   :last_dea :X_TASK   dl docol H_TASK 0 X_.SIGNON 
 ( 0804,F83C )                 dl N_TASK 0 
-( 0804,F844 )   :H_TASK   dl semis 
+( 0804,F844 )   :H_TASK   dl X_(;) 
 
 ( 0804,F848 )   :_end   d$  0  "The Netwide Assembler 0.98" 0 
 ( 0804,F864 )                 d$  0  ".shstrtab" 0 
