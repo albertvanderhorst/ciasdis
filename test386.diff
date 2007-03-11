@@ -1,6 +1,5 @@
-1,20c1,6
+1,19c1,6
 < 
-< 80386 ciforth 4.2.A 
 < 
 < SCR # 0 
 < COPYRIGHT (c) 2000-2004 Albert van der Horst, THE NETHERLANDS  
@@ -26,9 +25,9 @@
 > HEX
 > 10 AS-HERE 10 MOD - AS-ALLOT ( To get a nice DUMP)
 > AS-HERE
-89a76
+88a76
 > firstset
-3862,3893d3848
+3861,3892d3848
 < XORSI,   MEM|   C L,   10 IS,   
 < XORSI,   R|   DI|   10 IS,   
 < XORSI,   R|   SI|   10 IS,   
@@ -61,7 +60,7 @@
 < XORSI,   ZO|   [DX]   10 IS,   
 < XORSI,   ZO|   [CX]   10 IS,   
 < XORSI,   ZO|   [AX]   10 IS,   
-3926,3957d3880
+3925,3956d3880
 < ANDSI,   MEM|   C L,   10 IS,   
 < ANDSI,   R|   DI|   10 IS,   
 < ANDSI,   R|   SI|   10 IS,   
@@ -94,7 +93,7 @@
 < ANDSI,   ZO|   [DX]   10 IS,   
 < ANDSI,   ZO|   [CX]   10 IS,   
 < ANDSI,   ZO|   [AX]   10 IS,   
-4022,4053d3944
+4021,4052d3944
 < ORSI,   MEM|   C L,   10 IS,   
 < ORSI,   R|   DI|   10 IS,   
 < ORSI,   R|   SI|   10 IS,   
@@ -127,7 +126,7 @@
 < ORSI,   ZO|   [DX]   10 IS,   
 < ORSI,   ZO|   [CX]   10 IS,   
 < ORSI,   ZO|   [AX]   10 IS,   
-21422,21709c21313,21421
+21421,21708c21313,21421
 < ~SIB,   [MEM   +8*   DI]   14 L,   
 < ~SIB,   [MEM   +8*   SI]   14 L,   
 < ~SIB,   [MEM   +8*   BP]   14 L,   
