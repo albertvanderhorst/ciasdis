@@ -489,7 +489,8 @@ test386: asgen.frt asi386.frt ; \
     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
     sed 's/~SIB|   1C SIB,,/[AX +1* 0]/' |\
-    sed 's/~SIB|   14 SIB,,/[AX +1* BX]/' >$@;\
+    sed 's/~SIB|   14 SIB,,/[AX +1* BX]/'|\
+    grep -v ciforth >$@;\
     rcsdiff -bBw -r$(RCSVERSION) $@
 
 test386.diff: test386 ; \
@@ -641,7 +642,7 @@ rf751.cul : cidis rf751equ.cul rfcrawl.cul elf.cul
 	echo FETCH rf751 INCLUDE rfcrawl.cul | cidis >$@
 	rcsdiff -bBw -r$(RCSVERSION) $@
 
-rf751.asm : cidis rf751 rf751equ.cul rf751.cul
+rf751.asm : cidis cias rf751 rf751equ.cul rf751.cul
 	make rf751
 	cidis rf751 rf751.cul>$@
 	rcsdiff -bBw -r$(RCSVERSION) rf751.asm
