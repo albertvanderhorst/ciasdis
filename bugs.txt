@@ -1,0 +1,40 @@
+$Id$
+In the documentation there is a need to warn for redefinitions.
+
+The -dc- thingies should be generated with a automatic tool.
+
+MAKE-CUL should print symbolic names for ranges where possible
+
+There is some worry because QSORT can't handle empty ranges
+(or so it seems).
+
+
+A lone EQU leads to a not unique warning in the second pass.
+If a label is defined using EQU the not-unique-message
+should be supressed.
+
+Byte offsets should be signed. Maybe all offsets should be signed.
+
+Introduce AS-@+ .
+
+ORG is a mess. It clears the code buffer, so it should only be issued
+at the start of a segment. -ORG- changes the association with the
+start of the segment. This is a bad idea, it just means that we are
+entering a different segment.
+
+We need a don't care segment that is not analysed, because it contains
+don't care items.
+
+WHERE-LABEL and CLEAN-LABEL require sortedness. This should be a permanent
+and maintained property such that the use cannot be accidentally wrong.
+
+The name SEGMENT is all wrong. It should be called SECTION !!
+
+------------------------ WISH-LIST ---------------------------------
+
+ There could be a priority to cul-items. If there is an overruling
+priority the lower priority would give way.
+Example: disassembling at priority 1 hits a data area with priority
+0. The disassembling stop there.
+Disassembling at priority 1 would stop at an unknown instruction,
+at priority 0 it would not.
