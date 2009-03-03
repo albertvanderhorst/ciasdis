@@ -37,61 +37,14 @@
 
 # ALL FILES STARTING IN ``ci86'' (OUTHER ``ci86.gnr'') ARE GENERATED
 
-INGREDIENTS = \
-header.m4       \
-postlude.m4      \
-prelude.m4       \
-protect.m4       \
-width16.m4       \
-width32.m4       \
-# That's all folks!
-
-DOCTRANSFORMS = \
-gloss.m4        \
-glosshtml.m4    \
-indexhtml.m4    \
-manual.m4       \
-menu.m4  \
-names.m4        \
-wordset.m4      \
-# That's all folks!
-
-# Normally tools are not supplied with the release.
-# But this is a tool not otherwise available.
-TOOLS=  \
-ssort   \
-# That's all folks!
-
 # Index files used by info, some are empty for ciforth.
 INDICES= cp fn ky pg tp vr
 
-# Different assemblers should generate equivalent Forth's.
-ASSEMBLERS= masm nasm gas
-# The kinds of Forth assembler sources that can be made using any assembler
-TARGETS= lina wina mina alone linux alonehd msdos32
-# The kinds of Forth's binaries that can be made using NASM (not used)
-BINTARGETS= mina alone
-# If this makefile runs under Linux, the following forth's can be made and
-# subsequently run
-LINUXFORTHS= ciforthc lina
-# Auxiliary targets. Because of GNU make bug, keep constant.m4.
-OTHERTARGETS= forth.lab forth.lab.lina forth.lab.wina toblock fromblock constant.m4 namescooked.m4
 # C-sources with various aims. FIXME: start with .c names.
 ASTARGETS= cias cidis ciasdis test.bin test2.bin test2.asm
 CSRCAUX= toblock fromblock stealconstant
 CSRCFORTH= ciforth stealconstant
 CSRC= $(CSRCAUX) $(CSRCFORTH)
-
-# Texinfo files still to be processed by m4.
-SRCMI= \
-assembler.mi    \
-# That's all folks!
-# cifgen.mi \
-# ciforth.mi \
-# intro.mi    \
-# manual.mi   \
-# rational.mi  \
-# That's all folks!
 
 # Generic source for assembler
 # Include two pass, reverse engineering.
@@ -270,18 +223,10 @@ ci86.%     : %.cfg       ci86.gnr ; cat $+ | m4 >$@
 default : lina
 ci86.$(s).bin :
 
-# Put include type of dependancies here
-$(TARGETS:%=%.cfg) : $(INGREDIENTS) ; if [ -f $@ ] ; then touch $@ ; else co $@ ; fi
-
 # Some of these targets make no sense and will fail
-all: $(TARGETS:%=ci86.%.asm) $(TARGETS:%=ci86.%.msm) $(BINTARGETS:%=ci86.%.bin) \
-    $(LINUXFORTHS) $(OTHERTARGETS)
+all: regressiontest
 
-clean: \
-; rm -f $(TARGETS:%=ci86.%.*)  $(CSRCS:%=%.o) $(LINUXFORTHS) VERSION spy\
-; for i in $(INDICES) ; do rm -f *.$$i *.$$i's' ; done
-
-cleanall: clean  testclean asclean ; \
+cleanall: testclean asclean ; \
     rcsclean ; \
     rm -f $(OTHERTARGETS) ; \
     rm -f *.aux *.log *.ps *.toc *.pdf
@@ -306,19 +251,6 @@ asclean: ; rm -f $(ASTARGETS)
 
 # WARNING : the generation of postscript and pdf use the same files
 # for indices, but with different content.
-
-%.ps:%.dvi  ;
-	for i in $(INDICES) ; do texindex  $(@:%.ps=%.$$i) ; done
-	 dvips -ta4 $< -o$@
-#       dvips -A -r -i       -S10 $< -oA$@
-#       dvips -B -i -T 1.8cm,0.0cm -S10 $< -oB$@
-
-%.pdf:%.texinfo  ;
-	pdftex $<
-	for i in $(INDICES) ; do texindex  $(@:%.pdf=%.$$i) ; done
-	pdftex $<
-	# Don't leave invalid indices for postscript!
-	for i in $(INDICES) ; do rm $(@:%.pdf=%.$$i) ; done
 
 %.ps : asgen.frt %.frt ps.frt ; \
     ( \
@@ -355,40 +287,6 @@ did: ci86.mina.msm
 		diff -w ci86.mina.msm $(cd)/compare.asm
 
 #ci86.mina.asm : header.m4 mina.m4 nasm.m4 ci86.gnr ; m4 $+ >$@
-
-#copy: $(TARGETS:%=ci86.%.bin) $(TARGETS:%=ci86.%.msm)
-copy:
-		cp ci86.mina.bin  $(cd)/../test/mina.com
-		cp ci86.alone.bin  $(cd)/../test/alone.com
-		cp ci86.mina.asm  $(cd)/../test/mina.asm
-		cp ci86.alone.asm  $(cd)/../test/alone.asm
-		cp ci86.mina.msm  $(cd)/../test/mina.msm
-		cp ci86.msdos1.msm  $(cd)/../test/msdos1.msm
-		cp ci86.msdos2.msm  $(cd)/../test/msdos2.msm
-		cp ci86.msdos3.msm  $(cd)/../test/msdos3.msm
-		cp ci86.alone.msm  $(cd)/../test/alone.msm
-		cp forth.lab       $(cd)/../test/forth.lab
-		cp genboot.bat      $(cd)/../test/genboot.bat
-
-cmp: ci86.mina.bin ci86.alone.bin ciforth lina
-		strip lina
-		strip ciforth
-		cmp ci86.mina.bin  cmp/ci86.mina.bin
-		cmp ci86.alone.bin  cmp/ci86.alone.bin
-		cmp lina cmp/lina
-		cmp ciforth cmp/ciforth
-
-strip : lina
-	strip lina -s -R .bss -R .comment
-
-copy1: $(TARGETS:%=ci86.%.bin)
-		mount /mnt/dosa
-		cp ci86.alone.bin  /mnt/dosa/alone.com
-		cp ci86.mina.bin  /mnt/dosa/mina.com
-		cp genboot.bat    /mnt/dosa
-		cp /mnt/dosc/project/ci86/install/tlink.exe /mnt/dosa
-		cp /mnt/dosc/project/ci86/install/tasm.exe  /mnt/dosa
-		umount /mnt/dosa
 
 test : ci86.alone.bin   ; cmp $+ cmp/$+
 
@@ -525,68 +423,6 @@ msdos32.zip : forth32.asm forth32.com msdos32.txt msdos9.cfg config.sys ; \
     make mslinks ; \
     echo ms$(VERSION) $+ |xargs zip
 
-########################## DOCUMENTATION ########################################
-#
-# The documentation generates tex, info and html automatically for any version.
-# They still go through a common texinfo file, but because of the restrictions
-# of info regarding names, some tex-output is spoiled unecessarily.
-# In particular forth words with what the c-people find strange characters,
-# can not occur in chapter headers: ' : @ ( ) e.a.
-
-
-# Sort the raw information and add the wordset chapter ends
-# A .mig file has its @ duplicated!
-%.mig : %.rawdoc ;
-	ssort $+ -e '^worddoc[a-z]*($${@},{@}.*\n$$worddoc' -m 1s2s |\
-	sed -e 's/@/@@/g' >$@
-
-namescooked.m4 : names.m4 ci86.gnr ; \
-	cat names.m4 >$@ ; \
-	echo "define({ci86gnrversion}, ifelse(M4_VERSION,,\
-{snapshot `rlog -r -h -N ci86.gnr|grep head|sed -e s/head://`},\
-{M4_VERSION}\
-))dnl" >>$@
-
-# Make the worddoc macro's into glossary paragraphs to our liking
-%.mim : gloss.m4 %.mig ; \
-    ( cat $(@:ci86.%.mim=%.cfg) ; m4 $+ )| m4 |\
-    sed -e '/Split here for documentation/,$$d' > $@
-
-# Make the worddoc macro's into glossary html items to our liking
-ci86.%.html : %.cfg glosshtml.m4 indexhtml.m4 ci86.%.mig namescooked.m4
-	ssort $(@:%.html=%.mig) -e '^worddoc[a-z]*($${@},{@}.*\n$$worddoc' -m 2s1s |\
-	m4 indexhtml.m4 - > $@
-	cat $(@:%.html=%.mig)|\
-	sed -e 's/@@/@/g'               |\
-	sed -e s'/worddocsafe/worddoc/g'  |\
-	sed -e 's/</\&lt\;/g'   > temp.html
-	( \
-	    cat namescooked.m4 indexhtml.m4 ; \
-	    ssort temp.html -e '^worddoc[a-z]*($${@},{@}.*\n$$worddoc' -m 2s1s \
-	)| m4 |\
-	sed -e 's/thisforth/$(@:ci86.%.html=%)/g' > $@
-	m4 $(@:ci86.%.html=%.cfg) glosshtml.m4 namescooked.m4 temp.html >> $@
-
-%.info : %.texinfo  ; makeinfo --no-split $< -o $@
-
-# For tex we do not need to use the safe macro's
-ci86.%.texinfo : %.cfg $(SRCMI) ci86.%.mim ci86.%.mig manual.m4 wordset.m4 menu.m4 namescooked.m4
-	m4 menu.m4 $(@:%.texinfo=%.mig) > menu.texinfo
-	m4 wordset.m4 $(@:%.texinfo=%.mim)  $(@:%.texinfo=%.mig) |m4 >wordset.mi
-	echo 'define({thisfilename},{$@})' >>namescooked.m4
-	( \
-	    cat $(@:ci86.%.texinfo=%.cfg) manual.m4 namescooked.m4 ciforth.mi \
-	)| tee spy | m4 |\
-	sed -e '/Split here for documentation/,$$d' |\
-	sed -e 's/thisforth/$(@:ci86.%.texinfo=%)/g' > $@
-#        rm wordset.mi menu.texinfo
-
-cifgen.texinfo : cifgen.mi manual.m4 namescooked.m4 lina.cfg
-	m4 lina.cfg manual.m4 namescooked.m4 cifgen.mi |\
-	sed -e 's/_lbracket_/@{/g'                 |\
-	sed -e 's/_rbracket_/@}/g'                 |\
-	sed -e 's/_comat_/@@/g'          > $@
-
 TESTLINA= \
 test.m4 \
 ci86.lina.rawtest
@@ -594,27 +430,6 @@ ci86.lina.rawtest
 TESTLINUX= \
 test.m4 \
 ci86.linux.rawtest
-
-# No output expected, except for an official version (VERSION=A.B.C)
-# The version number shows up in the diff.
-testlina : $(TESTLINA) ci86.lina.rawtest lina forth.lab.lina tsuite.frt ;
-	rm forth.lab
-	cp forth.lab.lina forth.lab
-	m4 $(TESTLINA)  >$(TEMPFILE)
-	sed $(TEMPFILE) -e '/Split here for test/,$$d' >$@.1
-	sed $(TEMPFILE) -e '1,/Split here for test/d' >$@.2
-	lina <$@.1 2>&1| grep -v RCSfile >$@.3
-	diff -b -B $@.2 $@.3 || true
-	lina -a <tsuite.frt 2>&1 |cat >tsuite.out
-	diff -b -B tsuite.out testresults || true
-	ln -sf forth.lab.lina  forth.lab
-	rm $(TEMPFILE)
-
-%.test : ci86.%.rawtest test.m4 ;
-	m4 test.m4 $<  >$(TEMPFILE)
-	sed $(TEMPFILE) -e '/Split here for test/,$$d' >$@.1
-	sed $(TEMPFILE) -e '1,/Split here for test/d' >$@.2
-	rm $(TEMPFILE)
 
 # Preliminary until it is clear whether we want other disassemblers.
 ciasdis : $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
@@ -629,24 +444,24 @@ test.bin : cidis cias test.asm test.cul
 	rcsdiff -r$(RCSVERSION) test.bin
 	rcsdiff -b -B -r$(RCSVERSION) test2.asm
 
-lina405.asm : cidis lina405equ.cul lina405.cul
-	make lina405
+lina405.asm : cidis cias lina405 lina405equ.cul lina405.cul
+	chmod +w lina405
 	cidis lina405 lina405.cul >$@
-	cias lina405.asm lina405
+	cias $@ lina405
 	rcsdiff -r$(RCSVERSION) lina405
-	rcsdiff -b -B -r$(RCSVERSION) lina405.asm
+	rcsdiff -b -B -r$(RCSVERSION) $@
 
 # Test case, reverse engineer retroforth version 7.5.1.
-rf751.cul : cidis rf751equ.cul rfcrawl.cul elf.cul
-	make rf751
+rf751.cul : cidis rf751 rf751equ.cul rfcrawl.cul elf.cul
+	chmod +w rf751
 	echo FETCH rf751 INCLUDE rfcrawl.cul | cidis >$@
 	rcsdiff -bBw -r$(RCSVERSION) $@
 
 rf751.asm : cidis cias rf751 rf751equ.cul rf751.cul
-	make rf751
-	cidis rf751 rf751.cul>$@
-	rcsdiff -bBw -r$(RCSVERSION) rf751.asm
-	cias rf751.asm rf751
+	chmod +w rf751
+	cidis rf751 rf751.cul >$@
+	rcsdiff -bBw -r$(RCSVERSION) $@
+	cias $@ rf751
 	rcsdiff -r$(RCSVERSION) rf751
 
 %.bin : %.asm ; cias $< $@
