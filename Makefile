@@ -10,41 +10,19 @@
 # don't build.
 
 #.SUFFIXES:
-#.SUFFIXES:.bin.asm.m4.v.o.c
+#.SUFFIXES:.bin.asm.v.o.c
 
 # Applicable suffixes : * are generated files
 # + are generated files if they are mentionned on the next line
 #
 #* .dvi .tex .ps : as usual (See TeX)
-#+ .texinfo : texinfo
 #   menu.texinfo gloss.texinfo
-#* .asm : input file for `nasm' assembler
-#* .BLK : contains blocks usable by Forth
 # .frt : text file : contains blocks in an \n separated stream
-#* .msm : input file for `MASM' and `tasm' assembler
-#* .s : input file for `gas' assembler  Experimental
-#* .pres : file to be pre-processed generating .s Experimental
-#* .bin : a binary image without header (useful i.a. for msdos .com)
-#* .gas : input file for `gas' assembler
-#* .rawdoc : unsorted glossary items from the generic source.
-#* .rawtest : unsorted and unexpanded tests.
-#+ .m4 : m4 macro's possibly including other macro's
-#   except constant.m4
-# .cfg : m4 macro's generating files ( ci86.%.x + %.cfg -> ci86.%.y)
-# .mi : files that after processed by m4 give a .texinfo file
-# .mig : Currently in use for the wordset, which is a .mi file (WRONG!)
-# It could be, but it has been stolen.
+#* .bin : a binary image without header
 
 # ALL FILES STARTING IN ``ci86'' (OUTHER ``ci86.gnr'') ARE GENERATED
 
-# Index files used by info, some are empty for ciforth.
-INDICES= cp fn ky pg tp vr
-
-# C-sources with various aims. FIXME: start with .c names.
 ASTARGETS= cias cidis ciasdis test.bin test2.bin test2.asm
-CSRCAUX= toblock fromblock stealconstant
-CSRCFORTH= ciforth stealconstant
-CSRC= $(CSRCAUX) $(CSRCFORTH)
 
 # Generic source for assembler
 # Include two pass, reverse engineering.
@@ -98,7 +76,6 @@ p0F.asi386.ps   \
 qr8086.ps       \
 qr8080.ps       \
 # That's all folks!
-# $(SRCMI)
 
 # Test files for assemblers.
 TESTAS= \
@@ -137,25 +114,6 @@ $(DOC)          \
 $(TESTRV)         \
 # That's all folks!
 
-
-
-# The following must be updated on the website, whenever
-# any typo's are fixed. Unfortunately, it has become a separate
-# maintenance chore, and is in effect a separate project.
-DOCOLD = \
-figdoc.zip    \
-# That's all folks!
-
-# These files can easily be generated, if you have linux.
-EXAMPLES = \
-ci86.alone.asm  \
-ci86.mina.msm  \
-ci86.wina.asm  \
-ci86.linux.asm  \
-ci86.lina.asm  \
-ci86.alonehd.asm  \
-# That's all folks!
-
 RELEASECONTENT = \
 COPYING   \
 README.assembler.txt \
@@ -167,56 +125,20 @@ $(ASSRC)        \
 # 4.0 ### Version : an official release 4.0
 # Left out : beta, revision number is taken from rcs e.g. 3.154
 VERSION=  # Because normally VERSION is passed via the command line.
-DATE=2030     # To get the newest version
-
 
 TEMPFILE=/tmp/ciforthscratch
 
 MASK=FF
 PREFIX=0
 TITLE=QUICK REFERENCE PAGE FOR 80386 ASSEMBLER
-TESTTARGETS=*.ps testas* testlina.[0-9] testmina.[0-9] testlinux.[0-9]
+TESTTARGETS= test.bin lina405.asm rf751.asm rf751.cul
 
 # How to check out, anything
 %:RCS/%,v
 	co -r$(RCSVERSION) $<
 
-# Define NASM as *the* assembler generating bin files.
-%.bin:%.asm
-	nasm -fbin $< -o $@ -l $*.lst
-
-
-# mina.cfg and alone.cfg are present (at least via RCS)
-# allow to generate ci86.mina.bin etc.
-ci86.%.rawdoc ci86.%.rawtest : ci86.%.asm ;
-
-VERSION : ; echo 'define({M4_VERSION},$(VERSION))' >VERSION
-
-ci86.%.asm : %.cfg VERSION nasm.m4 ci86.gnr
-	make constant.m4
-	cat $+ | m4 >$(TEMPFILE)
-	sed $(TEMPFILE) -e '/Split here for doc/,$$d' >$@
-	sed $(TEMPFILE) -e '1,/Split here for doc/d' | \
-	sed -e '/Split here for test/,$$d' >$(@:%.asm=%.rawdoc)
-	sed $(TEMPFILE) -e '1,/Split here for test/d' >$(@:%.asm=%.rawtest)
-	rm $(TEMPFILE)
-
-ci86.%.msm : VERSION %.cfg masm.m4 ci86.gnr ; \
-	cat $+ | m4 >$(TEMPFILE)
-	sed $(TEMPFILE) -e '/Split here for doc/,$$d' >$@
-	sed $(TEMPFILE) -e '1,/Split here for doc/d' | \
-	sed -e '/Split here for test/,$$d' >$(@:%.msm=%.rawdoc)
-	sed $(TEMPFILE) -e '/Split here for test/,$$d' >$(@:%.msm=%.rawtest)
-	rm $(TEMPFILE)
-
-ci86.%pres  : %.cfg gas.m4  ci86.gnr ; cat $+ | m4 >$@
-ci86.%     : %.cfg       ci86.gnr ; cat $+ | m4 >$@
-
-# gas needs extra transformations that m4 cannot handle.
-# In particular the order of operands.
-%.s : %pres ; sed -f transforms <$+ >$@
-
-.PRECIOUS: ci86.%.rawdoc rf751.asm lina405.asm test.bin
+# If tests fails, test targets must be inspected.
+.PRECIOUS: rf751.asm lina405.asm test.bin
 
 .PHONY: default all clean releaseproof zip mslinks release regressiontest
 # Default target for convenience
@@ -226,11 +148,7 @@ ci86.$(s).bin :
 # Some of these targets make no sense and will fail
 all: regressiontest
 
-cleanall: testclean asclean ; \
-    rcsclean ; \
-    rm -f $(OTHERTARGETS) ; \
-    rm -f *.aux *.log *.ps *.toc *.pdf
-
+cleanall: testclean asclean ; rcsclean
 
 #msdos32.zip doesn't work yet.
 release : strip figdoc.zip zip msdos.zip lina.zip # as.zip
@@ -272,47 +190,11 @@ p0.asi386    :; make asi386.ps PREFIX=0 MASK=FF
 p0F.asi386.ps   :; make asi386.ps PREFIX=0F MASK=FFFF
 p0F.asiP.ps   :; make asiP.ps PREFIX=0F MASK=FFFF
 
-do : ci86.mina.msm
-		diff -w ci86.mina.msm orig/FORTH > masm.dif ||true
-		more masm.dif
-
-da : ci86.alone.asm
-		diff -w ci86.alone.asm cmp > asm.dif ||true
-		wc asm.dif
-
-cm :
-		cmp ci86.alone.bin cmp2/ci86.alone.bin
-
-did: ci86.mina.msm
-		diff -w ci86.mina.msm $(cd)/compare.asm
-
-#ci86.mina.asm : header.m4 mina.m4 nasm.m4 ci86.gnr ; m4 $+ >$@
-
-test : ci86.alone.bin   ; cmp $+ cmp/$+
-
-test1: ci86.alone.msm   ; diff -w $+ fortha.asm
-
-ff2 : ci86.linux.o ciforth.c
-		gcc -ggdb ciforth.c -c
-				ld ci86.linux.o -Tlink.script -r -o ci86.linux2.o
-		gcc ciforth.o ci86.linux2.o -o ciforth
-
 x : ; echo $(RELEASECONTENT)
 y : ; echo $(RELEASECONTENT) |\
 sed -e's/\<ci86\.//g' |\
 sed -e's/\<gnr\>/ci86.gnr/' |\
 sed -e's/ \([^ .]\{1,8\}\)[^ .]*\./ \1./g'
-
-fina : fina.c ci86.lina.o ; $(CC) $(CFLAGS) $+ -static -Wl,-Tlink.script -o $@
-
-ci86.lina.lis : ci86.lina.mac ;
-		as ci86.lina.mac -a=ci86.lina.lis  ;\
-		objcopy a.out -O binary
-
-ci86.lina.mac : ci86.lina.asm transforms ; \
-		sed -f transforms < ci86.lina.asm > $@
-
-lina2 : ci86.lina.s ; gcc $+ -l 2>aap
 
 ci86.lina.s :
 
@@ -418,18 +300,6 @@ test386-16: asgen.frt asi386.frt ; \
 
 as.tgz : $(RELEASEASSEMBLER) cias ciasdis cidis ; echo as$(VERSION).tgz $+ |\
  xargs tar cfz
-
-msdos32.zip : forth32.asm forth32.com msdos32.txt msdos9.cfg config.sys ; \
-    make mslinks ; \
-    echo ms$(VERSION) $+ |xargs zip
-
-TESTLINA= \
-test.m4 \
-ci86.lina.rawtest
-
-TESTLINUX= \
-test.m4 \
-ci86.linux.rawtest
 
 # Preliminary until it is clear whether we want other disassemblers.
 ciasdis : $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
