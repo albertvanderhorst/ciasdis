@@ -37,6 +37,12 @@ labeldis.frt \
 tools.frt    \
 # That's all folks!
 
+# Extra source for MS os.
+ASSRCCLUDGE= \
+cias.frt \
+cidis.frt \
+# That's all folks!
+
 # Plug ins for stand alone assembler
 PGSRC= \
 as6809s.frt \
@@ -116,7 +122,7 @@ $(TESTRV)         \
 
 RELEASECONTENT = \
 COPYING   \
-README.assembler.txt \
+README.assembler \
 cias.1          \
 cul.5           \
 $(ASSRC)        \
@@ -140,7 +146,7 @@ TESTTARGETS= test.bin lina405.asm rf751.asm rf751.cul
 # If tests fails, test targets must be inspected.
 .PRECIOUS: rf751.asm lina405.asm test.bin
 
-.PHONY: default all clean releaseproof zip mslinks release regressiontest
+.PHONY: RELEASE default all clean releaseproof zip regressiontest
 # Default target for convenience
 default : lina
 ci86.$(s).bin :
@@ -149,9 +155,6 @@ ci86.$(s).bin :
 all: regressiontest
 
 cleanall: testclean asclean ; rcsclean
-
-#msdos32.zip doesn't work yet.
-release : strip figdoc.zip zip msdos.zip lina.zip # as.zip
 
 #Install it. To be run as root
 install: ; @echo 'There is no "make install" ; use "lina -i <binpath> <libpath>"'
@@ -170,16 +173,17 @@ asclean: ; rm -f $(ASTARGETS)
 # WARNING : the generation of postscript and pdf use the same files
 # for indices, but with different content.
 
+# Using the elective screen requires the exact library coming
+# with the assembler!
 %.ps : asgen.frt %.frt ps.frt ; \
     ( \
-	echo 5 LOAD; \
 	cat $+ ;\
 	echo 'PRELUDE' ;\
 	echo 'HEX $(MASK) MASK ! $(PREFIX) PREFIX ! DECIMAL ' ;\
 	echo ' "$(TITLE)"   TITLE $$!' ;\
 	echo ' QUICK-REFERENCE BYE' \
     )|\
-    lina |\
+    lina -e |\
     sed '1,/SNIP TILL HERE/d' |\
     sed '/SI[MB]/d' |\
     sed '/OK/d' >p$(PREFIX).$@
@@ -298,8 +302,9 @@ test386-16: asgen.frt asi386.frt ; \
 #   diff -w $@ testset386 >$@.diff ;\
 #   diff $@.diff testresults
 
-as.tgz : $(RELEASEASSEMBLER) cias ciasdis cidis ; echo as$(VERSION).tgz $+ |\
- xargs tar cfz
+# As by : make RELEASE VERSION=1-0-0
+RELEASE: $(RELEASEASSEMBLER) cias ciasdis cidis $(ASSRCCLUDGE) ;\
+    echo ciasdis-$(VERSION).tgz $+ | xargs tar cfz
 
 # Preliminary until it is clear whether we want other disassemblers.
 ciasdis : $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
