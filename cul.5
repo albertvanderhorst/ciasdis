@@ -1,5 +1,5 @@
 .\" $Id$
-.TH cul "5" "May 2004" "cul 0.1.3" DFW
+.TH cul "5" "May 2009" "cul 0.2.0" DFW
 .SH "NAME"
 cul \- consult file format for
 computer intelligence
@@ -89,6 +89,22 @@ Ranges are exclusive, but they are always expanded to contain
 at least one byte.
 .br
 A name cannot contains spaces.
+.SH "SECTIONS"
+The word \fBsection\fR is used in the sense traditional for
+assembly programming: a range of memory that is addressed in a
+contiguous way.
+Normally the data of a section is specified
+in the binary file that is being analysed.
+If so, it must occupy a contiguous range there too,
+starting at the \fBfile-offset\fR in the file.
+Sections may overlap, in particular if ranges of memory are
+moved around.
+In those cases more than one memory address is
+associated with the same data, at different times during execution.
+A part of a section that is contiguous and of the same type
+(e.g. all code, or all string) is called \fBrange\fR.
+So a range can be disassembled by a single command.
+
 .SH "KEYWORDS"
 Keywords (or words in Forth parlance) apply to one or more
 preceeding expressions.
@@ -128,30 +144,30 @@ otherwise print its value in hex.
 \fI<expr1>\ <expr2>\fR \fB-dn:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI<name>\fR and is a section to be disassembled as uninitialised space.
+\fI<name>\fR and is to be disassembled as uninitialised space.
 .TP
 \fI<expr1>\ <expr2>\fR \fB-db:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI<name>\fR and is a section to be disassembled as byte values.
+\fI<name>\fR and is to be disassembled as byte values.
 .TP
 \fI<expr1>\ <expr2>\fR \fB-dw:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI<name>\fR and is a section to be disassembled as word (16-bit)
+\fI<name>\fR and is to be disassembled as word (16-bit)
 values.
 .TP
 \fI<expr1>\ <expr2>\fR \fB-dl:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI<name>\fR and is a section to be disassembled as long (32-bit) values.
+\fI<name>\fR and is to be disassembled as long (32-bit) values.
 They are printed as symbolic names,
 if they occur as a plain label.
 .TP
 \fI<expr1>\ <expr2>\fR \fB-d$:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI<name>\fR and is a section to be disassembled as strings.
+\fI<name>\fR and is to be disassembled as strings.
 This means it will be shown (in order of preference):
 .TP
 in the form \fI"<letters>"\fR for consequitive ASCII characters
@@ -168,16 +184,16 @@ All this is acceptable by the \fBd$\fR directive of the assembler.
 \fI<expr1>\ <expr2>\fR \fB-dc:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI<name>\fR and is a section to be disassembled as a normal code section.
-For the Intel 80386 this means a 32-bit code section.
+\fI<name>\fR and is to be disassembled as a normal code range.
+For the Intel 80386 this means a 32-bit code range.
 .TP
 \fI<expr1>\ <expr2>\fR \fI<string>\fR \fB[-dn|-db|-bw|-dl|-dc|-d$]\fR
 These commands are equivalent to \fB-dn: -db: -dw: -dl: -dc: -d$: \fR but the
-sections get their names from \fI<string>\fR.
+ranges get their names from \fI<string>\fR.
 .TP
 \fI<expr1>\ <expr2>\fR \fB[-dn-|-db-|-bw-|-dl-|-dc-|-d$-]\fR
 These commands are equivalent to \fB-dn: -db: -dw: -dl: -dc: -d$: \fR but the
-sections are anonymous.
+ranges are anonymous.
 .TP
 \fI<expr>\fR \fBORG\fR
 .br
@@ -188,17 +204,17 @@ Clear the code buffer and associate its start with the target address
 .br
 The start of the code buffer is associated with the target address
 \fI<expr>\fR without affecting its content.
-(\fBNote:\fR this is messy and will probably be replaced by assembly segments
-and one \fB-ORG-\fR per segment.)
+(\fBNote:\fR this is messy and will probably be replaced by assembly sections
+and one \fB-ORG-\fR per section.)
 .TP
 \fI<string>\fR \fI<expr>\fR \fBDIRECTIVE\fR
 .br
-The string is a directive associated with the target address 
+The string is a directive associated with the target address
 \fI<expr>\fR.
 It will be a separate line or lines in front of the disassembly.
 .br
 \fBNote:\fR
-This can be a multiple-line-comment,       
+This can be a multiple-line-comment,
 provided it is laid out as comment.
 .TP
 \fI<expr>\fR \fBCOMMENT:\fR "comment"
@@ -225,9 +241,9 @@ This includes all information added interactively.
 .br
 Read in the file named \fI<name>\fR and execute all commands there in.
 .TP
-\fB[PLAIN-LABELS|SECTION-LABELS]\ REMOVE:\fR \fI<name>\fR
+\fB[PLAIN-LABELS|RANGE-LABELS]\ REMOVE:\fR \fI<name>\fR
 .br
-Select the plain labels or the sections labels class and
+Select the plain labels or the ranges labels class and
 remove the label \fI<name>\fR from it.
 Removal of several labels in the same class need not repeat
 the selection.
@@ -245,8 +261,8 @@ Use the information that \fI<expr>\fR is a target code address.
 Heuristically find as much code as possible by disassembling
 from this address up till an unconditional transfer of control,
 and assuming jumps refer to more code addresses.
-Add new knowledge to the labeled sections,
-then combine any anonymous sections.
+Add new knowledge to the labeled ranges,
+then combine any anonymous ranges.
 .TP
 \fI<expr>\fR \fBCRAWL!\fR
 .br
@@ -257,17 +273,18 @@ It will be taken into account at the next invocation of CRAWL .
 Extracting label names from the binary is a vital capability.
 Also especially in headers, there are addresses to be fetched from
 the binary.
-Note that the keywords in this section are operators,
+Note that the keywords in this paragraph are operators,
 in the sense that they leave a result for further processing.
-The string operators on addresses in the host space (unlike \fBL@\fR e.a.),
+The string operators work on addresses in the host space (unlike \fBL@\fR e.a.),
 so they are normally preceeded by \fBTARGET>HOST\fR.
 .TP
 \fI<addr>\fR \fB[B@|W@|L@]\fR
 Get an 8 bit, 16 bit or 32 bit value from target address \fI<addr>\fR,
 in a big-endian (Intel) fashion.
 .br
-Note the conflict with the built-in \fBL@\fR .
+Note that in 4.x lina there is a conflict with the built-in \fBL@\fR .
 The old \fBL@\fR is available under the name \fBFAR@\fR.
+(No more in 5.x lina)
 .TP
 \fI<addr>\fR \fBTARGET>HOST\fR
 Transform the target address to a host address.
@@ -332,14 +349,14 @@ output the string on the error channel and exit
 \fI<expr1>\ <expr2>\fR \fB-dc16:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
-\fI<name>\fR and is a section to be disassembled as a 16-bit code section.
+\fI<name>\fR and is a range to be disassembled as a 16-bit code range.
 This command is specific to the Intel 80386.
 As are the corresponding \fB[-dc16|-dc16-]\fR commands.
 .\"
 .TP
 \fI<expr>\fR \fBCRAWL16\fR
 .br
-This command is like \fBCRAWL16\fR but applies to 16 bits code segments
+This command is like \fBCRAWL16\fR but applies to 16 bits code sections
 and generates \fB-dc16\fR family directives.
 \fBCRAWL!\fR is recognized for start addresses.
 .SH "COMMAND"

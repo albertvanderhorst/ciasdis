@@ -96,7 +96,7 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 \ This applies to plain labels that are in fact fact constants.
 : .PAY-DEA  CELL+ @ %ID. ;
 
-\ Make section I current, provided the payload is a dea.
+\ Make range I current, provided the payload is a dea.
 : MAKE-CURRENT LABELS[] CELL+ @ EXECUTE ;
 
 \ For label INDEX return the label NAME, provided it is a dea.
@@ -483,12 +483,18 @@ VARIABLE CUT-SIZE    16 CUT-SIZE !   \ Chunks for data-disassembly.
 
 \ ---------------- Specifiers of disassembly ranges ----------------------
 
-\ A section, as we all know, is a range of addresses that is kept
-\ together, even during relocation and such.
-\ Section ADDRESS1 .. ADDRESS2 always refers to a target range,
+\ A ``range'' is defined here as a range of addresses that is kept
+\ together, even during relocation and such, and contains data
+\ fo the same type.
+\ A ``section'' is defined here as a range of addresses that is kept
+\ together, even during relocation and such, where data need not be
+\ of the same type.
+\ ``Disassembly'' is to be understood as interpreting the content of
+\ a range, not necessarily as executable code.
+\ Range ADDRESS1 .. ADDRESS2 always refers to a target range,
 \ where address2 is exclusive.
 
-\ Define a section.
+\ Define a range.
 12 34 '2DROP
 class DIS-STRUCT
    >R >R >R          \ Get them in reverse order.
@@ -500,7 +506,7 @@ class DIS-STRUCT
    M: DIS-RANGE   @ >R DIS-START DIS-END R> EXECUTE M; R> ,       \ End of range
 endclass
 
-\ Print the section LAB as a matter of testing.
+\ Print the range LAB as a matter of testing.
 : .PAY-SECTION CELL+ @ DUP EXECUTE
    DIS-START H.  SPACE DIS-END H.  " BY " TYPE DIS-XT %ID.  %ID. ;
 
@@ -509,21 +515,21 @@ endclass
 \ DEA of dump belongs to DEA of creator. Add to ``SECTION-TYPES''.
 : ARE-COUPLED   SWAP SECTION-TYPES BAG+! SECTION-TYPES BAG+! ;
 
-\ For current section, return the XT of a proper defining word.
+\ For current range, return the XT of a proper defining word.
 : CREATOR-XT   DIS-XT SECTION-TYPES BAG-WHERE CELL+ @ ;
 
-\ Display section INDEX in a reconsumable form.
+\ Display range INDEX in a reconsumable form.
 : DECOMP-SECTION   DUP MAKE-CURRENT DIS-START H. SPACE DIS-END H. SPACE
     CREATOR-XT ID. LABEL-NAME TYPE CR ;
 
 \ Contains sector specification, range plus type.
-MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !BAG
+MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 
-\ Create a disassembly section from AD1 to AD2 using dis-assembler DEA1
-\ with NAME. Register it as a labeled section.
-: SECTION   POSTFIX  DIS-STRUCT   SECTION-LABELS   DIS-START LAB+!   LATEST LAB+! ;
-\ Create a disassembly section from AD1 to AD2 using dis-assembler DEA1 and
-\ end-of-line action DEA2 without a name. Register it as a labeled section.
+\ Create a disassembly range from AD1 to AD2 using dis-assembler DEA1
+\ with NAME. Register it as a labeled range.
+: SECTION   POSTFIX  DIS-STRUCT   RANGE-LABELS   DIS-START LAB+!   LATEST LAB+! ;
+\ Create a disassembly range from AD1 to AD2 using dis-assembler DEA1 and
+\ end-of-line action DEA2 without a name. Register it as a labeled range.
 : ANON-SECTION   NONAME$ SECTION ;
 
 \ Disassemble to ADDRESS2 from ADDRESS1.
@@ -538,7 +544,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Section ADDRESS1 .. ADDRESS2 is code with name "name".
 : -dc:    (WORD) -dc ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous code section.
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous code range.
 : -dc-    NONAME$ -dc ;
 
 'D-R-T     '-dc:   ARE-COUPLED
@@ -556,7 +562,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Section ADDRESS1 .. ADDRESS2 are such with name "name".
 : -dn:    (WORD) -dn ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous such section.
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous such range.
 : -dn-    NONAME$ -dn ;
 
 'DUMP-N    '-dn:   ARE-COUPLED
@@ -573,7 +579,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
 : -db:    (WORD) -db ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous byte section.
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous byte range.
 : -db-    NONAME$ -db ;
 
 'DUMP-B    '-db:   ARE-COUPLED \ Register the decompiler.
@@ -593,7 +599,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Section ADDRESS1 .. ADDRESS2 are words with name "name".
 : -dw:    (WORD) -dw ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous word section.
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous word range.
 : -dw-    NONAME$ -dw ;
 
 'DUMP-W    '-dw:   ARE-COUPLED
@@ -610,7 +616,7 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
 : -dl:    (WORD) -dl ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous long range.
 : -dl-    NONAME$ -dl ;
 
 'DUMP-L    '-dl:   ARE-COUPLED
@@ -636,15 +642,15 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 \ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
 : -d$:    (WORD) -d$ ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous long section.
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous long range.
 : -d$-    NONAME$ -d$ ;
 
 'DUMP-$    '-d$:   ARE-COUPLED
 
 \ Print a remark about whether START and END fit.
 : .HOW-FIT   2DUP = IF 2DROP ELSE
-   > IF "\ WARNING: This section overlaps with the previous one." ELSE
-   "\ WARNING: There is hole between this section and the previous one" THEN
+   > IF "\ WARNING: This range overlaps with the previous one." ELSE
+   "\ WARNING: There is hole between this range and the previous one" THEN
    CR TYPE CR THEN ;
 
 \ Print a remark about whether start of the current range fits to the
@@ -656,10 +662,10 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT SECTION-LABELS   LABELS !B
 : HOW-FIT-END    TARGET-END .HOW-FIT ;
 
 \ Disassemble all those sectors with their own disassemblers.
-\ No section will print their end labels, which is no problem if everything
-\ fits, except for the last section. Do that expressly.
+\ No range will print their end labels, which is no problem if everything
+\ fits, except for the last range. Do that expressly.
 : DISASSEMBLE-ALL   TARGET-START
-    SECTION-LABELS DO-LAB I CELL+ @ EXECUTE   HOW-FIT DIS-RANGE LOOP-LAB
+    RANGE-LABELS DO-LAB I CELL+ @ EXECUTE   HOW-FIT DIS-RANGE LOOP-LAB
     HOW-FIT-END   HOST-END CR-ADORNED ;
 
 \ ------------------- Generic again -------------------
@@ -723,7 +729,7 @@ ASSEMBLER
 \ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
 : -dc16:   (WORD) -dc16 ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-section.
+\ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-range.
 : -dc16-   NONAME$ -dc16 ;
 
 'D-R-T-16   '-dc16:   ARE-COUPLED
