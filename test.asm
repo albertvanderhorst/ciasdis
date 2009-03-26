@@ -1,5 +1,5 @@
 ASSEMBLER
-0 #1278 SEGMENT mine:
+0 #1278 SECTION mine:
 \ mine: not needed.
 \ Here it all starts
 \ Fasten Your Seat Belts (tm)
@@ -79,6 +79,6 @@ OS:,
 BITS-32
 \ Y Y is a target for forward jumps:
 :YYY
-1000 0A7B8,C7D8 SEGMENT fives:
+1000 0A7B8,C7D8 SECTION fives:
     dl   5555,5555 5555,5555
 PREVIOUS

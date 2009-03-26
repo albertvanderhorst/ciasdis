@@ -47,18 +47,18 @@ REQUIRE OLD:
     OLD: ?ERROR
     THEN THEN   ;
 
-\ Ignore FILEOFFSET and TARGET address. Make segment "name" current,
-\ and reset its allocation pointer. Like ``SEGMENT'' but this
+\ Ignore FILEOFFSET and TARGET address. Make section "name" current,
+\ and reset its allocation pointer. Like ``SECTION'' but this
 \ behaviour is appropriate for the second pass.
-: RESET-SEGMENT   2DROP   (WORD) EVALUATE   CODE-SPACE CP ! ;
+: RESET-SECTION   2DROP   (WORD) EVALUATE   CODE-SPACE CP ! ;
 
 \ Ignore undefined labels during first pass ...
-\ Define segments in the first pass ...
+\ Define section in the first pass ...
 : FIRSTPASS     '?ERROR-FIXING >DFA @ '?ERROR >DFA !
-                'SEGMENT RESTORED ;
+                'SECTION RESTORED ;
 
-\   ... but just start segment, and have normal errors in the second pass.
-: SECONDPASS    'RESET-SEGMENT >DFA @ 'SEGMENT >DFA !
+\   ... but just start section, and have normal errors in the second pass.
+: SECONDPASS    'RESET-SECTION >DFA @ 'SECTION >DFA !
                 '?ERROR RESTORED ;
 
 \ For NAME: "name REPRESENTS a label."

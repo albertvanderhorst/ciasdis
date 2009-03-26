@@ -16,13 +16,13 @@
 VARIABLE CODE-LENGTH
 2,000,000 CODE-LENGTH !
 
-\ A bag with the dea's of all segments.
-100 BAG SEGMENT-REGISTRY
+\ A bag with the dea's of all sections.
+100 BAG SECTION-REGISTRY
 
-\ Create segment with FILEOFFSET TARGETADDRESS and CODESPACE
+\ Create section with FILEOFFSET TARGETADDRESS and CODESPACE
 0 0 0  \ Overwritten anyway
-class (SEGMENT)
-LATEST SEGMENT-REGISTRY BAG+!
+class (SECTION)
+LATEST SECTION-REGISTRY BAG+!
 M: CP M; DUP ,           \ The local dictionary pointer ("code pointer")
 M: CODE-SPACE @ M;  ,    \ Start of the code space
 M: -ORG- ! M;            \ Define corresponding target addres.
@@ -30,18 +30,18 @@ M: TARGET-START @ M; ,   \ Return corresponding target addres.
 M: FILE-OFFSET @ M; ,      \ Return corresponding files addres.
 endclass
 
-SEGMENT-REGISTRY !BAG       \ Get rid of dummy registration.
+SECTION-REGISTRY !BAG       \ Get rid of dummy registration.
 
-\ Create segment with FILEOFFSET TARGETADDRESS.
+\ Create section with FILEOFFSET TARGETADDRESS.
 \ Assign ample code space. Leave it current.
-: SEGMENT  HERE   CODE-LENGTH @ ALLOT (SEGMENT) ;
+: SECTION  HERE   CODE-LENGTH @ ALLOT (SECTION) ;
 
-\ Define at least one segment lest the user forgets.
-: DEFAULT-SEGMENT
+\ Define at least one section lest the user forgets.
+: DEFAULT-SECTION
     0   \ File start address
     0   \ Target start address
     HERE CODE-LENGTH @ ALLOT \ Host start address
-    "the-default-segment" POSTFIX (SEGMENT) ;
+    "the-default-section" POSTFIX (SECTION) ;
 
 \ ``HERE'' such as used in assembly.
 : NEW-AS-HERE    CP @ ;   HOT-PATCH AS-HERE

@@ -48,13 +48,13 @@ REQUIRE #-PREFIX
 \ In behalf of building an executable.
 REQUIRE ARGC
 
-\ Write current segment to FILEHANDLE. Leave FILEHANDLE.
-: WRITE-ONE-SEGMENT
+\ Write current section to FILEHANDLE. Leave FILEHANDLE.
+: WRITE-ONE-SECTION
    >R   FILE-OFFSET 0 R@ REPOSITION-FILE THROW
    CODE-SPACE CP @ OVER - R@ WRITE-FILE THROW R> ;
 
-\ Write all segments to FILEHANDLE. Leave FILEHANDLE.
-: WRITE-SEGMENTS   SEGMENT-REGISTRY DO-BAG I @ EXECUTE WRITE-ONE-SEGMENT
+\ Write all sections to FILEHANDLE. Leave FILEHANDLE.
+: WRITE-SECTIONS   SECTION-REGISTRY DO-BAG I @ EXECUTE WRITE-ONE-SECTION
     LOOP-BAG ;
 
 \ Open NAME, return FILEHANDLE.
@@ -69,10 +69,10 @@ REQUIRE ARGC
 \ Return the NAME of the target file.
 : TARGET-AS 2 ARG[] ;
 
-\ Write all segments to file NAME.
-: WRITE-IT   OPEN-IT WRITE-SEGMENTS CLOSE-IT ;
+\ Write all sections to file NAME.
+: WRITE-IT   OPEN-IT WRITE-SECTIONS CLOSE-IT ;
 
-\ Assemble file NAME. Leave in default or file-specified segments.
+\ Assemble file NAME. Leave in default or file-specified sections.
 : ASSEMBLED
    POSTPONE ONLY POSTPONE FORTH POSTPONE ASSEMBLER HEX
     FIRSTPASS 2DUP INCLUDED  SECONDPASS INCLUDED ;
@@ -129,5 +129,5 @@ REQUIRE DUMP
 'TASK >DFA @   '.SIGNON >DFA !
 
 \ The name determines what to do.
-: MAIN   RESTORE-ALL  DEFAULT-SEGMENT HANDLE-ARG
+: MAIN   RESTORE-ALL  DEFAULT-SECTION HANDLE-ARG
     0 ARG[] CONTAINS-D? IF cidis ELSE cias THEN ;
