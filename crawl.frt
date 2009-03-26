@@ -40,29 +40,31 @@ REQUIRE BAG
 \D DECIMAL
 
 \ For range INDEX : "it IS of the same type as the previous one".
-: COMPATIBLE?   DUP MAKE-CURRENT DIS-XT   SWAP 1- MAKE-CURRENT DIS-XT  = ;
+: COMPATIBLE?   DUP MAKE-CURRENT RANGE-XT   SWAP 1- MAKE-CURRENT RANGE-XT  = ;
 
 \D ." EXPECT: -1 :" 2 COMPATIBLE? . CR
 \D ." EXPECT: -1 :" 3 COMPATIBLE? . CR
 \D ." EXPECT: 0 :" 4 COMPATIBLE? . CR
 
 \ Get the name of range INDEX.
-: SECTION-NAME LABELS[] CELL+ @ >NFA @ $@ ;
+: RANGE-NAME LABELS[] CELL+ @ >NFA @ $@ ;
 
-\D  ." EXPECT: NONAME :" 1 SECTION-NAME TYPE CR
-\D ." EXPECT: oops :"    2 SECTION-NAME TYPE   CR .S
+\D  ." EXPECT: NONAME :" 1 RANGE-NAME TYPE CR
+\D ." EXPECT: oops :"    2 RANGE-NAME TYPE   CR .S
 
 \ For a collapsible pair of range with INDEX1 and INDEX2 return INDEX1 and
 \ INDEX2 plus a new START for the combined range.
-: NEW-DIS-START OVER MAKE-CURRENT DIS-START  OVER MAKE-CURRENT DIS-START   MIN ;
+: NEW-RANGE-START OVER MAKE-CURRENT RANGE-START  OVER MAKE-CURRENT RANGE-START
+    MIN ;
 
 \ For a collapsible pair of range with INDEX1 and INDEX2 return INDEX1 and
 \ INDEX2 plus a new END for the combined range.
-: NEW-DIS-END OVER MAKE-CURRENT DIS-END  OVER MAKE-CURRENT DIS-END   MAX ;
+: NEW-RANGE-END OVER MAKE-CURRENT RANGE-END  OVER MAKE-CURRENT RANGE-END
+    MAX ;
 
 \D REQUIRE H.
-\D  ." EXPECT 520 : " 2 3 NEW-DIS-START H. 2DROP CR
-\D  ." EXPECT 590 : " 3 4 NEW-DIS-END  H. 2DROP CR .S
+\D  ." EXPECT 520 : " 2 3 NEW-RANGE-START H. 2DROP CR
+\D  ." EXPECT 590 : " 3 4 NEW-RANGE-END  H. 2DROP CR .S
 
 \ Replace the two ranges INDEX1 and INDEX2 with the last range.
 \ Place it at index1 (which has the correct start address.)
@@ -88,8 +90,8 @@ REQUIRE BAG
 \ This leads to words: SAME-TYPE SAME-ALIGN OVERLAP BORDER GAP IS-NAMED
 
 \ For range INDEX: "It HAS the same type and alignment as the previous one."
-: SAME-ALIGN    DUP MAKE-CURRENT  DIS-START SWAP
-    1- MAKE-CURRENT   DIS-START - DIS-STRIDE MOD 0=   ;
+: SAME-ALIGN    DUP MAKE-CURRENT  RANGE-START SWAP
+    1- MAKE-CURRENT   RANGE-START - RANGE-STRIDE MOD 0=   ;
 
 \D INIT-ALL RANGE-LABELS  HEX
 \D 12 34 -dc-
@@ -103,48 +105,48 @@ REQUIRE BAG
 \D ." EXPECT: -1 :" 4 SAME-ALIGN . CR
 
 \ For range INDEX return END of previous, START of this one,
-: END+START DUP MAKE-CURRENT DIS-START SWAP 1- MAKE-CURRENT DIS-END SWAP ;
+: END+START DUP MAKE-CURRENT RANGE-START SWAP 1- MAKE-CURRENT RANGE-END SWAP ;
 \D ." EXPECT: 34 34 :" 2 END+START SWAP . . CR
 \D ." EXPECT: 65 38 :" 3 END+START SWAP . . CR
 
-\ Section INDEX overlaps with previous one.
+\ Range INDEX overlaps with previous one.
 : OVERLAP? END+START > ;
 \D ." EXPECT: 0 :" 2 OVERLAP? . CR
 \D ." EXPECT: -1 :" 3 OVERLAP? . CR
 \D ." EXPECT: 0 :" 4 OVERLAP? . CR
 
-\ Section INDEX overlaps or borders with the previous one.
+\ Range INDEX overlaps or borders with the previous one.
 : OVERLAP-OR-BORDER? END+START >= ;
 \D ." EXPECT: -1 :" 2 OVERLAP-OR-BORDER? . CR
 \D ." EXPECT: -1 :" 3 OVERLAP-OR-BORDER? . CR
 \D ." EXPECT: 0 :" 4 OVERLAP-OR-BORDER? . CR
 
-\ Section INDEX has a gap with the previous one.
+\ Range INDEX has a gap with the previous one.
 : GAP? END+START < ;
 \D ." EXPECT: 0 :" 2 GAP? . CR
 \D ." EXPECT: 0 :" 3 GAP? . CR
 \D ." EXPECT: -1 :" 4 GAP? . CR
 
 \ For range INDEX: "It HAS a name"
-: IS-NAMED   SECTION-NAME NONAME$ $= 0= ;
+: IS-NAMED   RANGE-NAME NONAME$ $= 0= ;
 \D ." EXPECT: -1 :" 2 IS-NAMED . CR
 \D ." EXPECT: 0 :" 3 IS-NAMED . CR
 
 \ Collapse range I into the previous range, that determines the properties.
-: COLLAPSE DUP MAKE-CURRENT DIS-END OVER 1- MAKE-CURRENT DIS-END MAX DIS-END!
+: COLLAPSE DUP MAKE-CURRENT RANGE-END OVER 1- MAKE-CURRENT RANGE-END MAX RANGE-END!
          REMOVE-LABEL ;
 \D ." EXPECT: 5 82 94 4 :"
-\D LAB-UPB . 5 COLLAPSE 4 MAKE-CURRENT DIS-START . DIS-END .  LAB-UPB . CR
+\D LAB-UPB . 5 COLLAPSE 4 MAKE-CURRENT RANGE-START . RANGE-END .  LAB-UPB . CR
 
 \ Trim the range previous to INDEX, such that it borders to range index.
-: TRIM-SECTION DUP MAKE-CURRENT DIS-START SWAP 1- MAKE-CURRENT DIS-END! ;
+: TRIM-RANGE DUP MAKE-CURRENT RANGE-START SWAP 1- MAKE-CURRENT RANGE-END! ;
 \D 90 1000 -dl-
-\D ." EXPECT: 82 90 :" 5 TRIM-SECTION 4 MAKE-CURRENT DIS-START . DIS-END .  CR
+\D ." EXPECT: 82 90 :" 5 TRIM-RANGE 4 MAKE-CURRENT RANGE-START . RANGE-END .  CR
 
 \ Combine range INDEX with the previous one.
 : COMBINE
     DUP OVERLAP-OR-BORDER? OVER IS-NAMED 0= AND IF DUP COLLAPSE THEN
-    DUP OVERLAP? OVER IS-NAMED AND IF DUP TRIM-SECTION THEN  DROP ;
+    DUP OVERLAP? OVER IS-NAMED AND IF DUP TRIM-RANGE THEN  DROP ;
 \D INIT-ALL
 \D 10  30 -dl-
 \D 20  40 -dl-
@@ -153,8 +155,8 @@ REQUIRE BAG
 \D 90 100 -dl: noot
 \D ." EXPECT: 5 5 :" LAB-UPB . 5 COMBINE LAB-UPB . CR
 \D ." EXPECT: 5 5 :" LAB-UPB . 4 COMBINE LAB-UPB . CR
-\D ." EXPECT: 5 5 20 30 :" LAB-UPB . 3 COMBINE LAB-UPB . 2 MAKE-CURRENT DIS-START . DIS-END . CR
-\D ." EXPECT: 5 4 10 30 :" LAB-UPB . 2 COMBINE LAB-UPB . 1 MAKE-CURRENT DIS-START . DIS-END . CR
+\D ." EXPECT: 5 5 20 30 :" LAB-UPB . 3 COMBINE LAB-UPB . 2 MAKE-CURRENT RANGE-START . RANGE-END . CR
+\D ." EXPECT: 5 4 10 30 :" LAB-UPB . 2 COMBINE LAB-UPB . 1 MAKE-CURRENT RANGE-START . RANGE-END . CR
 
 \ Combine range INDEX with a previous overlapping or bordering range.
 : KILL-OVERLAP DUP SAME-ALIGN OVER COMPATIBLE? AND IF DUP COMBINE THEN DROP ;
@@ -166,8 +168,8 @@ REQUIRE BAG
 \D 90 100 -dl: noot
 \D ." EXPECT: 5 5 :" LAB-UPB . 5 KILL-OVERLAP LAB-UPB . CR
 \D ." EXPECT: 5 5 :" LAB-UPB . 4 KILL-OVERLAP LAB-UPB . CR
-\D ." EXPECT: 5 5 20 30 :" LAB-UPB . 3 KILL-OVERLAP LAB-UPB . 2 MAKE-CURRENT DIS-START . DIS-END . CR
-\D ." EXPECT: 5 4 10 30 :" LAB-UPB . 2 KILL-OVERLAP LAB-UPB . 1 MAKE-CURRENT DIS-START . DIS-END . CR
+\D ." EXPECT: 5 5 20 30 :" LAB-UPB . 3 KILL-OVERLAP LAB-UPB . 2 MAKE-CURRENT RANGE-START . RANGE-END . CR
+\D ." EXPECT: 5 4 10 30 :" LAB-UPB . 2 KILL-OVERLAP LAB-UPB . 1 MAKE-CURRENT RANGE-START . RANGE-END . CR
 \D INIT-ALL
 \D 10  30 -dl-
 \D 20  28 -db-
@@ -175,16 +177,16 @@ REQUIRE BAG
 \D 60 80  -dl-
 \D 7F 10F -dl-
 \ The following is actually wrong because the aligning is not tested yet.
-\D ." EXPECT: 5 4 60 10F :" LAB-UPB . 5 KILL-OVERLAP LAB-UPB . 4 MAKE-CURRENT DIS-START . DIS-END . CR
-\D ." EXPECT: 4 3 30 10F :" LAB-UPB . 4 KILL-OVERLAP LAB-UPB . 3 MAKE-CURRENT DIS-START . DIS-END . CR
-\D ." EXPECT: 3 3 20 28 :" LAB-UPB . 3 KILL-OVERLAP LAB-UPB . 2 MAKE-CURRENT DIS-START . DIS-END . CR
-\D ." EXPECT: 3 3 10 30 :" LAB-UPB . 2 KILL-OVERLAP LAB-UPB . 1 MAKE-CURRENT DIS-START . DIS-END . CR
+\D ." EXPECT: 5 4 60 10F :" LAB-UPB . 5 KILL-OVERLAP LAB-UPB . 4 MAKE-CURRENT RANGE-START . RANGE-END . CR
+\D ." EXPECT: 4 3 30 10F :" LAB-UPB . 4 KILL-OVERLAP LAB-UPB . 3 MAKE-CURRENT RANGE-START . RANGE-END . CR
+\D ." EXPECT: 3 3 20 28 :" LAB-UPB . 3 KILL-OVERLAP LAB-UPB . 2 MAKE-CURRENT RANGE-START . RANGE-END . CR
+\D ." EXPECT: 3 3 10 30 :" LAB-UPB . 2 KILL-OVERLAP LAB-UPB . 1 MAKE-CURRENT RANGE-START . RANGE-END . CR
 
 \ Introduce char range to fill the gap at INDEX. Note that the result is unordered.
 : FILL-GAP DUP GAP? IF   DUP END+START -ddef-   DUP 1+ LAB-UPB MAX KILL-OVERLAP
     DUP KILL-OVERLAP THEN DROP ;
-\D ." EXPECT: 3 4 28 30 :" LAB-UPB . 3 FILL-GAP LAB-UPB . 4 MAKE-CURRENT DIS-START . DIS-END . CR
-\D ." EXPECT: 4 4 20 28 :" LAB-UPB . 2 FILL-GAP LAB-UPB . 2 MAKE-CURRENT DIS-START . DIS-END . CR
+\D ." EXPECT: 3 4 28 30 :" LAB-UPB . 3 FILL-GAP LAB-UPB . 4 MAKE-CURRENT RANGE-START . RANGE-END . CR
+\D ." EXPECT: 4 4 20 28 :" LAB-UPB . 2 FILL-GAP LAB-UPB . 2 MAKE-CURRENT RANGE-START . RANGE-END . CR
 
 \ Clean up the range labels, from behind.
 \ Although the bounds may not be valid after a clean up, this works
@@ -193,15 +195,15 @@ REQUIRE BAG
 \ So a range can comfortably be removed using the regular removal
 \ mechanism for bags. A newly introduced range automatically falls
 \ into place, because of the conditions regarding the start addresses.
-: CLEANUP-SECTIONS RANGE-LABELS
+: CLEANUP-RANGES RANGE-LABELS
     2 LAB-UPB 2DUP <= IF DO I KILL-OVERLAP -1 +LOOP THEN ;
 
 \ Plug a hole at the first range.
-: PLUG-FIRST   1 MAKE-CURRENT TARGET-START DIS-START 2DUP <> IF
+: PLUG-FIRST   1 MAKE-CURRENT TARGET-START RANGE-START 2DUP <> IF
    -ddef- _ _ THEN 2DROP ;
 
 \ Plug a hole at the last range.
-: PLUG-LAST    LAB-UPB MAKE-CURRENT DIS-END TARGET-END 2DUP <> IF
+: PLUG-LAST    LAB-UPB MAKE-CURRENT RANGE-END TARGET-END 2DUP <> IF
    -ddef- _ _ THEN 2DROP ;
 
 \ If there are no ranges at all, make the buffer into a default range.
@@ -236,7 +238,7 @@ NORMAL-DISASSEMBLY
 \ Prepend `` RANGE-LABELS '' if you want to use the auxiliary words.
 
 \ For ADDRESS : "it IS in a current code range"
-: IN-CURRENT-CODE?   DIS-START DIS-END WITHIN   DIS-XT REQUIRED-XT =   AND ;
+: IN-CURRENT-CODE?   RANGE-START RANGE-END WITHIN   RANGE-XT REQUIRED-XT =   AND ;
 
 \ For ADDRESS and range number N: "address SITS in code range n"
 : IN-CODE-N? MAKE-CURRENT IN-CURRENT-CODE? ;
@@ -284,14 +286,14 @@ NORMAL-DISASSEMBLY
 
 \ Add the information that ADDRESS1 to ADDRESS2 is a code range.
 \ If range labels was sorted, it remains so.
-: INSERT-SECTION   OVER RANGE-LABELS WHERE-LABEL >R
-    REQUIRED-XT ANON-SECTION   R@ ROLL-LABEL   R> COLLAPSE(I1) ;
+: INSERT-RANGE   OVER RANGE-LABELS WHERE-LABEL >R
+    REQUIRED-XT ANON-RANGE   R@ ROLL-LABEL   R> COLLAPSE(I1) ;
 
 \ Analyse the code range from ADDRESS up to an unconditional transfer.
 \ Add information about jumps to ``STARTERS'' and new ranges to ``LABELS''.
 : CRAWL-ONE  DUP >R TARGET>HOST BEGIN (DISASSEMBLE) ANALYSE-INSTRUCTION
     DUP HOST-END >=   LATEST-INSTRUCTION @ UNCONDITIONAL-TRANSFERS IN-BAG?   OR
-  UNTIL     R> SWAP HOST>TARGET INSERT-SECTION ;
+  UNTIL     R> SWAP HOST>TARGET INSERT-RANGE ;
 
 \ Analyse code from ADDRESS , unless already known.
 : ?CRAWL-ONE? DUP STARTER? IF CRAWL-ONE _ THEN DROP ;
@@ -315,7 +317,7 @@ NORMAL-DISASSEMBLY
 \ For all dl-ranges add all plausible labels.
 : ALL-L-LABELS
     RANGE-LABELS DO-LAB   I CELL+ @ EXECUTE
-        DIS-XT 'DUMP-L =   IF   DIS-START DIS-END ADD-L-LABELS   THEN
+        RANGE-XT 'DUMP-L =   IF   RANGE-START RANGE-END ADD-L-LABELS   THEN
     LOOP-LAB ;
 
 \ ------------------------ INTEL 80386 ------------------------------

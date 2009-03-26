@@ -496,41 +496,41 @@ VARIABLE CUT-SIZE    16 CUT-SIZE !   \ Chunks for data-disassembly.
 
 \ Define a range.
 12 34 '2DROP
-class DIS-STRUCT
+class RANGE-STRUCT
    >R >R >R          \ Get them in reverse order.
-   M: DIS-START @ M; R> ,     \ Start of range
-   M: DIS-END! ! M;       \ End of range
-   M: DIS-END   @ M; R> ,       \ End of range
-   M: DIS-STRIDE   @ M; 1 ,  \ For the moment FIXME!
-   M: DIS-XT   @ M;
-   M: DIS-RANGE   @ >R DIS-START DIS-END R> EXECUTE M; R> ,       \ End of range
+   M: RANGE-START @ M; R> ,     \ Start of range
+   M: RANGE-END! ! M;       \ End of range
+   M: RANGE-END   @ M; R> ,       \ End of range
+   M: RANGE-STRIDE   @ M; 1 ,  \ For the moment FIXME!
+   M: RANGE-XT   @ M;
+   M: RANGE-DECODE   @ >R RANGE-START RANGE-END R> EXECUTE M; R> ,       \ End of range
 endclass
 
 \ Print the range LAB as a matter of testing.
-: .PAY-SECTION CELL+ @ DUP EXECUTE
-   DIS-START H.  SPACE DIS-END H.  " BY " TYPE DIS-XT %ID.  %ID. ;
+: .PAY-RANGE CELL+ @ DUP EXECUTE
+   RANGE-START H.  SPACE RANGE-END H.  " BY " TYPE RANGE-XT %ID.  %ID. ;
 
-20 BAG SECTION-TYPES  \ Contains dea of dumper, creator, alternating.
+20 BAG RANGE-TYPES  \ Contains dea of dumper, creator, alternating.
 
-\ DEA of dump belongs to DEA of creator. Add to ``SECTION-TYPES''.
-: ARE-COUPLED   SWAP SECTION-TYPES BAG+! SECTION-TYPES BAG+! ;
+\ DEA of dump belongs to DEA of creator. Add to ``RANGE-TYPES''.
+: ARE-COUPLED   SWAP RANGE-TYPES BAG+! RANGE-TYPES BAG+! ;
 
 \ For current range, return the XT of a proper defining word.
-: CREATOR-XT   DIS-XT SECTION-TYPES BAG-WHERE CELL+ @ ;
+: CREATOR-XT   RANGE-XT RANGE-TYPES BAG-WHERE CELL+ @ ;
 
 \ Display range INDEX in a reconsumable form.
-: DECOMP-SECTION   DUP MAKE-CURRENT DIS-START H. SPACE DIS-END H. SPACE
+: DECOMP-RANGE   DUP MAKE-CURRENT RANGE-START H. SPACE RANGE-END H. SPACE
     CREATOR-XT ID. LABEL-NAME TYPE CR ;
 
-\ Contains sector specification, range plus type.
-MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT RANGE-LABELS   LABELS !BAG
+\ Contains range specification, limits plus type.
+MAX-LABEL '.PAY-RANGE 'DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 
 \ Create a disassembly range from AD1 to AD2 using dis-assembler DEA1
 \ with NAME. Register it as a labeled range.
-: SECTION   POSTFIX  DIS-STRUCT   RANGE-LABELS   DIS-START LAB+!   LATEST LAB+! ;
+: RANGE   POSTFIX  RANGE-STRUCT   RANGE-LABELS   RANGE-START LAB+!   LATEST LAB+! ;
 \ Create a disassembly range from AD1 to AD2 using dis-assembler DEA1 and
 \ end-of-line action DEA2 without a name. Register it as a labeled range.
-: ANON-SECTION   NONAME$ SECTION ;
+: ANON-RANGE   NONAME$ RANGE ;
 
 \ Disassemble to ADDRESS2 from ADDRESS1.
 : (D-R-T) SWAP D-R ;
@@ -538,13 +538,13 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Disassemble from target ADDRESS1 to ADDRESS2.
 : D-R-T TARGET>HOST SWAP TARGET>HOST (D-R-T) ;
 
-\ Section ADDRESS1 .. ADDRESS2 is code with name NAME.
-: -dc    2>R 'D-R-T   2R> SECTION ;
+\ Range ADDRESS1 .. ADDRESS2 is code with name NAME.
+: -dc    2>R 'D-R-T   2R> RANGE ;
 
-\ Section ADDRESS1 .. ADDRESS2 is code with name "name".
+\ Range ADDRESS1 .. ADDRESS2 is code with name "name".
 : -dc:    (WORD) -dc ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous code range.
+\ Range ADDRESS1 .. ADDRESS2 is an anonymous code range.
 : -dc-    NONAME$ -dc ;
 
 'D-R-T     '-dc:   ARE-COUPLED
@@ -556,13 +556,13 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ adorned with with a label.
 : DUMP-N   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-N) ;
 
-\ Section ADDRESS1 .. ADDRESS2 are such with name NAME.
-: -dn    2>R 'DUMP-N 2R> SECTION ;
+\ Range ADDRESS1 .. ADDRESS2 are such with name NAME.
+: -dn    2>R 'DUMP-N 2R> RANGE ;
 
-\ Section ADDRESS1 .. ADDRESS2 are such with name "name".
+\ Range ADDRESS1 .. ADDRESS2 are such with name "name".
 : -dn:    (WORD) -dn ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous such range.
+\ Range ADDRESS1 .. ADDRESS2 is an anonymous such range.
 : -dn-    NONAME$ -dn ;
 
 'DUMP-N    '-dn:   ARE-COUPLED
@@ -573,13 +573,13 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Dump bytes from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-B   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-B) ;
 
-\ Section ADDRESS1 .. ADDRESS2 are bytes with name NAME.
-: -db    2>R 'DUMP-B 2R> SECTION ;
+\ Range ADDRESS1 .. ADDRESS2 are bytes with name NAME.
+: -db    2>R 'DUMP-B 2R> RANGE ;
 
-\ Section ADDRESS1 .. ADDRESS2 are bytes with name "name".
+\ Range ADDRESS1 .. ADDRESS2 are bytes with name "name".
 : -db:    (WORD) -db ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous byte range.
+\ Range ADDRESS1 .. ADDRESS2 is an anonymous byte range.
 : -db-    NONAME$ -db ;
 
 'DUMP-B    '-db:   ARE-COUPLED \ Register the decompiler.
@@ -593,13 +593,13 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-W   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-W) ;
 
-\ Section ADDRESS1 .. ADDRESS2 are words with name NAME.
-: -dw    2>R 'DUMP-W 2R> SECTION ;
+\ Range ADDRESS1 .. ADDRESS2 are words with name NAME.
+: -dw    2>R 'DUMP-W 2R> RANGE ;
 
-\ Section ADDRESS1 .. ADDRESS2 are words with name "name".
+\ Range ADDRESS1 .. ADDRESS2 are words with name "name".
 : -dw:    (WORD) -dw ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous word range.
+\ Range ADDRESS1 .. ADDRESS2 is an anonymous word range.
 : -dw-    NONAME$ -dw ;
 
 'DUMP-W    '-dw:   ARE-COUPLED
@@ -610,13 +610,13 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-L) ;
 
-\ Section ADDRESS1 .. ADDRESS2 are longs with name NAME.
-: -dl    2>R 'DUMP-L 2R> SECTION ;
+\ Range ADDRESS1 .. ADDRESS2 are longs with name NAME.
+: -dl    2>R 'DUMP-L 2R> RANGE ;
 
-\ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
+\ Range ADDRESS1 .. ADDRESS2 are longs with name "name".
 : -dl:    (WORD) -dl ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous long range.
+\ Range ADDRESS1 .. ADDRESS2 is an anonymous long range.
 : -dl-    NONAME$ -dl ;
 
 'DUMP-L    '-dl:   ARE-COUPLED
@@ -636,13 +636,13 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-$   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-$) ;
 
-\ Section ADDRESS1 .. ADDRESS2 are longs with name NAME.
-: -d$    2>R 'DUMP-$ 2R> SECTION ;
+\ Range ADDRESS1 .. ADDRESS2 are longs with name NAME.
+: -d$    2>R 'DUMP-$ 2R> RANGE ;
 
-\ Section ADDRESS1 .. ADDRESS2 are longs with name "name".
+\ Range ADDRESS1 .. ADDRESS2 are longs with name "name".
 : -d$:    (WORD) -d$ ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous long range.
+\ Range ADDRESS1 .. ADDRESS2 is an anonymous long range.
 : -d$-    NONAME$ -d$ ;
 
 'DUMP-$    '-d$:   ARE-COUPLED
@@ -655,17 +655,17 @@ MAX-LABEL '.PAY-SECTION 'DECOMP-SECTION   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 
 \ Print a remark about whether start of the current range fits to the
 \ END of the previous range. Leave END of current range for the next check.
-: HOW-FIT   DIS-START .HOW-FIT DIS-END ;
+: HOW-FIT   RANGE-START .HOW-FIT RANGE-END ;
 
 \ Print a remark about whether the END of the previous range is really
 \ the end of the input file.
 : HOW-FIT-END    TARGET-END .HOW-FIT ;
 
-\ Disassemble all those sectors with their own disassemblers.
+\ Disassemble all those ranges with their own disassemblers.
 \ No range will print their end labels, which is no problem if everything
 \ fits, except for the last range. Do that expressly.
 : DISASSEMBLE-ALL   TARGET-START
-    RANGE-LABELS DO-LAB I CELL+ @ EXECUTE   HOW-FIT DIS-RANGE LOOP-LAB
+    RANGE-LABELS DO-LAB I CELL+ @ EXECUTE   HOW-FIT RANGE-DECODE LOOP-LAB
     HOW-FIT-END   HOST-END CR-ADORNED ;
 
 \ ------------------- Generic again -------------------
@@ -718,18 +718,18 @@ ASSEMBLER
 ( Not yet definitions, these thingies must be visible in the            )
 ( disassembler.                                                         )
 
-(                       SECTIONS                                        )
+(                       RANGES                                        )
 
 \ Disassemble from target ADDRESS1 to ADDRESS2 as 16 bit.
 : D-R-T-16  BITS-16 CR "BITS-16" TYPE D-R-T BITS-32 CR "BITS-32" TYPE ;
 
-\ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name NAME.
-: -dc16    2>R 'D-R-T-16   2R> SECTION ;
+\ Range ADDRESS1 .. ADDRESS2 is 16-bit code with name NAME.
+: -dc16    2>R 'D-R-T-16   2R> RANGE ;
 
-\ Section ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
+\ Range ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
 : -dc16:   (WORD) -dc16 ;
 
-\ Section ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-range.
+\ Range ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-range.
 : -dc16-   NONAME$ -dc16 ;
 
 'D-R-T-16   '-dc16:   ARE-COUPLED
