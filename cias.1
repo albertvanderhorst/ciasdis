@@ -1,23 +1,23 @@
 .\" $Id$
-.TH cias "1" "May 2009" "cias 0.2.0" DFW
+.TH cias "1" "May 2004" "cias 0.1.0" DFW
 .SH "NAME"
 cias \- computer_intelligence_assembler_386
 .br
 cidis \- computer_intelligence_disassembler_386
 .SH "SYNOPSIS"
-\fBcias   \fR  [\ \fB\-HV\fR\ ]
-.br
-\fBcidis   \fR  [\ \fB\-HV\fR\ ]
-.br
+.\" \fBcias   \fR  [\ \fB\-HV\fR\ ]
+.\" .br
+.\" \fBcidis   \fR  [\ \fB\-HV\fR\ ]
+.\" .br
 \fBcias\fR  \ [ [<source-file>] <bin-file> ]
 .br
 \fBcidis\fR  \ [ [<bin-file>] <consult> ]
 .\".br
-.\"\ficias/cdis\fR  \ \fB\-I\fR\ <binary-path> <library-path>
+.\"\ficias/cidis\fR  \ \fB\-I\fR\ <binary-path> <library-path>
 .\".br
-.\"\ficias/cdis\fR  \ \fB\-L\fR\ <library> [ params ]
+.\"\ficias/cidis\fR  \ \fB\-L\fR\ <library> [ params ]
 .\".br
-.\"\ficias/cdis\fR  \ \fB\-S\fR\ <script> [ params ]
+.\"\ficias/cidis\fR  \ \fB\-S\fR\ <script> [ params ]
 .SH "DESCRIPTION"
 The \fB
 computer intelligence assembler and disassembler
@@ -28,7 +28,7 @@ source code and assemble it to
 the exact same binary code.
 You can specify towards
 the disassembler
-which ranges are what sort of
+which sections are what sort of
 data and which are code, provide annotations, etc.
 in order to make the source comprehensible.
 These specifications can be stored, reused and combined,
@@ -75,7 +75,7 @@ A \fBBYE\fR command ends an interactive session.
 After the command \fBFORTH\fR
 you have a full Forth environment available (see lina(1))
 
-\fIdisas\fR has no options but there is a wealth of commands
+\fIcidis\fR has no options but there is a wealth of commands
 in interactive mode.
 If there is a \fibin-files\fR parameter,
 it is loaded into the code-buffer.
@@ -97,8 +97,8 @@ assembler source can be tried out interactively (see lina(1))
 After the command \fBFORTH\fR
 you have a full Forth environment available (see lina(1))
 
-.\"\ficias/cdis\fR without options starts an interactive system.
-.\"If used as a filter, \ficias/cdis\fR doesn't reflect its input and exits
+.\"\ficias/cidis\fR without options starts an interactive system.
+.\"If used as a filter, \ficias/cidis\fR doesn't reflect its input and exits
 .\"at end of input.
 .\"Options are implemented by a simple mechanism through
 .\"the source library, and hence are configurable.
@@ -128,7 +128,7 @@ Print help, i.e. the option summary.
 \fB\-V\fR
 Print version and copyright information.
 .SH "AVAILABILITY"
-\ficias/cdis\fR is based on \fBciforth\fR.
+\ficias/cidis\fR is based on \fBciforth\fR.
 .br
 The generic system can be fetched from
 .IP
@@ -160,7 +160,7 @@ Configuration is done fully internal.
 
 .SH "FILES"
 \fIforth.lab\fR contains a Forth source library.
-This provides   additional facilities for advance use.
+This provides   additional facilities for advanced use.
 If   it is absent,
 assembler   errors result in numeric error messages without mnemonics.
 
@@ -179,9 +179,9 @@ A mnemonic message is fetched from the library file and displayed,
 if possible.
 
 .SH "CAVEAT"
-Mistakes in Forth mode can easily crash \ficias/cdis\fR.
+Mistakes in Forth mode can easily crash \ficias/cidis\fR.
 
-\ficias/cdis\fR is case sensitive.
+\ficias/cidis\fR is case sensitive.
 
 \fBL@\FR is renamed \fBFAR@\R to prevent a conflict.
 .SH DISCLAIMER
@@ -198,5 +198,5 @@ are made available under the GNU Public License:
 quality, but NO warranty.
 
 .SH "AUTHOR"
-Copyright \(co 2004-2009
+Copyright \(co 2004-2008
 Albert van der Horst \fI albert@spenarnc.xs4all.nl\fR.
