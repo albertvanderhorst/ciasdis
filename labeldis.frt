@@ -766,7 +766,7 @@ VARIABLE LATEST-OFFSET
 : .COMMA-LABEL   DUP AS-@+ .LABEL/. %ID. ;
 
 (  For DEA print the name without the surrounding brackets.             )
-: ID.-NO()   >NFA @ $@  2 - SWAP 1 + SWAP TYPE ;
+: ID.-NO()   >NFA @ $@  2 - SWAP 1 + SWAP TYPE SPACE ;
 
 (  Assuming the disassembly sits at the offset of a relative branch     )
 (  assembled by commaer DEA , return the host space ADDRESS of the next )
@@ -813,19 +813,20 @@ VARIABLE LATEST-OFFSET
 '.COMMA-LABEL  'W,    >DIS !  ( immediate data : address/offset )
 '.COMMA-LABEL  'B,    >DIS !  ( immediate byte : address/offset )
 
-
 \ Contains all instruction that represent an unconditional transfer
 \ of control. It may be followed by data instead of code.
 0 BAG UNCONDITIONAL-TRANSFERS
-\   'CALL, , 'CALLFAR, , 'CALLFARO, , 'CALLO, , 'INT, , 'INT3, , 'INTO, ,
+  'CALL, , 'CALLFAR, , 'CALLFARO, , 'CALLO, , 'INT, , 'INT3, , 'INTO, ,
   'IRET, , 'JMP, , 'JMPFAR, , 'JMPFARO, , 'JMPO, , 'JMPS, , 'RET+, ,
   'RET, , 'RETFAR+, , 'RETFAR, ,
 HERE UNCONDITIONAL-TRANSFERS !
+100 CELLS ALLOT         \ Allow to put more here
 
 \ Contains all instructions that represent intra-segment jumps.
 0 BAG JUMPS
    'CALL, , 'J, , 'JCXZ, , 'JMP, , 'JMPS, , 'J|X, , 'LOOP, , 'LOOPNZ,
    , 'LOOPZ, ,
 HERE JUMPS !
+100 CELLS ALLOT         \ Allow to put more here
 
 PREVIOUS DEFINITIONS

@@ -2,6 +2,15 @@
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
+\ In retroforth all calls return and ``INT 80'' too.
+ASSEMBLER
+'CALL,  UNCONDITIONAL-TRANSFERS BAG-
+'CALLO, UNCONDITIONAL-TRANSFERS BAG-
+'INT,   UNCONDITIONAL-TRANSFERS BAG-
+PREVIOUS
+
+\ 'CALLFAR, , 'CALLFARO, , 'CALLO, , , 'INT3, , 'INTO, ,
+
 : \D POSTPONE \ ;   \ Get rid of debug
 HEX INIT-ALL
 INCLUDE elf.cul
@@ -129,5 +138,10 @@ CLEAN-LABELS
 CLEANUP-RANGES
 \ MAKE-CUL
 PLUG-HOLES
+
+\ Now spit out a cul file that is used going on.
+"\ This file is generated, stored in RCS for comparison only.
+" TYPE
+
 MAKE-CUL
 \ DISASSEMBLE-ALL
