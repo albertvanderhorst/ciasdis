@@ -25,17 +25,17 @@ BITS-32
 
 \ XXX is a target for backward jumps:   
 ( 0000,053F )   :XXX    MOV, X| T| DI'| MEM| QQQ L, \   Move a xell to register DI from memory at QQQ
-( 0000,0545 )                  JMP, XXX RL,
+( 0000,0545 )                  JMP, XXX RL, 
 ( 0000,054A )                  AS:, 
-( 0000,054B )                  JMP, XXX RW,
-( 0000,054E )                  JMP, XXX RL,
-( 0000,0553 )                  JMP, XXX 1 - RL,
-( 0000,0558 )                  JMPS, XXX RB,
-( 0000,055A )                  JMPS, XXX 1 + RB,
-( 0000,055C )                  JMP, END RL,
+( 0000,054B )                  JMP, XXX RW, \ RW, didn't end in a blank, before
+( 0000,054E )                  JMP, XXX RL, 
+( 0000,0553 )                  JMP, XXX 1 - RL, 
+( 0000,0558 )                  JMPS, XXX RB, 
+( 0000,055A )                  JMPS, XXX 1 + RB, 
+( 0000,055C )                  JMP, END RL, 
 ( 0000,0561 )                  JMP, 170 (RL,) 
-( 0000,0566 )                  JMPS, YY RB,
-( 0000,0568 )                  JMPS, YY 1 - RB,
+( 0000,0566 )                  JMPS, YY RB, 
+( 0000,0568 )                  JMPS, YY 1 - RB, 
 ( 0000,056A )   :YY   db 0 0 0 0 0 0 
 \  First line
 \  Second line   

@@ -35,6 +35,7 @@ YY 100 +  END LEN16 -   -dc-            \ Unnamed section
 END LEN16 -  END  -dc16: AAP               \ Named section
 
 "XXX is a target for backward jumps:" 053F COMMENT
+054B COMMENT: RW, didn't end in a blank, before
 053F  LABEL XXX
 \ From now on the label ``XXXX'' can be used: like this
 XXX  COMMENT:   Move a xell to register DI from memory at QQQ
