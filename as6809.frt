@@ -41,20 +41,20 @@ ASSEMBLER DEFINITIONS  HEX
     80 00 9F 0 DFIR (|#,)    \ Incorporate 5 bit unsigned DATA.
 \ Incorporate signed DATA. Cut off negative values at 5 bits.
 : |#, DUP -10 +10 WITHIN 0= 31 ?ERROR  1F AND   (|#,) ;
-80 0 60 T!R       20 0 4 FAMILY|R X Y U S
+80 0 60 T!       20 0 4 FAMILY|R X Y U S
 280 02 FF 9F FIR [##]
-    80 00 9F T!R
+    80 00 9F T!
 01 80 07 FAMILY|R ,R+ ,R++ ,-R ,--R ,R B,R A,R
 01 91 06 FAMILY|R [,R++] -- [,--R] [,R] [B,R] [A,R]
 10 8B 02 FAMILY|R D,R [D,R]
 
 \ The don't care bits translate to underscores
-180 02 9F T!R     10 88 02 FAMILY|R #,R [#,R]
-280 02 9F T!R     10 89 02 FAMILY|R ##,R [##,R]
-    180 02 FF T!R
+180 02 9F T!     10 88 02 FAMILY|R #,R [#,R]
+280 02 9F T!     10 89 02 FAMILY|R ##,R [##,R]
+    180 02 FF T!
 20 8C 04 FAMILY|R #,PCR  #,PCR_  #,PCR__  #,PCR___
 20 9C 04 FAMILY|R [#,PCR] [#,PCR]_  [#,PCR]__ [#,PCR]___
-    280 02 FF T!R
+    280 02 FF T!
 20 8D 04 FAMILY|R ##,PCR  ##,PCR_  ##,PCR__  ##,PCR___
 20 9D 04 FAMILY|R [##,PCR] [##,PCR]_  [##,PCR]__ [##,PCR]___
 
@@ -103,7 +103,7 @@ ASSEMBLER DEFINITIONS  HEX
 4000 8F10 2 2FAMILY, STY, STS,
 
 \ Branches, control flow
-    0151 0 0F T!R
+    0151 0 0F T!
 01 00 10 FAMILY|R Y| N| U>| U<=| U>=| U<| =| <>| VC| VS| 0>=| 0<| >=| <| >| <=|
 29 00 30 4E 1PI JMP,
 2A 00 30 8D 1PI JSR,

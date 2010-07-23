@@ -31,12 +31,12 @@
 (               10 Register op        20 Memory op                    )
 (               40 D0                 80 [BP]                         )
 ( Only valid for 16 bits real mode  A0JUL04 AvdH )
-20 0 07 T!R
+20 0 07 T!
  01 0 8 FAMILY|R [BX+SI] [BX+DI] [BP+SI] [BP+DI] [SI] [DI] -- [BX]
 A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
-12 0 07 T!R
+12 0 07 T!
  01 0 8 FAMILY|R AX| CX| DX| BX| SP| BP| SI| DI|
-11 0 07 T!R
+11 0 07 T!
  01 0 8 FAMILY|R AL| CL| DL| BL| AH| CH| DH| BH|
 
 60 000  C0 00 FIR      D0|
@@ -46,12 +46,12 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 08 200  C7 06 FIR      MEM|
  ( Overrules D0| [BP] )
 
-02 00 38 T!R
+02 00 38 T!
  08 0 8 FAMILY|R AX'| CX'| DX'| BX'| SP'| BP'| SI'| DI'|
-01 00 38 T!R
+01 00 38 T!
  08 0 8 FAMILY|R AL'| CL'| DL'| BL'| AH'| CH'| DH'| BH'|
 
-00 00 0200 T!R   0200 0 2 FAMILY|R F| T|
+00 00 0200 T!   0200 0 2 FAMILY|R F| T|
 01 00 0100 0000 FIR B|
 02 00 0100 0100 FIR W|
 
@@ -96,11 +96,11 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 
 ( --------- special fixups ----------)
 
-00 00 0100,0001 T!R   01 0 2 FAMILY|R Y| N|
-00 00 0E T!R   02 0 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
+00 00 0100,0001 T!   01 0 2 FAMILY|R Y| N|
+00 00 0E T!   02 0 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
 00 4000 10F 70 1PI J,
 
-00 00 18 T!R   08 0 4 FAMILY|R ES| CS| SS| DS|
+00 00 18 T!   08 0 4 FAMILY|R ES| CS| SS| DS|
 00 00 18 T!   01 06 2 1FAMILY, PUSH|SG, POP|SG,
 02 00 DF02 08C 2PI MOV|SG,
 

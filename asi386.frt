@@ -52,29 +52,29 @@
 ( only valid for 16 bits mode, or with an address overwite. Use W, L,   )
 ( appropriately.                                                        )
 
-8200 0 38 T!R
+8200 0 38 T!
  08 00 8 FAMILY|R AX] CX] DX] BX] 0] BP] SI] DI]
-8200 0 C0 T!R
+8200 0 C0 T!
  40 00 4 FAMILY|R  +1* +2* +4* +8*
-8200 0 0700,0001 T!
+8200 0 0100,0007 T!
  01 00 8 FAMILY|R [AX [CX [DX [BX [SP -- [SI [DI
 8280 00 0100,0007 05 FIR [BP   ( Fits in the hole, but disallow ZO| )
 8248 02 0100,0007 05 FIR [MEM  ( Fits in the hole, but requires ZO| )
 
-4120 0 07 T!R
+4120 0 07 T!
   01 00 8
     FAMILY|R [BX+SI]% [BX+DI]% [BP+SI]% [BP+DI]% [SI]% [DI]% -- [BX]%
 40A0 0000 07 06 FIR [BP]%  ( Fits in the hole, safe inconsistency check)
-8120 0 07 T!R
+8120 0 07 T!
  01 00 4 FAMILY|R [AX] [CX] [DX] [BX]
 8120 01 07 04 FIR ~SIB|   ( Fits in the hole, but requires ~SIB, )
 81A0 00 07 05 FIR [BP]   ( Fits in the hole, but disallow ZO| )
-8120 0 07 T!R
+8120 0 07 T!
  01 06 2 FAMILY|R [SI] [DI]
 
-20,0111 0 07 T!R
+20,0111 0 07 T!
  01 00 8 FAMILY|R AL| CL| DL| BL| AH| CH| DH| BH|
-20,0112 0 07 T!R
+20,0112 0 07 T!
  01 00 8 FAMILY|R AX| CX| DX| BX| SP| BP| SI| DI|
 0160 00 C0 00 FIR      ZO|
 0124 02 C0 40 FIR      BO|
@@ -83,16 +83,16 @@
 20,4048 02 C7 06 FIR      MEM|% ( Overrules ZO| [BP]% )
 20,8108 02 C7 05 FIR      MEM| ( Overrules ZO| [BP] )
 
-24,1101 0000 38 T!R
+24,1101 0000 38 T!
  08 00 8 FAMILY|R AL'| CL'| DL'| BL'| AH'| CH'| DH'| BH'|
-24,1102 0000 38 T!R
+24,1102 0000 38 T!
  08 00 8 FAMILY|R AX'| CX'| DX'| BX'| SP'| BP'| SI'| DI'|
-24,2100 0000  38 T!R   08 00 6 FAMILY|R ES| CS| SS| DS| FS| GS|
-28,0002 0000 3801,0000 T!   ( 3)
+24,2100 0000  38 T!   08 00 6 FAMILY|R ES| CS| SS| DS| FS| GS|
+28,0002 0000 0138 T!   ( 3)
  08 00 5 FAMILY|R CR0| -- CR2| CR3| CR4|                 ( 3)
  0008 0100 8 FAMILY|R DR0| DR1| DR2| DR3| DR4| DR5| DR6| DR7| ( 3)
 
-20,0000 0000 0200 T!R  0200 00 2 FAMILY|R F| T|
+20,0000 0000 0200 T!  0200 00 2 FAMILY|R F| T|
 24,0401 0000 0100 0000 FIR B|
 24,0402 0000 0100 0100 FIR X|
 
@@ -161,8 +161,8 @@
 
 ( --------- special fixups ----------)
 
-0800     0000 0100,0001 T!R     01 00 2 FAMILY|R Y| N|
-0800     0000 0400,000E T!R     02 00 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
+0800     0000 0100,0001 T!     01 00 2 FAMILY|R Y| N|
+0800     0000 0400,000E T!     02 00 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
 0800 40 050F 0070 1PI J,
 
 2102 0 FF02 008C 2PI MOV|SG,
@@ -175,8 +175,8 @@
 8,0012 0000 3F,0300 C0,200F 3PI  MOV|CD,  ( 3)
 
 0800 80 5,0F00 800F 2PI J|X,                                           ( 3)
-0800 0 0100 T!R  0100 0000 2 FAMILY|R Y'| N'|                          ( 3)
-0800 0 0E00 T!R  0200 0000 8 FAMILY|R O'| C'| Z'| CZ'| S'| P'| L'| LE'| ( 3)
+0800 0 0100 T!  0100 0000 2 FAMILY|R Y'| N'|                          ( 3)
+0800 0 0E00 T!  0200 0000 8 FAMILY|R O'| C'| Z'| CZ'| S'| P'| L'| LE'| ( 3)
 0901 0 C7,0F00 00,900F 3PI SET,  ( 3)
 
 ( --------- no fixups ---------------)

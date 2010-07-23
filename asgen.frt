@@ -291,19 +291,12 @@ HEX
 ( Post the instruction using DATA. )
 : POSTIT   CHECK26   !TALLY   !POSTIT
     @+ >R   TALLY:,   R> assemble, ;
-( Build an instruction given by BA BY BI the OPCODE and COUNT           )
-: BUILD-IP >R , , , , R> , 0 ( prefix) , ;
-( Define an instruction by BA BY BI and the OPCODE                      )
-( For 1 2 3 and 4 byte opcodes.                                         )
-IS-A IS-1PI : 1PI  CHECK33 CREATE--  1 BUILD-IP DOES> REMEMBER POSTIT ;
-IS-A IS-2PI : 2PI  CHECK33 CREATE--  2 BUILD-IP DOES> REMEMBER POSTIT ;
-IS-A IS-3PI : 3PI  CHECK33 CREATE--  3 BUILD-IP DOES> REMEMBER POSTIT ;
-IS-A IS-4PI : 4PI  CHECK33 CREATE--  4 BUILD-IP DOES> REMEMBER POSTIT ;
 ( For DEA : it REPRESENTS some kind of opcode.                          )
-: IS-PI  >R 0
-    R@ IS-1PI OR  R@ IS-2PI OR  R@ IS-3PI OR   R@ IS-4PI OR
-R> DROP ;
-
+IS-A IS-PI   \ Awaiting REMEMBER.
+( Define an instruction by BA BY BI and the OPCODE plus COUNT           )
+: PI  >R CHECK33 CREATE--  , , , , R> , 0 , DOES> REMEMBER POSTIT ;
+( 1 .. 4 byte instructions ( BA BY BI OPCODE : - )
+: 1PI   1 PI ;     : 2PI   2 PI ;    : 3PI   3 PI ;    : 4PI   4 PI ;
 ( Bookkeeping for a fixup using a pointer to the BIBYBA information,    )
 ( can fake a fixup in disassembling too.                                )
 : TALLY:|   @+ TALLY-BI AND!   @+ TALLY-BY OR!   @ TALLY-BA OR!U ;
@@ -385,9 +378,8 @@ IS-A  IS-COMMA   : COMMAER CREATE  , 0 , , , , , DOES> REMEMBER COMMA ;
 ( ------------- ASSEMBLER, SUPER DEFINING WORDS ----------------------)
 
 CREATE PRO-TALLY 3 CELLS ALLOT  ( Prototype for TALLY-BI BY BA )
+( Fill in the tally prototype with BA BY BI information                 )
 : T! PRO-TALLY !+ !+ !+ DROP ;
-( Fill in the tally prototype with BA BY, reversed BI information )
-: T!R   REVERSE-BYTES T! ;
 ( Get the data from the tally prototype back BA BY BI )
 : T@ PRO-TALLY 3 CELLS +  @- @- @- DROP ;
 ( Add INCREMENT to the OPCODE a NUMBER of times, and generate as much   )
@@ -399,7 +391,7 @@ CREATE PRO-TALLY 3 CELLS ALLOT  ( Prototype for TALLY-BI BY BA )
 : 3FAMILY,    0 DO   DUP >R T@ R> 3PI   OVER + LOOP DROP DROP ;
 : 4FAMILY,    0 DO   DUP >R T@ R> 4PI   OVER + LOOP DROP DROP ;
 : xFAMILY|    0 DO   DUP >R T@ R> xFI   OVER + LOOP DROP DROP ;
-: FAMILY|R    0 DO   DUP >R T@ REVERSE-BYTES  R> FIR   OVER + LOOP DROP DROP ;
+: FAMILY|R    0 DO   DUP >R T@ R> FIR   OVER + LOOP DROP DROP ;
 : xFAMILY|F   0 DO   DUP >R T@ R> DFI   OVER + LOOP DROP DROP ;
 
 ( ############### PART II DISASSEMBLER #################################### )
