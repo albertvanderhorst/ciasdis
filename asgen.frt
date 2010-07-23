@@ -539,7 +539,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ( Show at least all instructions valid for the "OPCODE" given. )
 : SHOW:
     !DISS   !TALLY
-    % DUP BEGIN
+    ' DUP BEGIN
         SHOW-STEP
      OVER DISS CELL+ @ - OVER VOCEND? OR UNTIL DROP DROP
 ;
