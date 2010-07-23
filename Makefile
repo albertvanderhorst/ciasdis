@@ -43,6 +43,16 @@ cias.frt \
 cidis.frt \
 # That's all folks!
 
+TESTTARGETS= \
+testset386   \
+testset386a  \
+testset6809  \
+testset8080  \
+testset8086  \
+testsetalpha   \
+testsetpentium \
+# That's all folks!
+
 # Plug ins for stand alone assembler
 PGSRC= \
 as6809s.frt \
@@ -154,7 +164,7 @@ ci86.$(s).bin :
 # Some of these targets make no sense and will fail
 all: regressiontest
 
-cleanall: testclean asclean ; rcsclean
+clean: testclean asclean ; rcsclean
 
 #Install it. To be run as root
 install: ; @echo 'There is no "make install" ; use "lina -i <binpath> <libpath>"'
@@ -164,11 +174,11 @@ forth.lab : ; echo 'BLOCK-FILE $$@ GET-FILE "'$@'" PUT-FILE'|lina
 
 zip : $(RELEASECONTENT) ; echo cias-$(VERSION).tar.gz $+ | xargs tar -cvzf
 
-releaseproof : ; for i in $(RELEASECONTENT); do  rcsdiff -w $$i ; done
-
 testclean: ; rm -f $(TESTTARGETS)
 
 asclean: ; rm -f $(ASTARGETS)
+
+releaseproof : ; for i in $(RELEASECONTENT); do  rcsdiff -w $$i ; done
 
 # WARNING : the generation of postscript and pdf use the same files
 # for indices, but with different content.
@@ -201,6 +211,11 @@ sed -e's/\<gnr\>/ci86.gnr/' |\
 sed -e's/ \([^ .]\{1,8\}\)[^ .]*\./ \1./g'
 
 ci86.lina.s :
+
+# ------------------- TARGET TESTS ---------------------------------
+# All the test<target> assemble a testset<target> with virtually
+# all combinations of instructions, then disassemble then compared.
+# A previous diff file is in RCS
 
 testasalpha: asgen.frt asalpha.frt testsetalpha ; \
 	echo INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testsetalpha |\
@@ -242,6 +257,8 @@ testas386: asgen.frt asi386.frt testset386 ; \
     diff -w $@ testset386 >$@.diff ;\
     rcsdiff -bBw $@.diff
 
+# This is limited to pentium instructions common to all pemtiums,
+# excluded those tested by testas386
 testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
     cat $+|\
     lina -e|\
@@ -260,12 +277,12 @@ testas386a: asgen.frt asi386.frt testset386a ; \
     diff -w $@ testset386a >$@.diff ;\
     rcsdiff -bBw $@.diff
 
-# For the moment there is doubt about test386.
-# testallpentium : testas86 testas386 test386 testaspentium
+# ------------------- TARGET TESTS ---------------------------------
 
-testallpentium : testas86 testas386 testas386a testaspentium
+# Do all tests applicable to Pentium
+testallpentium : testas386 testas386a testaspentium
 
-testasses : testasalpha testas6809 testas80 testallpentium
+testasses : testasalpha testas6809 testas80 testas86 testallpentium
 
 test386: asgen.frt asi386.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-32   SHOW-ALL)|\
