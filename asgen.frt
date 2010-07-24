@@ -278,7 +278,7 @@ HEX
 (                         |||    |||       |||                          )
 _ _ _ _ _
 class PIFU
-  M: DATA  ( @) M; ,    ( OR!    AND!      --        )
+  M: DATA  ( @) M; ,    ( OR!    AND!      EXECUTE   )
   M: BI    ( @) M; ,    ( OR!    AND!      --        )
   M: BY    ( @) M; ,    ( OR!    OR!       AND!      )
   M: BA    ( @) M; ,    ( OR!U   OR!U      OR!U      )
@@ -314,7 +314,7 @@ endclass
 ( Is also used for disassembling.                                       )
 : TALLY:,   BI @ TALLY-BI !   BY @ TALLY-BY !   BA @ TALLY-BA OR!U
     CNT @ ISL !   DSP @ BA-XT ! ;
-( Post the instruction using a PIFU )
+( Post the instruction using a POINTER to a postit pifu                  )
 : POSTIT   CHECK26 PIFU!   !POSTIT !TALLY TALLY:,   DATA @ assemble, ;
 ( For DEA : it REPRESENTS some kind of opcode.                          )
 IS-A IS-PI   \ Awaiting REMEMBER.
@@ -325,7 +325,7 @@ IS-A IS-PI   \ Awaiting REMEMBER.
 ( Bookkeeping for a fixup that is the current pifu                      )
 ( Is also used for disassembling.                                       )
 : TALLY:|   BI @ TALLY-BI AND!   BY @ TALLY-BY OR!   BA @ TALLY-BA OR!U ;
-( Fix up the instruction using a pointer to a fixup pifu                )
+( Fix up the instruction using a POINTER to a fixup pifu                )
 : FIXUP>   PIFU! DATA @ ISS @ OR!   TALLY:|   CHECK32 ;
 ( Define a fixup by BA BY BI and the FIXUP bits )
 ( Because of the or character of the operations, the bytecount is dummy )
@@ -334,9 +334,9 @@ IS-A IS-xFI   : xFI   CHECK31 CREATE-- NEW-PIFU DOES> REMEMBER FIXUP> ;
 ( For a signed DATA item a LENGTH and a BITFIELD. Shift the data item   )
 ( into the bit field and leave IT. Check if it doesn't fit.             )
 : TRIM-SIGNED >R   2DUP R@ SWAP RSHIFT CHECK32B   LSHIFT R> AND ;
-( Fix up the instruction using DATA and a pointer to the bit POSITION. )
+( Fix up the instruction using a POINTER to a data fixup pifu           )
 : FIXUP-DATA PIFU!   DATA @ LSHIFT ISS @ OR!   TALLY:| CHECK32 ;
-( Fix up the instruction using DATA and a pointer to the bit POSITION. )
+( Fix up the instruction using a POINTER to a signed data fixup pifu    )
 : FIXUP-SIGNED PIFU!   DATA @ BI @ TRIM-SIGNED   ISS @ OR!
     TALLY:| CHECK32 ;
 ( Define a data fixup by BA BY BI, and LEN the bit position.            )
@@ -376,10 +376,11 @@ IS-A IS-DFIR   : DFIR   CHECK31 CREATE--   SWAP REVERSE-BYTES SWAP NEW-PIFU
     DOES> ( data -- )REMEMBER PIFU! DATA @ LSHIFT REVERSE-BYTES FIXUP<
     TALLY:|R CHECK32 ;
 
-( Bookkeeping for a commaer using a pointer to the BIBYBA information.  )
-( Not used by the disassembler.                                         )
-: TALLY:,, CELL+   @+ CHECK30 TALLY-BY AND!   @ TALLY-BA OR!U ;
-: COMMA @+ >R  TALLY:,,  CHECK32   R> EXECUTE ;
+( Bookkeeping for a commaer that is the current pifu                    )
+( Is also used for disassembling.                                       )
+: TALLY:,,   BY @ CHECK30 TALLY-BY AND!   BA @ TALLY-BA OR!U ;
+( Expand the instruction in accordance with the POINTER to a commaer    )
+: COMMA PIFU!   TALLY:,,   CHECK32   DATA @ EXECUTE ;
 ( Build with an display ROUTINE, with the LENGTH to comma, the BA       )
 (  BY information and the XT of a comma-word like `` L, ''               )
 : BUILD-COMMA   0 ( BI) SWAP NEW-PIFU   CNT !   DSP ! ;
@@ -469,7 +470,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 : TRY-COMMA   DUP PIFU!!
    DUP IS-COMMA IF
    BY @ TALLY-BY @ CONTAINED-IN IF
-       BI TALLY:,,
+       TALLY:,,
        DUP +DISS
    THEN
    THEN
@@ -511,7 +512,6 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
     THEN
 ;
 
-\     % RESULT +DISS Spurious? Remove after next total test.
 ( Try to expand the current instruction in `DISS' by looking whether    )
 ( DEA fits. Leave the NEXT dea.                                         )
 : SHOW-STEP
@@ -569,9 +569,9 @@ VARIABLE LATEST-INSTRUCTION
 : DIS-PI    DUP PIFU!!
     DUP IS-PI IF
     AT-REST? IF
-    BI OVER >CNT @  MC@ INVERT
-    >R AS-POINTER @ OVER >CNT @  MC@ R>   AND
-    OVER >DATA @ = IF
+    BI CNT @  MC@ INVERT
+    >R AS-POINTER @ CNT @  MC@ R>   AND
+    DATA @ = IF
         TALLY:,
         DUP +DISS
         DUP LATEST-INSTRUCTION !
@@ -584,7 +584,7 @@ VARIABLE LATEST-INSTRUCTION
 : DIS-xFI   DUP PIFU!!
    DUP IS-xFI IF
    BI @ TALLY-BI @ CONTAINED-IN IF
-   BI @ INSTRUCTION AND   OVER >DATA @ = IF
+   BI @ INSTRUCTION AND   DATA @ = IF
    BA @  COMPATIBLE? IF
        TALLY:|
        DUP +DISS
@@ -616,7 +616,7 @@ VARIABLE LATEST-INSTRUCTION
 : DIS-FIR   DUP PIFU!!
    DUP IS-FIR IF
    BI @ CORRECT-R   TALLY-BI @ CONTAINED-IN IF
-   BI @ CORRECT-R   INSTRUCTION AND   OVER >DATA @ CORRECT-R = IF
+   BI @ CORRECT-R   INSTRUCTION AND   DATA @ CORRECT-R = IF
    BA @  COMPATIBLE? IF
        TALLY:|R
        DUP +DISS
@@ -630,7 +630,7 @@ VARIABLE LATEST-INSTRUCTION
    DUP IS-COMMA IF
    BY @ TALLY-BY @ CONTAINED-IN IF
    BA @  COMPATIBLE? IF
-       BI TALLY:,,
+       TALLY:,,
        DUP +DISS
    THEN
    THEN
@@ -638,36 +638,36 @@ VARIABLE LATEST-INSTRUCTION
 ;
 
 ( Print a disassembly for the data-fixup DEA.                           )
-: .DFI
-    INSTRUCTION   OVER >BI @ AND   OVER >DATA @ RSHIFT   U.
+: .DFI   DUP PIFU!!
+    INSTRUCTION   BI @ AND   DATA @ RSHIFT   U.
     %ID.                         ( DEA -- )
 ;
 
 ( Print a disassembly for the data-fixup from reverse DEA.              )
-: .DFIR
-    INSTRUCTION   OVER >BI @ CORRECT-R AND   OVER >DATA @ RSHIFT
+: .DFIR   DUP PIFU!!
+    INSTRUCTION   BI @ CORRECT-R AND   DATA @ RSHIFT
     REVERSE-BYTES CORRECT-R U.
     %ID.                         ( DEA -- )
 ;
 
 ( Print a standard disassembly for the commaer DEA.                     )
-: .COMMA-STANDARD
-    AS-POINTER @ OVER >CNT @ MC@ U.
-    DUP >CNT @ AS-POINTER +!
+: .COMMA-STANDARD   DUP PIFU!!
+    AS-POINTER @ CNT @ MC@ U.
+    CNT @ AS-POINTER +!
     %ID.                         ( DEA -- )
 ;
 
 ( Print a signed disassembly for the commaer DEA.                       )
-: .COMMA-SIGNED
-    AS-POINTER @ OVER >CNT @ MC@ .
-    DUP >CNT @ AS-POINTER +!
+: .COMMA-SIGNED   DUP PIFU!!
+    AS-POINTER @ CNT @ MC@ .
+    CNT @ AS-POINTER +!
     %ID.                         ( DEA -- )
 ;
 
 ( Print the disassembly for the commaer DEA, advancing `AS-POINTER' past   )
 ( the comma-content                                                     )
-: .COMMA   DUP >DSP @ IF   DUP >DSP @ EXECUTE   ELSE
-    .COMMA-STANDARD   THEN ;
+: .COMMA   DUP PIFU!!
+    DSP @ IF   DSP @ EXECUTE   ELSE .COMMA-STANDARD   THEN ;
 
 ( Print the DEA but with suppression, i.e. ignore those starting in '~' )
 : %~ID. DUP IGNORE? IF DROP ELSE %ID. THEN  ;
