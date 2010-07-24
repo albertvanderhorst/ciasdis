@@ -317,13 +317,13 @@ endclass
 IS-A IS-PI   \ Awaiting REMEMBER.
 ( Define an instruction by BA BY BI and the OPCODE plus COUNT           )
 \ : PI  >R CHECK33 CREATE--  , , , , R> , 0 , DOES> REMEMBER POSTIT ;
-: PI  >R CHECK33 CREATE--  R> BUILD-PIFU DROP DOES> REMEMBER POSTIT ; 
+: PI  >R CHECK33 CREATE--  R> BUILD-PIFU DROP DOES> REMEMBER POSTIT ;
 ( 1 .. 4 byte instructions ( BA BY BI OPCODE : - )
 : 1PI   1 PI ;     : 2PI   2 PI ;    : 3PI   3 PI ;    : 4PI   4 PI ;
-( Bookkeeping for a fixup that is the current PIFU                      )
+( Bookkeeping for a fixup that is the current pifu                      )
 ( Is also used for disassembling.                                       )
 : TALLY:|   BI @ TALLY-BI AND!   BY @ TALLY-BY OR!   BA @ TALLY-BA OR!U ;
-( Fix up the instruction using a pointer to a fixup PIFU                )
+( Fix up the instruction using a pointer to a fixup pifu                )
 : FIXUP>   DUP PIFU! @ ISS @ OR!   TALLY:|   CHECK32 ;
 ( Define a fixup by BA BY BI and the FIXUP bits )
 ( Because of the or character of the operations, the bytecount is dummy )
@@ -341,10 +341,10 @@ IS-A IS-xFI   : xFI   CHECK31 CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER
 ( Define a data fixup by BA BY BI, and LEN the bit position.            )
 ( At assembly time: expect DATA that is shifted before use              )
 ( Because of the or character of the operations, the bytecount is dummy )
-IS-A IS-DFI  : DFI   CHECK31A CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER 
+IS-A IS-DFI  : DFI   CHECK31A CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER
 FIXUP-DATA ;
 ( Same, but for signed data.                                    )
-IS-A IS-DFIs : DFIs  CHECK31A CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER 
+IS-A IS-DFIs : DFIs  CHECK31A CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER
 FIXUP-SIGNED ;
 
 ( *************** OBSOLESCENT ***********************************       )
@@ -355,22 +355,26 @@ FIXUP-SIGNED ;
 ( Rotate the MASK etc from a fixup-from-reverse into a NEW mask fit )
 ( for using from the start of the instruction. We know the length!  )
 : CORRECT-R 0 CELL+ ISL @ - ROTLEFT ;
-( Bookkeeping for a fixup-from-reverse using a pointer to the BIBYBA    )
-( information, can fake a fixup in disassembling too.                   )
-: TALLY:|R  @+ CORRECT-R TALLY-BI AND!   @+ TALLY-BY OR!   @ TALLY-BA OR!U ;
+( Bookkeeping for a fixup-from-reverse that is the current pifu         )
+( Is also used for disassembling.                                       )
+: TALLY:|R  BI @ CORRECT-R TALLY-BI AND!   BY @ TALLY-BY OR!
+    BA @ TALLY-BA OR!U ;
 ( Fix up the instruction from reverse with DATA. )
 : FIXUP<   CORRECT-R ISS @ OR!   ;
 ( Define a fixup-from-reverse by BA BY BI and the FIXUP bits )
 ( One size fits all, because of the character of the or-operations. )
 ( bi and fixup are specified that last byte is lsb, such as you read it )
-IS-A IS-FIR   : FIR   CHECK31 CREATE-- REVERSE-BYTES , REVERSE-BYTES , , ,
-    DOES> REMEMBER @+ FIXUP< TALLY:|R  CHECK32 ;
+IS-A IS-FIR   : FIR   CHECK31 CREATE--
+   REVERSE-BYTES SWAP REVERSE-BYTES SWAP 0 BUILD-PIFU DROP
+   DOES> REMEMBER PIFU! DATA @ FIXUP< TALLY:|R  CHECK32 ;
 
-( Define a fixup-from-reverse by BA BY BI and LEN to shift )
+( Define a data fixup-from-reverse by BA BY BI and LEN to shift )
 ( One size fits all, because of the character of the or-operations. )
 ( bi and fixup are specified that last byte is lsb, such as you read it )
-IS-A IS-DFIR   : DFIR   CHECK31 CREATE-- , REVERSE-BYTES , , ,
-    DOES> REMEMBER @+ SWAP >R LSHIFT REVERSE-BYTES FIXUP< R> TALLY:|R  CHECK32 ;
+IS-A IS-DFIR   : DFIR   CHECK31 CREATE--
+    SWAP REVERSE-BYTES SWAP 0 BUILD-PIFU DROP
+    DOES> ( data -- )REMEMBER PIFU! DATA @ LSHIFT REVERSE-BYTES FIXUP<
+    TALLY:|R CHECK32 ;
 
 ( Bookkeeping for a commaer using a pointer to the BIBYBA information.  )
 ( Not used by the disassembler.                                         )
@@ -439,7 +443,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 
 : TRY-xFI   DUP PIFU!!
    DUP IS-xFI IF
-   DUP >BI @ TALLY-BI @ CONTAINED-IN IF
+   BI @ TALLY-BI @ CONTAINED-IN IF
        TALLY:|
        DUP +DISS
    THEN
@@ -447,7 +451,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ;
 : TRY-DFI   DUP PIFU!!
    DUP IS-DFI OVER IS-DFIs OR IF
-   DUP >BI @ TALLY-BI @ CONTAINED-IN IF
+   BI @ TALLY-BI @ CONTAINED-IN IF
        TALLY:|
        DUP +DISS
    THEN
@@ -455,16 +459,16 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ;
 : TRY-FIR   DUP PIFU!!
    DUP IS-FIR IF
-   DUP >BI @ CORRECT-R TALLY-BI @ CONTAINED-IN IF
-       DUP >BI TALLY:|R
+   BI @ CORRECT-R TALLY-BI @ CONTAINED-IN IF
+       TALLY:|R
        DUP +DISS
    THEN
    THEN
 ;
-: TRY-COMMA
+: TRY-COMMA   DUP PIFU!!
    DUP IS-COMMA IF
-   DUP >BY @ TALLY-BY @ CONTAINED-IN IF
-       DUP >BI TALLY:,,
+   BY @ TALLY-BY @ CONTAINED-IN IF
+       BI TALLY:,,
        DUP +DISS
    THEN
    THEN
@@ -564,23 +568,23 @@ VARIABLE LATEST-INSTRUCTION
 : DIS-PI    DUP PIFU!!
     DUP IS-PI IF
     AT-REST? IF
-    DUP >BI OVER >CNT @  MC@ INVERT
+    BI OVER >CNT @  MC@ INVERT
     >R AS-POINTER @ OVER >CNT @  MC@ R>   AND
     OVER >DATA @ = IF
         TALLY:,
         DUP +DISS
         DUP LATEST-INSTRUCTION !
         AS-POINTER @ ISS !
-        DUP >CNT @ AS-POINTER +!
+        CNT @ AS-POINTER +!
     THEN
     THEN
     THEN
 ;
 : DIS-xFI   DUP PIFU!!
    DUP IS-xFI IF
-   DUP >BI @ TALLY-BI @ CONTAINED-IN IF
-   DUP >BI @ INSTRUCTION AND   OVER >DATA @ = IF
-   DUP >BA @  COMPATIBLE? IF
+   BI @ TALLY-BI @ CONTAINED-IN IF
+   BI @ INSTRUCTION AND   OVER >DATA @ = IF
+   BA @  COMPATIBLE? IF
        TALLY:|
        DUP +DISS
    THEN
@@ -588,32 +592,32 @@ VARIABLE LATEST-INSTRUCTION
    THEN
    THEN
 ;
-: DIS-DFI
+: DIS-DFI   DUP PIFU!!
    DUP IS-DFI OVER IS-DFIs OR IF
-   DUP >BI @ TALLY-BI @ CONTAINED-IN IF
-   DUP >BA @  COMPATIBLE? IF
+   BI @ TALLY-BI @ CONTAINED-IN IF
+   BA @  COMPATIBLE? IF
        TALLY:|
        DUP +DISS
    THEN
    THEN
    THEN
 ;
-: DIS-DFIR
+: DIS-DFIR   DUP PIFU!!
    DUP IS-DFIR IF
-   DUP >BI @ CORRECT-R   TALLY-BI @ CONTAINED-IN IF
-   DUP >BA @  COMPATIBLE? IF
-       DUP >BI TALLY:|R
+   BI @ CORRECT-R   TALLY-BI @ CONTAINED-IN IF
+   BA @  COMPATIBLE? IF
+       TALLY:|R
        DUP +DISS
    THEN
    THEN
    THEN
 ;
-: DIS-FIR
+: DIS-FIR   DUP PIFU!!
    DUP IS-FIR IF
-   DUP >BI @ CORRECT-R   TALLY-BI @ CONTAINED-IN IF
-   DUP >BI @ CORRECT-R   INSTRUCTION AND   OVER >DATA @ CORRECT-R = IF
-   DUP >BA @  COMPATIBLE? IF
-       DUP >BI TALLY:|R
+   BI @ CORRECT-R   TALLY-BI @ CONTAINED-IN IF
+   BI @ CORRECT-R   INSTRUCTION AND   OVER >DATA @ CORRECT-R = IF
+   BA @  COMPATIBLE? IF
+       TALLY:|R
        DUP +DISS
    THEN
    THEN
@@ -621,11 +625,11 @@ VARIABLE LATEST-INSTRUCTION
    THEN
 ;
 
-: DIS-COMMA
+: DIS-COMMA   DUP PIFU!!
    DUP IS-COMMA IF
-   DUP >BY @ TALLY-BY @ CONTAINED-IN IF
-   DUP >BA @  COMPATIBLE? IF
-       DUP >BI TALLY:,,
+   BY @ TALLY-BY @ CONTAINED-IN IF
+   BA @  COMPATIBLE? IF
+       BI TALLY:,,
        DUP +DISS
    THEN
    THEN
