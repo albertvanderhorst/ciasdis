@@ -12,16 +12,16 @@ ASSEMBLER DEFINITIONS  HEX
 ( ############## 6809 ASSEMBLER PROPER ################################ )
 ( Note the decompiler hits them in the reverse order                    )
 ( ' CNT      BA BY DATA                                                )
-  0 1        10 01 ' C, >CFA   COMMAER #, ( immediate byte data)
-  0 2        20 01 ' W, >CFA   COMMAER ##, ( immediate data : cell)
-  0 1       100 02 ' C, >CFA   COMMAER CO, ( address: byte offset)
-  0 2       200 02 ' W, >CFA   COMMAER WO, ( cell: address or offset)
-  0 1        00 04 ' C, >CFA   COMMAER DO, ( direct page offset )
+  0 1        10 01 ' C,   COMMAER #, ( immediate byte data)
+  0 2        20 01 ' W,   COMMAER ##, ( immediate data : cell)
+  0 1       100 02 ' C,   COMMAER CO, ( address: byte offset)
+  0 2       200 02 ' W,   COMMAER WO, ( cell: address or offset)
+  0 1        00 04 ' C,   COMMAER DO, ( direct page offset )
 \ Indexing is handled as an instruction within an instruction.
 \ It is an Index byte, similar to the SIB of Intel.
-  _ 0        00 08 ' C, >CFA   COMMAER IB,, ( index byte, cff. sib)
-  0 2        00 10 ' W, >CFA   COMMAER E,  ( extended address )
-  _ 0        00 20 ' C, >CFA   COMMAER STACK, ( what to push or pop)
+  _ 0        00 08 ' C,   COMMAER IB,, ( index byte, cff. sib)
+  0 2        00 10 ' W,   COMMAER E,  ( extended address )
+  _ 0        00 20 ' C,   COMMAER STACK, ( what to push or pop)
 
 ( Meaning of the bits in TALLY-BA :                                     )
 \     0000,0001 A/B/[]/E instruction       0000,0002 #/P/[]/E instruction

@@ -7,10 +7,10 @@ ASSEMBLER DEFINITIONS  HEX
 
 ( Note the decompiler hits them in the reverse order                    )
 ( ' CNT      BA BY DATA                                                )
-  0 1        0 100 ' AS-C, >CFA   COMMAER IB, ( immediate byte data)
-  0 2        0 200 ' W,  >CFA   COMMAER IX, ( immediate data : cell)
-  0 2        0 400 ' W,  >CFA   COMMAER X,  ( immediate data : address)
-  0 1        0 800 ' AS-C, >CFA   COMMAER P,  ( port number ; byte     )
+  0 1        0 100 ' AS-C,  COMMAER IB, ( immediate byte data)
+  0 2        0 200 ' W,     COMMAER IX, ( immediate data : cell) 
+  0 2        0 400 ' W,     COMMAER X,  ( immediate data : address)
+  0 1        0 800 ' AS-C,  COMMAER P,  ( port number ; byte     )
 
 00 00 00 T!
  08 07 8 1FAMILY, RLC RRC RAL RAR DAA CMA STC CMC
