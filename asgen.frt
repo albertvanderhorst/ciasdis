@@ -316,8 +316,8 @@ endclass
 ( For DEA : it REPRESENTS some kind of opcode.                          )
 IS-A IS-PI   \ Awaiting REMEMBER.
 ( Define an instruction by BA BY BI and the OPCODE plus COUNT           )
-: PI  >R CHECK33 CREATE--  , , , , R> , 0 , DOES> REMEMBER POSTIT ;
-\ : PI  >R CHECK33 CREATE--  R> BUILD-PIFU DOES> REMEMBER POSTIT ;
+\ : PI  >R CHECK33 CREATE--  , , , , R> , 0 , DOES> REMEMBER POSTIT ;
+: PI  >R CHECK33 CREATE--  R> BUILD-PIFU DROP DOES> REMEMBER POSTIT ; 
 ( 1 .. 4 byte instructions ( BA BY BI OPCODE : - )
 : 1PI   1 PI ;     : 2PI   2 PI ;    : 3PI   3 PI ;    : 4PI   4 PI ;
 ( Bookkeeping for a fixup that is the current PIFU                      )
@@ -326,8 +326,9 @@ IS-A IS-PI   \ Awaiting REMEMBER.
 ( Fix up the instruction using a pointer to a fixup PIFU                )
 : FIXUP>   DUP PIFU! @ ISS @ OR!   TALLY:|   CHECK32 ;
 ( Define a fixup by BA BY BI and the FIXUP bits )
-( One size fits all, because of the or character of the operations. )
-IS-A IS-xFI   : xFI   CHECK31 CREATE-- , , , , DOES> REMEMBER FIXUP> ;
+( Because of the or character of the operations, the bytecount is dummy )
+IS-A IS-xFI   : xFI   CHECK31 CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER
+    FIXUP> ;
 
 ( For a signed DATA item a LENGTH and a BITFIELD. Shift the data item   )
 ( into the bit field and leave IT. Check if it doesn't fit.             )
@@ -339,10 +340,12 @@ IS-A IS-xFI   : xFI   CHECK31 CREATE-- , , , , DOES> REMEMBER FIXUP> ;
     TALLY:| CHECK32 ;
 ( Define a data fixup by BA BY BI, and LEN the bit position.            )
 ( At assembly time: expect DATA that is shifted before use              )
-( One size fits all, because of the or character of the operations.     )
-IS-A IS-DFI  : DFI   CHECK31A CREATE-- , , , , DOES> REMEMBER FIXUP-DATA ;
-( Same, but for signed data.                                            )
-IS-A IS-DFIs : DFIs  CHECK31A CREATE-- , , , , DOES> REMEMBER FIXUP-SIGNED ;
+( Because of the or character of the operations, the bytecount is dummy )
+IS-A IS-DFI  : DFI   CHECK31A CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER 
+FIXUP-DATA ;
+( Same, but for signed data.                                    )
+IS-A IS-DFIs : DFIs  CHECK31A CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER 
+FIXUP-SIGNED ;
 
 ( *************** OBSOLESCENT ***********************************       )
 \ Reverses bytes in a WORD. Return IT.
@@ -368,25 +371,6 @@ IS-A IS-FIR   : FIR   CHECK31 CREATE-- REVERSE-BYTES , REVERSE-BYTES , , ,
 ( bi and fixup are specified that last byte is lsb, such as you read it )
 IS-A IS-DFIR   : DFIR   CHECK31 CREATE-- , REVERSE-BYTES , , ,
     DOES> REMEMBER @+ SWAP >R LSHIFT REVERSE-BYTES FIXUP< R> TALLY:|R  CHECK32 ;
-
-( *************** PREFERRED NOT YET USED ************************       )
-( If bits were already down it is wrong. For next two words.)
-( Reset bits of DATA into ADDRESS bytewise. )
-: (AND!BYTE) >R 0FF AND INVERT R@ C@ CHECK29 AND R> C! ;
-( Reset bits of DATA byte by byte into ADDRESS )
-: AND!BYTE BEGIN 2DUP (AND!BYTE) SWAP 8 RSHIFT DUP WHILE SWAP 1+ REPEAT 2DROP ;
-( If bits were already up its wrong. for next two words.)
-( Or DATA into ADDRESS bytewise. )
-: (OR!BYTE) >R R@ C@  CHECK28 OR R> C! ;
-( Or DATA byte by byte from behind into ADDRESS )
-: OR!BYTE BEGIN 1- 2DUP (OR!BYTE) SWAP 8 RSHIFT DUP WHILE SWAP REPEAT 2DROP ;
-( Bookkeeping for a fixup-from-reverse using a pointer to the BIBYBA    )
-( information, can fake a fixup in disassembling too.                   )
-: TALLY:|R'  @+ TALLY-BI AND!BYTE   @+ TALLY-BY OR!   @ TALLY-BA OR!U ;
-( Fix up the instruction from reverse using a pointer to DATA. )
-: FIXUP<'   @+ ISS @ ISL @ + OR!BYTE   TALLY:|R'  CHECK32 ;
-
-( *************** END PREFERRED ****************************       )
 
 ( Bookkeeping for a commaer using a pointer to the BIBYBA information.  )
 ( Not used by the disassembler.                                         )
