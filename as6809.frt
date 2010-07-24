@@ -137,7 +137,7 @@ ASSEMBLER DEFINITIONS  HEX
 : DIS-STACK   DROP 'PC&   AS-POINTER @ C@   1 AS-POINTER +!
    ." (& " BEGIN 2DUP PRINT-STACK NEXT-STACK DUP 0= UNTIL ." )S, "
    2DROP ;
-' DIS-STACK    % STACK, >DIS !
+' DIS-STACK    % STACK, >DSP !
 
  ' ~IB,   % IB,, >DATA !   ( Fill in deferred data creation action  )
 ( Disassemble the ib byte where the disassembler sits now, ignore DEA   )
@@ -145,7 +145,7 @@ ASSEMBLER DEFINITIONS  HEX
 ( the disassembly pointer. ]                                            )
 : DIS-IB   DROP [ % ~IB, ] LITERAL FORCED-DISASSEMBLY ;
 ( Fill in deferred disassembler action.                                 )
-' DIS-IB    % IB,, >DIS !
+' DIS-IB    % IB,, >DSP !
 
 \ None of the essential
 : LSL,   ASL, ;         \ Do not use an alias, then the disassembler will use it! l

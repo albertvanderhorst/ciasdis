@@ -801,19 +801,19 @@ VARIABLE LATEST-OFFSET
 \D 5 .LABEL/. CR
 \D '(RB,) ID.-NO() CR
 
-'.COMMA-LABEL  'OW,   >DIS ! ( obligatory word     )
-'.COMMA-REL    '(RL,) >DIS !  ( cell relative to IP )
-'.COMMA-REL    '(RW,) >DIS !  ( cell relative to IP )
-'.COMMA-REL    '(RB,) >DIS !  ( byte relative to IP )
-'.COMMA-LABEL  'SG,   >DIS !  (  Segment: WORD      )
-'.COMMA-LABEL  'P,    >DIS !  ( port number ; byte     )
-'.COMMA-LABEL  'IS,   >DIS !  ( Single -obl-  byte )
-'.COMMA-LABEL  'IL,   >DIS !  ( immediate data : cell)
-'.COMMA-LABEL  'IW,   >DIS !  ( immediate data : cell)
-'.COMMA-LABEL  'IB,   >DIS !  ( immediate byte data)
-'.COMMA-LABEL  'L,    >DIS !  ( immediate data : address/offset )
-'.COMMA-LABEL  'W,    >DIS !  ( immediate data : address/offset )
-'.COMMA-LABEL  'B,    >DIS !  ( immediate byte : address/offset )
+'.COMMA-LABEL  'OW,   >DSP ! ( obligatory word     )
+'.COMMA-REL    '(RL,) >DSP !  ( cell relative to IP )
+'.COMMA-REL    '(RW,) >DSP !  ( cell relative to IP )
+'.COMMA-REL    '(RB,) >DSP !  ( byte relative to IP )
+'.COMMA-LABEL  'SG,   >DSP !  (  Segment: WORD      )
+'.COMMA-LABEL  'P,    >DSP !  ( port number ; byte     )
+'.COMMA-LABEL  'IS,   >DSP !  ( Single -obl-  byte )
+'.COMMA-LABEL  'IL,   >DSP !  ( immediate data : cell)
+'.COMMA-LABEL  'IW,   >DSP !  ( immediate data : cell)
+'.COMMA-LABEL  'IB,   >DSP !  ( immediate byte data)
+'.COMMA-LABEL  'L,    >DSP !  ( immediate data : address/offset )
+'.COMMA-LABEL  'W,    >DSP !  ( immediate data : address/offset )
+'.COMMA-LABEL  'B,    >DSP !  ( immediate byte : address/offset )
 
 \ Contains all instruction that represent an unconditional transfer
 \ of control. It may be followed by data instead of code.

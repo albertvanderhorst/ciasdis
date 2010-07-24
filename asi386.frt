@@ -238,7 +238,7 @@
 ;
 
 ( Fill in deferred disassembler action.                                 )
- ' DIS-SIB    % SIB,, >DIS !
+ ' DIS-SIB    % SIB,, >DSP !
 
 ( Redefine some fixups, such that the user may say                      )
 ( "[AX" instead of " ~SIB| SIB,, [AX"                                   )
@@ -258,9 +258,9 @@
 
 ( ############## 80386 ASSEMBLER PROPER END ########################### )
 ( You may want to use these always instead of (Rx,)
-    : RB, _AP_ 1 + - (RB,) ;    ' .COMMA-SIGNED   % (RB,) >DIS !
-    : RW, _AP_ 2 + - (RW,) ;    ' .COMMA-SIGNED   % (RW,) >DIS !
-    : RL, _AP_ 4 + - (RL,) ;    ' .COMMA-SIGNED   % (RL,) >DIS !
+    : RB, _AP_ 1 + - (RB,) ;    ' .COMMA-SIGNED   % (RB,) >DSP !
+    : RW, _AP_ 2 + - (RW,) ;    ' .COMMA-SIGNED   % (RW,) >DSP !
+    : RL, _AP_ 4 + - (RL,) ;    ' .COMMA-SIGNED   % (RL,) >DSP !
 
 ( Require instructions as per a 32 resp. 16 bits segment.               )
 : BITS-32   2,8000 BA-DEFAULT ! ;

@@ -278,7 +278,7 @@ HEX
 : >BY %>BODY 2 CELLS + ;                 ( OR!    OR!       AND!      )
 : >BA %>BODY  3 CELLS + ;                ( OR!U   OR!U      OR!U      )
 : >CNT %>BODY 4 CELLS + ;   ( `HERE' advances with count )
-: >DIS %>BODY 5 CELLS + ; ( disassembler only for COMMA , 0 -> default  )
+: >DSP %>BODY 5 CELLS + ; ( disassembler only for COMMA , 0 -> default  )
 : >PRF %>BODY 5 CELLS + ; ( prefix flag, only for PI ,    0 -> default  )
 
 ( Assemble INSTRUCTION for ``ISL'' bytes. ls byte first.                )
@@ -655,7 +655,7 @@ VARIABLE LATEST-INSTRUCTION
 
 ( Print the disassembly for the commaer DEA, advancing `AS-POINTER' past   )
 ( the comma-content                                                     )
-: .COMMA   DUP >DIS @ IF   DUP >DIS @ EXECUTE   ELSE
+: .COMMA   DUP >DSP @ IF   DUP >DSP @ EXECUTE   ELSE
     .COMMA-STANDARD   THEN ;
 
 ( Print the DEA but with suppression, i.e. ignore those starting in '~' )
