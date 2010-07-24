@@ -270,24 +270,27 @@ HEX
 ( All leave a single ADDRESS.                                           )
 
 ( A PIFU is what is common to all parts of an assembler instruction.    )
-( Define an pifu by BA BY BI and the OPCODE/fixup bits plus COUNT       )
-( This is never changed after creation!                                 )
+( Define an pifu by BA BY BI and the PAYLOAD opcode/fixup bits/xt       )
+( Two more fields CNT and DSP are typically filled in immediately.      )
+( These are never to change after creation!                             )
 ( Work on TALLY-BI etc.
 (           Effects  for posits fixups and commaers.                    )
 (                         |||    |||       |||                          )
 _ _ _ _ _
-class PIFU  >R
+class PIFU
   M: DATA  ( @) M; ,    ( OR!    AND!      --        )
   M: BI    ( @) M; ,    ( OR!    AND!      --        )
   M: BY    ( @) M; ,    ( OR!    OR!       AND!      )
   M: BA    ( @) M; ,    ( OR!U   OR!U      OR!U      )
-  M: CNT   ( @) M; R> , (  `HERE' advances with count )
+  M: CNT   ( @) M; 0 , (  `HERE' advances with count )
   M: DSP   ( @) M;      ( displayer only for COMMA , 0 -> default     OVERLAYED )
   M: PRF   ( @) M; 0 ,  ( prefix flag, only for PI ,    0 -> default  OVERLAYED )
 endclass
 
-\ Make POINTER the current ``PIFU'' object.
+( Make POINTER the current ``PIFU'' object.                             )
 : PIFU!   ^PIFU ! ;
+( Have a new pifu and make it current, for filling in fields            )
+: NEW-PIFU   ( BA BY BI PL -- ) BUILD-PIFU PIFU! ;
 \ Make the DEA the current ``PIFU'' object, such that fields can
 \ be used.
 : PIFU!! %>BODY PIFU! ;
@@ -317,7 +320,7 @@ endclass
 IS-A IS-PI   \ Awaiting REMEMBER.
 ( Define an instruction by BA BY BI and the OPCODE plus COUNT           )
 \ : PI  >R CHECK33 CREATE--  , , , , R> , 0 , DOES> REMEMBER POSTIT ;
-: PI  >R CHECK33 CREATE--  R> BUILD-PIFU DROP DOES> REMEMBER POSTIT ;
+: PI  >R CHECK33 CREATE--  NEW-PIFU R> CNT ! DOES> REMEMBER POSTIT ;
 ( 1 .. 4 byte instructions ( BA BY BI OPCODE : - )
 : 1PI   1 PI ;     : 2PI   2 PI ;    : 3PI   3 PI ;    : 4PI   4 PI ;
 ( Bookkeeping for a fixup that is the current pifu                      )
@@ -327,7 +330,7 @@ IS-A IS-PI   \ Awaiting REMEMBER.
 : FIXUP>   DUP PIFU! @ ISS @ OR!   TALLY:|   CHECK32 ;
 ( Define a fixup by BA BY BI and the FIXUP bits )
 ( Because of the or character of the operations, the bytecount is dummy )
-IS-A IS-xFI   : xFI   CHECK31 CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER
+IS-A IS-xFI   : xFI   CHECK31 CREATE-- NEW-PIFU DOES> REMEMBER
     FIXUP> ;
 
 ( For a signed DATA item a LENGTH and a BITFIELD. Shift the data item   )
@@ -341,10 +344,10 @@ IS-A IS-xFI   : xFI   CHECK31 CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER
 ( Define a data fixup by BA BY BI, and LEN the bit position.            )
 ( At assembly time: expect DATA that is shifted before use              )
 ( Because of the or character of the operations, the bytecount is dummy )
-IS-A IS-DFI  : DFI   CHECK31A CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER
+IS-A IS-DFI  : DFI   CHECK31A CREATE-- NEW-PIFU DOES> REMEMBER
 FIXUP-DATA ;
 ( Same, but for signed data.                                    )
-IS-A IS-DFIs : DFIs  CHECK31A CREATE-- 0 BUILD-PIFU DROP DOES> REMEMBER
+IS-A IS-DFIs : DFIs  CHECK31A CREATE-- NEW-PIFU DOES> REMEMBER
 FIXUP-SIGNED ;
 
 ( *************** OBSOLESCENT ***********************************       )
@@ -365,14 +368,13 @@ FIXUP-SIGNED ;
 ( One size fits all, because of the character of the or-operations. )
 ( bi and fixup are specified that last byte is lsb, such as you read it )
 IS-A IS-FIR   : FIR   CHECK31 CREATE--
-   REVERSE-BYTES SWAP REVERSE-BYTES SWAP 0 BUILD-PIFU DROP
+   REVERSE-BYTES SWAP REVERSE-BYTES SWAP NEW-PIFU
    DOES> REMEMBER PIFU! DATA @ FIXUP< TALLY:|R  CHECK32 ;
 
 ( Define a data fixup-from-reverse by BA BY BI and LEN to shift )
 ( One size fits all, because of the character of the or-operations. )
 ( bi and fixup are specified that last byte is lsb, such as you read it )
-IS-A IS-DFIR   : DFIR   CHECK31 CREATE--
-    SWAP REVERSE-BYTES SWAP 0 BUILD-PIFU DROP
+IS-A IS-DFIR   : DFIR   CHECK31 CREATE--   SWAP REVERSE-BYTES SWAP NEW-PIFU
     DOES> ( data -- )REMEMBER PIFU! DATA @ LSHIFT REVERSE-BYTES FIXUP<
     TALLY:|R CHECK32 ;
 
@@ -380,10 +382,11 @@ IS-A IS-DFIR   : DFIR   CHECK31 CREATE--
 ( Not used by the disassembler.                                         )
 : TALLY:,, CELL+   @+ CHECK30 TALLY-BY AND!   @ TALLY-BA OR!U ;
 : COMMA @+ >R  TALLY:,,  CHECK32   R> EXECUTE ;
-( Build with an disassembly ROUTINE, with the LENGTH to comma, the BA   )
-( BY information and the ADDRESS that is executing the commaer          )
+( Build with an display ROUTINE, with the LENGTH to comma, the BA       )
+(  BY information and the XT of a comma-word like `` L, ''               )
+: BUILD-COMMA   0 ( BI) SWAP NEW-PIFU   CNT !   DSP ! ;
 ( A disassembly routine gets the ``DEA'' of the commaer on stack.       )
-IS-A  IS-COMMA   : COMMAER CREATE  , 0 , , , , , DOES> REMEMBER COMMA ;
+IS-A  IS-COMMA   : COMMAER   CREATE BUILD-COMMA   DOES> REMEMBER COMMA ;       
 
 ( ------------- ASSEMBLER, SUPER DEFINING WORDS ----------------------)
 
