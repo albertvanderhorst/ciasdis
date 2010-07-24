@@ -234,7 +234,7 @@ testas6809: asgen.frt as6809.frt testset6809 ; \
 	rcsdiff -bBw -r$(RCSVERSION) $@.diff
 
 testas80: asgen.frt as80.frt testset8080 ; \
-    cat $+|\
+    echo INCLUDE asgen.frt INCLUDE as80.frt INCLUDE testset8080 |\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
@@ -242,7 +242,7 @@ testas80: asgen.frt as80.frt testset8080 ; \
     rcsdiff -bBw $@.diff
 
 testas86: asgen.frt asi86.frt testset8086 ; \
-    cat $+|\
+    echo INCLUDE asgen.frt INCLUDE asi86.frt INCLUDE testset8086 |\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
@@ -250,7 +250,7 @@ testas86: asgen.frt asi86.frt testset8086 ; \
     rcsdiff -bBw $@.diff
 
 testas386: asgen.frt asi386.frt testset386 ; \
-    cat $+|\
+    echo INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386 |\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
@@ -260,7 +260,7 @@ testas386: asgen.frt asi386.frt testset386 ; \
 # This is limited to pentium instructions common to all pemtiums,
 # excluded those tested by testas386
 testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
-    cat $+|\
+    echo INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE asipentium.frt INCLUDE testsetpentium | \
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
@@ -269,7 +269,7 @@ testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
 
 # Special test to exercise otherwise hidden instructions.
 testas386a: asgen.frt asi386.frt testset386a ; \
-    cat $+|\
+    echo INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386a | \
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
     sed '/^OK$$/d' |\
@@ -285,7 +285,7 @@ testallpentium : testas386 testas386a testaspentium
 testasses : testasalpha testas6809 testas80 testas86 testallpentium
 
 test386: asgen.frt asi386.frt ; \
-    (cat $+;echo ASSEMBLER HEX BITS-32   SHOW-ALL)|\
+    echo INCLUDE asgen.frt INCLUDE asi386.frt ASSEMBLER HEX BITS-32   SHOW-ALL|\
     lina -e|\
     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
@@ -314,7 +314,8 @@ testinstructionsets : test386.diff
 #     diff $@.diff testresults
 
 test386-16: asgen.frt asi386.frt ; \
-    (cat $+;echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
+    echo INCLUDE asgen.frt INCLUDE asi386.frt | \
+    echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
     lina -e >$@       ;
 #   diff -w $@ testset386 >$@.diff ;\
 #   diff $@.diff testresults
