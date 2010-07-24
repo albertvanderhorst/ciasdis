@@ -319,7 +319,6 @@ endclass
 ( For DEA : it REPRESENTS some kind of opcode.                          )
 IS-A IS-PI   \ Awaiting REMEMBER.
 ( Define an instruction by BA BY BI and the OPCODE plus COUNT           )
-\ : PI  >R CHECK33 CREATE--  , , , , R> , 0 , DOES> REMEMBER POSTIT ;
 : PI  >R CHECK33 CREATE--  NEW-PIFU R> CNT ! DOES> REMEMBER POSTIT ;
 ( 1 .. 4 byte instructions ( BA BY BI OPCODE : - )
 : 1PI   1 PI ;     : 2PI   2 PI ;    : 3PI   3 PI ;    : 4PI   4 PI ;
@@ -327,25 +326,24 @@ IS-A IS-PI   \ Awaiting REMEMBER.
 ( Is also used for disassembling.                                       )
 : TALLY:|   BI @ TALLY-BI AND!   BY @ TALLY-BY OR!   BA @ TALLY-BA OR!U ;
 ( Fix up the instruction using a pointer to a fixup pifu                )
-: FIXUP>   DUP PIFU! @ ISS @ OR!   TALLY:|   CHECK32 ;
+: FIXUP>   PIFU! DATA @ ISS @ OR!   TALLY:|   CHECK32 ;
 ( Define a fixup by BA BY BI and the FIXUP bits )
 ( Because of the or character of the operations, the bytecount is dummy )
-IS-A IS-xFI   : xFI   CHECK31 CREATE-- NEW-PIFU DOES> REMEMBER
-    FIXUP> ;
+IS-A IS-xFI   : xFI   CHECK31 CREATE-- NEW-PIFU DOES> REMEMBER FIXUP> ;
 
 ( For a signed DATA item a LENGTH and a BITFIELD. Shift the data item   )
 ( into the bit field and leave IT. Check if it doesn't fit.             )
 : TRIM-SIGNED >R   2DUP R@ SWAP RSHIFT CHECK32B   LSHIFT R> AND ;
 ( Fix up the instruction using DATA and a pointer to the bit POSITION. )
-: FIXUP-DATA DUP PIFU! @ LSHIFT ISS @ OR! TALLY:| CHECK32 ;
+: FIXUP-DATA PIFU!   DATA @ LSHIFT ISS @ OR!   TALLY:| CHECK32 ;
 ( Fix up the instruction using DATA and a pointer to the bit POSITION. )
-: FIXUP-SIGNED DUP PIFU! @+ SWAP @ TRIM-SIGNED ISS @ OR!
+: FIXUP-SIGNED PIFU!   DATA @ BI @ TRIM-SIGNED   ISS @ OR!
     TALLY:| CHECK32 ;
 ( Define a data fixup by BA BY BI, and LEN the bit position.            )
 ( At assembly time: expect DATA that is shifted before use              )
 ( Because of the or character of the operations, the bytecount is dummy )
 IS-A IS-DFI  : DFI   CHECK31A CREATE-- NEW-PIFU DOES> REMEMBER
-FIXUP-DATA ;
+    FIXUP-DATA ;
 ( Same, but for signed data.                                    )
 IS-A IS-DFIs : DFIs  CHECK31A CREATE-- NEW-PIFU DOES> REMEMBER
 FIXUP-SIGNED ;
@@ -386,7 +384,7 @@ IS-A IS-DFIR   : DFIR   CHECK31 CREATE--   SWAP REVERSE-BYTES SWAP NEW-PIFU
 (  BY information and the XT of a comma-word like `` L, ''               )
 : BUILD-COMMA   0 ( BI) SWAP NEW-PIFU   CNT !   DSP ! ;
 ( A disassembly routine gets the ``DEA'' of the commaer on stack.       )
-IS-A  IS-COMMA   : COMMAER   CREATE BUILD-COMMA   DOES> REMEMBER COMMA ;       
+IS-A  IS-COMMA   : COMMAER   CREATE BUILD-COMMA   DOES> REMEMBER COMMA ;
 
 ( ------------- ASSEMBLER, SUPER DEFINING WORDS ----------------------)
 
