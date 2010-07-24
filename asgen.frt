@@ -116,6 +116,7 @@ REQUIRE ALIAS
 REQUIRE @+ ( Fetch from ADDRES. Leave incremented ADDRESS and DATA )
 REQUIRE BAG
 REQUIRE POSTFIX
+REQUIRE class
 
 'HERE  ALIAS AS-HERE
 'C,    ALIAS AS-C,
@@ -268,40 +269,62 @@ HEX
 ( Common fields in the defining words for posits fixups and commaers.   )
 ( All leave a single ADDRESS.                                           )
 
+( A PIFU is what is common to all parts of an assembler instruction.    )
+( Define an pifu by BA BY BI and the OPCODE/fixup bits plus COUNT       )
+( This is never changed after creation!                                 )
+( Work on TALLY-BI etc.
+(           Effects  for posits fixups and commaers.                    )
+(                         |||    |||       |||                          )
+_ _ _ _ _
+class PIFU  >R
+  M: DATA  ( @) M; ,    ( OR!    AND!      --        )
+  M: BI    ( @) M; ,    ( OR!    AND!      --        )
+  M: BY    ( @) M; ,    ( OR!    OR!       AND!      )
+  M: BA    ( @) M; ,    ( OR!U   OR!U      OR!U      )
+  M: CNT   ( @) M; R> , (  `HERE' advances with count )
+  M: DSP   ( @) M;      ( displayer only for COMMA , 0 -> default     OVERLAYED )
+  M: PRF   ( @) M; 0 ,  ( prefix flag, only for PI ,    0 -> default  OVERLAYED )
+endclass
+
+\ Make POINTER the current ``PIFU'' object.
+: PIFU!   ^PIFU ! ;
+\ Make the DEA the current ``PIFU'' object, such that fields can
+\ be used.
+: PIFU!! %>BODY PIFU! ;
 ( The first data field for a postit/fixup contains instruction bits,    )
 ( for a commaer it contains the xt of the coma action                   )
 ( for a data fixup it contains the position of the bits                 )
-: >DATA  %>BODY  ;
+: >DATA PIFU!! DATA ;
 ( Work on TALLY-BI etc.      Effects  for posits fixups and commaers.   )
 (                                          |||    |||       |||         )
-: >BI %>BODY CELL+ ;                     ( OR!    AND!      --        )
-: >BY %>BODY 2 CELLS + ;                 ( OR!    OR!       AND!      )
-: >BA %>BODY  3 CELLS + ;                ( OR!U   OR!U      OR!U      )
-: >CNT %>BODY 4 CELLS + ;   ( `HERE' advances with count )
-: >DSP %>BODY 5 CELLS + ; ( disassembler only for COMMA , 0 -> default  )
-: >PRF %>BODY 5 CELLS + ; ( prefix flag, only for PI ,    0 -> default  )
+: >BI   PIFU!! BI   ;      ( OR!    AND!      --        )
+: >BY   PIFU!! BY   ;      ( OR!    OR!       AND!      )
+: >BA   PIFU!! BA   ;      ( OR!U   OR!U      OR!U      )
+: >CNT  PIFU!! CNT  ;      ( `HERE' advances with count )
+: >DSP  PIFU!! DSP  ;      ( displayer only for COMMA , 0 -> default  )
+: >PRF  PIFU!! PRF  ;      ( prefix flag, only for PI , 0 -> default  )
 
 ( Assemble INSTRUCTION for ``ISL'' bytes. ls byte first.                )
 : assemble, ISL @ 0 DO lsbyte, LOOP DROP ;
 : !POSTIT  AS-HERE ISS !  0 OLDCOMMA ! ;  ( Initialise in behalf of postit )
-( Bookkeeping for a postit using a pointer to the BIBYBA )
-( information, can fake a postit in disassembling too                   )
-: TALLY:,   @+ TALLY-BI !  @+ TALLY-BY !   @+ TALLY-BA OR!U
-    @+ ISL !   @ BA-XT ! ;
-( Post the instruction using DATA. )
-: POSTIT   CHECK26   !TALLY   !POSTIT
-    @+ >R   TALLY:,   R> assemble, ;
+( Bookkeeping for a commaer that is the current PIFU                    )
+( Is also used for disassembling.                                       )
+: TALLY:,   BI @ TALLY-BI !   BY @ TALLY-BY !   BA @ TALLY-BA OR!U
+    CNT @ ISL !   DSP @ BA-XT ! ;
+( Post the instruction using a PIFU )
+: POSTIT   CHECK26 PIFU!   !POSTIT !TALLY TALLY:,   DATA @ assemble, ;
 ( For DEA : it REPRESENTS some kind of opcode.                          )
 IS-A IS-PI   \ Awaiting REMEMBER.
 ( Define an instruction by BA BY BI and the OPCODE plus COUNT           )
 : PI  >R CHECK33 CREATE--  , , , , R> , 0 , DOES> REMEMBER POSTIT ;
+\ : PI  >R CHECK33 CREATE--  R> BUILD-PIFU DOES> REMEMBER POSTIT ;
 ( 1 .. 4 byte instructions ( BA BY BI OPCODE : - )
 : 1PI   1 PI ;     : 2PI   2 PI ;    : 3PI   3 PI ;    : 4PI   4 PI ;
-( Bookkeeping for a fixup using a pointer to the BIBYBA information,    )
-( can fake a fixup in disassembling too.                                )
-: TALLY:|   @+ TALLY-BI AND!   @+ TALLY-BY OR!   @ TALLY-BA OR!U ;
-( Fix up the instruction using a pointer to DATA. )
-: FIXUP>   @+ ISS @ OR!   TALLY:|   CHECK32 ;
+( Bookkeeping for a fixup that is the current PIFU                      )
+( Is also used for disassembling.                                       )
+: TALLY:|   BI @ TALLY-BI AND!   BY @ TALLY-BY OR!   BA @ TALLY-BA OR!U ;
+( Fix up the instruction using a pointer to a fixup PIFU                )
+: FIXUP>   DUP PIFU! @ ISS @ OR!   TALLY:|   CHECK32 ;
 ( Define a fixup by BA BY BI and the FIXUP bits )
 ( One size fits all, because of the or character of the operations. )
 IS-A IS-xFI   : xFI   CHECK31 CREATE-- , , , , DOES> REMEMBER FIXUP> ;
@@ -310,11 +333,10 @@ IS-A IS-xFI   : xFI   CHECK31 CREATE-- , , , , DOES> REMEMBER FIXUP> ;
 ( into the bit field and leave IT. Check if it doesn't fit.             )
 : TRIM-SIGNED >R   2DUP R@ SWAP RSHIFT CHECK32B   LSHIFT R> AND ;
 ( Fix up the instruction using DATA and a pointer to the bit POSITION. )
-: FIXUP-DATA @+ SWAP >R LSHIFT ISS @ OR! R> TALLY:| CHECK32 ;
+: FIXUP-DATA DUP PIFU! @ LSHIFT ISS @ OR! TALLY:| CHECK32 ;
 ( Fix up the instruction using DATA and a pointer to the bit POSITION. )
-: FIXUP-SIGNED @+ SWAP >R
-    R@ @ TRIM-SIGNED ISS @ OR!
-    R> TALLY:| CHECK32 ;
+: FIXUP-SIGNED DUP PIFU! @+ SWAP @ TRIM-SIGNED ISS @ OR!
+    TALLY:| CHECK32 ;
 ( Define a data fixup by BA BY BI, and LEN the bit position.            )
 ( At assembly time: expect DATA that is shifted before use              )
 ( One size fits all, because of the or character of the operations.     )
@@ -422,32 +444,32 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ( assembling and add the fixup/posti/commaer to the disassembly struct. )
 ( as if this instruction were assembled.                                )
 ( Leave the DEA.                                                        )
-: TRY-PI
+: TRY-PI  DUP PIFU!!
     DUP IS-PI IF
     AT-REST? IF
-        DUP >BI TALLY:,
+        TALLY:,
         DUP +DISS
     THEN
     THEN
 ;
 
-: TRY-xFI
+: TRY-xFI   DUP PIFU!!
    DUP IS-xFI IF
    DUP >BI @ TALLY-BI @ CONTAINED-IN IF
-       DUP >BI TALLY:|
+       TALLY:|
        DUP +DISS
    THEN
    THEN
 ;
-: TRY-DFI
+: TRY-DFI   DUP PIFU!!
    DUP IS-DFI OVER IS-DFIs OR IF
    DUP >BI @ TALLY-BI @ CONTAINED-IN IF
-       DUP >BI TALLY:|
+       TALLY:|
        DUP +DISS
    THEN
    THEN
 ;
-: TRY-FIR
+: TRY-FIR   DUP PIFU!!
    DUP IS-FIR IF
    DUP >BI @ CORRECT-R TALLY-BI @ CONTAINED-IN IF
        DUP >BI TALLY:|R
@@ -555,13 +577,13 @@ VARIABLE LATEST-INSTRUCTION
 ( assembling and add the fixup/posti/commaer to the                     )
 ( disassembly struct.                                                   )
 ( Leave the DEA.                                                        )
-: DIS-PI
+: DIS-PI    DUP PIFU!!
     DUP IS-PI IF
     AT-REST? IF
     DUP >BI OVER >CNT @  MC@ INVERT
     >R AS-POINTER @ OVER >CNT @  MC@ R>   AND
     OVER >DATA @ = IF
-        DUP >BI TALLY:,
+        TALLY:,
         DUP +DISS
         DUP LATEST-INSTRUCTION !
         AS-POINTER @ ISS !
@@ -570,12 +592,12 @@ VARIABLE LATEST-INSTRUCTION
     THEN
     THEN
 ;
-: DIS-xFI
+: DIS-xFI   DUP PIFU!!
    DUP IS-xFI IF
    DUP >BI @ TALLY-BI @ CONTAINED-IN IF
    DUP >BI @ INSTRUCTION AND   OVER >DATA @ = IF
    DUP >BA @  COMPATIBLE? IF
-       DUP >BI TALLY:|
+       TALLY:|
        DUP +DISS
    THEN
    THEN
@@ -586,7 +608,7 @@ VARIABLE LATEST-INSTRUCTION
    DUP IS-DFI OVER IS-DFIs OR IF
    DUP >BI @ TALLY-BI @ CONTAINED-IN IF
    DUP >BA @  COMPATIBLE? IF
-       DUP >BI TALLY:|
+       TALLY:|
        DUP +DISS
    THEN
    THEN
