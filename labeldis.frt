@@ -41,7 +41,7 @@ REQUIRE BAG             \ Simple bag facility
 
 \ Define a class for label-like things of length N.
 \ A label-like thing is two cells: address and a payload.
-1 'DROP 'DROP \ Reverse of: Dummy decompiler, printer, length.
+1 ' DROP ' DROP \ Reverse of: Dummy decompiler, printer, length.
 class LABELSTRUCT
 \ Return the DEA of the current label class.
   LATEST
@@ -182,7 +182,7 @@ VARIABLE MAX-DEV-N   8  MAX-DEV-N !        \ Max deviation acceptable with next
 : .EQU    LABELS[] DUP @ H. " EQU " TYPE  CELL+ @ %ID. CR ;
 
 \ Contains equ labels, i.e. classes as associate with ``LABEL''
-MAX-LABEL '.PAY-DEA '.EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
+MAX-LABEL ' .PAY-DEA ' .EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
 
 \ Generate a equ label at (target) ADDRESS with NAME, this can be
 \ any symbolic constant in fact.
@@ -292,7 +292,7 @@ VARIABLE SMALL-LABEL-LIMIT   100 SMALL-LABEL-LIMIT !
 : .COMMENT:   LABELS[] DUP @ H. " COMMENT: " TYPE  CELL+ @ $@ TYPE CR ;
 
 \ Contains comment labels, i.e. classes as associate with ``COMMENT:''
-MAX-LABEL '.PAY$ '.COMMENT: LABELSTRUCT COMMENT:-LABELS LABELS !BAG
+MAX-LABEL ' .PAY$ ' .COMMENT: LABELSTRUCT COMMENT:-LABELS LABELS !BAG
 
 \ Generate a comment label at ADDRESS. A pointer to the
 \ remainder of the line is the payload.
@@ -339,7 +339,7 @@ VARIABLE COMMENT:-TO-BE
 : .MDIRECTIVE   LABELS[] DUP CELL+ @ $@ ."$" SPACE @ H. " DIRECTIVE " TYPE  CR ;
 
 \ Contains multiple line comment labels, i.e. classes as associate with ``COMMENT''
-MAX-LABEL '.PAY$ '.MDIRECTIVE LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
+MAX-LABEL ' .PAY$ ' .MDIRECTIVE LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 
 \ New directive STRING at ADDRESS. (See ``DIRECTIVE'').
 \ Primitive, doesn't keep it sorted.
@@ -497,7 +497,7 @@ VARIABLE CUT-SIZE    16 CUT-SIZE !   \ Chunks for data-disassembly.
 \ where address2 is exclusive.
 
 \ Define a range.
-12 34 '2DROP
+12 34 ' 2DROP
 class RANGE-STRUCT
    >R >R >R          \ Get them in reverse order.
    M: RANGE-START @ M; R> ,     \ Start of range
@@ -525,7 +525,7 @@ endclass
     CREATOR-XT ID. LABEL-NAME TYPE CR ;
 
 \ Contains range specification, limits plus type.
-MAX-LABEL '.PAY-RANGE 'DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
+MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 
 \ Create a disassembly range from AD1 to AD2 using dis-assembler DEA1
 \ with NAME. Register it as a labeled range.
@@ -549,7 +549,7 @@ MAX-LABEL '.PAY-RANGE 'DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous code range.
 : -dc-    NONAME$ -dc ;
 
-'D-R-T     '-dc:   ARE-COUPLED
+% D-R-T     % -dc:   ARE-COUPLED
 
 \ Dump storage with unspecified content to ADDRESS2 from ADDRESS1.
 : (DUMP-N)   DUP CR+dn - .LABEL/. " RESB" TYPE CR   ;
@@ -567,7 +567,7 @@ MAX-LABEL '.PAY-RANGE 'DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous such range.
 : -dn-    NONAME$ -dn ;
 
-'DUMP-N    '-dn:   ARE-COUPLED
+% DUMP-N    % -dn:   ARE-COUPLED
 
 \ Dump bytes from target ADDRESS1 to ADDRESS2 plain.
 : (DUMP-B)   DO I DUP CR+db C@ .B-CLEAN LOOP   PRINT-OLD-COMMENT: CR ;
@@ -584,7 +584,7 @@ MAX-LABEL '.PAY-RANGE 'DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous byte range.
 : -db-    NONAME$ -db ;
 
-'DUMP-B    '-db:   ARE-COUPLED \ Register the decompiler.
+% DUMP-B    % -db:   ARE-COUPLED \ Register the decompiler.
 
 \ Print X as a word (4 hex digits).
 : W. 0 4 (DH.) TYPE SPACE ;
@@ -604,7 +604,7 @@ MAX-LABEL '.PAY-RANGE 'DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous word range.
 : -dw-    NONAME$ -dw ;
 
-'DUMP-W    '-dw:   ARE-COUPLED
+% DUMP-W    % -dw:   ARE-COUPLED
 
 \ Dump longs to ADDRESS1 from ADDRESS2, plain.
 : (DUMP-L)   DO I DUP CR+dl @ .LABEL/. 4 +LOOP PRINT-OLD-COMMENT: CR   ;
@@ -621,7 +621,7 @@ MAX-LABEL '.PAY-RANGE 'DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous long range.
 : -dl-    NONAME$ -dl ;
 
-'DUMP-L    '-dl:   ARE-COUPLED
+% DUMP-L    % -dl:   ARE-COUPLED
 
 \ Print all chars to ADDR1 from ADDR2 appropriately.
 \ Try to combine, playing with the next flush.
@@ -647,7 +647,7 @@ MAX-LABEL '.PAY-RANGE 'DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous long range.
 : -d$-    NONAME$ -d$ ;
 
-'DUMP-$    '-d$:   ARE-COUPLED
+% DUMP-$    % -d$:   ARE-COUPLED
 
 \ Print a remark about whether START and END fit.
 : .HOW-FIT   2DUP = IF 2DROP ELSE
@@ -709,7 +709,7 @@ MAX-LABEL '.PAY-RANGE 'DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ This is used to plug holes, where the user doesn't specify how to
 \ disassemble.
 VARIABLE DEFAULT-DISASSEMBLY
-'-d$- DEFAULT-DISASSEMBLY !
+' -d$- DEFAULT-DISASSEMBLY !
 : -ddef- DEFAULT-DISASSEMBLY @ EXECUTE ;
 
 ( ----------------------------------                                    )

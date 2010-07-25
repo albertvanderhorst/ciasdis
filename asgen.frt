@@ -138,18 +138,20 @@ CREATE TABLE 1 , 1 , ( x TABLE + @ yields $100^[-x mod 4] )
 'TABLE HIDDEN
 
 ( ------------- UTILITIES, SYSTEM DEPENDANT ----------------------------)
+( We use the abstraction of a dea "dictionary entry address" of a       )
+( wor to find properties of a word, like its name. In ciforth this      )
+( DEA serves as an execution token.                                     )
+( Return the DEA from "word". 1]                                        )
+
+( Find a DEA for "name" , this is a porting convenience, for in ciforth )
+( it is just an alias for ' .                                           )
+' ' ALIAS %
+
 : %ID. >NFA @ $@ TYPE SPACE ;   ( Print a definitions name from its DEA.)
 VOCABULARY ASSEMBLER IMMEDIATE   ASSEMBLER DEFINITIONS HEX
-( We use the abstraction of a dea "dictionary entry address". aqa "xt" )
-( Return the DEA from "word". 1]                                         )
 
-\ Make an alias for "'" in the minimum search order called "%".
-'ONLY >WID CURRENT !    \ Making ONLY the CONTEXT is dangerous! This will do.
-"'" 'ONLY >WID (FIND)   ALIAS %         ( "'" ) 2DROP
-CONTEXT @ CURRENT !     \ Restore current.
-
-: %>BODY >CFA >BODY ; ( From DEA to the DATA field of a created word )
-: %BODY> BODY> CFA> ; ( Reverse of above)
+: %>BODY   >BODY ; ( From DEA to the DATA field of a created word )
+: %BODY>   BODY> ; ( Reverse of above)
 : %>DOES >DFA @ ; ( From DEA to the DOES> pointer for a ``DOES>'' word )
 ( Leave for DEA : it IS to be ignored in disassemblies. This is used    )
 ( for supressing the bare bones of the sib mechanism in i586.           )
@@ -438,7 +440,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ( assembling and add the fixup/posti/commaer to the disassembly struct. )
 ( as if this instruction were assembled.                                )
 ( Leave the DEA.                                                        )
-: TRY-PI  DUP PIFU!!
+: TRY-PI
     DUP IS-PI IF
     AT-REST? IF
         TALLY:,
@@ -447,7 +449,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
     THEN
 ;
 
-: TRY-xFI   DUP PIFU!!
+: TRY-xFI
    DUP IS-xFI IF
    BI TALLY-BI @ CONTAINED-IN IF
        TALLY:|
@@ -455,7 +457,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
    THEN
    THEN
 ;
-: TRY-DFI   DUP PIFU!!
+: TRY-DFI
    DUP IS-DFI OVER IS-DFIs OR IF
    BI TALLY-BI @ CONTAINED-IN IF
        TALLY:|
@@ -463,7 +465,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
    THEN
    THEN
 ;
-: TRY-FIR   DUP PIFU!!
+: TRY-FIR
    DUP IS-FIR IF
    BI CORRECT-R TALLY-BI @ CONTAINED-IN IF
        TALLY:|R
@@ -471,7 +473,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
    THEN
    THEN
 ;
-: TRY-COMMA   DUP PIFU!!
+: TRY-COMMA
    DUP IS-COMMA IF
    BY TALLY-BY @ CONTAINED-IN IF
        TALLY:,,
@@ -485,6 +487,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
     !TALLY
     DISS? IF
         DISS @+ SWAP !DISS DO  ( Get bounds before clearing)
+            I @ PIFU!!
             I @ TRY-PI TRY-xFI TRY-DFI TRY-FIR TRY-COMMA DROP
         0 CELL+ +LOOP
     THEN
@@ -518,7 +521,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 
 ( Try to expand the current instruction in `DISS' by looking whether    )
 ( DEA fits. Leave the NEXT dea.                                         )
-: SHOW-STEP
+: SHOW-STEP   DUP PIFU!!
         TRY-PI TRY-DFI TRY-xFI TRY-FIR TRY-COMMA
         .RESULT
         >NEXT%
