@@ -101,11 +101,11 @@ ASSEMBLER DEFINITIONS  HEX
 
 ( Toggle some register fixup's back to interesting, i.e. make it show   )
 ( up in disassembly.                                                    )
-'R0a 2 !BAD             'R7a 2 !BAD             'Rza 2 !BAD
-'R0b 2 !BAD             'R7b 2 !BAD             'Rzb 2 !BAD
-'R0c 2 !BAD             'R7c 2 !BAD             'Rzc 2 !BAD
+% R0a 2 !BAD             % R7a 2 !BAD             % Rza 2 !BAD
+% R0b 2 !BAD             % R7b 2 !BAD             % Rzb 2 !BAD
+% R0c 2 !BAD             % R7c 2 !BAD             % Rzc 2 !BAD
 \ Prohibit some instructions from using the zero register.
-'Rza 0800 !BAD          'Rzb 2000 !BAD
+% Rza 0800 !BAD          % Rzb 2000 !BAD
 
 ( ***************************** 8 bit data field ********************** )
 
