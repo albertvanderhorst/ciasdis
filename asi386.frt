@@ -253,8 +253,8 @@
 ( Fill in the transformation to TALLY-BA for `` AS:, OS:, ''            )
 ( This flags them as prefixes.                                          )
 ( The toggle inverts the 16 and 32 bits at the same time.               )
-: AS16<->32   TALLY-BA  C000 TOGGLE ;  LATEST 'AS:, >PRF !
-: OS16<->32   TALLY-BA 30000 TOGGLE ;  LATEST 'OS:, >PRF !
+: AS16<->32   TALLY-BA  C000 TOGGLE ;  LATEST % AS:, >PRF !
+: OS16<->32   TALLY-BA 30000 TOGGLE ;  LATEST % OS:, >PRF !
 
 ( ############## 80386 ASSEMBLER PROPER END ########################### )
 ( You may want to use these always instead of (Rx,)
