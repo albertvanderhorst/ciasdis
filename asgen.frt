@@ -304,7 +304,7 @@ class PIFU
   M: BA      @  M; ,    ( OR!U   OR!U      OR!U      )
   M: CNT^       M;
   M: CNT     @  M; 0 , (  `HERE' advances with count )
-  M: DSP   ( @) M; \ '%ID. ,  ( default displayer,  often overruled )
+  M: DSP   ( @) M; 0 , \ '%ID. ,  ( default displayer,  often overruled )
   M: PRF   ( @) M; 0 ,  ( prefix flag, only for PI ,  0 -> default )
   M: DIS^       M; 0 ,  ( Disassembly action )
   M: TRY^       M; 0 ,  ( Attempted disassembly action )
@@ -338,7 +338,7 @@ endclass
 ( Bookkeeping for a commaer that is the current PIFU                    )
 ( Is also used for disassembling.                                       )
 : TALLY:,   BI TALLY-BI !   BY TALLY-BY !   BA TALLY-BA OR!U
-    CNT ISL !   DSP @ BA-XT ! ;
+    CNT ISL !   PRF @ BA-XT ! ;
 ( Post the instruction using a POINTER to a postit pifu                  )
 : POSTIT   CHECK26 PIFU!   !POSTIT !TALLY TALLY:,   DATA assemble, ;
 ( For DEA : it REPRESENTS some kind of opcode.                          )
