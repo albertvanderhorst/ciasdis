@@ -266,7 +266,22 @@ HEX
 ( Reset bits of DATA into ADDRESS. If bits were already down it's wrong )
 : AND! >R INVERT R@ @ CHECK29 AND R> ! ;
 
-( ------------- ASSEMBLER, DEFINING WORDS    ----------------------------)
+( ############### PART II DISASSEMBLER #################################### )
+
+( Tryers try to construct an instruction from current bookkeeping.      )
+( They can backtrack to show all possibilities.                         )
+( Disassemblers try to reconstruct an instruction from current          )
+( bookkeeping. They are similar but disassemblers take one more aspect  )
+( into account, a piece of actual code. They do not backtrack but fail. )
+
+( ------------- DATA STRUCTURES -----------------------------------------)
+12 BAG DISS          ( A row of dea's representing a disassembly. )
+: !DISS DISS !BAG ;
+: +DISS DISS BAG+! ;
+: DISS? DISS BAG? ;
+: DISS- 0 CELL+ NEGATE DISS +! ; ( Discard last item of `DISS' )
+
+( ############### DEFINING WORDS  ASSEMBLER, DISASSEMBLER ############# )
 
 ( Common fields in the defining words for posits fixups and commaers.   )
 ( All leave a single ADDRESS.                                           )
@@ -289,8 +304,10 @@ class PIFU
   M: BA      @  M; ,    ( OR!U   OR!U      OR!U      )
   M: CNT^       M;
   M: CNT     @  M; 0 , (  `HERE' advances with count )
-  M: DSP   ( @) M;      ( displayer only for COMMA , 0 -> default     OVERLAYED )
-  M: PRF   ( @) M; 0 ,  ( prefix flag, only for PI ,    0 -> default  OVERLAYED )
+  M: DSP   ( @) M; \ '%ID. ,  ( default displayer,  often overruled )
+  M: PRF   ( @) M; 0 ,  ( prefix flag, only for PI ,  0 -> default )
+  M: DIS^       M; 0 ,  ( Disassembly action )
+  M: TRY^       M; 0 ,  ( Attempted disassembly action )
 endclass
 
 ( Make POINTER the current ``PIFU'' object.                             )
@@ -313,6 +330,8 @@ endclass
 : >DSP  PIFU!! DSP  ;      ( displayer only for COMMA , 0 -> default  )
 : >PRF  PIFU!! PRF  ;      ( prefix flag, only for PI , 0 -> default  )
 
+
+( ------------- PIFU's : PI ---------------------------------------------)
 ( Assemble INSTRUCTION for ``ISL'' bytes. ls byte first.                )
 : assemble, ISL @ 0 DO lsbyte, LOOP DROP ;
 : !POSTIT  AS-HERE ISS !  0 OLDCOMMA ! ;  ( Initialise in behalf of postit )
@@ -328,6 +347,7 @@ IS-A IS-PI   \ Awaiting REMEMBER.
 : PI  >R CHECK33 CREATE--  NEW-PIFU R> CNT^ ! DOES> REMEMBER POSTIT ;
 ( 1 .. 4 byte instructions ( BA BY BI OPCODE : - )
 : 1PI   1 PI ;     : 2PI   2 PI ;    : 3PI   3 PI ;    : 4PI   4 PI ;
+( ------------- PIFU's : xFI---------------------------------------------)
 ( Bookkeeping for a fixup that is the current pifu                      )
 ( Is also used for disassembling.                                       )
 : TALLY:|   BI TALLY-BI AND!   BY TALLY-BY OR!   BA TALLY-BA OR!U ;
@@ -337,6 +357,7 @@ IS-A IS-PI   \ Awaiting REMEMBER.
 ( Because of the or character of the operations, the bytecount is dummy )
 IS-A IS-xFI   : xFI   CHECK31 CREATE-- NEW-PIFU DOES> REMEMBER FIXUP> ;
 
+( ------------- PIFU's : DFI DFIs ---------------------------------------)
 ( For a signed DATA item a LENGTH and a BITFIELD. Shift the data item   )
 ( into the bit field and leave IT. Check if it doesn't fit.             )
 : TRIM-SIGNED >R   2DUP R@ SWAP RSHIFT CHECK32B   LSHIFT R> AND ;
@@ -353,8 +374,7 @@ IS-A IS-DFI  : DFI   CHECK31A CREATE-- NEW-PIFU DOES> REMEMBER
 ( Same, but for signed data.                                    )
 IS-A IS-DFIs : DFIs  CHECK31A CREATE-- NEW-PIFU DOES> REMEMBER
 FIXUP-SIGNED ;
-
-( *************** OBSOLESCENT ***********************************       )
+( ------------- PIFU's : FIR DFIR ---------------------------------------)
 \ Reverses bytes in a WORD. Return IT.
 : REVERSE-BYTES     1 CELLS 0 DO DUP  FF AND SWAP 8 RSHIFT   LOOP
                     8 CELLS 0 DO SWAP I LSHIFT OR       8 +LOOP ;
@@ -382,6 +402,7 @@ IS-A IS-DFIR   : DFIR   CHECK31 CREATE--   SWAP REVERSE-BYTES SWAP NEW-PIFU
     DOES> ( data -- )REMEMBER PIFU! DATA LSHIFT REVERSE-BYTES FIXUP<
     TALLY:|R CHECK32 ;
 
+( ------------- PIFU's : COMMAER ----------------------------------------)
 ( Bookkeeping for a commaer that is the current pifu                    )
 ( Is also used for disassembling.                                       )
 : TALLY:,,   BY CHECK30 TALLY-BY AND!   BA TALLY-BA OR!U ;
@@ -412,26 +433,13 @@ CREATE PRO-TALLY 3 CELLS ALLOT  ( Prototype for TALLY-BI BY BA )
 : FAMILY|R    0 DO   DUP >R T@ R> FIR   OVER + LOOP DROP DROP ;
 : xFAMILY|F   0 DO   DUP >R T@ R> DFI   OVER + LOOP DROP DROP ;
 
-( ############### PART II DISASSEMBLER #################################### )
+( ################## DISASSEMBLER ################################# )
 
-( Tryers try to construct an instruction from current bookkeeping.      )
-( They can backtrack to show all possibilities.                         )
-( Disassemblers try to reconstruct an instruction from current          )
-( bookkeeping. They are similar but disassemblers take one more aspect  )
-( into account, a piece of actual code. They do not backtrack but fail. )
-
-( ------------- DATA STRUCTURES -----------------------------------------)
-12 BAG DISS          ( A row of dea's representing a disassembly. )
-: !DISS DISS !BAG ;
 : .DISS-AUX DISS @+ SWAP DO
     I @ DUP IS-COMMA OVER IS-DFI OR OVER IS-DFIs OR IF I DISS - . THEN ID.
  0 CELL+ +LOOP CR ;
 ( DISS-VECTOR can be redefined to generate testsets)
 VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
-: +DISS DISS BAG+! ;
-: DISS? DISS BAG? ;
-: DISS- 0 CELL+ NEGATE DISS +! ; ( Discard last item of `DISS' )
-
 ( ------------- TRYERS --------------------------------------------------)
 
 ( These tryers are quite similar:
@@ -440,6 +448,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ( assembling and add the fixup/posti/commaer to the disassembly struct. )
 ( as if this instruction were assembled.                                )
 ( Leave the DEA.                                                        )
+
 : TRY-PI
     DUP IS-PI IF
     AT-REST? IF
@@ -448,7 +457,6 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
     THEN
     THEN
 ;
-
 : TRY-xFI
    DUP IS-xFI IF
    BI TALLY-BI @ CONTAINED-IN IF
@@ -488,6 +496,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
     DISS? IF
         DISS @+ SWAP !DISS DO  ( Get bounds before clearing)
             I @ PIFU!!
+            \ TRY^ @ IF TRY^ @ EXECUTE THEN
             I @ TRY-PI TRY-xFI TRY-DFI TRY-FIR TRY-COMMA DROP
         0 CELL+ +LOOP
     THEN
@@ -522,6 +531,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ( Try to expand the current instruction in `DISS' by looking whether    )
 ( DEA fits. Leave the NEXT dea.                                         )
 : SHOW-STEP   DUP PIFU!!
+        \ TRY^ @ IF TRY^ @ EXECUTE THEN
         TRY-PI TRY-DFI TRY-xFI TRY-FIR TRY-COMMA
         .RESULT
         >NEXT%
@@ -710,6 +720,7 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
     DUP AS-POINTER !   >R
     3 SPACES
     ( startdea -- ) BEGIN  DUP PIFU!!
+        \ DIS^ @ IF DIS^ @ EXECUTE THEN
         DIS-PI DIS-xFI DIS-DFI DIS-DFIR DIS-FIR DIS-COMMA
         >NEXT%
 (       DUP ID. ." : "  DISS-VECTOR @ EXECUTE                                 )
