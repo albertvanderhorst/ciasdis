@@ -799,35 +799,36 @@ VARIABLE LATEST-OFFSET
 
 \D 5 .LABEL/. CR
 \D 5 .LABEL/. CR
-\D '(RB,) ID.-NO() CR
+\D ' (RB,) ID.-NO() CR
 
-'.COMMA-LABEL  'OW,   >DSP ! ( obligatory word     )
-'.COMMA-REL    '(RL,) >DSP !  ( cell relative to IP )
-'.COMMA-REL    '(RW,) >DSP !  ( cell relative to IP )
-'.COMMA-REL    '(RB,) >DSP !  ( byte relative to IP )
-'.COMMA-LABEL  'SG,   >DSP !  (  Segment: WORD      )
-'.COMMA-LABEL  'P,    >DSP !  ( port number ; byte     )
-'.COMMA-LABEL  'IS,   >DSP !  ( Single -obl-  byte )
-'.COMMA-LABEL  'IL,   >DSP !  ( immediate data : cell)
-'.COMMA-LABEL  'IW,   >DSP !  ( immediate data : cell)
-'.COMMA-LABEL  'IB,   >DSP !  ( immediate byte data)
-'.COMMA-LABEL  'L,    >DSP !  ( immediate data : address/offset )
-'.COMMA-LABEL  'W,    >DSP !  ( immediate data : address/offset )
-'.COMMA-LABEL  'B,    >DSP !  ( immediate byte : address/offset )
+' .COMMA-LABEL  % OW,   >DSP ! ( obligatory word     )
+' .COMMA-REL    % (RL,) >DSP !  ( cell relative to IP )
+' .COMMA-REL    % (RW,) >DSP !  ( cell relative to IP )
+' .COMMA-REL    % (RB,) >DSP !  ( byte relative to IP )
+' .COMMA-LABEL  % SG,   >DSP !  (  Segment: WORD      )
+' .COMMA-LABEL  % P,    >DSP !  ( port number ; byte     )
+' .COMMA-LABEL  % IS,   >DSP !  ( Single -obl-  byte )
+' .COMMA-LABEL  % IL,   >DSP !  ( immediate data : cell)
+' .COMMA-LABEL  % IW,   >DSP !  ( immediate data : cell)
+' .COMMA-LABEL  % IB,   >DSP !  ( immediate byte data)
+' .COMMA-LABEL  % L,    >DSP !  ( immediate data : address/offset )
+' .COMMA-LABEL  % W,    >DSP !  ( immediate data : address/offset )
+' .COMMA-LABEL  % B,    >DSP !  ( immediate byte : address/offset )
 
 \ Contains all instruction that represent an unconditional transfer
 \ of control. It may be followed by data instead of code.
+\ Note these are all pifu's.
 0 BAG UNCONDITIONAL-TRANSFERS
-  'CALL, , 'CALLFAR, , 'CALLFARO, , 'CALLO, , 'INT, , 'INT3, , 'INTO, ,
-  'IRET, , 'JMP, , 'JMPFAR, , 'JMPFARO, , 'JMPO, , 'JMPS, , 'RET+, ,
-  'RET, , 'RETFAR+, , 'RETFAR, ,
+  % CALL, , % CALLFAR, , % CALLFARO, , % CALLO, , % INT, , % INT3, ,
+  % INTO, , % IRET, , % JMP, , % JMPFAR, , % JMPFARO, , % JMPO, , % JMPS, ,
+  % RET+, , % RET, , % RETFAR+, , % RETFAR, ,
 HERE UNCONDITIONAL-TRANSFERS !
 100 CELLS ALLOT         \ Allow to put more here
 
 \ Contains all instructions that represent intra-segment jumps.
 0 BAG JUMPS
-   'CALL, , 'J, , 'JCXZ, , 'JMP, , 'JMPS, , 'J|X, , 'LOOP, , 'LOOPNZ,
-   , 'LOOPZ, ,
+   % CALL, , % J, , % JCXZ, , % JMP, , % JMPS, , % J|X, , % LOOP, ,
+   % LOOPNZ, , % LOOPZ, ,
 HERE JUMPS !
 100 CELLS ALLOT         \ Allow to put more here
 
