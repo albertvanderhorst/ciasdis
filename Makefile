@@ -329,7 +329,13 @@ ciasdis : $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
 cias : ciasdis ; ln -f ciasdis cias
 cidis : ciasdis ; ln -f ciasdis cidis
 
-test.bin : cidis cias test.asm test.cul
+test.bin : ciasdis cidis cias test.asm test.cul
+	ciasdis -a test.asm test.bin
+	ciasdis -d test.bin test.cul > test2.asm
+	ciasdis -a test2.asm test2.bin
+	diff test2.bin test.bin
+	rcsdiff -r$(RCSVERSION) test.bin
+	rcsdiff -b -B -r$(RCSVERSION) test2.asm
 	cias test.asm test.bin
 	cidis test.bin test.cul > test2.asm
 	cias test2.asm test2.bin
@@ -337,27 +343,27 @@ test.bin : cidis cias test.asm test.cul
 	rcsdiff -r$(RCSVERSION) test.bin
 	rcsdiff -b -B -r$(RCSVERSION) test2.asm
 
-lina405.asm : cidis cias lina405 lina405equ.cul lina405.cul
+lina405.asm : ciasdis lina405 lina405equ.cul lina405.cul
 	chmod +w lina405
-	cidis lina405 lina405.cul >$@
-	cias $@ lina405
+	ciasdis -d lina405 lina405.cul >$@
+	ciasdis -a $@ lina405
 	rcsdiff -r$(RCSVERSION) lina405
 	rcsdiff -b -B -r$(RCSVERSION) $@
 
 # Test case, reverse engineer retroforth version 7.5.1.
-rf751.cul : cidis rf751 rf751equ.cul rfcrawl.cul elf.cul
+rf751.cul : ciasdis rf751 rf751equ.cul rfcrawl.cul elf.cul
 	chmod +w rf751
-	echo FETCH rf751 INCLUDE rfcrawl.cul | cidis >$@
+	echo FETCH rf751 INCLUDE rfcrawl.cul | ciasdis >$@
 	rcsdiff -bBw -r$(RCSVERSION) $@
 
-rf751.asm : cidis cias rf751 rf751equ.cul rf751.cul
+rf751.asm : ciasdis rf751 rf751equ.cul rf751.cul
 	chmod +w rf751
-	cidis rf751 rf751.cul >$@
+	ciasdis -d rf751 rf751.cul >$@
 	rcsdiff -bBw -r$(RCSVERSION) $@
-	cias $@ rf751
+	ciasdis -a $@ rf751
 	rcsdiff -r$(RCSVERSION) rf751
 
-%.bin : %.asm ; cias $< $@
+%.bin : %.asm ; ciasdis -a $< $@
 
 cidis386.zip : $(ASSRC) asi386.frt asipentium.frt ;  zip $@ $+
 
