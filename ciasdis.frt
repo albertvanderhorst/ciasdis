@@ -112,13 +112,25 @@ REQUIRE DUMP
 : INTERACTIVE    'OK DUP >DFA @ SWAP >PHA = IF 0 LIST OK THEN
         ASSEMBLER   0 ORG   QUIT ;
 
-\ Handle arguments, start interactive system if no arguments.
-: HANDLE-ARG   ARGC 1 = IF INTERACTIVE THEN
-    \ second argument still obligatory for the moment.
-    ARGC ( 2) 3 4 WITHIN 0= 13 ?ERROR ;
+\ Abort on error.
+: CHECK-ARGS   ARGC 3 4 WITHIN 0= IF
+" Usage:
+    start interactive system: ciasdis
+    assemble:    [cias  | ciasdis -a ]    SOURCE BINARY
+    disassemble: [cidis  | ciasdis -d ]   BINARY CONSULT
+" ETYPE   1 EXIT-CODE !   BYE
+THEN ;
+
+: -a   SHIFT-ARGS   CHECK-ARGS  1 ;
+: -d   SHIFT-ARGS   CHECK-ARGS  2 ;
 
 \ For STRING: "It CONTAINS a `d' or a `D' "
 : CONTAINS-D?    2DUP &D $I >R  &d $I R>  OR ;
+
+\ Handle arguments, start interactive system if no arguments.
+: HANDLE-ARG   ARGC 1 = IF INTERACTIVE 0 EXIT THEN
+    1 ARG[] OVER C@ &- = IF EVALUATE EXIT THEN
+    0 ARG[] CONTAINS-D? IF CHECK-ARGS 2 ELSE CHECK-ARGS 1 THEN ;
 
 \ Fetch the library file from the current directory.
 \ We can't assume lina has been installed so forth.lab is supplied with
@@ -130,4 +142,7 @@ REQUIRE DUMP
 
 \ The name determines what to do.
 : MAIN   RESTORE-ALL  DEFAULT-SECTION HANDLE-ARG
-    0 ARG[] CONTAINS-D? IF cidis ELSE cias THEN ;
+        DUP 0 = IF DROP INTERACTIVE
+   ELSE DUP 1 = IF DROP cias
+   ELSE DUP 2 = IF DROP cidis
+   THEN THEN THEN DROP ;
