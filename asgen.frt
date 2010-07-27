@@ -5,43 +5,52 @@
 ( REVERSE ENGINEERING ASSEMBLER  cias cidis                             )
 
 ( This file `asgen.frt' contains generic tools and has been used to     )
-( make assemblers for 8080 8086 80386 Alpha 6809 and should be          )
-( usable for Pentium 68000 6502 8051.                                   )
-( It should run on ISO Forth's provided some ciforth facilities are     )
-( present or emulated.                                                  )
-( The assemblers -- with some care -- have the property that the        )
-( disassembled code can be assembled to the exact same code.            )
+( make assemblers for 8080 8086 80386 Pentium Alpha 6809 and should     )
+( be usable for 68000 6502 8051.                                        )
+( It should be possible to port it to ISO Forth's but some ciforth      )
+( facilities must be present or need to be emulated.                    )
+( The assemblers have the property that the disassembled code is        )
+( assembled to the exact same code.                                     )
 
 ( Most instruction set follow this basic idea that it contains of three )
 ( distinct parts:                                                       )
 (   1. the opcode that identifies the operation                         )
-(   2. modifiers such as the register working on                        )
-(   3. data, as a bit field in the instruction.                         )
-(   4. data, including addresses or offsets.                            )
+(   2a. modifiers such as the register working on                       )
+(   2b. data, as a bit field in the instruction.                        )
+(   3. data, including addresses or offsets.                            )
+( These parts have properties. There is only one opcode. Modifiers      )
+( and data-as-bitfields essentially have no order. And data such as     )
+( addresses, offsets, immediate data has to be supplied in an exact     )
+( order.                                                          )
+
 ( This assembler goes through three stages for each instruction:        )
-(   1. postit: assemblers the opcode with holes for the modifiers.      )
+(   1. postit: assembles the opcode with holes for the modifiers.       )
 (      This has a fixed length. Also posts requirements for commaers.   )
-(   2. fixup: fill up the holes, either from the beginning or the       )
+(   2a. fixup: fill up the holes, either from the beginning or the      )
 (     end of the post. These can also post required commaers            )
-(   3. fixup's with data. It has user supplied data in addition to      )
-(      opcode bits. Both together fill up bits left by a postit.        )
-(   4. The commaers. Any user supplied data in addition to              )
-(      opcode, that can be added as separate bytes. Each has a          )
-(      separate command, where checks are built in.                     )
+(   2b. fixup's with data. It has user supplied data in addition to     )
+(      opcode bits. Both together fill up the holes left by a postit.   )
+(   3. The commaers. Any user supplied data in addition to              )
+(      opcode, that can be added as separate whole bytes. Each sort     )
+(      of data has a separate command, where the checks are built       )
+(      in.                                                              )
 ( Keeping track of this is done by bit arrays, similar to the a.i.      )
 ( blackboard concept. This is ONLY to notify the user of mistakes,      )
 ( they are NOT needed for the assembler proper.                         )
+( A fast assembler for trusted source can be extracted where all        )
+( checks are ommitted. The result is compact indeed.                    )
 ( This setup allows a complete check of validity of code and complete   )
 ( control over what code is generated. Even so all checks can be        )
 ( defeated if need be.                                                  )
 
 ( The generic tools include:                                            )
 (   - the defining words for 1 2 3 4 byte postits,                      )
-(   -                    for fixups from front and behind               )
-(   -                    for comma-ers,                                 )
+(                        for fixups from front and behind               )
+(                        for data fixups from front and behind          )
+(                        for comma-ers,                                 )
 (   - showing a list of possible instructions, for all opcodes or       )
-(   -  for a single one.                                                )
-(   -  disassembly of a single instruction or a range                   )
+(      for a single one.                                                )
+(   - disassembly of a single instruction or a range                    )
 (   - hooks for more tools, e.g. print the opcode map as postscript.    )
 (   - hooks for prefix instructions                                     )
 (   - hooks for classes of instructions, to be turned off as a whole    )
@@ -73,10 +82,13 @@
 
 ( Then comes the fixups. They fill up the holes left in the             )
 ( instruction -- before `HERE' -- by or-ing and maintain `TALLY-BI' ,   )
-( resetting bits. They end in `|' where the other assembly actions end  )
-( in `,'. They may require more commaers, posting to `TALLY-BY'. The    )
-( commaers advance `HERE' by a whole number of bytes assembling user    )
-( supplied information and reset the corresponding bits in `TALLY-BY'.  )
+( resetting bits. They conventionally end in `|' where the other        )
+( assembly actions end in `,' to stress that they advance HERE. They    )
+( may demand more commaers, posting to `TALLY-BY'.                      )
+
+( The commaers advance `HERE' by a whole number of bytes assembling     )
+( user supplied information and reset the corresponding bits in         )
+( `TALLY-BY'                                                            )
 
 ( All parts of an instruction can add bits to `TALLY-BA'. If any two    )
 ( consecutive bits are up this is bad. Its bits can never be reset but  )
@@ -100,24 +112,29 @@
 ( - commaing when `TALLY-BI' still contains bits up                     )
 ( - setting `TALLY-BA' bad                                              )
 
+( A prefix is an instruction in its own right. It communicates only     )
+( through the BAD bits to restrict the instructions following.          )
 ( A prefix PostIt has its prefix field filled in with an execution      )
 ( token. This token represents the action performed on the TALLY-BA     )
-( flags, that is used instead of resetting it. This can be used for     )
-( example for the OS -- operand size -- prefix in the Pentium. Instead  )
-( of putting the information that we are in a 16 bit operand segment    )
-( in TALLY-BA , it transforms that information to 32 bit.               )
+( flags, that the next POSTIT uses, instead of resetting it. This       )
+( can be used for example for the OS -- operand size -- prefix in       )
+( the Pentium. Instead of putting the information that we are in a      )
+( 16 bit operand segment in TALLY-BA , it transforms that information   )
+( to 32 bit.                                                            )
 
 ( ############### PRELUDE ############################################# )
 
-( Wrapper for asgen, when we want to test without label mechanisms.     )
-( These are hot patched for reverse engineering.                        )
-
+\ Facilities
 REQUIRE ALIAS
 REQUIRE @+ ( Fetch from ADDRES. Leave incremented ADDRESS and DATA )
 REQUIRE BAG
 REQUIRE DO-BAG
 REQUIRE POSTFIX
 REQUIRE class
+
+( If we are to use sections and the label mechanisms, these are hot     )
+( patched. Note that these words get separate headers such that the     )
+( original remain functional.                                           )
 
 'HERE  ALIAS AS-HERE
 'C,    ALIAS AS-C,
@@ -184,9 +201,13 @@ VOCABULARY ASSEMBLER IMMEDIATE   ASSEMBLER DEFINITIONS HEX
     2 = SWAP "--" CORA 0= AND IF LATEST HIDDEN THEN ;
 
 ( ------------- UTILITIES, SYSTEM INDEPENDANT ------------------------- )
-( Note that the assembler works with multi-character bigendian numbers  )
+( Note that the assembler works with multi-character l.s. byte first    )
+( numbers. This means that the l.s byte of a postit is commaed in       )
+( first. With fixups-from-reverse it means that HERE-1 is fixed up      )
+( with the l.s. byte, then going back.                                  )
+( See the word ``assemble,'' .                                          )
 
-(   The FIRST bitset is contained in the SECOND one, leaving it IS      )
+( Is the FIRST bitset contained in the SECOND one? Leaving:"it IS"      )
 : CONTAINED-IN OVER AND = ;
 ( Compile the ls 8 bits of X at here, leaving the REMAINING bits.       )
 : lsbyte, DUP AS-C, 0008 RSHIFT ;
@@ -334,7 +355,7 @@ class PIFU
    M: CNT^     M;
   M: CNT   @  M; 0 , (  `HERE' advances with count, commaer or postit )
   M: DSP^     M; '%~ID. ,   ( display and advance while disassembling )
-  M: PRF      M; 0 ,  ( prefix flag, only for PI ,  0 -> default )
+  M: PRF      M; 0 ,  ( prefix xt, only for PI ,  0 -> default )
   M: DIS^     M; 0 ,  ( Disassembly action )
   M: TRY^     M; 0 ,  ( Attempted disassembly action )
 endclass
@@ -378,7 +399,7 @@ endclass
     CNT ISL !   PRF @ BA-XT ! ;
 ( Post the instruction using a POINTER to a postit pifu                  )
 : POSTIT   CHECK26 PIFU!   !POSTIT !TALLY TALLY:,   DAT assemble, ;
-( A disassembler for the current, postit PIFU. leave IT                 )
+( A disassembler for the current, postit PIFU. leave IT.                )
 : DIS-PI   AT-REST? IF   BI^ CNT MC@ INVERT   >R AS-POINTER @ CNT MC@ R>
     AND   DAT = IF   TALLY:, DUP +DISS   DUP LATEST-INSTRUCTION !
     AS-POINTER @ ISS !   CNT AS-POINTER +! THEN THEN ;
@@ -601,11 +622,9 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 
 ( Show at least all instructions valid for the "OPCODE" given. )
 : SHOW:
-    !DISS   !TALLY
-    ' DUP BEGIN
-        SHOW-STEP
-     OVER DISS CELL+ @ - OVER VOCEND? OR UNTIL DROP DROP
-;
+    !DISS !TALLY   ' ( "OPCODE")
+    DUP BEGIN SHOW-STEP   OVER DISS CELL+ @ <>   OVER VOCEND? OR UNTIL
+    DROP DROP ;
 
 ( ------------- DISASSEMBLERS ------------------------------------------------)
 
