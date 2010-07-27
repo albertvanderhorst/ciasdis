@@ -253,14 +253,15 @@
 ( Fill in the transformation to TALLY-BA for `` AS:, OS:, ''            )
 ( This flags them as prefixes.                                          )
 ( The toggle inverts the 16 and 32 bits at the same time.               )
-: AS16<->32   TALLY-BA  C000 TOGGLE ;  LATEST % AS:, >PRF !
-: OS16<->32   TALLY-BA 30000 TOGGLE ;  LATEST % OS:, >PRF !
+: AS16<->32   TALLY-BA  C000 TOGGLE ;  ' AS16<->32 % AS:, >PRF ! 
+: OS16<->32   TALLY-BA 30000 TOGGLE ;  ' OS16<->32 % OS:, >PRF ! 
 
 ( ############## 80386 ASSEMBLER PROPER END ########################### )
-( You may want to use these always instead of (Rx,)
-    : RB, _AP_ 1 + - (RB,) ;    ' .COMMA-SIGNED   % (RB,) >DSP !
-    : RW, _AP_ 2 + - (RW,) ;    ' .COMMA-SIGNED   % (RW,) >DSP !
-    : RL, _AP_ 4 + - (RL,) ;    ' .COMMA-SIGNED   % (RL,) >DSP !
+\ You may want to use these always instead of (Rx,)                     
+( They accept an absolute address, convenient for using labels.         )
+: RB, _AP_ 1 + - (RB,) ;    ' .COMMA-SIGNED   % (RB,) >DSP !
+: RW, _AP_ 2 + - (RW,) ;    ' .COMMA-SIGNED   % (RW,) >DSP !
+: RL, _AP_ 4 + - (RL,) ;    ' .COMMA-SIGNED   % (RL,) >DSP !
 
 ( Require instructions as per a 32 resp. 16 bits segment.               )
 : BITS-32   2,8000 BA-DEFAULT ! ;
