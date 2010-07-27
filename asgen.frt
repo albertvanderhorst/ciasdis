@@ -301,7 +301,8 @@ HEX
 : !DISS DISS !BAG ;
 : +DISS DISS BAG+! ;
 : DISS? DISS BAG? ;
-: DISS- 0 CELL+ NEGATE DISS +! ; ( Discard last item of `DISS' )
+: DISS- DISS BAG@- DROP ; ( Discard last item of `DISS' )
+: DISS@- DISS BAG@- ;
 
 ( Contains the position that is being disassembled                      )
 VARIABLE AS-POINTER       HERE AS-POINTER !
@@ -574,14 +575,9 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ( Discard the last item of the disassembly -- it is either used twice   )
 ( or incorrect. Replace DEA with the proper DEA to inspect from here.   )
 : BACKTRACK
-(   ." BACKTRACKING"                                                    )
-    DROP DISS @ @- DISS !
-(   DROP DISS @ 0 CELL+ - @                                             )
-(   "Failed at :" TYPE DUP ID. CR                                       )
-    >NEXT%
-(   DISS-                                                               )
-    REBUILD
-;
+\      DROP DISS @ @- DISS !
+      DROP DISS@-
+>NEXT%   REBUILD ;
 
 ( If the disassembly contains something: `AT-REST?' means               )
 ( we have gone full cycle rest->postits->fixups->commaers               )
@@ -589,36 +585,22 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 : RESULT? AT-REST? DISS? AND   BAD? 0= AND ;
 
 ( If present, print a result and continue searching for a new last item )
-: .RESULT
-    RESULT? IF
-        DISS-VECTOR @ EXECUTE
-        DISS-
-        REBUILD
-    THEN
-;
+: .RESULT   RESULT? IF DISS-VECTOR @ EXECUTE   DISS- REBUILD THEN ;
 
 ( Try to expand the current instruction in `DISS' by looking whether    )
-( DEA fits. Leave the NEXT dea.                                         )
+( DEA fits. Leave the next DEA, or vocend to stop.                                         )
 : SHOW-STEP   DUP PIFU!!   IS-PIFU IF TRY^ @ EXECUTE THEN   .RESULT
    >NEXT% ( DUP ID. )   BAD? IF BACKTRACK THEN
    BEGIN DUP VOCEND? DISS? AND WHILE BACKTRACK REPEAT
 ;
 
 ( Show all the instructions present in the assembler vocabulary )
-: SHOW-ALL
-    !DISS   !TALLY
-    STARTVOC BEGIN
-       SHOW-STEP
-    DUP VOCEND? UNTIL DROP
-;
+: SHOW-ALL   !DISS !TALLY   STARTVOC BEGIN SHOW-STEP   DUP VOCEND? UNTIL
+    DROP ;
 
 ( Show all the opcodes present in the assembler vocabulary )
-: SHOW-OPCODES
-    !DISS   !TALLY
-    STARTVOC BEGIN
-       DUP IS-PI IF DUP %ID. THEN >NEXT%
-    DUP VOCEND? UNTIL DROP
-;
+: SHOW-OPCODES   !DISS !TALLY   STARTVOC BEGIN   DUP IS-PI IF DUP %ID. THEN
+    >NEXT%   DUP VOCEND? UNTIL DROP ;
 
 ( Show at least all instructions valid for the "OPCODE" given. )
 : SHOW:
