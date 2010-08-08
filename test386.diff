@@ -126,7 +126,7 @@
 < ORSI,   ZO|   [DX]   10 IS,   
 < ORSI,   ZO|   [CX]   10 IS,   
 < ORSI,   ZO|   [AX]   10 IS,   
-21421,21708c21313,21421
+21421,21709c21313,21421
 < ~SIB,   [MEM   +8*   DI]   14 L,   
 < ~SIB,   [MEM   +8*   SI]   14 L,   
 < ~SIB,   [MEM   +8*   BP]   14 L,   
@@ -415,6 +415,7 @@
 < ~SIB,   [AX   +1*   DX]   
 < ~SIB,   [AX   +1*   CX]   
 < ~SIB,   [AX   +1*   AX]   
+< _""_   
 ---
 > ANDSI, MEM| C L, 10 IS,
 > ANDSI, R| DI| 10 IS,
