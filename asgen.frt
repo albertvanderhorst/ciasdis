@@ -326,8 +326,12 @@ VARIABLE LATEST-INSTRUCTION
 : %~ID. DUP IGNORE? IF DROP ELSE %ID. THEN  ;
 
 ( A PIFU is what is common to all parts of an assembler instruction.    )
+( The first data field for a postit/fixup contains instruction bits,    )
+( for a commaer it contains the xt of the coma action                   )
+( for a data fixup it contains the position of the bits                 )
 ( Define an pifu by BA BY BI and the PAYLOAD opcode/fixup bits/xt       )
-( Two more fields CNT and DSP are typically filled in immediately.      )
+( Four more fields CNT^ DIS^ TRY^ DSP^ are typically filled in          )
+( immediately.                                                          )
 ( These are never to change after creation!                             )
 ( Work on TALLY-BI etc.
 (        Effects  for posits fixups and commaers.                    )
@@ -341,7 +345,7 @@ VARIABLE LATEST-INSTRUCTION
 ( Rotate the MASK etc from a fixup-from-reverse into a NEW mask fit )
 ( for using from the start of the instruction. We know its length!  )
 : CORRECT-R 0 CELL+ ISL @ - ROTLEFT ;
-_ _ _ _ _       ( BI BA BY DAT )
+_ _ _ _       ( BI BA BY DAT )
 class PIFU
    M: DAT^     M;
    M: DAT-R   @ CORRECT-R M;  ( data if "from-reverse" )
@@ -350,6 +354,7 @@ class PIFU
    M: BI^      M;
    M: BI-R   @ CORRECT-R M;   ( fixup bit if "from-reverse" )
   M: BI    @  M; ,            ( postit or regular fixup bits)
+   M: BY^      M;
   M: BY    @  M; ,            ( bytes, mask for commaers )
    M: BA^      M;
   M: BA    @  M; ,            ( Bad mask)
@@ -365,19 +370,16 @@ endclass
 : PIFU!   ^PIFU ! ;
 ( Have a new pifu and make it current, for filling in fields            )
 : NEW-PIFU   ( BA BY BI PL -- ) BUILD-PIFU PIFU! ;
-( The first data field for a postit/fixup contains instruction bits,    )
-( for a commaer it contains the xt of the coma action                   )
-( for a data fixup it contains the position of the bits                 )
-( It may be necessary to access the fields from the DEA some time       )
-\ Make the DEA the current ``PIFU'' object, such that fields can
-\ be used.
+( It may be necessary to access the fields from the dea some time:      )
+( Make the DEA the current ``PIFU'' object, such that fields can        )
+( be used.                                                              )
 : PIFU!! %>BODY PIFU! ;
 \ From DEA return a field ADDRESS like the above.
 : >DATA PIFU!! DAT^ ;
-\ : >BI   PIFU!! BI^  ;
-\ : >BY   PIFU!! BY^  ;
+: >BI   PIFU!! BI^  ;      \ Not needed
+: >BY   PIFU!! BY^  ;      \ Not needed
 : >BA   PIFU!! BA^  ;      \ Needed in asalpha.frt
-: >CNT  PIFU!! CNT^  ;      ( `HERE' advances with count )
+: >CNT  PIFU!! CNT^  ;
 : >DSP  PIFU!! DSP^  ;
 : >PRF  PIFU!! PRF  ;      ( prefix flag, only for PI , 0 -> default  )
 
@@ -566,18 +568,15 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
     !TALLY
     DISS? IF
         DISS @+ SWAP !DISS DO  ( Get bounds before clearing)
-            I @ DUP PIFU!!
-            IS-PIFU IF TRY^ @ EXECUTE THEN DROP
+            I @ IS-PIFU IF DUP PIFU!!  TRY^ @ EXECUTE THEN DROP
         0 CELL+ +LOOP
     THEN
 ;
 
-( Discard the last item of the disassembly -- it is either used twice   )
-( or incorrect. Replace DEA with the proper DEA to inspect from here.   )
-: BACKTRACK
-\      DROP DISS @ @- DISS !
-      DROP DISS@-
->NEXT%   REBUILD ;
+( All possibilities with the last item of the disassembly are           )
+( exhausted, so discard it. Replace DEA with the proper DEA to inspect  )
+( from here.                                                            )
+: BACKTRACK  DROP DISS@- >NEXT%   REBUILD ;
 
 ( If the disassembly contains something: `AT-REST?' means               )
 ( we have gone full cycle rest->postits->fixups->commaers               )
@@ -589,7 +588,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 
 ( Try to expand the current instruction in `DISS' by looking whether    )
 ( DEA fits. Leave the next DEA, or vocend to stop.                                         )
-: SHOW-STEP   DUP PIFU!!   IS-PIFU IF TRY^ @ EXECUTE THEN   .RESULT
+: SHOW-STEP   IS-PIFU IF DUP PIFU!!   TRY^ @ EXECUTE THEN   .RESULT
    >NEXT% ( DUP ID. )   BAD? IF BACKTRACK THEN
    BEGIN DUP VOCEND? DISS? AND WHILE BACKTRACK REPEAT
 ;
@@ -635,8 +634,8 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
     SWAP
     DUP AS-POINTER !   >R
     3 SPACES
-    ( startdea -- ) BEGIN  DUP PIFU!!
-        IS-PIFU IF DIS^ @ EXECUTE THEN
+    ( startdea -- ) BEGIN
+        IS-PIFU IF DUP PIFU!!  DIS^ @ EXECUTE THEN
         >NEXT%
     DUP VOCEND? RESULT? OR UNTIL DROP
     RESULT? IF
@@ -665,6 +664,24 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
     SWAP   BEGIN DUP ADORN-ADDRESS    (DISASSEMBLE) 2DUP > 0= UNTIL   2DROP
 ;
 
+( Completion based on the current state of the tallies.                 )
+0 0 0 0 0 PI _""_   \ Dummy instruction to replace current state.
+CREATE SOMEMORE
+
+( Catch current state in `` _""_ ''                                     )
+: >_""_   '_""_ PIFU!!   TALLY-BI @ BI^ !   TALLY-BY @ BY^ !
+    TALLY-BA @ BA^ !   ISL @ CNT^ ! ;
+
+( Restore current state from `` _""_ ''                                 )
+: _""_>   '_""_ PIFU!!   BI^ @ TALLY-BI !   BY^ @ TALLY-BY !
+     BA^ @ TALLY-BA !   CNT^ @ ISL ! ;
+
+( Show all possible completions of the current partially completed      )
+( instruction.                                                          )
+: SHOW-COMPLETION   >_""_ !DISS    '_""_ DUP +DISS REBUILD
+    STARTVOC BEGIN OVER DISS CELL+ @ =  OVER VOCEND? 0= AND WHILE
+    SHOW-STEP REPEAT   .S 2DROP .S _""_> .S ;
+
 ( ********************* DEFINING WORDS FRAMEWORK ********************** )
 ( Close an assembly definition: restore and check.)
 : END-CODE
@@ -673,6 +690,8 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 
 ( FIXME : we must get rid of this one )
 : ;C POSTPONE END-CODE "WARNING: get rid of C;" TYPE CR ; IMMEDIATE
+
+( ************************* USAGE ************************************* )
 
 \ The following two definitions must *NOT* be in the assembler wordlist.
 PREVIOUS DEFINITIONS DECIMAL
@@ -689,11 +708,12 @@ ASSEMBLER
     ?CSP   POSTPONE (;CODE)   POSTPONE [   POSTPONE ASSEMBLER
 ; IMMEDIATE
 
-( ************************* CONVENIENCES ****************************** )
+( ------------------------- user convenience -------------------------- )
 
 ( Abbreviations for interactive use. In the current dictionary. )
     : DDD (DISASSEMBLE) ;
     : D-R DISASSEMBLE-RANGE ;
+    : ?? SHOW-COMPLETION ;
 
 ( *********************************** NOTES *************************** )
 ( 1. A DEA is an address that allows to get at header data like flags   )
