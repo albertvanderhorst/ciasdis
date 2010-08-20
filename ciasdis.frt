@@ -105,11 +105,17 @@ REQUIRE DUMP
 \ Restore all revectoring done while compiling to stand alone.
 : RESTORE-ALL  'ERROR RESTORED     'INCLUDED RESTORED      'ABORT RESTORED ;
 
+\ The prompt we want to use.
+: PROMPT    CR "ci>" TYPE ;
+
+\ Change the prompt to "Hurry up, dummy!" style.
+: CHANGE-PROMPT   'PROMPT 'OK 3 CELLS MOVE ;
+
 \ Start an interactive session or a filter.
 \ The startup code has changed ``OK'' for a filter.
 \ In that case suppress the splat screen.
 \ Note that ``QUIT'' is the command interpreter.
-: INTERACTIVE    'OK DUP >DFA @ SWAP >PHA = IF 0 LIST OK THEN
+: INTERACTIVE    'OK DUP >DFA @ SWAP >PHA = IF 0 LIST CHANGE-PROMPT OK THEN
         ASSEMBLER   0 ORG   QUIT ;
 
 \ Print usage, then go bye with EXITCODE.
@@ -117,8 +123,8 @@ REQUIRE DUMP
 " Usage:
     start interactive system: ciasdis
     help:        ciasdis -h
-    assemble:    [cias  | ciasdis -a ]    SOURCE BINARY
-    disassemble: [cidis  | ciasdis -d ]   BINARY CONSULT
+    assemble:    [cias  | ciasdis -a ]    <source> <binary>
+    disassemble: [cidis  | ciasdis -d ]   <binary> <consult>
     install:     ciasdis -i <executable> <library> [ <shell> ]
 " TYPE   EXIT-CODE !   BYE ;
 
@@ -137,12 +143,6 @@ REQUIRE DUMP
 : HANDLE-ARG   ARGC 1 = IF INTERACTIVE 0 EXIT THEN
     1 ARG[] OVER C@ &- = IF EVALUATE EXIT THEN
     0 ARG[] CONTAINS-D? IF CHECK-ARGS 2 ELSE CHECK-ARGS 1 THEN ;
-
-\ The prompt we want to use.
-: PROMPT    CR "ci>" TYPE ;
-
-\ Change the prompt to "Hurry up, dummy!" style.
-: CHANGE-PROMPT   'PROMPT 'OK 3 CELLS MOVE ;
 
 \ Fetch the library file from the current directory.
 \ We can't assume lina has been installed so forth.lab is supplied with
