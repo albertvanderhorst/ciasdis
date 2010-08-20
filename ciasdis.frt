@@ -112,17 +112,23 @@ REQUIRE DUMP
 : INTERACTIVE    'OK DUP >DFA @ SWAP >PHA = IF 0 LIST OK THEN
         ASSEMBLER   0 ORG   QUIT ;
 
-\ Abort on error.
-: CHECK-ARGS   ARGC 3 4 WITHIN 0= IF
+\ Print usage, then go bye with EXITCODE.
+: USAGE
 " Usage:
     start interactive system: ciasdis
+    help:        ciasdis -h
     assemble:    [cias  | ciasdis -a ]    SOURCE BINARY
     disassemble: [cidis  | ciasdis -d ]   BINARY CONSULT
-" ETYPE   1 EXIT-CODE !   BYE
-THEN ;
+    install:     ciasdis -i <executable> <library> [ <shell> ]
+" TYPE   EXIT-CODE !   BYE ;
+
+\ Abort on error.
+: CHECK-ARGS   ARGC 3 4 WITHIN 0= IF 1 USAGE THEN ;
 
 : -a   SHIFT-ARGS   CHECK-ARGS  1 ;
 : -d   SHIFT-ARGS   CHECK-ARGS  2 ;
+: -i   ^I LOAD ;
+: -h   0 USAGE ;
 
 \ For STRING: "It CONTAINS a `d' or a `D' "
 : CONTAINS-D?    2DUP &D $I >R  &d $I R>  OR ;
@@ -132,16 +138,23 @@ THEN ;
     1 ARG[] OVER C@ &- = IF EVALUATE EXIT THEN
     0 ARG[] CONTAINS-D? IF CHECK-ARGS 2 ELSE CHECK-ARGS 1 THEN ;
 
+\ The prompt we want to use.
+: PROMPT    CR "ci>" TYPE ;
+
+\ Change the prompt to "Hurry up, dummy!" style.
+: CHANGE-PROMPT   'PROMPT 'OK 3 CELLS MOVE ;
+
 \ Fetch the library file from the current directory.
 \ We can't assume lina has been installed so forth.lab is supplied with
 \ the ciasdis program.
-"forth.lab" BLOCK-FILE $!
+\ "forth.lab" BLOCK-FILE $!
+"ciasdis.lab" BLOCK-FILE $!
 
 \ Make a cold start silent.
 'TASK >DFA @   '.SIGNON >DFA !
 
 \ The name determines what to do.
-: MAIN   RESTORE-ALL  DEFAULT-SECTION HANDLE-ARG
+: MAIN   RESTORE-ALL DEFAULT-SECTION HANDLE-ARG CHANGE-PROMPT
         DUP 0 = IF DROP INTERACTIVE
    ELSE DUP 1 = IF DROP cias
    ELSE DUP 2 = IF DROP cidis
