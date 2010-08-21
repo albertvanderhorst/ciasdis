@@ -24,7 +24,7 @@
 
 # The following directory are supposedly in line with the
 # Debian FHS directory philosophy.
-INSTALLDIR=/usr
+INSTALLDIR=/
 INSTALLDIR_MAN=/usr/share/man
 INSTALLDIR_info=/usr/share/info
 
@@ -170,14 +170,18 @@ DEBIANFILES=control
 %:RCS/%,v
 	co -r$(RCSVERSION) $<
 
-debian : default control
-	mkdir -p debian/DEBIAN
-	mkdir -p debian/usr/bin
-	mkdir -p debian/usr/lib
-	find debian -type d | xargs chmod 755
-	cp ciasdis debian/usr/bin
-	cp ciasdis.lab debian/usr/lib
-	cp control debian/DEBIAN
+install:  default control cias.1 cul.5
+	mkdir -p $(INSTALLDIR)/DEBIAN
+	cp -f control $(INSTALLDIR)/DEBIAN
+	mkdir -p $(INSTALLDIR)/usr/bin
+	mkdir -p $(INSTALLDIR)/usr/lib
+	#find $(INSTALLDIR) -type d | xargs chmod 755
+	./ciasdis -i $(INSTALLDIR)/usr/bin/ciasdis  $(INSTALLDIR)/usr/lib/ciasdis.lab
+	mkdir -p $(INSTALLDIR)/usr/share/man/man1
+	mkdir -p $(INSTALLDIR)/usr/share/man/man5
+	cp -f cias.1 $(INSTALLDIR)/usr/share/man/man1
+	cp -f cul.5 $(INSTALLDIR)/usr/share/man/man5
+	gzip -r $(INSTALLDIR)/usr/share/man
 
 # If tests fails, test targets must be inspected.
 .PRECIOUS: rf751.asm lina405.asm test.bin
@@ -193,10 +197,10 @@ all: regressiontest
 clean: testclean asclean ; rcsclean
 
 #Install it. To be run as root
-install: ciasdis cias.1 cul.5
-	./ciasdis -i $(INSTALLDIR)/bin/ciasdis  $(INSTALLDIR)/lib/ciasdis.lab
-	cp cias.1 $(INSTALLDIR_MAN)/man1
-	cp cul.5 $(INSTALLDIR_MAN)/man5
+debian: ciasdis cias.1 cul.5
+	./ciasdis -i $(INSTALLDIR)/usr/bin/ciasdis  $(INSTALLDIR)/usr/lib/ciasdis.lab
+	cp cias.1 $(INSTALLDIR)/usr/share/man/man1
+	cp cul.5 $(INSTALLDIR)/usr/share/man/man5
 
 # Get the library file that is used while compiling.
 ciasdis.lab : ; echo 'BLOCK-FILE $$@ GET-FILE "'$@'" PUT-FILE'|lina
