@@ -22,6 +22,13 @@
 
 # ALL FILES STARTING IN ``ci86'' (OUTHER ``ci86.gnr'') ARE GENERATED
 
+# The following directory are supposedly in line with the
+# Debian FHS directory philosophy.
+INSTALLDIR=/usr
+INSTALLDIR_MAN=/usr/share/man
+INSTALLDIR_info=/usr/share/info
+
+
 ASTARGETS= cias cidis ciasdis test.bin test2.bin test2.asm
 
 # Generic source for assembler
@@ -138,6 +145,15 @@ cul.5           \
 $(ASSRC)        \
 # That's all folks!
 
+BINRELEASE = \
+COPYING   \
+README.assembler \
+cias.1          \
+cul.5           \
+ciasdis         \
+ciasdis.lab       \
+# That's all folks!
+
 # 4.0 ### Version : an official release 4.0
 # Left out : beta, revision number is taken from rcs e.g. 3.154
 VERSION=  # Because normally VERSION is passed via the command line.
@@ -148,17 +164,27 @@ MASK=FF
 PREFIX=0
 TITLE=QUICK REFERENCE PAGE FOR 80386 ASSEMBLER
 TESTTARGETS= test.bin lina405.asm rf751.asm rf751.cul
+DEBIANFILES=control
 
 # How to check out, anything
 %:RCS/%,v
 	co -r$(RCSVERSION) $<
 
+debian : default control
+	mkdir -p debian/DEBIAN
+	mkdir -p debian/usr/bin
+	mkdir -p debian/usr/lib
+	find debian -type d | xargs chmod 755
+	cp ciasdis debian/usr/bin
+	cp ciasdis.lab debian/usr/lib
+	cp control debian/DEBIAN
+
 # If tests fails, test targets must be inspected.
 .PRECIOUS: rf751.asm lina405.asm test.bin
 
-.PHONY: RELEASE default all clean releaseproof zip regressiontest
+.PHONY: RELEASE default all clean releaseproof zip regressiontest debian
 # Default target for convenience
-default : lina
+default : ciasdis ciasdis.lab
 ci86.$(s).bin :
 
 # Some of these targets make no sense and will fail
@@ -167,12 +193,18 @@ all: regressiontest
 clean: testclean asclean ; rcsclean
 
 #Install it. To be run as root
-install: ; @echo 'There is no "make install" ; use "lina -i <binpath> <libpath>"'
+install: ciasdis cias.1 cul.5
+	./ciasdis -i $(INSTALLDIR)/bin/ciasdis  $(INSTALLDIR)/lib/ciasdis.lab
+	cp cias.1 $(INSTALLDIR_MAN)/man1
+	cp cul.5 $(INSTALLDIR_MAN)/man5
 
 # Get the library file that is used while compiling.
-forth.lab : ; echo 'BLOCK-FILE $$@ GET-FILE "'$@'" PUT-FILE'|lina
+ciasdis.lab : ; echo 'BLOCK-FILE $$@ GET-FILE "'$@'" PUT-FILE'|lina
 
-zip : $(RELEASECONTENT) ; echo cias-$(VERSION).tar.gz $+ | xargs tar -cvzf
+# Make a source distribution.
+srczip : $(RELEASECONTENT) ; echo ciasdis-dev-$(VERSION).tar.gz $+ | xargs tar -cvzf
+# Make a normal, binary distribution.
+zip : $(BINRELEASE) ; echo ciasdis-$(VERSION).tar.gz $+ | xargs tar -cvzf
 
 testclean: ; rm -f $(TESTTARGETS)
 
@@ -325,7 +357,8 @@ RELEASE: $(RELEASEASSEMBLER) cias ciasdis cidis $(ASSRCCLUDGE) ;\
     echo ciasdis-$(VERSION).tgz $+ | xargs tar cfz
 
 # Preliminary until it is clear whether we want other disassemblers.
-ciasdis : $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
+# Note: this will copy forth.lab to the local directory.
+ciasdis : forth.lab $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
 cias : ciasdis ; ln -f ciasdis cias
 cidis : ciasdis ; ln -f ciasdis cidis
 
