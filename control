@@ -1,2 +1,22 @@
-$Id$
-Copyright (2010): Albert van der Horst {by GNU Public License}
+Package: ciasdis
+Version: 1.0.0-1
+Section: devel
+Priority: optional
+Architecture: i386
+Depends: ciforth ( >= 4.0.6-1)
+Suggests: ciforth-doc
+Conflicts:
+Homepage: http://home.hccnet.nl/a.w.m.van.der.horst/ciasdis.html
+Replaces:
+Installed-Size:
+Maintainer: Albert van der Horst <albert@spenarnc.xs4all.nl>
+Description: A reverse engineering assembler/disassembler
+  ciasdis is an assembler-disassembler combination that allows to
+  reassemble to a byte-for-byte same binary. This is useful for modifying
+  programs where the source was lost, analysing viruses, etc. and
+  general curiosity. Knowledge about a binary can be build up
+  automatically, using scripts, or interactively and can be stored for
+  continued use in .cul files.
+  .
+  The assembler chapter of the ciforth documentation is all but
+  mandatory. For cross assembling, use the source package.
