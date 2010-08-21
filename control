@@ -1,9 +1,8 @@
 Package: ciasdis
-Version: 1.0.0-1
+Version: 1.0
 Section: devel
 Priority: optional
-Architecture: i386
-Depends: ciforth ( >= 4.0.6-1)
+Architecture: all
 Suggests: ciforth-doc
 Conflicts:
 Homepage: http://home.hccnet.nl/a.w.m.van.der.horst/ciasdis.html
