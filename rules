@@ -16,7 +16,7 @@
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
-
+PACKAGE=ciasdis_$(VERSION)_all
 # This has to be exported to make some magic below work.
 export DH_OPTIONS
 
@@ -24,47 +24,46 @@ build: build-stamp
 build-stamp:
 
 	# Add here commands to compile the package.
-	$(MAKE) -f Makefile debian
-	cp control debian/control   # Satisfy dh_test
-	dh_testdir
+	$(MAKE) -f Makefile install INSTALLDIR=$(PACKAGE)
+	#dh_testdir
 
 	touch build-stamp
 
 clean:
-	dh_testdir
-	dh_testroot
+	#dh_testdir
+	#dh_testroot
 	rm -f build-stamp
 
 	# Add here commands to clean up after the build process.
 	#$(MAKE) -f Makefile clean
 	#$(MAKE) distclean
 
-	dh_clean
+	#dh_clean
 
 install: DH_OPTIONS=
 install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
+	#dh_testdir
+	#dh_testroot
+	#dh_clean -k
+	#dh_installdirs
 
-	# Add here commands to install the package into debian/tmp.
-	$(MAKE) -f Makefile INSTALLDIR=`pwd`/debian/tmp/usr install
+	# Add here commands to install the package into soem subdir.
+	$(MAKE) -f Makefile install INSTALLDIR=ciasdis_$(VERSION)_all
 
-	dh_install
+	#dh_install
 
 # This single target is used to build all the packages, all at once, or
 # one at a time. So keep in mind: any options passed to commands here will
 # affect _all_ packages. Anything you want to only affect one package
 # should be put in another target, such as the install target.
 binary-common:
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs
-	dh_installdocs
-	dh_installexamples
-	dh_installmenu
-#       dh_installdebconf
+	#dh_testdir
+	#dh_testroot
+	#dh_installchangelogs
+	#dh_installdocs
+	#dh_installexamples
+	#dh_installmenu
+#       #dh_installdebconf
 #       dh_installlogrotate
 #       dh_installemacsen
 #       dh_installcatalogs
@@ -77,18 +76,18 @@ binary-common:
 #       dh_installwm
 #       dh_installudev
 #       dh_undocumented
-	dh_strip
-	dh_link
-	dh_compress
-	dh_fixperms
+	#dh_strip
+	#dh_link
+	#dh_compress
+	#dh_fixperms
 #       dh_perl
 #       dh_python
 #       dh_makeshlibs
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
+	#dh_installdeb
+	#dh_shlibdeps
+	#dh_gencontrol
+	#dh_md5sums
+	#dh_builddeb
 
 # Build architecture independant packages using the common target.
 binary-indep: build install
@@ -101,7 +100,7 @@ binary-indep: build install
 
 # Any other binary targets build just one binary package at a time.
 binary-386: build install
-	dpkg-deb --build debian
+	dpkg-deb --build $(PACKAGE)
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary-common binary install

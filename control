@@ -10,12 +10,14 @@ Replaces:
 Installed-Size:
 Maintainer: Albert van der Horst <albert@spenarnc.xs4all.nl>
 Description: A reverse engineering assembler/disassembler
-  ciasdis is an assembler-disassembler combination that allows to
-  reassemble to a byte-for-byte same binary. This is useful for modifying
-  programs where the source was lost, analysing viruses, etc. and
-  general curiosity. Knowledge about a binary can be build up
-  automatically, using scripts, or interactively and can be stored for
-  continued use in .cul files.
-  .
-  The assembler chapter of the ciforth documentation is all but
-  mandatory. For cross assembling, use the source package.
+ The package ciasdis contains an assembler-disassembler
+ combination that allows to reassemble to a byte-for-byte
+ same binary. This is useful for modifying programs where
+ the source was lost, analysing viruses, etc. and general
+ curiosity. Knowledge about a binary can be build up
+ automatically, using scripts, or interactively and can be
+ stored for continued use in .cul files.
+ .
+ The assembler chapter of the ciforth documentation is all but
+ mandatory. For cross assembling to other targets, such as
+ DEC Alpha or M6809, use the source package.
