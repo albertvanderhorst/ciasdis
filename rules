@@ -1,11 +1,20 @@
 #!/usr/bin/make -f
-# Sample debian/rules that uses debhelper.
-# This file is public domain software, originally written by Joey Hess.
+# $Id$
+# Copyright(2000): Albert van der Horst, HCC FIG Holland by GNU Public License
+#
+# This is the debian/rules , in behalf of debhelper, for ciasdis
+#  a reverse engineering ("computer intelligence") assembler/disassembler.
+# Most specific targets are handled by including the regular Makefile.
+# It is based on a public domain example, written by Joey Hess.
+# ciasdis as a source package targets all architectures where there is
+#  a opcode database present: 8080 8086 i386 Pentium-I 6809 Dec-Alpha
+# ciasdis as a binary package targets the architecture the package is
+# build for. An i386 package will handle
 #
 # This version is for a multibinary package. It also allows you to build any
 # of the binary packages independantly, via binary-<package> targets.
 
-# Uncomment this to turn on verbose mode. 
+# Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
 # This has to be exported to make some magic below work.
@@ -13,10 +22,11 @@ export DH_OPTIONS
 
 build: build-stamp
 build-stamp:
-	dh_testdir
 
 	# Add here commands to compile the package.
-	#$(MAKE)
+	$(MAKE) -f Makefile debian
+	cp control debian/control   # Satisfy dh_test
+	dh_testdir
 
 	touch build-stamp
 
@@ -26,7 +36,7 @@ clean:
 	rm -f build-stamp
 
 	# Add here commands to clean up after the build process.
-	#$(MAKE) clean
+	#$(MAKE) -f Makefile clean
 	#$(MAKE) distclean
 
 	dh_clean
@@ -39,7 +49,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/tmp.
-	#$(MAKE) prefix=`pwd`/debian/tmp/usr install
+	$(MAKE) -f Makefile INSTALLDIR=`pwd`/debian/tmp/usr install
 
 	dh_install
 
@@ -54,26 +64,26 @@ binary-common:
 	dh_installdocs
 	dh_installexamples
 	dh_installmenu
-#	dh_installdebconf
-#	dh_installlogrotate
-#	dh_installemacsen
-#	dh_installcatalogs
-#	dh_installpam
-#	dh_installmime
-#	dh_installinit
-#	dh_installman
-#	dh_installcron
-#	dh_installinfo
-#	dh_installwm
-#	dh_installudev
-#	dh_undocumented
+#       dh_installdebconf
+#       dh_installlogrotate
+#       dh_installemacsen
+#       dh_installcatalogs
+#       dh_installpam
+#       dh_installmime
+#       dh_installinit
+#       dh_installman
+#       dh_installcron
+#       dh_installinfo
+#       dh_installwm
+#       dh_installudev
+#       dh_undocumented
 	dh_strip
 	dh_link
 	dh_compress
 	dh_fixperms
-#	dh_perl
-#	dh_python
-#	dh_makeshlibs
+#       dh_perl
+#       dh_python
+#       dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
@@ -83,15 +93,15 @@ binary-common:
 # Build architecture independant packages using the common target.
 binary-indep: build install
 # (Uncomment this next line if you have such packages.)
-#	 $(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+#        $(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
 
 # Build architecture dependant packages using the common target.
-binary-arch: build install
-	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
+#binary-arch: build install
+#        $(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
 
 # Any other binary targets build just one binary package at a time.
-binary-%: build install
-	make -f debian/rules binary-common DH_OPTIONS=-p$*
+binary-386: build install
+	dpkg-deb --build debian
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary-common binary install
