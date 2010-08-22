@@ -28,7 +28,10 @@ INSTALLDIR=/
 INSTALLED_LAB=$(INSTALLDIR)/usr/lib/ciasdis.lab
 INSTALLED_BIN=$(INSTALLDIR)/usr/bin/ciasdis
 
-
+MISC_DOC= \
+RCS_changelog \
+README.assembler.txt \
+# That's all folks!
 
 ASTARGETS= cias cidis ciasdis test.bin test2.bin test2.asm
 
@@ -172,27 +175,27 @@ DEBIANFILES=control
 	co -r$(RCSVERSION) $<
 
 # Install a configured binary.
-# Burn in the address where the library resides.
-# Now we have to do change of prompt again.
-install_bin: ciasdis
+# Burn in the address where the library resides in a special copy.
+install_bin: ciasdis_tbi
 	mkdir -p $(INSTALLDIR)/usr/bin
-	echo '"/usr/lib/ciasdis.lab" BLOCK-FILE $$!' \
-	 CHANGE-PROMPT '"'$(INSTALLED_BIN)'"' SAVE-SYSTEM BYE |\
-	ciasdis
+	cp $< $(INSTALLED_BIN)
 
-install:  default control ciasdis.1 cul.5 install_bin
-	mkdir -p $(INSTALLDIR)/DEBIAN
-	cp -f control $(INSTALLDIR)/DEBIAN
+install:  default $(MISC_DOC) ciasdis.1 cul.5 install_bin
 	mkdir -p $(INSTALLDIR)/usr/lib
 	cp ciasdis.lab  $(INSTALLED_LAB)
+	mkdir -p $(INSTALLDIR)/DEBIAN
+	cp -f control $(INSTALLDIR)/DEBIAN
 	mkdir -p $(INSTALLDIR)/usr/share/man/man1
 	mkdir -p $(INSTALLDIR)/usr/share/man/man5
 	cp -f ciasdis.1 $(INSTALLDIR)/usr/share/man/man1
 	cp -f cul.5 $(INSTALLDIR)/usr/share/man/man5
+	mkdir -p $(INSTALLDIR)/usr/share/doc/ciasdis
+	cp -f $(MISC_DOC) $(INSTALLDIR)/usr/share/doc/ciasdis
 	find $(INSTALLDIR) -type d | xargs chmod 755
 	find $(INSTALLDIR) -type f | xargs chmod 644
 	chmod 755 $(INSTALLDIR)/usr/bin/ciasdis
-	gzip -9 -r $(INSTALLDIR)/usr/share/man
+	gzip -9 -r $(INSTALLDIR)/usr/share
+	cp -f copyright $(INSTALLDIR)/usr/share/doc/ciasdis
 
 # If tests fails, test targets must be inspected.
 .PRECIOUS: rf751.asm lina405.asm test.bin
@@ -210,14 +213,16 @@ clean: testclean asclean install_clean; rcsclean
 install_clean:
 	rm -r $(INSTALLDIR)
 
-#Install it. To be run as root
-debian: ciasdis ciasdis.1 cul.5
-	./ciasdis -i $(INSTALLDIR)/usr/bin/ciasdis  $(INSTALLDIR)/usr/lib/ciasdis.lab
-	cp cias.1 $(INSTALLDIR)/usr/share/man/man1
-	cp cul.5 $(INSTALLDIR)/usr/share/man/man5
+# Get the library file to be used, trim it.
+ciasdis.lab :
+	echo 'BLOCK-FILE $$@ GET-FILE TYPE' |\
+	lina | sed -e '/ciforth examples \**)/,$$d' >$@
+	echo '( *************** ciforth examples etc. trimmed ************* )'>>$@
 
-# Get the library file that is used while compiling.
-ciasdis.lab : ; echo 'BLOCK-FILE $$@ GET-FILE "'$@'" PUT-FILE'|lina
+# Get the binary to be used, burn in the correct library.
+ciasdis_tbi : $(ASSRC) asi386.frt asipentium.frt
+	sed -e /BLOCK-FILE/s?forth.lab?/usr/lib/ciasdis.lab? ciasdis.frt >$@.frt
+	lina -c $@.frt
 
 # Make a source distribution.
 srczip : $(RELEASECONTENT) ; echo ciasdis-dev-$(VERSION).tar.gz $+ | xargs tar -cvzf
@@ -375,8 +380,8 @@ RELEASE: $(RELEASEASSEMBLER) cias ciasdis cidis $(ASSRCCLUDGE) ;\
     echo ciasdis-$(VERSION).tgz $+ | xargs tar cfz
 
 # Preliminary until it is clear whether we want other disassemblers.
-# Note: this will copy forth.lab to the local directory.
-ciasdis : forth.lab $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
+# Note: this will use a copy of forth.lab to the local directory as ciasdis.lab
+ciasdis : ciasdis.lab $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
 cias : ciasdis ; ln -f ciasdis cias
 cidis : ciasdis ; ln -f ciasdis cidis
 
