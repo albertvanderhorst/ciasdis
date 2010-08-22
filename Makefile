@@ -25,8 +25,9 @@
 # The following directory are supposedly in line with the
 # Debian FHS directory philosophy.
 INSTALLDIR=/
-INSTALLDIR_MAN=/usr/share/man
-INSTALLDIR_info=/usr/share/info
+INSTALLED_LAB=$(INSTALLDIR)/usr/lib/ciasdis.lab
+INSTALLED_BIN=$(INSTALLDIR)/usr/bin/ciasdis
+
 
 
 ASTARGETS= cias cidis ciasdis test.bin test2.bin test2.asm
@@ -170,12 +171,20 @@ DEBIANFILES=control
 %:RCS/%,v
 	co -r$(RCSVERSION) $<
 
-install:  default control ciasdis.1 cul.5
+# Install a configured binary.
+# Burn in the address where the library resides.
+# Now we have to do change of prompt again.
+install_bin: ciasdis
+	mkdir -p $(INSTALLDIR)/usr/bin
+	echo '"/usr/lib/ciasdis.lab" BLOCK-FILE $$!' \
+	 CHANGE-PROMPT '"'$(INSTALLED_BIN)'"' SAVE-SYSTEM BYE |\
+	ciasdis
+
+install:  default control ciasdis.1 cul.5 install_bin
 	mkdir -p $(INSTALLDIR)/DEBIAN
 	cp -f control $(INSTALLDIR)/DEBIAN
-	mkdir -p $(INSTALLDIR)/usr/bin
 	mkdir -p $(INSTALLDIR)/usr/lib
-	./ciasdis -i $(INSTALLDIR)/usr/bin/ciasdis  $(INSTALLDIR)/usr/lib/ciasdis.lab
+	cp ciasdis.lab  $(INSTALLED_LAB)
 	mkdir -p $(INSTALLDIR)/usr/share/man/man1
 	mkdir -p $(INSTALLDIR)/usr/share/man/man5
 	cp -f ciasdis.1 $(INSTALLDIR)/usr/share/man/man1
@@ -196,7 +205,10 @@ ci86.$(s).bin :
 # Some of these targets make no sense and will fail
 all: regressiontest
 
-clean: testclean asclean ; rcsclean
+clean: testclean asclean install_clean; rcsclean
+
+install_clean:
+	rm -r $(INSTALLDIR)
 
 #Install it. To be run as root
 debian: ciasdis ciasdis.1 cul.5
