@@ -116,7 +116,7 @@ REQUIRE DUMP
 \ In that case suppress the splat screen.
 \ Note that ``QUIT'' is the command interpreter.
 : INTERACTIVE    'OK DUP >DFA @ SWAP >PHA = IF 0 LIST CHANGE-PROMPT OK THEN
-        ASSEMBLER   0 ORG   QUIT ;
+	ASSEMBLER   0 ORG   QUIT ;
 
 \ Print usage, then go bye with EXITCODE.
 : USAGE
@@ -147,15 +147,14 @@ REQUIRE DUMP
 \ Fetch the library file from the current directory.
 \ We can't assume lina has been installed so forth.lab is supplied with
 \ the ciasdis program.
-\ "forth.lab" BLOCK-FILE $!
-"ciasdis.lab" BLOCK-FILE $!
+"forth.lab" BLOCK-FILE $!
 
 \ Make a cold start silent.
 'TASK >DFA @   '.SIGNON >DFA !
 
 \ The name determines what to do.
 : MAIN   RESTORE-ALL DEFAULT-SECTION HANDLE-ARG CHANGE-PROMPT
-        DUP 0 = IF DROP INTERACTIVE
+	DUP 0 = IF DROP INTERACTIVE
    ELSE DUP 1 = IF DROP cias
    ELSE DUP 2 = IF DROP cidis
    THEN THEN THEN DROP ;
