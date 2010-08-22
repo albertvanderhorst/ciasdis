@@ -35,7 +35,8 @@ clean:
 	rm -f build-stamp
 
 	# Add here commands to clean up after the build process.
-	#$(MAKE) -f Makefile clean
+	$(MAKE) -f Makefile clean
+	rm -r $(PACKAGE)
 	#$(MAKE) distclean
 
 	#dh_clean
