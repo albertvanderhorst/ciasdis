@@ -174,6 +174,9 @@ DEBIANFILES=control
 %:RCS/%,v
 	co -r$(RCSVERSION) $<
 
+# Default target for convenience
+default : ciasdis ciasdis.lab
+
 # Install a configured binary.
 # Burn in the address where the library resides in a special copy.
 install_bin: ciasdis_tbi
@@ -201,17 +204,16 @@ install:  default $(MISC_DOC) ciasdis.1 cul.5 install_bin
 .PRECIOUS: rf751.asm lina405.asm test.bin
 
 .PHONY: RELEASE default all clean releaseproof zip regressiontest debian
-# Default target for convenience
-default : ciasdis ciasdis.lab
-ci86.$(s).bin :
 
 # Some of these targets make no sense and will fail
 all: regressiontest
 
-clean: testclean asclean install_clean; rcsclean
+clean: testclean asclean install_clean
+	rcsclean
+	rm ciasdis.lab
 
+# How to get rid of the Debian test directory
 install_clean:
-	rm -r $(INSTALLDIR)
 
 # Get the library file to be used, trim it.
 ciasdis.lab :
@@ -381,7 +383,7 @@ RELEASE: $(RELEASEASSEMBLER) cias ciasdis cidis $(ASSRCCLUDGE) ;\
 
 # Preliminary until it is clear whether we want other disassemblers.
 # Note: this will use a copy of forth.lab to the local directory as ciasdis.lab
-ciasdis : ciasdis.lab $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
+ciasdis : $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
 cias : ciasdis ; ln -f ciasdis cias
 cidis : ciasdis ; ln -f ciasdis cidis
 
