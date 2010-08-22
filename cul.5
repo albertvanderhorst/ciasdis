@@ -32,11 +32,22 @@ but this can be overruled by the \fB#\fR prefix for decimal.
 .br
 A character is denoted by a \fB&\fR prefix.
 .br
-A label must be previously defined by an \fBEQU\fR,
+A label stands for a numeric constant.
+It may be used before it is defined,
+but ultimately it must be given a value.
+This is done explicitly by an \fBEQU\fR,
 \fBLABELED\fR or \fBLABEL\fR statement.
+It is done implicitly by appending a semicolon \fN:\fR to it and placing it
+somewhere in an assembly.
+The value will be the current target address for the
+current \fBsection\fR.
+Labels may be multiply defined and as long as the value is
+the same, this is not an error.
+Explicit labels of a \fi.cul.\fR file will show up as implicit labels in
+a disassembly.
 .br
 Hexadecimal numbers can start in a letter,
-and labels can be fully numeric,
+and labels can have fully numeric names,
 but both practices are discouraged.
 .br
 A flag contains either all 0's or all 1' in number base 2.
@@ -83,7 +94,7 @@ Equality of strings is established by \fB$=\fR working on two strings
 (4 atoms) and yielding a flag.
 .br
 A range consist of two atoms, representing addressing in the
-host space,
+target space,
 i.e. such as seen during execution.
 Ranges are exclusive, but they are always expanded to contain
 at least one byte.
@@ -93,13 +104,30 @@ A name cannot contains spaces.
 The word \fBsection\fR is used in the sense traditional for
 assembly programming: a range of memory that is addressed in a
 contiguous way.
+In \ficiasdis\fR a section has a name that is used to make it
+current,
+an address (offset) in the input file,
+a target start address such as valid during execution and a length.
+Each section also has a \ficode pointer\fR that indicates the place
+in target space where we are currently assembling or dissassembling,
+mostly the instruction pointer.
+As a section is copied into memory during analysis,
+it also has a host address,
+which is relevant to e.g. \ficrawlers\fR.
+This memory area is refered to as a \ficode buffer\fR
+but it may contain anything.
+
 Normally the data of a section is specified
 in the binary file that is being analysed.
 If so, it must occupy a contiguous range there too,
 starting at the \fBfile-offset\fR in the file.
 Sections may overlap, in particular if ranges of memory are
 moved around.
-In those cases more than one memory address is
+Sections may be generated,
+for instance if the disk file is compressed or encrypted.
+
+In those cases more than one section and more than one target
+memory address is
 associated with the same data, at different times during execution.
 A part of a section that is contiguous and of the same type
 (e.g. all code, or all string) is called \fBrange\fR.
@@ -110,6 +138,13 @@ Keywords (or words in Forth parlance) apply to one or more
 preceeding expressions.
 They may also scan ahead,
 mostly for a name that is hence-to-forth known, e.g. as a label.
+
+This is a list of the most important keywords.
+.TP
+\fBSECTION\fR \fI<name>\fR
+.br
+Generate a section called name, amd make it current.
+Subsequent use of \fI<name>\fR makes this section current.
 .TP
 \fBFETCH\fR \fI<name>\fR
 .br
