@@ -54,7 +54,7 @@ cias.frt \
 cidis.frt \
 # That's all folks!
 
-TESTTARGETS= \
+TESTSETS= \
 testset386   \
 testset386a  \
 testset6809  \
@@ -105,7 +105,7 @@ qr8080.ps       \
 # That's all folks!
 
 # Test files for assemblers.
-TESTAS= \
+TESTSET= \
 testset8080     \
 testset8086     \
 testset386      \
@@ -114,6 +114,17 @@ testsetpentium  \
 testset6809     \
 testsetalpha    \
 asm386endtest   \
+# That's all folks!
+
+# More test files for assemblers.
+TESTAS= \
+testas386       \
+testas386a      \
+testas6809      \
+testas80        \
+testas86        \
+testasalpha     \
+testaspentium   \
 # That's all folks!
 
 # Test files for reverse engineering and two pass.
@@ -210,7 +221,7 @@ all: regressiontest
 
 clean: testclean asclean install_clean
 	rcsclean
-	rm ciasdis.lab
+	rm -f ciasdis.lab
 
 # How to get rid of the Debian test directory
 install_clean:
@@ -231,7 +242,7 @@ srczip : $(RELEASECONTENT) ; echo ciasdis-dev-$(VERSION).tar.gz $+ | xargs tar -
 # Make a normal, binary distribution.
 zip : $(BINRELEASE) ; echo ciasdis-$(VERSION).tar.gz $+ | xargs tar -cvzf
 
-testclean: ; rm -f $(TESTTARGETS)
+testclean: ; rm -f $(TESTTARGETS) $(TESTSETS)  $(TESTAS)
 
 asclean: ; rm -f $(ASTARGETS)
 
@@ -275,6 +286,7 @@ ci86.lina.s :
 # A previous diff file is in RCS
 
 testasalpha: asgen.frt asalpha.frt testsetalpha ; \
+	rm -f $@.diff ;\
 	echo INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testsetalpha |\
 	lina -e |\
 	sed '1,/TEST STARTS HERE/d' |\
@@ -283,6 +295,7 @@ testasalpha: asgen.frt asalpha.frt testsetalpha ; \
 	rcsdiff -bBw -r$(RCSVERSION) $@.diff
 
 testas6809: asgen.frt as6809.frt testset6809 ; \
+	rm -f $@.diff ;\
 	echo INCLUDE asgen.frt INCLUDE as6809.frt INCLUDE testset6809 |\
 	lina -e |\
 	sed '1,/TEST STARTS HERE/d' |\
@@ -291,6 +304,7 @@ testas6809: asgen.frt as6809.frt testset6809 ; \
 	rcsdiff -bBw -r$(RCSVERSION) $@.diff
 
 testas80: asgen.frt as80.frt testset8080 ; \
+	rm -f $@.diff ;\
     echo INCLUDE asgen.frt INCLUDE as80.frt INCLUDE testset8080 |\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
@@ -299,6 +313,7 @@ testas80: asgen.frt as80.frt testset8080 ; \
     rcsdiff -bBw $@.diff
 
 testas86: asgen.frt asi86.frt testset8086 ; \
+    rm -f $@.diff ;\
     echo INCLUDE asgen.frt INCLUDE asi86.frt INCLUDE testset8086 |\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
@@ -307,6 +322,7 @@ testas86: asgen.frt asi86.frt testset8086 ; \
     rcsdiff -bBw $@.diff
 
 testas386: asgen.frt asi386.frt testset386 ; \
+    rm -f $@.diff ;\
     echo INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386 |\
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
@@ -317,6 +333,7 @@ testas386: asgen.frt asi386.frt testset386 ; \
 # This is limited to pentium instructions common to all pemtiums,
 # excluded those tested by testas386
 testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
+    rm -f $@.diff ;\
     echo INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE asipentium.frt INCLUDE testsetpentium | \
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
@@ -326,6 +343,7 @@ testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
 
 # Special test to exercise otherwise hidden instructions.
 testas386a: asgen.frt asi386.frt testset386a ; \
+    rm -f $@.diff ;\
     echo INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386a | \
     lina -e|\
     sed '1,/TEST STARTS HERE/d' |\
@@ -402,6 +420,7 @@ test.bin : ciasdis cidis cias test.asm test.cul
 	rcsdiff -b -B -r$(RCSVERSION) test2.asm
 
 lina405.asm : ciasdis lina405 lina405equ.cul lina405.cul
+	co lina405
 	chmod +w lina405
 	ciasdis -d lina405 lina405.cul >$@
 	ciasdis -a $@ lina405
