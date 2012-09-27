@@ -62,6 +62,9 @@ testset8080  \
 testset8086  \
 testsetalpha   \
 testsetpentium \
+#asm386endtest   ---- WHAT? ---
+# That's all folks!
+# Test files for assemblers.
 # That's all folks!
 
 # Plug ins for stand alone assembler
@@ -104,17 +107,6 @@ qr8086.ps       \
 qr8080.ps       \
 # That's all folks!
 
-# Test files for assemblers.
-TESTSET= \
-testset8080     \
-testset8086     \
-testset386      \
-testset386a     \
-testsetpentium  \
-testset6809     \
-testsetalpha    \
-asm386endtest   \
-# That's all folks!
 
 # More test files for assemblers.
 TESTAS= \
@@ -214,7 +206,7 @@ install:  default $(MISC_DOC) ciasdis.1 cul.5 install_bin
 # If tests fails, test targets must be inspected.
 .PRECIOUS: rf751.asm lina405.asm test.bin
 
-.PHONY: RELEASE default all clean releaseproof zip regressiontest debian
+.PHONY: RELEASE default all clean releaseproof zip regressiontest testexamples debian
 
 # Some of these targets make no sense and will fail
 all: regressiontest
@@ -222,6 +214,7 @@ all: regressiontest
 clean: testclean asclean install_clean
 	rcsclean
 	rm -f ciasdis.lab
+	rm *.bin
 
 # How to get rid of the Debian test directory
 install_clean:
@@ -372,7 +365,8 @@ test386: asgen.frt asi386.frt ; \
 test386.diff: test386 ; \
     cat testset386 >tempie;\
     diff -w $+ tempie >$@ ;\
-    rcsdiff -bBw -r$(RCSVERSION) $@
+    rcsdiff -bBw -r$(RCSVERSION) $@;\
+    rm tempie
 
 testinstructionsets : test386.diff
 
@@ -444,7 +438,7 @@ rf751.asm : ciasdis rf751 rf751equ.cul rf751.cul
 
 cidis386.zip : $(ASSRC) asi386.frt asipentium.frt ;  zip $@ $+
 
-testciasdis : test.bin lina405.asm rf751.asm
+testexamples : test.bin lina405.asm rf751.asm
 
 # -----------------
-regressiontest : testasses testciasdis testinstructionsets
+regressiontest : testasses testexamples testinstructionsets
