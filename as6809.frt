@@ -132,7 +132,7 @@ ASSEMBLER DEFINITIONS  HEX
 \ For DEA and MASK print name if mask applicable.
 : PRINT-STACK 80 AND IF %ID. _ THEN DROP ;
 \ For DEA and MASK leave next DEA and MASK.
-: NEXT-STACK 7F AND 1 LSHIFT SWAP >NEXT% SWAP ;
+: NEXT-STACK 7F AND 1 LSHIFT SWAP >LFA @ SWAP ;
 \ Disassembler byte denoting stack at ``AS-POINTER'' for DEA of 'STACK, .
 : DIS-STACK   DROP 'PC&   AS-POINTER @ C@   1 AS-POINTER +!
    ." (& " BEGIN 2DUP PRINT-STACK NEXT-STACK DUP 0= UNTIL ." )S, "
