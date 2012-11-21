@@ -414,7 +414,6 @@ test.bin : ciasdis cidis cias test.asm test.cul
 	rcsdiff -b -B -r$(RCSVERSION) test2.asm
 
 lina405.asm : ciasdis lina405 lina405equ.cul lina405.cul
-	co lina405
 	chmod +w lina405
 	ciasdis -d lina405 lina405.cul >$@
 	ciasdis -a $@ lina405
