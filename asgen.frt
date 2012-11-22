@@ -171,17 +171,9 @@ VOCABULARY ASSEMBLER IMMEDIATE   ASSEMBLER DEFINITIONS HEX
 : %>BODY   >BODY ; ( From DEA to the DATA field of a created word )
 : %BODY>   BODY> ; ( Reverse of above)
 : %>DOES >DFA @ ; ( From DEA to the DOES> pointer for a ``DOES>'' word )
-( Leave for DEA : it IS to be ignored in disassemblies. This is used    )
-( for supressing the bare bones of the sib mechanism in i586.           )
+( Leave for DEA : it IS to be used but not printed in disassemblies.    )
+( This supresses the bare bones of the sib mechanism in i586.           )
 : IGNORE? >NFA @ CELL+ C@ &~ = ;
-
-: (>NEXT%) >LFA @ ; ( Given a DEA, return the next DEA. )
-( For a DEA as returned from (>NEXT%} : it IS the end, not a real dea.  )
-: VOCEND? >LFA @ 0= ;
-( As (>NEXT%} but skip holes, i.e. words with names starting in ``-''   )
-: >NEXT% BEGIN  (>NEXT%) DUP >NFA @ CELL+ C@ &- - UNTIL ;
-( Leave the first DEA of the assembler vocabulary.                      )
-: STARTVOC ['] ASSEMBLER >WID >LFA @ ;
 
 ( Build: allocate place to remember a DOES> address of a `CREATE'd word )
 ( Leave that ADDRESS  to be filled in by ``REMEMBER''                   )
@@ -194,11 +186,6 @@ VOCABULARY ASSEMBLER IMMEDIATE   ASSEMBLER DEFINITIONS HEX
 
 ( Also needed : ?ERROR                                                  )
 (   `` : ?ERROR DROP DROP ; '' defeats all checks.                      )
-
-( Behaves as ``CREATE'' except, if the word to be created has name "--" )
-( it is ignored, by making the header unfindable. Not strictly needed.  )
-: CREATE--   (WORD) 2DUP POSTFIX CREATE
-    2 = SWAP "--" CORA 0= AND IF LATEST HIDDEN THEN ;
 
 ( ------------- UTILITIES, SYSTEM INDEPENDANT ------------------------- )
 ( Note that the assembler works with multi-character l.s. byte first    )
@@ -332,7 +319,7 @@ VARIABLE LATEST-INSTRUCTION
 ( Define an pifu by BA BY BI and the PAYLOAD opcode/fixup bits/xt       )
 ( Four more fields CNT^ DIS^ TRY^ DSP^ are typically filled in          )
 ( immediately.                                                          )
-( These are never to change after creation!                             )
+\ Ony DSP^ (display) is ever to change after creation!
 ( Work on TALLY-BI etc.
 (        Effects  for posits fixups and commaers.                    )
 (                      |||    |||       |||                          )
@@ -342,11 +329,21 @@ VARIABLE LATEST-INSTRUCTION
 ( M: BA    @  M; ,      OR!U   OR!U      OR!U                           )
 ( Indented fields are aliases. `^' indicate a pointer                   )
 
-( Rotate the MASK etc from a fixup-from-reverse into a NEW mask fit )
-( for using from the start of the instruction. We know its length!  )
-: CORRECT-R 0 CELL+ ISL @ - ROTLEFT ;
-_ _ _ _       ( BI BA BY DAT )
+ ( Rotate the MASK etc from a fixup-from-reverse into a NEW mask fit )
+ ( for using from the start of the instruction. We know its length!  )
+ : CORRECT-R 0 CELL+ ISL @ - ROTLEFT ;
+ VARIABLE (pifulist)    \ Start of linked list.
+
+( BI BA BY DAT display disassembler attempted-disassembler )
+ _ _ _ _  'NOOP 'NOOP 'NOOP
 class PIFU
+   M: this  BODY> M;
+   M: ~ID.  BODY> %~ID. M;
+
+   M: try-disassemble  @ EXECUTE M; ( TRY^ ) , ( Attempted disassembly )
+   M: disassemble-this @ EXECUTE M; ( DIS^ ) , ( Disassembly action )
+   M: display @ EXECUTE M;  ( display and advance while disassembling )
+  M: DSP^     M; ,
    M: DAT^     M;
    M: DAT-R   @ CORRECT-R M;  ( data if "from-reverse" )
    M: SHT   @  M;             ( shift count )
@@ -360,17 +357,24 @@ class PIFU
   M: BA    @  M; ,            ( Bad mask)
    M: CNT^     M;
   M: CNT   @  M; 0 , (  `HERE' advances with count, commaer or postit )
-  M: DSP^     M; '%~ID. ,   ( display and advance while disassembling )
   M: PRF      M; 0 ,  ( prefix xt, only for PI ,  0 -> default )
-  M: DIS^     M; 0 ,  ( Disassembly action )
-  M: TRY^     M; 0 ,  ( Attempted disassembly action )
+   M: lastpifu? @ 0= M; ( Current word is the last of the pifu's       )
+  M: >next @ ^PIFU ! M; (pifulist) @ , ( Make next word current pifu )
+  R@ (pifulist) !       ( Link in )
 endclass
 
-( Make POINTER the current ``PIFU'' object.                             )
+0 (pifulist) !   \ Do this *after* a sample PIFU object has been created!
+( Make pifu with BODY the current ``PIFU'' data area object.            )
 : PIFU!   ^PIFU ! ;
-( Have a new pifu and make it current, for filling in fields            )
-: NEW-PIFU   ( BA BY BI PL -- ) BUILD-PIFU PIFU! ;
+: pifustart (pifulist) @ PIFU! ;  ( Make start of pifu's current        )
+
+\ The pifulist is exhausted.
+: pifuend?  ^PIFU @ 0= ;
+
 ( It may be necessary to access the fields from the dea some time:      )
+( Have a new pifu and make it current, for filling in fields            )
+: NEW-PIFU   ( BA BY BI PL DSP DIS TRY -- ) BUILD-PIFU PIFU! ;
+
 ( Make the DEA the current ``PIFU'' object, such that fields can        )
 ( be used.                                                              )
 : PIFU!! %>BODY PIFU! ;
@@ -404,15 +408,15 @@ endclass
 : POSTIT   CHECK26 PIFU!   !POSTIT !TALLY TALLY:,   DAT assemble, ;
 ( A disassembler for the current, postit PIFU. leave IT.                )
 : DIS-PI   AT-REST? IF   BI^ CNT MC@ INVERT   >R AS-POINTER @ CNT MC@ R>
-    AND   DAT = IF   TALLY:, DUP +DISS   DUP LATEST-INSTRUCTION !
+    AND   DAT = IF   TALLY:, this +DISS   this LATEST-INSTRUCTION !
     AS-POINTER @ ISS !   CNT AS-POINTER +! THEN THEN ;
 \ Match the tally to PIFU, a (current) postit. Leave IT.
-: TRY-PI AT-REST? IF TALLY:, DUP +DISS THEN ;
+: TRY-PI AT-REST? IF TALLY:, this +DISS THEN ;
 ( For DEA : it REPRESENTS some kind of opcode.                          )
 IS-A IS-PI   \ Awaiting REMEMBER.
 ( Define an instruction by BA BY BI and the OPCODE plus COUNT           )
-: PI  >R CHECK33 CREATE--  NEW-PIFU R> CNT^ !   'DIS-PI DIS^ !
-    'TRY-PI TRY^ !   DOES> REMEMBER POSTIT ;
+: PI  >R CHECK33 CREATE  '%~ID. 'DIS-PI 'TRY-PI NEW-PIFU R>
+    CNT^ !   DOES> REMEMBER POSTIT ;
 ( 1 .. 4 byte instructions ( BA BY BI OPCODE : - )
 : 1PI   1 PI ;     : 2PI   2 PI ;    : 3PI   3 PI ;    : 4PI   4 PI ;
 
@@ -423,13 +427,13 @@ IS-A IS-PI   \ Awaiting REMEMBER.
 ( Fix up the instruction using a POINTER to a fixup pifu                )
 : FIXUP>   PIFU! DAT ISS @ OR!   TALLY:|   CHECK32 ;
 : DIS-xFI   BI TALLY-BI @ CONTAINED-IN IF   BI INSTRUCTION AND   DAT = IF
-   BA COMPATIBLE? IF   TALLY:| DUP +DISS THEN THEN THEN ;
-\ Match the tally to PIFU, a (current) fixup. Leave IT.
-: TRY-xFI   BI TALLY-BI @ CONTAINED-IN IF TALLY:| DUP +DISS THEN ;
+   BA COMPATIBLE? IF   TALLY:| this +DISS THEN THEN THEN ;
+\ Match the tally to the current fixup.
+: TRY-xFI   BI TALLY-BI @ CONTAINED-IN IF TALLY:| this +DISS THEN ;
 ( Define a fixup by BA BY BI and the FIXUP bits )
 ( Because of the or character of the operations, the bytecount is dummy )
-IS-A IS-xFI   : xFI   CHECK31 CREATE-- NEW-PIFU   'DIS-xFI DIS^ !
-    'TRY-xFI TRY^ !   DOES> REMEMBER FIXUP> ;
+IS-A IS-xFI   : xFI   CHECK31 CREATE '%~ID. 'DIS-xFI 'TRY-xFI NEW-PIFU
+    DOES> REMEMBER FIXUP> ;
 
 ( ------------- PIFU's : DFI DFIs ---------------------------------------)
 ( For a signed DATA item a LENGTH and a BITFIELD. Shift the data item   )
@@ -439,22 +443,20 @@ IS-A IS-xFI   : xFI   CHECK31 CREATE-- NEW-PIFU   'DIS-xFI DIS^ !
 : FIXUP-NUMBER PIFU!   SHT LSHIFT ISS @ OR!   TALLY:| CHECK32 ;
 ( Fix up with SIGNED using a POINTER to a signed data fixup pifu        )
 : FIXUP-SIGNED PIFU!   SHT BI TRIM-SIGNED ISS @ OR!   TALLY:| CHECK32 ;
-( Print a disassembly for the data-fixup DEA that must be current )
+\ Print a disassembly for the current data-fixup
 : .DFI    INSTRUCTION   BI AND   SHT RSHIFT   U. %ID. ;
-( A disassembler for the current, data fixup PIFU. leave IT             )
+\ A disassembler for the current, data fixup pifu.
 : DIS-DFI   BI TALLY-BI @ CONTAINED-IN IF   BA COMPATIBLE? IF
-    TALLY:| DUP +DISS THEN THEN ;
-\ Match the tally to PIFU, a (current) fixup. Leave IT.
-: TRY-DFI   BI TALLY-BI @ CONTAINED-IN IF TALLY:| DUP +DISS THEN ;
+    TALLY:| this +DISS THEN THEN ;
+\ Match the tally to a (current) fixup pifu.
+: TRY-DFI   BI TALLY-BI @ CONTAINED-IN IF TALLY:| this +DISS THEN ;
 ( Define a data fixup by BA BY BI, and LEN the bit position.            )
 ( At assembly time: expect DATA that is shifted before use              )
 ( Because of the or character of the operations, the bytecount is dummy )
-IS-A IS-DFI  : DFI   CHECK31A CREATE-- NEW-PIFU   '.DFI DSP^ !
-   'DIS-DFI DIS^ !   'TRY-DFI TRY^ !
+IS-A IS-DFI  : DFI   CHECK31A CREATE '.DFI 'DIS-DFI 'TRY-DFI NEW-PIFU
     DOES> ( u -- )REMEMBER FIXUP-NUMBER ;
 ( Same, but for signed data, a convenience. Disassembly shows unsigned  )
-IS-A IS-DFIs : DFIs  CHECK31A CREATE-- NEW-PIFU   '.DFI DSP^ !
-    'DIS-DFI DIS^ !   'TRY-DFI TRY^ !
+IS-A IS-DFIs : DFIs  CHECK31A CREATE '.DFI 'DIS-DFI 'TRY-DFI NEW-PIFU
     DOES> ( n -- ) REMEMBER FIXUP-SIGNED ;
 
 ( ------------- PIFU's : FIR DFIR ---------------------------------------)
@@ -471,29 +473,29 @@ IS-A IS-DFIs : DFIs  CHECK31A CREATE-- NEW-PIFU   '.DFI DSP^ !
 ( Fix up the instruction from reverse with DATA. )
 : FIXUP-N-REVERSE   PIFU! SHT LSHIFT REVERSE-BYTES CORRECT-R   ISS @ OR!
     TALLY:|R CHECK32 ;
-( A disassembler for the current, fixup from reverse PIFU. leave IT     )
+( A disassembler for the current, fixup from reverse pifu.              )
 : DIS-FIR   BI-R   TALLY-BI @ CONTAINED-IN IF   BI-R
   INSTRUCTION AND   DAT-R = IF   BA COMPATIBLE? IF TALLY:|R
-  DUP +DISS THEN THEN THEN ;
-\ Match the tally to PIFU, a (current) fixup from reverse. Leave IT.
-: TRY-FIR   BI-R TALLY-BI @ CONTAINED-IN IF   TALLY:|R DUP +DISS THEN ;
+  this +DISS THEN THEN THEN ;
+\ Match the tally to a (current) fixup from reverse pifu.
+: TRY-FIR   BI-R TALLY-BI @ CONTAINED-IN IF   TALLY:|R this +DISS THEN ;
 ( Define a fixup-from-reverse by BA BY BI and the FIXUP bits )
 ( One size fits all, because of the character of the or-operations. )
 ( bi and fixup are specified that last byte is lsb, such as you read it )
-IS-A IS-FIR   : FIR   CHECK31 CREATE--
-   REVERSE-BYTES SWAP REVERSE-BYTES SWAP NEW-PIFU   'DIS-FIR DIS^ !
-   'TRY-FIR TRY^ !   DOES> REMEMBER FIXUP-REVERSE ;
-( Print a disassembly for the current, 'data-fixup from reverse' DEA     )
+IS-A IS-FIR   : FIR   CHECK31 CREATE
+   REVERSE-BYTES SWAP REVERSE-BYTES SWAP '%~ID. 'DIS-FIR 'TRY-FIR NEW-PIFU
+    DOES> REMEMBER FIXUP-REVERSE ;
+( Print a disassembly for the current, 'data-fixup from reverse' pifu )
 : .DFIR   INSTRUCTION   BI-R AND   SHT RSHIFT   REVERSE-BYTES
     CORRECT-R U.   %ID. ;
-( Disassemble the current, data fixup from reverse PIFU. leave IT     )
+\ Disassemble the current, data fixup from reverse pifu.
 : DIS-DFIR   BI-R   TALLY-BI @ CONTAINED-IN IF   BA COMPATIBLE? IF
-    TALLY:|R DUP +DISS THEN THEN ;
+    TALLY:|R this +DISS THEN THEN ;
 ( Define a data fixup-from-reverse by BA BY BI and LEN to shift )
 ( One size fits all, because of the character of the or-operations. )
 ( bi and fixup are specified that last byte is lsb, such as you read it )
-IS-A IS-DFIR   : DFIR   CHECK31 CREATE--   SWAP REVERSE-BYTES SWAP NEW-PIFU
-    '.DFIR DSP^ !   'DIS-DFIR DIS^ !
+IS-A IS-DFIR   : DFIR   CHECK31 CREATE   SWAP REVERSE-BYTES SWAP
+    '.DFIR 'DIS-DFIR 'NOOP NEW-PIFU
     DOES> ( data -- )REMEMBER FIXUP-N-REVERSE ;
 
 ( ------------- PIFU's : COMMAER ----------------------------------------)
@@ -502,30 +504,22 @@ IS-A IS-DFIR   : DFIR   CHECK31 CREATE--   SWAP REVERSE-BYTES SWAP NEW-PIFU
 : TALLY:,,   BY CHECK30 TALLY-BY AND!   BA TALLY-BA OR!U ;
 ( Expand the instruction in accordance with the POINTER to a commaer    )
 : COMMA PIFU!   TALLY:,,   CHECK32   DAT EXECUTE ;
-( Print a standard disassembly for the commaer DEA that must be current )
+( Print a standard disassembly for the commaer pifu that is current )
 : .COMMA-STANDARD   AS-POINTER @ CNT MC@ U.   CNT AS-POINTER +!   %ID. ;
-( Print a signed disassembly for the commaer DEA that must be current )
+( Print a signed disassembly for the commaer pifu that is current )
 : .COMMA-SIGNED   AS-POINTER @ CNT MC@ .   CNT AS-POINTER +!   %ID. ;
-( A disassembler for the current, commaer PIFU. leave IT                )
+\ A disassembler for the current, commaer pifu.
 : DIS-COMMA   BY TALLY-BY @ CONTAINED-IN IF   BA COMPATIBLE? IF
-     TALLY:,, DUP +DISS THEN THEN ;
-\ Match the tally to PIFU, a (current) commaer. Leave IT.
-: TRY-COMMA   BY TALLY-BY @ CONTAINED-IN IF TALLY:,, DUP +DISS THEN ;
+     TALLY:,, this +DISS THEN THEN ;
+\ Match the tally to a (current) commaer pifu.
+: TRY-COMMA   BY TALLY-BY @ CONTAINED-IN IF TALLY:,, this +DISS THEN ;
 ( Build with an display ROUTINE, with the LENGTH to comma, the BA       )
 (  BY information and the XT of a comma-word like `` L, ''               )
-: BUILD-COMMA   0 ( BI) SWAP NEW-PIFU   CNT^ !   DUP 0= IF
-    DROP '.COMMA-STANDARD THEN DSP^ !   'DIS-COMMA DIS^ !
-    'TRY-COMMA TRY^ ! ;
+: BUILD-COMMA   0 ( BI) SWAP '.COMMA-STANDARD 'DIS-COMMA 'TRY-COMMA NEW-PIFU
+    ( LENGTH ) CNT^ !   ( ROUTINE ) DROP ( or: ABORT" A NULL expected ) ;
 ( A disassembly routine gets the ``DEA'' of the commaer on stack.       )
 ( The stack diagram of DOES> is inherited from the XT passed.           )
 IS-A  IS-COMMA   : COMMAER   CREATE BUILD-COMMA  DOES> REMEMBER COMMA ;
-
-( For DEA: leave IT and:"it IS some pifu"                               )
-( This could be replaced by a link field in pifu's to link them together)
-( Dea's have the advantage of access to the name, so we need this to     )
-( allow regular definitions amongst the pifu's                          )
-: IS-PIFU   DUP IS-PI   OVER IS-xFI OR   OVER IS-DFI OR   OVER IS-DFIs OR
-  OVER IS-DFIR OR   OVER IS-FIR OR   OVER IS-COMMA OR ;
 
 ( ------------- ASSEMBLER, SUPER DEFINING WORDS ----------------------)
 
@@ -534,23 +528,29 @@ CREATE PRO-TALLY 3 CELLS ALLOT  ( Prototype for TALLY-BI BY BA )
 : T! PRO-TALLY !+ !+ !+ DROP ;
 ( Get the data from the tally prototype back BA BY BI )
 : T@ PRO-TALLY 3 CELLS +  @- @- @- DROP ;
+( Return "The next word IS not -- "                                           )
+: no--  IN @ >R (WORD) 2 <> SWAP "--" CORA OR DUP IF R> IN !
+    ELSE RDROP THEN ;
+
 ( Add INCREMENT to the OPCODE a NUMBER of times, and generate as much   )
 ( instructions, all with the same BI-BA-BY from ``PRO-TALLY''           )
 ( For each assembler defining word there is a corresponding family word )
 ( Words named "--" are mere placeholders. )
-: 1FAMILY,    0 DO   DUP >R T@ R> 1PI   OVER + LOOP DROP DROP ;
-: 2FAMILY,    0 DO   DUP >R T@ R> 2PI   OVER + LOOP DROP DROP ;
-: 3FAMILY,    0 DO   DUP >R T@ R> 3PI   OVER + LOOP DROP DROP ;
-: 4FAMILY,    0 DO   DUP >R T@ R> 4PI   OVER + LOOP DROP DROP ;
-: xFAMILY|    0 DO   DUP >R T@ R> xFI   OVER + LOOP DROP DROP ;
-: FAMILY|R    0 DO   DUP >R T@ R> FIR   OVER + LOOP DROP DROP ;
-: xFAMILY|F   0 DO   DUP >R T@ R> DFI   OVER + LOOP DROP DROP ;
+: 1FAMILY,    0 DO no-- IF DUP >R T@ R> 1PI THEN   OVER + LOOP 2DROP ;
+: 2FAMILY,    0 DO no-- IF DUP >R T@ R> 2PI THEN   OVER + LOOP 2DROP ;
+: 3FAMILY,    0 DO no-- IF DUP >R T@ R> 3PI THEN   OVER + LOOP 2DROP ;
+: 4FAMILY,    0 DO no-- IF DUP >R T@ R> 4PI THEN   OVER + LOOP 2DROP ;
+: xFAMILY|    0 DO no-- IF DUP >R T@ R> xFI THEN   OVER + LOOP 2DROP ;
+: FAMILY|R    0 DO no-- IF DUP >R T@ R> FIR THEN   OVER + LOOP 2DROP ;
+: xFAMILY|F   0 DO no-- IF DUP >R T@ R> DFI THEN   OVER + LOOP 2DROP ;
 
 ( ################## DISASSEMBLER ################################# )
 
-: .DISS-AUX DISS @+ SWAP DO
-    I @ DUP IS-COMMA OVER IS-DFI OR OVER IS-DFIs OR IF I DISS - . THEN ID.
- 0 CELL+ +LOOP CR ;
+\ Show the disassembled instruction with arbitrary data.
+: .DISS-AUX DISS DO-BAG
+    I @ DUP IS-COMMA OVER IS-DFI OR OVER IS-DFIs OR IF I DISS -
+    ( Whatever) . THEN ID.
+  LOOP-BAG CR ;
 ( DISS-VECTOR can be redefined to generate testsets)
 VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 
@@ -564,19 +564,15 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ( Leave the DEA.                                                        )
 
 ( Generate bookkeeping such as to correspond with `DISS'.               )
-: REBUILD
-    !TALLY
-    DISS? IF
-        DISS @+ SWAP !DISS DO  ( Get bounds before clearing)
-            I @ IS-PIFU IF DUP PIFU!!  TRY^ @ EXECUTE THEN DROP
-        0 CELL+ +LOOP
-    THEN
-;
+: REBUILD   !TALLY DISS? IF
+   DISS @+ SWAP !DISS DO  ( Get bounds before clearing)
+      I @ PIFU!!  try-disassemble
+   0 CELL+ +LOOP
+ THEN ;
 
 ( All possibilities with the last item of the disassembly are           )
-( exhausted, so discard it. Replace DEA with the proper DEA to inspect  )
-( from here.                                                            )
-: BACKTRACK  DROP DISS@- >NEXT%   REBUILD ;
+( exhausted, so discard it. Leave current the pifu that was discarded.  )
+: BACKTRACK  DISS@- REBUILD PIFU!! ;
 
 ( If the disassembly contains something: `AT-REST?' means               )
 ( we have gone full cycle rest->postits->fixups->commaers               )
@@ -584,28 +580,26 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 : RESULT? AT-REST? DISS? AND   BAD? 0= AND ;
 
 ( If present, print a result and continue searching for a new last item )
-: .RESULT   RESULT? IF DISS-VECTOR @ EXECUTE   DISS- REBUILD THEN ;
+: .RESULT   RESULT? IF this DISS-VECTOR @ EXECUTE   DISS- REBUILD
+   PIFU!! THEN ;
 
 ( Try to expand the current instruction in `DISS' by looking whether    )
-( DEA fits. Leave the next DEA, or vocend to stop.                                         )
-: SHOW-STEP   IS-PIFU IF DUP PIFU!!   TRY^ @ EXECUTE THEN   .RESULT
-   >NEXT% ( DUP ID. )   BAD? IF BACKTRACK THEN
-   BEGIN DUP VOCEND? DISS? AND WHILE BACKTRACK REPEAT
-;
+( current pifu fits. Leave at the next pifu or nill if exhaused.        )
+: SHOW-STEP   try-disassemble .RESULT   BAD? IF BACKTRACK THEN
+  lastpifu? DISS? AND IF BACKTRACK THEN >next ;
 
 ( Show all the instructions present in the assembler vocabulary )
-: SHOW-ALL   !DISS !TALLY   STARTVOC BEGIN SHOW-STEP   DUP VOCEND? UNTIL
-    DROP ;
+: SHOW-ALL   !DISS !TALLY   pifustart BEGIN SHOW-STEP pifuend? UNTIL ;
 
 ( Show all the opcodes present in the assembler vocabulary )
-: SHOW-OPCODES   !DISS !TALLY   STARTVOC BEGIN   DUP IS-PI IF DUP %ID. THEN
-    >NEXT%   DUP VOCEND? UNTIL DROP ;
+: SHOW-OPCODES   !DISS !TALLY   pifustart BEGIN   this IS-PI IF this %ID. THEN
+    >next   pifuend? UNTIL ;
 
 ( Show at least all instructions valid for the "OPCODE" given. )
 : SHOW:
     !DISS !TALLY   ' ( "OPCODE")
-    DUP BEGIN SHOW-STEP   OVER DISS CELL+ @ <>   OVER VOCEND? OR UNTIL
-    DROP DROP ;
+    DUP PIFU!! BEGIN SHOW-STEP DUP DISS CELL+ @ <>   pifuend? OR UNTIL
+    DROP ;
 
 ( ------------- DISASSEMBLERS ------------------------------------------------)
 
@@ -619,7 +613,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 
 ( Print the disassembly `DISS'                                          )
 ( All commaers must advance `AS-POINTER''                               )
-: .DISS   DISS DO-BAG I @   DUP PIFU!!   DSP^ @ EXECUTE LOOP-BAG ;
+: .DISS   DISS DO-BAG I @   DUP PIFU!!   display LOOP-BAG ;
 
 VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 
@@ -631,13 +625,9 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 ( PIFU on. Build on what is currently left in `TALLY!'                  )
 ( Leave a AS-POINTER pointing after that instruction.                   )
 : ((DISASSEMBLE))
-    SWAP
     DUP AS-POINTER !   >R
     3 SPACES
-    ( startdea -- ) BEGIN
-        IS-PIFU IF DUP PIFU!!  DIS^ @ EXECUTE THEN
-        >NEXT%
-    DUP VOCEND? RESULT? OR UNTIL DROP
+    BEGIN disassemble-this >next pifuend? RESULT? OR UNTIL
     RESULT? IF
       .DISS     \ Advances pointer past commaers
       LATEST-INSTRUCTION @ >PRF @ BA-XT !
@@ -650,20 +640,23 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 ( Dissassemble one instruction from ADDRESS using the whole instruction set )
 ( and starting with a clean slate. )
 ( Leave an ADDRESS pointing after that instruction.                     )
-: (DISASSEMBLE)   !DISS !TALLY STARTVOC ((DISASSEMBLE)) ;
+: (DISASSEMBLE)   !DISS !TALLY pifustart ((DISASSEMBLE)) ;
 
 ( Forced dissassembly of one instruction from `AS-POINTER'. )
 ( Force interpretation as PIFU instruction. )
 ( This is useful for instructions that are known or hidden by an other  )
 ( instruction that is found first.                             )
 : FORCED-DISASSEMBLY
-    !DISS   !TALLY   AS-POINTER @ SWAP ((DISASSEMBLE)) DROP ;
+    !DISS   !TALLY   PIFU!! AS-POINTER @ ((DISASSEMBLE)) DROP ;
 
 ( Dissassemble instructions from address ONE to address TWO. )
 : DISASSEMBLE-RANGE
     SWAP   BEGIN DUP ADORN-ADDRESS    (DISASSEMBLE) 2DUP > 0= UNTIL   2DROP
 ;
 
+\ MOVE TO END!    MOVE TO END!
+\ NOT YET. We need one dummy instruction to end still. _""_
+0 (pifulist) !   \ Do this just before the real PIFU's are created!
 ( Completion based on the current state of the tallies.                 )
 0 0 0 0 0 PI _""_   \ Dummy instruction to replace current state.
 CREATE SOMEMORE
@@ -679,8 +672,8 @@ CREATE SOMEMORE
 ( Show all possible completions of the current partially completed      )
 ( instruction.                                                          )
 : SHOW-COMPLETION   >_""_ !DISS    '_""_ DUP +DISS REBUILD
-    STARTVOC BEGIN OVER DISS CELL+ @ =  OVER VOCEND? 0= AND WHILE
-    SHOW-STEP REPEAT   .S 2DROP .S _""_> .S ;
+    pifustart BEGIN DUP DISS CELL+ @ =  pifuend? 0= AND WHILE
+    SHOW-STEP REPEAT   DROP _""_> ;
 
 ( ********************* DEFINING WORDS FRAMEWORK ********************** )
 ( Close an assembly definition: restore and check.)
@@ -718,5 +711,9 @@ ASSEMBLER
 ( *********************************** NOTES *************************** )
 ( 1. A DEA is an address that allows to get at header data like flags   )
 (     and names. In ciforth an xt will do.                              )
+
+\ NOT YET. We need one dummy instruction to end still. _""_
+\ 0 (pifulist) !   \ Do this just before the real PIFU's are created!
+
 
 PREVIOUS
