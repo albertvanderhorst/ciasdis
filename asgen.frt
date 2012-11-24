@@ -377,15 +377,15 @@ endclass
 
 ( Make the DEA the current ``PIFU'' object, such that fields can        )
 ( be used.                                                              )
-: PIFU!! %>BODY PIFU! ;
+: PIFU'! %>BODY PIFU! ;
 \ From DEA return a field ADDRESS like the above.
-: >DATA PIFU!! DAT^ ;
-: >BI   PIFU!! BI^  ;      \ Not needed
-: >BY   PIFU!! BY^  ;      \ Not needed
-: >BA   PIFU!! BA^  ;      \ Needed in asalpha.frt
-: >CNT  PIFU!! CNT^  ;
-: >DSP  PIFU!! DSP^  ;
-: >PRF  PIFU!! PRF  ;      ( prefix flag, only for PI , 0 -> default  )
+: >DATA PIFU'! DAT^ ;
+: >BI   PIFU'! BI^  ;      \ Not needed
+: >BY   PIFU'! BY^  ;      \ Not needed
+: >BA   PIFU'! BA^  ;      \ Needed in asalpha.frt
+: >CNT  PIFU'! CNT^  ;
+: >DSP  PIFU'! DSP^  ;
+: >PRF  PIFU'! PRF  ;      ( prefix flag, only for PI , 0 -> default  )
 
 ( All pifu words have a defining word, such as PI, a tally word such    )
 ( as TALLY:, , a doer like POSTIT, a builder mostly directly after      )
@@ -564,15 +564,14 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ( Leave the DEA.                                                        )
 
 ( Generate bookkeeping such as to correspond with `DISS'.               )
-: REBUILD   !TALLY DISS? IF
-   DISS @+ SWAP !DISS DO  ( Get bounds before clearing)
-      I @ PIFU!!  try-disassemble
-   0 CELL+ +LOOP
- THEN ;
+: REBUILD   !TALLY
+   DISS @+ SWAP !DISS ?DO  ( Get bounds before clearing)
+      I @ PIFU'!  try-disassemble
+   0 CELL+ +LOOP ;
 
 ( All possibilities with the last item of the disassembly are           )
 ( exhausted, so discard it. Leave current the pifu that was discarded.  )
-: BACKTRACK  DISS@- REBUILD PIFU!! ;
+: BACKTRACK  DISS@- REBUILD PIFU'! ;
 
 ( If the disassembly contains something: `AT-REST?' means               )
 ( we have gone full cycle rest->postits->fixups->commaers               )
@@ -581,7 +580,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 
 ( If present, print a result and continue searching for a new last item )
 : .RESULT   RESULT? IF this DISS-VECTOR @ EXECUTE   DISS- REBUILD
-   PIFU!! THEN ;
+   PIFU'! THEN ;
 
 ( Try to expand the current instruction in `DISS' by looking whether    )
 ( current pifu fits. Leave at the next pifu or nill if exhaused.        )
@@ -598,8 +597,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 ( Show at least all instructions valid for the "OPCODE" given. )
 : SHOW:
     !DISS !TALLY   ' ( "OPCODE")
-    DUP PIFU!! BEGIN SHOW-STEP DUP DISS CELL+ @ <>   pifuend? OR UNTIL
-    DROP ;
+    PIFU'! BEGIN SHOW-STEP DISS? 0= pifuend? OR UNTIL ;
 
 ( ------------- DISASSEMBLERS ------------------------------------------------)
 
@@ -613,7 +611,7 @@ VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
 
 ( Print the disassembly `DISS'                                          )
 ( All commaers must advance `AS-POINTER''                               )
-: .DISS   DISS DO-BAG I @   DUP PIFU!!   display LOOP-BAG ;
+: .DISS   DISS DO-BAG I @   DUP PIFU'!   display LOOP-BAG ;
 
 VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 
@@ -647,7 +645,7 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 ( This is useful for instructions that are known or hidden by an other  )
 ( instruction that is found first.                             )
 : FORCED-DISASSEMBLY
-    !DISS   !TALLY   PIFU!! AS-POINTER @ ((DISASSEMBLE)) DROP ;
+    !DISS   !TALLY   PIFU'! AS-POINTER @ ((DISASSEMBLE)) DROP ;
 
 ( Dissassemble instructions from address ONE to address TWO. )
 : DISASSEMBLE-RANGE
@@ -662,18 +660,18 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 CREATE SOMEMORE
 
 ( Catch current state in `` _""_ ''                                     )
-: >_""_   '_""_ PIFU!!   TALLY-BI @ BI^ !   TALLY-BY @ BY^ !
+: >_""_   '_""_ PIFU'!   TALLY-BI @ BI^ !   TALLY-BY @ BY^ !
     TALLY-BA @ BA^ !   ISL @ CNT^ ! ;
 
 ( Restore current state from `` _""_ ''                                 )
-: _""_>   '_""_ PIFU!!   BI^ @ TALLY-BI !   BY^ @ TALLY-BY !
+: _""_>   '_""_ PIFU'!   BI^ @ TALLY-BI !   BY^ @ TALLY-BY !
      BA^ @ TALLY-BA !   CNT^ @ ISL ! ;
 
 ( Show all possible completions of the current partially completed      )
 ( instruction.                                                          )
-: SHOW-COMPLETION   >_""_ !DISS    '_""_ DUP +DISS REBUILD
-    pifustart BEGIN DUP DISS CELL+ @ =  pifuend? 0= AND WHILE
-    SHOW-STEP REPEAT   DROP _""_> ;
+: SHOW-COMPLETION   >_""_ !DISS    '_""_ +DISS REBUILD
+    pifustart BEGIN DISS? pifuend? 0= AND WHILE
+    SHOW-STEP REPEAT   _""_> ;
 
 ( ********************* DEFINING WORDS FRAMEWORK ********************** )
 ( Close an assembly definition: restore and check.)
