@@ -65,8 +65,10 @@ If \fB<bin-file>\fR is missing,
 the extension \fB.frt\fR removed from   \fI<source-file>\fR ,
 for other extensions
 the output is in \fIa.out\fR .
-
-The interactive mode is started if there is no parameter.
+Having one source file is no restriction.
+By using \fBINCLUDE\fR \fI<source2>\fR another source file
+can be included verbatim.
+Ihe interactive mode is started if there is no parameter.
 
 All \fBASSEMBLER\fR commands can now we tried
 out interactively (see lina(1)).
@@ -135,7 +137,7 @@ The generic system can be fetched from
 \fI http://home.hccnet.nl/a.w.m.van.der.horst/ciforth.html\fR
 .PP
 MS-DOS, "windows" , stand alone and Alpha Linux
-binary versions are available.
+versions are available.
 
 .SH "EXAMPLE"
 A typical consult file to disassemble
@@ -183,7 +185,7 @@ Mistakes in Forth mode can easily crash \ficias/cidis\fR.
 
 \ficias/cidis\fR is case sensitive.
 
-\fBL@\fR is renamed \fBFAR@\fR to prevent a conflict.
+\fBL@\fR (\filina\fR before version 5) is renamed \fBFAR@\fR to prevent a conflict.
 .SH DISCLAIMER
 The name of these programs is
 \fRcomputer_intelligence_assembler_386\fR
