@@ -248,6 +248,7 @@ releaseproof : ; for i in $(RELEASECONTENT); do  rcsdiff -w $$i ; done
 # with the assembler!
 %.ps : asgen.frt %.frt ps.frt ; \
     ( \
+	echo REQUIRE INCLUDE REQUIRE DUMP ;\
 	cat $+ ;\
 	echo 'PRELUDE' ;\
 	echo 'HEX $(MASK) MASK ! $(PREFIX) PREFIX ! DECIMAL ' ;\
@@ -280,8 +281,8 @@ ci86.lina.s :
 
 testasalpha: asgen.frt asalpha.frt testsetalpha ; \
 	rm -f $@.diff ;\
-	echo INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testsetalpha |\
-	lina -e |\
+	echo REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testsetalpha |\
+	lina -a |\
 	sed '1,/TEST STARTS HERE/d' |\
 	sed 's/^[0-9A-F \.,]*://' >$@ ;\
 	diff -w $@ testsetalpha >$@.diff ;\
@@ -289,8 +290,8 @@ testasalpha: asgen.frt asalpha.frt testsetalpha ; \
 
 testas6809: asgen.frt as6809.frt testset6809 ; \
 	rm -f $@.diff ;\
-	echo INCLUDE asgen.frt INCLUDE as6809.frt INCLUDE testset6809 |\
-	lina -e |\
+	echo REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE as6809.frt INCLUDE testset6809 |\
+	lina -a |\
 	sed '1,/TEST STARTS HERE/d' |\
 	sed 's/^[0-9A-F \.,]*://' >$@ ;\
 	diff -w $@ testset6809 >$@.diff ;\
@@ -298,8 +299,8 @@ testas6809: asgen.frt as6809.frt testset6809 ; \
 
 testas80: asgen.frt as80.frt testset8080 ; \
 	rm -f $@.diff ;\
-    echo INCLUDE asgen.frt INCLUDE as80.frt INCLUDE testset8080 |\
-    lina -e|\
+    echo REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE as80.frt INCLUDE testset8080 |\
+    lina -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8080 >$@.diff ;\
@@ -307,8 +308,8 @@ testas80: asgen.frt as80.frt testset8080 ; \
 
 testas86: asgen.frt asi86.frt testset8086 ; \
     rm -f $@.diff ;\
-    echo INCLUDE asgen.frt INCLUDE asi86.frt INCLUDE testset8086 |\
-    lina -e|\
+    echo REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asi86.frt INCLUDE testset8086 |\
+    lina -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8086 >$@.diff ;\
@@ -316,8 +317,8 @@ testas86: asgen.frt asi86.frt testset8086 ; \
 
 testas386: asgen.frt asi386.frt testset386 ; \
     rm -f $@.diff ;\
-    echo INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386 |\
-    lina -e|\
+    echo REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386 |\
+    lina -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset386 >$@.diff ;\
@@ -327,8 +328,8 @@ testas386: asgen.frt asi386.frt testset386 ; \
 # excluded those tested by testas386
 testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
     rm -f $@.diff ;\
-    echo INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE asipentium.frt INCLUDE testsetpentium | \
-    lina -e|\
+    echo REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE asipentium.frt INCLUDE testsetpentium | \
+    lina -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testsetpentium >$@.diff ;\
@@ -337,8 +338,8 @@ testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
 # Special test to exercise otherwise hidden instructions.
 testas386a: asgen.frt asi386.frt testset386a ; \
     rm -f $@.diff ;\
-    echo INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386a | \
-    lina -e|\
+    echo REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386a | \
+    lina -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed '/^OK$$/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
@@ -353,8 +354,8 @@ testallpentium : testas386 testas386a testaspentium
 testasses : testasalpha testas6809 testas80 testas86 testallpentium
 
 test386: asgen.frt asi386.frt ; \
-    echo INCLUDE asgen.frt INCLUDE asi386.frt ASSEMBLER HEX BITS-32   SHOW-ALL|\
-    lina -e|\
+    echo REQUIRE INCLUDE INCLUDE asgen.frt INCLUDE asi386.frt ASSEMBLER HEX BITS-32   SHOW-ALL|\
+    lina -a|\
     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
     sed 's/~SIB|   1C SIB,,/[AX +1* 0]/' |\
@@ -414,7 +415,7 @@ test.bin : ciasdis cidis cias test.asm test.cul
 	rcsdiff -b -B -r$(RCSVERSION) test2.asm
 
 lina405.asm : ciasdis lina405 lina405equ.cul lina405.cul
-	chmod +w lina405
+	chmod +w lina405 $@
 	ciasdis -d lina405 lina405.cul >$@
 	ciasdis -a $@ lina405
 	rcsdiff -r$(RCSVERSION) lina405
@@ -422,12 +423,12 @@ lina405.asm : ciasdis lina405 lina405equ.cul lina405.cul
 
 # Test case, reverse engineer retroforth version 7.5.1.
 rf751.cul : ciasdis rf751 rf751equ.cul rfcrawl.cul elf.cul
-	chmod +w rf751
+	chmod +w rf751 $@
 	echo FETCH rf751 INCLUDE rfcrawl.cul | ciasdis >$@
 	rcsdiff -bBw -r$(RCSVERSION) $@
 
 rf751.asm : ciasdis rf751 rf751equ.cul rf751.cul
-	chmod +w rf751
+	chmod +w rf751 $@
 	ciasdis -d rf751 rf751.cul >$@
 	rcsdiff -bBw -r$(RCSVERSION) $@
 	ciasdis -a $@ rf751
