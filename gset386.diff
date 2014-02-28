@@ -1,23 +1,5 @@
-1,19c1,6
+1c1,6
 < 
-< 
-< SCR # 0 
-< COPYRIGHT (c) 2000-2004 Albert van der Horst, THE NETHERLANDS  
-<                    LICENSE                                     
-< This program is free software; you can redistribute it and/or  
-< modify it under the terms of version 2 of the GNU General      
-< Public License as published by the Free Software Foundation.   
-<                                                                
-< This program is distributed in the hope that it will be useful,
-< but WITHOUT ANY WARRANTY; without even the implied warranty of 
-< MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   
-< GNU General Public License for more details.                   
-<                                                                
-< You should have received a copy of the GNU General Public      
-< License along with this program; if not, write to the          
-<             Free Software Foundation, Inc.,                    
-<    59 Temple Place, Suite 330, Boston, MA 02111, USA.          
-<                                                                
 ---
 > ASSEMBLER
 > : firstset ." First set" ;
@@ -25,9 +7,9 @@
 > HEX
 > 10 AS-HERE 10 MOD - AS-ALLOT ( To get a nice DUMP)
 > AS-HERE
-88a76
+70a76
 > firstset
-3861,3892d3848
+3843,3874d3848
 < XORSI,   MEM|   C L,   10 IS,   
 < XORSI,   R|   DI|   10 IS,   
 < XORSI,   R|   SI|   10 IS,   
@@ -60,7 +42,7 @@
 < XORSI,   ZO|   [DX]   10 IS,   
 < XORSI,   ZO|   [CX]   10 IS,   
 < XORSI,   ZO|   [AX]   10 IS,   
-3925,3956d3880
+3907,3938d3880
 < ANDSI,   MEM|   C L,   10 IS,   
 < ANDSI,   R|   DI|   10 IS,   
 < ANDSI,   R|   SI|   10 IS,   
@@ -93,7 +75,7 @@
 < ANDSI,   ZO|   [DX]   10 IS,   
 < ANDSI,   ZO|   [CX]   10 IS,   
 < ANDSI,   ZO|   [AX]   10 IS,   
-4021,4052d3944
+4003,4034d3944
 < ORSI,   MEM|   C L,   10 IS,   
 < ORSI,   R|   DI|   10 IS,   
 < ORSI,   R|   SI|   10 IS,   
@@ -126,7 +108,7 @@
 < ORSI,   ZO|   [DX]   10 IS,   
 < ORSI,   ZO|   [CX]   10 IS,   
 < ORSI,   ZO|   [AX]   10 IS,   
-21421,21709c21313,21421
+21403,21691c21313,21421
 < ~SIB,   [MEM   +8*   DI]   14 L,   
 < ~SIB,   [MEM   +8*   SI]   14 L,   
 < ~SIB,   [MEM   +8*   BP]   14 L,   
