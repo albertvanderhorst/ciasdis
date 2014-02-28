@@ -328,7 +328,7 @@ testas386: asgen.frt asi386.frt testset386 ; \
 # excluded those tested by testas386
 testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
     rm -f $@.diff ;\
-    echo REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE asipentium.frt INCLUDE testsetpentium | \
+    echo CR REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE asipentium.frt INCLUDE testsetpentium | \
     lina -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\

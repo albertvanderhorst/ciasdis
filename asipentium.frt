@@ -30,8 +30,8 @@
    01 00 8 FAMILY|R ST0| ST1| ST2| ST3| ST4| ST5| ST6| ST7|
 0110,0022 0 0400 T!       0400 00 2 FAMILY|R s| d|     \ Single/Double 16/32
 0210,0022 0 0400 T!       0400 00 2 FAMILY|R |32 |16   \ memory int
-\ Reverse: ST0 is the second operand
-0010,0000 0 0008 T!       0008 00 2 FAMILY|R n| r|     \ Normal reverse
+\ Abormal: ST0 is the second operand
+0010,0000 0 0008 T!       0008 00 2 FAMILY|R n| a|     \ Normal abnormal 
 0050,0112 0 04C0 00C0 FIR u| \ 2th register not modified, ST0 begets result
 0090,0112 0 04C0 04C0 FIR m| \ 2th register modified, begets result
 
