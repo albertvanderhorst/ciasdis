@@ -125,12 +125,12 @@
 ( ############### PRELUDE ############################################# )
 
 \ Facilities
-REQUIRE ALIAS
-REQUIRE @+ ( Fetch from ADDRES. Leave incremented ADDRESS and DATA )
-REQUIRE BAG
-REQUIRE DO-BAG
-REQUIRE POSTFIX
-REQUIRE class
+WANT ALIAS
+WANT @+ ( Fetch from ADDRES. Leave incremented ADDRESS and DATA )
+WANT BAG
+WANT DO-BAG
+WANT POSTFIX
+WANT class
 
 ( If we are to use sections and the label mechanisms, these are hot     )
 ( patched. Note that these words get separate headers such that the     )
@@ -529,7 +529,7 @@ CREATE PRO-TALLY 3 CELLS ALLOT  ( Prototype for TALLY-BI BY BA )
 ( Get the data from the tally prototype back BA BY BI )
 : T@ PRO-TALLY 3 CELLS +  @- @- @- DROP ;
 ( Return "The next word IS not -- "                                           )
-: no--  IN @ >R (WORD) 2 <> SWAP "--" CORA OR DUP IF R> IN !
+: no--  IN @ >R NAME 2 <> SWAP "--" CORA OR DUP IF R> IN !
     ELSE RDROP THEN ;
 
 ( Add INCREMENT to the OPCODE a NUMBER of times, and generate as much   )
@@ -692,7 +692,7 @@ ASSEMBLER
 ( Define "word" using assembly instructions up till END-CODE )
 ( One could put a ``SMUDGE'' in both. )
 : CODE
-    ?EXEC (WORD) (CREATE) ASSEMBLER !TALLY !CSP
+    ?EXEC NAME (CREATE) ASSEMBLER !TALLY !CSP
 ; IMMEDIATE
 
 ( Like ``DOES>'' but assembly code follows, closed by END-CODE )

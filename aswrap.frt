@@ -8,7 +8,7 @@
 \ ------------------------- library definitions -------------------------
 \ Copy the behaviour of the latest definition into "name" affecting all
 \ words already using that word.
-: HOT-PATCH   LATEST   (WORD) FOUND   3 CELLS MOVE ;
+: HOT-PATCH   LATEST   NAME FOUND   3 CELLS MOVE ;
 
 \ ------------------------- library definitions end ---------------------
 

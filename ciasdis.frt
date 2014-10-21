@@ -17,14 +17,13 @@
 : NONAME$ "NONAME" ;
 
 WANT REQUIRE
-WANT (WORD)
 WANT ORDER
 'NOOP ALIAS ?EXEC
 '$@ ALIAS @+
 'PP ALIAS IN
 'PP@@ ALIAS IN[]
 
-REQUIRE OLD:    REQUIRE $=      REQUIRE class   REQUIRE W/O
+WANT OLD:    WANT $=      WANT class   WANT W/O
 
 \ Patch the word ``PRESENT'' such that no name words are no longer
 \ considered present. This prevent zillion error messages.
@@ -48,9 +47,9 @@ INCLUDE labeldis.frt
 INCLUDE crawl.frt
 
 \ In behalf of user.
-REQUIRE #-PREFIX
+WANT #-PREFIX
 \ In behalf of building an executable.
-REQUIRE ARGC
+WANT ARGC
 
 \ Write current section to FILEHANDLE. Leave FILEHANDLE.
 : WRITE-ONE-SECTION
@@ -88,19 +87,19 @@ REQUIRE ARGC
 : FETCHED    GET-FILE CODE-SPACE SWAP    2DUP + CP !   MOVE ;
 
 \ Fetch file "name" to the code buffer.
-: FETCH    (WORD) FETCHED ;
+: FETCH    NAME FETCHED ;
 
 \ Return the NAME of the target file.
 : TARGET-DIS 2 ARG[] ;
 
-REQUIRE DUMP
+WANT DUMP
 \ Using (only) information from file with NAME,
 \ disassemble the current program as stored in the ``CODE-BUFFER''.
 : CONSULTED   INIT-ALL   HEX INCLUDED ( file)   SORT-ALL
     PLUG-HOLES ALL-L-LABELS DISASSEMBLE-TARGET DECIMAL ;
 
 \ Consult "file" as per ``CONSULT''
-: CONSULT   (WORD) CONSULTED ;
+: CONSULT   NAME CONSULTED ;
 
 \ Perform the action of the program as per the spec's of ``cidis''
 

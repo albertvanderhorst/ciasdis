@@ -5,15 +5,15 @@
 ( Handle labels as far as disassembly is concerned.                     )
 ( There is a separate one for the assembler.                            )
 
-REQUIRE ALIAS
-REQUIRE @+
-REQUIRE QSORT
-REQUIRE EXCHANGE
-REQUIRE BIN-SEARCH
-REQUIRE POSTFIX
-REQUIRE H.      \ In behalf of (DH.)
-REQUIRE 2>R
-REQUIRE BAG             \ Simple bag facility
+WANT ALIAS
+WANT @+
+WANT QSORT
+WANT EXCHANGE
+WANT BIN-SEARCH
+WANT POSTFIX
+WANT H.      \ In behalf of (DH.)
+WANT 2>R
+WANT BAG             \ Simple bag facility
 
 1000 CONSTANT MAX-LABEL
 
@@ -190,7 +190,7 @@ MAX-LABEL ' .PAY-DEA ' .EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
 : LABELED   POSTFIX CONSTANT   EQU-LABELS   LATEST DUP EXECUTE LAB+! LAB+! ;
 
 \ Generate a equ label at (target) ADDRESS with "NAME". Like ``LABEL''.
-: LABEL   (WORD) LABELED ;
+: LABEL   NAME LABELED ;
 
 'LABEL ALIAS EQU
 
@@ -296,7 +296,7 @@ MAX-LABEL ' .PAY$ ' .COMMENT: LABELSTRUCT COMMENT:-LABELS LABELS !BAG
 
 \ Generate a comment label at ADDRESS. A pointer to the
 \ remainder of the line is the payload.
-: COMMENT:   COMMENT:-LABELS   LAB+!  ^J (PARSE) $, LAB+! ;
+: COMMENT:   COMMENT:-LABELS   LAB+!  ^J PARSE $, LAB+! ;
 
 \ Remember the comment at the end of this instruction.
 \ Zero means no comment.
@@ -387,7 +387,7 @@ MAX-LABEL ' .PAY$ ' .MDIRECTIVE LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 
 \ ---------------- The special printing of strings.     --------------------------------------
 
-REQUIRE NEW-IF
+WANT -scripting-
 
 \ Contains a printing indicator :
 \ 0 as hex                      8A
@@ -544,7 +544,7 @@ MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 : -dc    2>R 'D-R-T   2R> RANGE ;
 
 \ Range ADDRESS1 .. ADDRESS2 is code with name "name".
-: -dc:    (WORD) -dc ;
+: -dc:    NAME -dc ;
 
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous code range.
 : -dc-    NONAME$ -dc ;
@@ -562,7 +562,7 @@ MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 : -dn    2>R 'DUMP-N 2R> RANGE ;
 
 \ Range ADDRESS1 .. ADDRESS2 are such with name "name".
-: -dn:    (WORD) -dn ;
+: -dn:    NAME -dn ;
 
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous such range.
 : -dn-    NONAME$ -dn ;
@@ -579,7 +579,7 @@ MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 : -db    2>R 'DUMP-B 2R> RANGE ;
 
 \ Range ADDRESS1 .. ADDRESS2 are bytes with name "name".
-: -db:    (WORD) -db ;
+: -db:    NAME -db ;
 
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous byte range.
 : -db-    NONAME$ -db ;
@@ -599,7 +599,7 @@ MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 : -dw    2>R 'DUMP-W 2R> RANGE ;
 
 \ Range ADDRESS1 .. ADDRESS2 are words with name "name".
-: -dw:    (WORD) -dw ;
+: -dw:    NAME -dw ;
 
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous word range.
 : -dw-    NONAME$ -dw ;
@@ -616,7 +616,7 @@ MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 : -dl    2>R 'DUMP-L 2R> RANGE ;
 
 \ Range ADDRESS1 .. ADDRESS2 are longs with name "name".
-: -dl:    (WORD) -dl ;
+: -dl:    NAME -dl ;
 
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous long range.
 : -dl-    NONAME$ -dl ;
@@ -642,7 +642,7 @@ MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 : -d$    2>R 'DUMP-$ 2R> RANGE ;
 
 \ Range ADDRESS1 .. ADDRESS2 are longs with name "name".
-: -d$:    (WORD) -d$ ;
+: -d$:    NAME -d$ ;
 
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous long range.
 : -d$-    NONAME$ -d$ ;
@@ -729,7 +729,7 @@ ASSEMBLER
 : -dc16    2>R 'D-R-T-16   2R> RANGE ;
 
 \ Range ADDRESS1 .. ADDRESS2 is 16-bit code with name "name".
-: -dc16:   (WORD) -dc16 ;
+: -dc16:   NAME -dc16 ;
 
 \ Range ADDRESS1 .. ADDRESS2 is an anonymous 16-bit code-range.
 : -dc16-   NONAME$ -dc16 ;

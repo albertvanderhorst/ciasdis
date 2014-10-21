@@ -4,9 +4,9 @@
 
 ( Handle labels )
 
-REQUIRE BAG             \ Simple bag facility
-REQUIRE DO-BAG          \ More advanced bag facility
-REQUIRE POSTFIX
+WANT BAG             \ Simple bag facility
+WANT DO-BAG          \ More advanced bag facility
+WANT POSTFIX
 
 ( Make sure undefined labels don't fool up the first pass of the        )
 (   assembly                                                            )
@@ -26,19 +26,19 @@ REQUIRE POSTFIX
 ( Make sure undefined labels that looks like numbers,                   )
 (   don't fool up the first pass of the assembly.                       )
 ( Not that we endorse the idea to name labels like 250HUP.              )
-\ All of a word may have been scanned, so before using (WORD) ,
+\ All of a word may have been scanned, so before using NAME ,
 \ we backspace one char.
 \ Afterwards we backspace again, such that the number routine we return
 \ to concludes it is ready.
 \ We leave some random number, which is okay, but it must be single precision!
-: FIX-NMB   -1 IN +!   (WORD) 2DROP   BACKSPACE-IN   0 DPL ! ;
+: FIX-NMB   -1 IN +!   NAME 2DROP   BACKSPACE-IN   0 DPL ! ;
 
 \ If FLAG we have a misspelled number, skip its remainder.
 : ERROR10 DROP IF  FIX-NMB THEN ;
 \ If FLAG we have an unknown word, treat it as a label.
 : ERROR12 DROP IF  FIX-DEA THEN ;
 
-REQUIRE OLD:
+WANT OLD:
 \ Replacement for ?ERROR, if FLAG, give error NUMBER.
 \ Fix up errors, see FIX-NMB FIX-DEA.
 : ?ERROR-FIXING
@@ -50,7 +50,7 @@ REQUIRE OLD:
 \ Ignore FILEOFFSET and TARGET address. Make section "name" current,
 \ and reset its allocation pointer. Like ``SECTION'' but this
 \ behaviour is appropriate for the second pass.
-: RESET-SECTION   2DROP   (WORD) EVALUATE   CODE-SPACE CP ! ;
+: RESET-SECTION   2DROP   NAME EVALUATE   CODE-SPACE CP ! ;
 
 \ Ignore undefined labels during first pass ...
 \ Define section in the first pass ...
@@ -83,7 +83,7 @@ R> ;
 \ restricted by what words are in Forth.
 \ Note: this is actually an abuse of the denotation mechanism.
 'ONLY >WID CURRENT !  \ Making ONLY the CONTEXT is dangerous! This will do.
-: : (WORD)
+: : NAME
     KNOWN-LABEL? IF 2DROP ELSE 2>R _AP_ 2R> POSTFIX CONSTANT THEN
 ; PREFIX IMMEDIATE    DEFINITIONS
 
@@ -95,7 +95,7 @@ R> ;
 : !DX-SET DX-SET !BAG ;
 
 \ Fill ``DX-SET'' from the remainder of the line in reverse order.
-: GET-DX-SET    DEPTH >R   ^J (PARSE) EVALUATE DEPTH R> ?DO DX-SET BAG+! LOOP ;
+: GET-DX-SET    DEPTH >R   ^J PARSE EVALUATE DEPTH R> ?DO DX-SET BAG+! LOOP ;
 
 \ Output ``DX-SET'' as bytes.
 : C,-DX-SET  BEGIN DX-SET BAG@- AS-C,  DX-SET BAG? 0= UNTIL ;
