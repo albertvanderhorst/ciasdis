@@ -11,7 +11,6 @@
 
 \ This is a main build. For details see asgen.frt
 
-'NOOP ALIAS ?EXEC
 '$@   ALIAS @+
 
 WANT OLD:    WANT $=      WANT class   WANT W/O
