@@ -20,8 +20,8 @@ WANT POSTFIX
 
 
 \ Backspace a character, but not if we are at the end of input.
-\ We find out by trial reading another character, then bakc two up.
-: BACKSPACE-IN   IN[] IF -2 IN +! THEN DROP ;
+\ We find out by trial reading another character, then back two up.
+: BACKSPACE-IN   PP@@ IF -2 PP +! THEN DROP ;
 
 ( Make sure undefined labels that looks like numbers,                   )
 (   don't fool up the first pass of the assembly.                       )
@@ -31,7 +31,7 @@ WANT POSTFIX
 \ Afterwards we backspace again, such that the number routine we return
 \ to concludes it is ready.
 \ We leave some random number, which is okay, but it must be single precision!
-: FIX-NMB   -1 IN +!   NAME 2DROP   BACKSPACE-IN   0 DPL ! ;
+: FIX-NMB   -1 PP +!   NAME 2DROP   BACKSPACE-IN   0 DPL ! ;
 
 \ If FLAG we have a misspelled number, skip its remainder.
 : ERROR10 DROP IF  FIX-NMB THEN ;

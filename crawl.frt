@@ -6,8 +6,8 @@
 
 \ ------------------------------------------------------------------------
 
-REQUIRE H.
-REQUIRE BAG
+WANT H.
+WANT BAG
 
 \ : \D ;
 
@@ -62,7 +62,7 @@ REQUIRE BAG
 : NEW-RANGE-END OVER MAKE-CURRENT RANGE-END  OVER MAKE-CURRENT RANGE-END
     MAX ;
 
-\D REQUIRE H.
+\D WANT H.
 \D  ." EXPECT 520 : " 2 3 NEW-RANGE-START H. 2DROP CR
 \D  ." EXPECT 590 : " 3 4 NEW-RANGE-END  H. 2DROP CR .S
 

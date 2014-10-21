@@ -529,7 +529,7 @@ CREATE PRO-TALLY 3 CELLS ALLOT  ( Prototype for TALLY-BI BY BA )
 ( Get the data from the tally prototype back BA BY BI )
 : T@ PRO-TALLY 3 CELLS +  @- @- @- DROP ;
 ( Return "The next word IS not -- "                                           )
-: no--  IN @ >R NAME 2 <> SWAP "--" CORA OR DUP IF R> IN !
+: no--  PP @ >R NAME 2 <> SWAP "--" CORA OR DUP IF R> PP !
     ELSE RDROP THEN ;
 
 ( Add INCREMENT to the OPCODE a NUMBER of times, and generate as much   )

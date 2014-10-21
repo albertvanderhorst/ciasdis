@@ -6,8 +6,8 @@
 
 \ ------------------------------------------------------------------------
 
-REQUIRE H.
-REQUIRE RESTORED
+WANT H.
+WANT RESTORED
 
 : .^   .S R@ @ >NFA @ $@ TYPE ;
 
@@ -44,5 +44,5 @@ REQUIRE RESTORED
 : ?ABORT ROT IF ETYPE 2 EXIT-CODE ! BYE ELSE 2DROP THEN ;
 
 
-REQUIRE $=
-REQUIRE ."$"
+WANT $=
+WANT ."$"

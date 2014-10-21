@@ -11,19 +11,16 @@
 
 \ This is a main build. For details see asgen.frt
 
+'NOOP ALIAS ?EXEC
+'$@   ALIAS @+
+
+WANT OLD:    WANT $=      WANT class   WANT W/O
+
 \ ------------------Disgraceful adaptations. -------------------
+
 \ Put here to draw attention.
 \ This name might later be changed.
 : NONAME$ "NONAME" ;
-
-WANT REQUIRE
-WANT ORDER
-'NOOP ALIAS ?EXEC
-'$@ ALIAS @+
-'PP ALIAS IN
-'PP@@ ALIAS IN[]
-
-WANT OLD:    WANT $=      WANT class   WANT W/O
 
 \ Patch the word ``PRESENT'' such that no name words are no longer
 \ considered present. This prevent zillion error messages.
@@ -134,20 +131,13 @@ WANT DUMP
 \ Abort on error.
 : CHECK-ARGS   ARGC 3 4 WITHIN 0= IF 1 USAGE THEN ;
 
-ORDER
 : -a   SHIFT-ARGS   CHECK-ARGS  1 ;
 : -d   SHIFT-ARGS   CHECK-ARGS  2 ;
 : -i   ^I LOAD ;
 : -h   0 USAGE ;
 
 \ For STRING: "It CONTAINS a `d' or a `D' "
-: CONTAINS-D?    2DUP &D $I >R  &d $I R>  OR ;
-
-\ : EVALUATE ." Evaluating " CR
-\ ORDER CR
-\ 2DUP TYPE
-\ EVALUATE
-\ ." klaar! " CR ;
+: CONTAINS-D?    2DUP &D $^ >R  &d $^ R>  OR ;
 
 \ Handle arguments, start interactive system if no arguments.
 : HANDLE-ARG   ARGC 1 = IF INTERACTIVE 0 EXIT THEN
