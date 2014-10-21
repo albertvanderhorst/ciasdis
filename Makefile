@@ -22,11 +22,14 @@
 
 # ALL FILES STARTING IN ``ci86'' (OUTHER ``ci86.gnr'') ARE GENERATED
 
+FORTH=/usr/bin/lina32
+
 # The following directory are supposedly in line with the
 # Debian FHS directory philosophy.
 INSTALLDIR=/
 INSTALLED_LAB=$(INSTALLDIR)/usr/lib/ciasdis.lab
 INSTALLED_BIN=$(INSTALLDIR)/usr/bin/ciasdis
+
 
 MISC_DOC= \
 RCS_changelog \
@@ -222,13 +225,13 @@ install_clean:
 # Get the library file to be used, trim it.
 ciasdis.lab :
 	echo 'BLOCK-FILE $$@ GET-FILE TYPE' |\
-	lina | sed -e '/ciforth examples \**)/,$$d' >$@
+	$(FORTH) -a | sed -e '/ciforth examples \**)/,$$d' >$@
 	echo '( *************** ciforth examples etc. trimmed ************* )'>>$@
 
 # Get the binary to be used, burn in the correct library.
 ciasdis_tbi : $(ASSRC) asi386.frt asipentium.frt
 	sed -e /BLOCK-FILE/s?forth.lab?/usr/lib/ciasdis.lab? ciasdis.frt >$@.frt
-	lina -c $@.frt
+	$(FORTH) -c $@.frt
 
 # Make a source distribution.
 srczip : $(RELEASECONTENT) ; echo ciasdis-dev-$(VERSION).tar.gz $+ | xargs tar -cvzf
@@ -255,7 +258,7 @@ releaseproof : ; for i in $(RELEASECONTENT); do  rcsdiff -w $$i ; done
 	echo ' "$(TITLE)"   TITLE $$!' ;\
 	echo ' QUICK-REFERENCE BYE' \
     )|\
-    lina -e |\
+    $(FORTH) -e |\
     sed '1,/SNIP TILL HERE/d' |\
     sed '/SI[MB]/d' |\
     sed '/OK/d' >p$(PREFIX).$@
@@ -282,7 +285,7 @@ ci86.lina.s :
 testasalpha: asgen.frt asalpha.frt testsetalpha ; \
 	rm -f $@.diff ;\
 	echo CR REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testsetalpha |\
-	lina -a |\
+	$(FORTH) -a |\
 	sed '1,/TEST STARTS HERE/d' |\
 	sed 's/^[0-9A-F \.,]*://' >$@ ;\
 	diff -w $@ testsetalpha >$@.diff ;\
@@ -291,7 +294,7 @@ testasalpha: asgen.frt asalpha.frt testsetalpha ; \
 testas6809: asgen.frt as6809.frt testset6809 ; \
 	rm -f $@.diff ;\
 	echo CR REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE as6809.frt INCLUDE testset6809 |\
-	lina -a |\
+	$(FORTH) -a |\
 	sed '1,/TEST STARTS HERE/d' |\
 	sed 's/^[0-9A-F \.,]*://' >$@ ;\
 	diff -w $@ testset6809 >$@.diff ;\
@@ -300,7 +303,7 @@ testas6809: asgen.frt as6809.frt testset6809 ; \
 testas80: asgen.frt as80.frt testset8080 ; \
 	rm -f $@.diff ;\
     echo CR REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE as80.frt INCLUDE testset8080 |\
-    lina -a|\
+    $(FORTH) -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8080 >$@.diff ;\
@@ -309,7 +312,7 @@ testas80: asgen.frt as80.frt testset8080 ; \
 testas86: asgen.frt asi86.frt testset8086 ; \
     rm -f $@.diff ;\
     echo CR REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asi86.frt INCLUDE testset8086 |\
-    lina -a|\
+    $(FORTH) -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8086 >$@.diff ;\
@@ -318,7 +321,7 @@ testas86: asgen.frt asi86.frt testset8086 ; \
 testas386: asgen.frt asi386.frt testset386 ; \
     rm -f $@.diff ;\
     echo CR REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386 |\
-    lina -a|\
+    $(FORTH) -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset386 >$@.diff ;\
@@ -329,7 +332,7 @@ testas386: asgen.frt asi386.frt testset386 ; \
 testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
     rm -f $@.diff ;\
     echo CR REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE asipentium.frt INCLUDE testsetpentium | \
-    lina -a|\
+    $(FORTH) -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testsetpentium >$@.diff ;\
@@ -339,7 +342,7 @@ testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
 testas386a: asgen.frt asi386.frt testset386a ; \
     rm -f $@.diff ;\
     echo CR REQUIRE INCLUDE REQUIRE DUMP INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386a | \
-    lina -a|\
+    $(FORTH) -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed '/^OK$$/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
@@ -355,7 +358,7 @@ testasses : testasalpha testas6809 testas80 testas86 testallpentium
 
 test386: asgen.frt asi386.frt ; \
     echo CR REQUIRE INCLUDE INCLUDE asgen.frt INCLUDE asi386.frt ASSEMBLER HEX BITS-32   SHOW-ALL|\
-    lina -a|\
+    $(FORTH) -a|\
     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
     sed 's/~SIB|   1C SIB,,/[AX +1* 0]/' |\
@@ -375,7 +378,7 @@ testinstructionsets : test386.diff
 # because asi386.frt is not loaded.
 # testpentium: asgen.frt asipentium.frt ; \
 #     (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
-#     lina -e|\
+#     $(FORTH) -e|\
 #     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
 #     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
 #     sed 's/~SIB|   1C SIB,,/[AX +1* 0]/' |\
@@ -386,7 +389,7 @@ testinstructionsets : test386.diff
 test386-16: asgen.frt asi386.frt ; \
     echo INCLUDE asgen.frt INCLUDE asi386.frt | \
     echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
-    lina -e >$@       ;
+    $(FORTH) -e >$@       ;
 #   diff -w $@ testset386 >$@.diff ;\
 #   diff $@.diff testresults
 
@@ -396,7 +399,7 @@ RELEASE: $(RELEASEASSEMBLER) cias ciasdis cidis $(ASSRCCLUDGE) ;\
 
 # Preliminary until it is clear whether we want other disassemblers.
 # Note: this will use a copy of forth.lab to the local directory as ciasdis.lab
-ciasdis : $(ASSRC) asi386.frt asipentium.frt ; lina -c ciasdis.frt
+ciasdis : $(ASSRC) asi386.frt asipentium.frt ; $(FORTH) -c $@.frt
 cias : ciasdis ; ln -f ciasdis cias
 cidis : ciasdis ; ln -f ciasdis cidis
 

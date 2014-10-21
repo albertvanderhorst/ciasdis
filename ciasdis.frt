@@ -16,16 +16,20 @@
 \ This name might later be changed.
 : NONAME$ "NONAME" ;
 
+WANT REQUIRE
+WANT (WORD)
+WANT ORDER
+'NOOP ALIAS ?EXEC
+'$@ ALIAS @+
+'PP ALIAS IN
+'PP@@ ALIAS IN[]
+
 REQUIRE OLD:    REQUIRE $=      REQUIRE class   REQUIRE W/O
 
 \ Patch the word ``PRESENT'' such that no name words are no longer
 \ considered present. This prevent zillion error messages.
 : NEW-PRESENT   OLD: PRESENT DUP IF DUP >NFA @ $@ NONAME$ $= 0= AND THEN ;
 ' NEW-PRESENT ' PRESENT 3 CELLS MOVE
-
-\ Patch the word ``L@'' with the name "FAR@". Such that it no longer
-\ conflicts with the ``L@'' we have.
-: FAR@ L@ ;    HIDE L@
 
 \ --------------------------------------------------------------
 
@@ -74,7 +78,7 @@ REQUIRE ARGC
 
 \ Assemble file NAME. Leave in default or file-specified sections.
 : ASSEMBLED
-   POSTPONE ONLY POSTPONE FORTH POSTPONE ASSEMBLER HEX
+   ONLY FORTH ASSEMBLER HEX
     FIRSTPASS 2DUP INCLUDED  SECONDPASS INCLUDED ;
 
 \ Perform the action of the program as per the spec's of ``cias''
@@ -116,7 +120,7 @@ REQUIRE DUMP
 \ In that case suppress the splat screen.
 \ Note that ``QUIT'' is the command interpreter.
 : INTERACTIVE    'OK DUP >DFA @ SWAP >PHA = IF 0 LIST CHANGE-PROMPT OK THEN
-	ASSEMBLER   0 ORG   QUIT ;
+        ASSEMBLER   0 ORG   QUIT ;
 
 \ Print usage, then go bye with EXITCODE.
 : USAGE
@@ -131,6 +135,7 @@ REQUIRE DUMP
 \ Abort on error.
 : CHECK-ARGS   ARGC 3 4 WITHIN 0= IF 1 USAGE THEN ;
 
+ORDER
 : -a   SHIFT-ARGS   CHECK-ARGS  1 ;
 : -d   SHIFT-ARGS   CHECK-ARGS  2 ;
 : -i   ^I LOAD ;
@@ -138,6 +143,12 @@ REQUIRE DUMP
 
 \ For STRING: "It CONTAINS a `d' or a `D' "
 : CONTAINS-D?    2DUP &D $I >R  &d $I R>  OR ;
+
+\ : EVALUATE ." Evaluating " CR
+\ ORDER CR
+\ 2DUP TYPE
+\ EVALUATE
+\ ." klaar! " CR ;
 
 \ Handle arguments, start interactive system if no arguments.
 : HANDLE-ARG   ARGC 1 = IF INTERACTIVE 0 EXIT THEN
@@ -154,7 +165,7 @@ REQUIRE DUMP
 
 \ The name determines what to do.
 : MAIN   RESTORE-ALL DEFAULT-SECTION HANDLE-ARG CHANGE-PROMPT
-	DUP 0 = IF DROP INTERACTIVE
+        DUP 0 = IF DROP INTERACTIVE
    ELSE DUP 1 = IF DROP cias
    ELSE DUP 2 = IF DROP cidis
    THEN THEN THEN DROP ;

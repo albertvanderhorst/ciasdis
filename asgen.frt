@@ -166,7 +166,7 @@ CREATE TABLE 1 , 1 , ( x TABLE + @ yields $100^[-x mod 4] )
 ' ' ALIAS %
 
 : %ID. >NFA @ $@ TYPE SPACE ;   ( Print a definitions name from its DEA.)
-VOCABULARY ASSEMBLER IMMEDIATE   ASSEMBLER DEFINITIONS HEX
+NAMESPACE ASSEMBLER             ASSEMBLER DEFINITIONS HEX
 
 : %>BODY   >BODY ; ( From DEA to the DATA field of a created word )
 : %BODY>   BODY> ; ( Reverse of above)
@@ -684,19 +684,20 @@ CREATE SOMEMORE
 
 ( ************************* USAGE ************************************* )
 
-\ The following two definitions must *NOT* be in the assembler wordlist.
+\ The following definitions must *NOT* be in the assembler wordlist.
 PREVIOUS DEFINITIONS DECIMAL
 
+\ The following words *DO* use the assembler wordlist.
 ASSEMBLER
 ( Define "word" using assembly instructions up till END-CODE )
 ( One could put a ``SMUDGE'' in both. )
 : CODE
-    ?EXEC (WORD) (CREATE) POSTPONE ASSEMBLER !TALLY !CSP
+    ?EXEC (WORD) (CREATE) ASSEMBLER !TALLY !CSP
 ; IMMEDIATE
 
 ( Like ``DOES>'' but assembly code follows, closed by END-CODE )
 : ;CODE
-    ?CSP   POSTPONE (;CODE)   POSTPONE [   POSTPONE ASSEMBLER
+    ?CSP   POSTPONE (;CODE)   POSTPONE [   ASSEMBLER
 ; IMMEDIATE
 
 ( ------------------------- user convenience -------------------------- )
