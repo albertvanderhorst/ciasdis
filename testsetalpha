@@ -1,7 +1,4 @@
 \ Testing the DEC Alpha assembler/disassembler
-REQUIRE DUMP
-REQUIRE ALIAS
-'$@ ALIAS @+
 
 ASSEMBLER
 !TALLY

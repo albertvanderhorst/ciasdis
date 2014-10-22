@@ -38,8 +38,8 @@ ASSEMBLER DEFINITIONS  HEX
 : !BAD    SWAP >BA SWAP TOGGLE ;
 ( Transform the XX.XXX code such as used in appendix C into             )
 ( a proper BI mask.                                                     )
-: BI: 0. &. (PARSE) >NUMBER 2DROP DROP 1A LSHIFT
-      0. BL (PARSE) >NUMBER 2DROP DROP 5 LSHIFT OR ;
+: BI: 0. &. PARSE >NUMBER 2DROP DROP 1A LSHIFT
+      0. BL PARSE >NUMBER 2DROP DROP 5 LSHIFT OR ;
 
 ( Mask for opcode with function codes.)
 : FUNCTION-MASK [ BI: 3F.FFF INVERT FFFF,FFFF AND ] LITERAL ;
