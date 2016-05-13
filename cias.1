@@ -1,5 +1,5 @@
 .\" $Id$
-.TH cias "1" "Oct 2014" "cias 1.1.0" DFW
+.TH cias "1" "Jan 2015" "cias 1.1.0" DFW
 .SH "NAME"
 cias \- computer_intelligence_assembler_386
 .br
@@ -60,6 +60,8 @@ in interactive mode.
 
 If called with two parameters,
 \fIcias\fR assembles the \fI<source-file>\fR to \fI<bin-file>\fR .
+This is a two-pass assembler, so forward references to labels are
+alllowed.
 
 If \fB<bin-file>\fR is missing,
 the extension \fB.frt\fR removed from   \fI<source-file>\fR ,
@@ -157,6 +159,15 @@ The actual command to disassemble is:
 .br
  \ \ \ cidis freecell.exe freecell.cul > freecell.asm
 
+If the consult file covers the whole binary, the command
+.br
+ \ \ \ cias freecell.exe freecell.asm
+.br
+will regenerate into \fBfreecell\fR a byte for byte replica
+of \fBfreecell.exe\fR
+irrespective whether the
+interpretation as code or data in the .cul is correct.
+
 .SH "ENVIRONMENT"
 Configuration is done fully internal.
 
@@ -198,5 +209,5 @@ are made available under the GNU Public License:
 quality, but NO warranty.
 
 .SH "AUTHOR"
-Copyright \(co 2004-2014
+Copyright \(co 2004-2015
 Albert van der Horst \fI albert@spenarnc.xs4all.nl\fR.

@@ -1,5 +1,5 @@
 .\" $Id$
-.TH cul "5" "May 2004" "cul 0.1.3" DFW
+.TH cul "5" "jan 2015" "cul 0.1.15" DFW
 .SH "NAME"
 cul \- consult file format for
 computer intelligence
@@ -32,8 +32,12 @@ but this can be overruled by the \fB#\fR prefix for decimal.
 .br
 A character is denoted by a \fB&\fR prefix.
 .br
-A label must be previously defined by an \fBEQU\fR,
+Unidentified names are registered as labels.
+All labels must be eventually be defined implicitly or by an \fBEQU\fR,
 \fBLABELED\fR or \fBLABEL\fR statement.
+Implicit labels stand in front of an assembler statement, preceeded
+by a colon. So \fBL9870,A04A\fR is defined by \fB:L9870,A04A\fR somehere.
+The value of the label is the program counter at that point.
 .br
 Hexadecimal numbers can start in a letter,
 and labels can be fully numeric,
@@ -193,12 +197,12 @@ and one \fB-ORG-\fR per segment.)
 .TP
 \fI<string>\fR \fI<expr>\fR \fBDIRECTIVE\fR
 .br
-The string is a directive associated with the target address 
+The string is a directive associated with the target address
 \fI<expr>\fR.
 It will be a separate line or lines in front of the disassembly.
 .br
 \fBNote:\fR
-This can be a multiple-line-comment,       
+This can be a multiple-line-comment,
 provided it is laid out as comment.
 .TP
 \fI<expr>\fR \fBCOMMENT:\fR "comment"
@@ -242,9 +246,10 @@ Like REMOVE: but the label is identified by its address in \fI<expr>\fR.
 \fI<expr>\fR \fBCRAWL\fR
 .br
 Use the information that \fI<expr>\fR is a target code address.
-Heuristically find as much code as possible by disassembling
-from this address up till an unconditional transfer of control,
-and assuming jumps refer to more code addresses.
+Recursively find as much code as possible by disassembling
+from this address up till a transfer of control whose target
+cannot be determined, and assuming jumps and calls refer to more
+code addresses.
 Add new knowledge to the labeled sections,
 then combine any anonymous sections.
 .TP
@@ -433,7 +438,7 @@ Mistakes in Forth mode can easily crash \fBcias / cidis\fR.
 
 \fBcias / cdis\fR is case sensitive.
 .SH "AUTHOR"
-Copyright \(co 2004
+Copyright \(co 2004-2015
 Albert van der Horst \fI albert@spenarnc.xs4all.nl\fR.
 \fBcias / cidis\fR
 are made available under the GNU Public License:
