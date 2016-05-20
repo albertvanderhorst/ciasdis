@@ -11,8 +11,10 @@
 
 \ This is a main build. For details see asgen.frt
 
-'$@   ALIAS @+
+\ Put here to draw attention. Smart words may be tricky.
+WANT -scripting-
 
+WANT INCLUDE
 WANT OLD:    WANT $=      WANT class   WANT W/O
 
 \ ------------------Disgraceful adaptations. -------------------
