@@ -387,7 +387,6 @@ MAX-LABEL ' .PAY$ ' .MDIRECTIVE LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
 
 \ ---------------- The special printing of strings.     --------------------------------------
 
-WANT -scripting-
 
 \ Contains a printing indicator :
 \ 0 as hex                      8A
