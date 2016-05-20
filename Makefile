@@ -22,7 +22,7 @@
 
 # ALL FILES STARTING IN ``ci86'' (OUTHER ``ci86.gnr'') ARE GENERATED
 
-FORTH=/usr/bin/lina32
+FORTH=./lina
 
 # The following directory are supposedly in line with the
 # Debian FHS directory philosophy.
