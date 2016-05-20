@@ -3,9 +3,8 @@
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
 ( Handle labels )
-
-WANT BAG             \ Simple bag facility
-WANT DO-BAG          \ More advanced bag facility
+\ Simple and facility more advanced bag facility
+WANT BAG DO-BAG
 WANT POSTFIX
 
 ( Make sure undefined labels don't fool up the first pass of the        )
