@@ -251,7 +251,7 @@ releaseproof : ; for i in $(RELEASECONTENT); do  rcsdiff -w $$i ; done
 # with the assembler!
 %.ps : asgen.frt %.frt ps.frt ; \
     ( \
-	echo WANT INCLUDE WANT DUMP ;\
+	echo  \"INCLUDE\" WANTED  \"DUMP\" WANTED ;\
 	cat $+ ;\
 	echo 'PRELUDE' ;\
 	echo 'HEX $(MASK) MASK ! $(PREFIX) PREFIX ! DECIMAL ' ;\
@@ -284,7 +284,7 @@ ci86.lina.s :
 
 testasalpha: asgen.frt asalpha.frt testsetalpha ; \
 	rm -f $@.diff ;\
-	echo CR WANT INCLUDE WANT DUMP INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testsetalpha |\
+	echo CR  \"INCLUDE\" WANTED  \"DUMP\" WANTED INCLUDE asgen.frt INCLUDE asalpha.frt INCLUDE testsetalpha |\
 	$(FORTH) -a |\
 	sed '1,/TEST STARTS HERE/d' |\
 	sed 's/^[0-9A-F \.,]*://' >$@ ;\
@@ -293,7 +293,7 @@ testasalpha: asgen.frt asalpha.frt testsetalpha ; \
 
 testas6809: asgen.frt as6809.frt testset6809 ; \
 	rm -f $@.diff ;\
-	echo CR WANT INCLUDE WANT DUMP INCLUDE asgen.frt INCLUDE as6809.frt INCLUDE testset6809 |\
+	echo CR  \"INCLUDE\" WANTED  \"DUMP\" WANTED INCLUDE asgen.frt INCLUDE as6809.frt INCLUDE testset6809 |\
 	$(FORTH) -a |\
 	sed '1,/TEST STARTS HERE/d' |\
 	sed 's/^[0-9A-F \.,]*://' >$@ ;\
@@ -302,7 +302,7 @@ testas6809: asgen.frt as6809.frt testset6809 ; \
 
 testas80: asgen.frt as80.frt testset8080 ; \
 	rm -f $@.diff ;\
-    echo CR WANT INCLUDE WANT DUMP INCLUDE asgen.frt INCLUDE as80.frt INCLUDE testset8080 |\
+    echo CR  \"INCLUDE\" WANTED  \"DUMP\" WANTED INCLUDE asgen.frt INCLUDE as80.frt INCLUDE testset8080 |\
     $(FORTH) -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
@@ -311,7 +311,7 @@ testas80: asgen.frt as80.frt testset8080 ; \
 
 testas86: asgen.frt asi86.frt testset8086 ; \
     rm -f $@.diff ;\
-    echo CR WANT INCLUDE WANT DUMP INCLUDE asgen.frt INCLUDE asi86.frt INCLUDE testset8086 |\
+    echo CR  \"INCLUDE\" WANTED  \"DUMP\" WANTED INCLUDE asgen.frt INCLUDE asi86.frt INCLUDE testset8086 |\
     $(FORTH) -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
@@ -320,7 +320,7 @@ testas86: asgen.frt asi86.frt testset8086 ; \
 
 testas386: asgen.frt asi386.frt testset386 ; \
     rm -f $@.diff ;\
-    echo CR WANT INCLUDE WANT DUMP INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386 |\
+    echo CR  \"INCLUDE\" WANTED  \"DUMP\" WANTED INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386 |\
     $(FORTH) -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
@@ -331,7 +331,7 @@ testas386: asgen.frt asi386.frt testset386 ; \
 # excluded those tested by testas386
 testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
     rm -f $@.diff ;\
-    echo CR WANT INCLUDE WANT DUMP INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE asipentium.frt INCLUDE testsetpentium | \
+    echo CR  \"INCLUDE\" WANTED  \"DUMP\" WANTED INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE asipentium.frt INCLUDE testsetpentium | \
     $(FORTH) -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
@@ -341,7 +341,7 @@ testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
 # Special test to exercise otherwise hidden instructions.
 testas386a: asgen.frt asi386.frt testset386a ; \
     rm -f $@.diff ;\
-    echo CR WANT INCLUDE WANT DUMP INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386a | \
+    echo CR  \"INCLUDE\" WANTED  \"DUMP\" WANTED INCLUDE asgen.frt INCLUDE asi386.frt INCLUDE testset386a | \
     $(FORTH) -a|\
     sed '1,/TEST STARTS HERE/d' |\
     sed '/^OK$$/d' |\
@@ -357,7 +357,7 @@ testallpentium : testas386 testas386a testaspentium
 testasses : testasalpha testas6809 testas80 testas86 testallpentium
 
 test386: asgen.frt asi386.frt ; \
-    echo CR WANT INCLUDE INCLUDE asgen.frt INCLUDE asi386.frt ASSEMBLER HEX BITS-32   SHOW-ALL|\
+    echo CR  \"INCLUDE\" WANTED INCLUDE asgen.frt INCLUDE asi386.frt ASSEMBLER HEX BITS-32   SHOW-ALL|\
     $(FORTH) -a|\
     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
