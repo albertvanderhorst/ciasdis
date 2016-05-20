@@ -126,7 +126,8 @@
 
 \ Facilities
 WANT ALIAS
-'$@ ALIAS @+ ( Fetch from ADDRES. Leave incremented ADDRESS and DATA )
+\ Fetch from ADDRES. Leave incremented ADDRESS and DATA
+WANT @+
 'NOOP ALIAS ?EXEC   \ Define it if you want notified.
 WANT BAG
 WANT DO-BAG
