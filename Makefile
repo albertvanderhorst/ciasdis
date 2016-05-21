@@ -15,8 +15,7 @@
 # Applicable suffixes : * are generated files
 # + are generated files if they are mentionned on the next line
 #
-#* .dvi .tex .ps : as usual (See TeX)
-#   menu.texinfo gloss.texinfo
+#* .ps : as usual (See TeX)
 # .frt : text file : contains blocks in an \n separated stream
 #* .bin : a binary image without header
 
@@ -269,13 +268,7 @@ p0.asi386    :; make asi386.ps PREFIX=0 MASK=FF
 p0F.asi386.ps   :; make asi386.ps PREFIX=0F MASK=FFFF
 p0F.asiP.ps   :; make asiP.ps PREFIX=0F MASK=FFFF
 
-x : ; echo $(RELEASECONTENT)
-y : ; echo $(RELEASECONTENT) |\
-sed -e's/\<ci86\.//g' |\
-sed -e's/\<gnr\>/ci86.gnr/' |\
-sed -e's/ \([^ .]\{1,8\}\)[^ .]*\./ \1./g'
-
-ci86.lina.s :
+showcontent : ; echo $(RELEASECONTENT)
 
 # ------------------- TARGET TESTS ---------------------------------
 # All the test<target> assemble a testset<target> with virtually
@@ -374,21 +367,8 @@ test386.diff: test386 ; \
 
 testinstructionsets : test386.diff
 
-# There is a problem here: SHOW-ALL shows almost nothing
-# because asi386.frt is not loaded.
-# testpentium: asgen.frt asipentium.frt ; \
-#     (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
-#     $(FORTH) -e|\
-#     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
-#     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
-#     sed 's/~SIB|   1C SIB,,/[AX +1* 0]/' |\
-#     sed 's/~SIB|   14 SIB,,/[AX +1* BX]/' >$@       ;\
-#     diff -w $@ testsetpentium >$@.diff ;\
-#     diff $@.diff testresults
-
 test386-16: asgen.frt asi386.frt ; \
-    echo INCLUDE asgen.frt INCLUDE asi386.frt | \
-    echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
+    (cat $+;echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
     $(FORTH) -e >$@       ;
 #   diff -w $@ testset386 >$@.diff ;\
 #   diff $@.diff testresults
