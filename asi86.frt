@@ -84,8 +84,8 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 22 00 C700 T!  1000 18FF 2 2FAMILY, CALLFARO, JMPFARO,
 
 ( --------- no fixup operands ----------)
-01 00 02000001 00 FIR B'|
-02 00 02000001 01 FIR W'|
+01 00 0200,0001 cludge64  00 FIR B'|
+02 00 0200,0001 cludge64  01 FIR W'|
 8 0200 201 T!    02 A0 2 1FAMILY, MOVTA, MOVFA,
 0 0400 201 T!
  08 04 8 1FAMILY, ADDI|A, ORI|A, ADCI|A, SBBI|A, ANDI|A, SUBI|A, XORI|A, CMPI|A,
@@ -96,7 +96,7 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 
 ( --------- special fixups ----------)
 
-00 00 0100,0001 T!   01 0 2 FAMILY|R Y| N|
+00 00 0100,0001 cludge64 T!   01 0 2 FAMILY|R Y| N|
 00 00 0E T!   02 0 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
 00 4000 10F 70 1PI J,
 
@@ -104,8 +104,8 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 00 00 18 T!   01 06 2 1FAMILY, PUSH|SG, POP|SG,
 02 00 DF02 08C 2PI MOV|SG,
 
-00 00  0100,0200 0000 FIR 1|
-00 800 0100,0200 0200 FIR V|
+00 00  0100,0200 cludge64  0000 FIR 1|
+00 800 0100,0200 cludge64  0200 FIR V|
 
 00 0 01,C703 T!
 (    0800 00D0 8 2FAMILY, ROL, ROR, RCL, RCR, SHL, SHR, -- SAR,         )

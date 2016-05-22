@@ -154,7 +154,10 @@ WANT DUMP
 'TASK >DFA @   '.SIGNON >DFA !
 
 \ The name determines what to do.
-: MAIN   RESTORE-ALL DEFAULT-SECTION HANDLE-ARG CHANGE-PROMPT
+: MAIN
+   \ Defeat the correction for the bizarre byte manipulation, if not wanted.
+   1 CELLS 4 = IF 'NOOP 'cludge64 3 CELLS MOVE THEN
+    RESTORE-ALL DEFAULT-SECTION HANDLE-ARG CHANGE-PROMPT
         DUP 0 = IF DROP INTERACTIVE
    ELSE DUP 1 = IF DROP cias
    ELSE DUP 2 = IF DROP cidis

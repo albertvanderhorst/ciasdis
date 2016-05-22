@@ -56,10 +56,10 @@
  08 00 8 FAMILY|R AX] CX] DX] BX] 0] BP] SI] DI]
 8200 0 C0 T!
  40 00 4 FAMILY|R  +1* +2* +4* +8*
-8200 0 0100,0007 T!
+8200 0 0100,0007 cludge64 T!
  01 00 8 FAMILY|R [AX [CX [DX [BX [SP -- [SI [DI
-8280 00 0100,0007 05 FIR [BP   ( Fits in the hole, but disallow ZO| )
-8248 02 0100,0007 05 FIR [MEM  ( Fits in the hole, but requires ZO| )
+8280 00 0100,0007 cludge64 05 FIR [BP   ( Fits in the hole, but disallow ZO| )
+8248 02 0100,0007 cludge64 05 FIR [MEM  ( Fits in the hole, but requires ZO| )
 
 4120 0 07 T!
   01 00 8
@@ -148,8 +148,8 @@
   08,0000 00,010F 4 3FAMILY, SGDT, SIDT, LGDT, LIDT, ( 3)
 
 ( --------- no fixup operands ----------)
-0001 0 0200,0001 00 FIR B'|
-0002 0 0200,0001 01 FIR X'|
+0001 0 0200,0001 cludge64 00 FIR B'|
+0002 0 0200,0001 cludge64 01 FIR X'|
 0008 02 0201 T!    0002 A0 2 1FAMILY, MOV|TA, MOV|FA,
 0 04 0201 T!
  0008 04 8 1FAMILY, ADDI|A, ORI|A, ADCI|A, SBBI|A, ANDI|A, SUBI|A, XORI|A, CMPI|A,
@@ -161,13 +161,14 @@
 
 ( --------- special fixups ----------)
 
-0800     0000 0100,0001 T!     01 00 2 FAMILY|R Y| N|
-0800     0000 0400,000E T!     02 00 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
+0800     0000 0100,0001 cludge64 T!     01 00 2 FAMILY|R Y| N|
+0800     0000 0400,000E cludge64 T!     02 00 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
 0800 40 050F 0070 1PI J,
 
 2102 0 FF02 008C 2PI MOV|SG,
 
-0000 0 0200,0200 0000 FIR 1|   0000 0 0200,0200 0200 FIR V|          ( 3)
+0000 0 0200,0200 cludge64 0000 FIR 1|          ( 3)
+0000 0 0200,0200 cludge64 0200 FIR V|          ( 3)
 0100 0 2,C703 T! ( 2,0000 is a lockin for 1| V|)                   ( 3)
  0800 00D0 8 2FAMILY, ROL, ROR, RCL, RCR, SHL, SHR, -- SAR,  ( 3)
 0000 8 C701 T!
@@ -253,11 +254,11 @@
 ( Fill in the transformation to TALLY-BA for `` AS:, OS:, ''            )
 ( This flags them as prefixes.                                          )
 ( The toggle inverts the 16 and 32 bits at the same time.               )
-: AS16<->32   TALLY-BA  C000 TOGGLE ;  ' AS16<->32 % AS:, >PRF ! 
-: OS16<->32   TALLY-BA 30000 TOGGLE ;  ' OS16<->32 % OS:, >PRF ! 
+: AS16<->32   TALLY-BA  C000 TOGGLE ;  ' AS16<->32 % AS:, >PRF !
+: OS16<->32   TALLY-BA 30000 TOGGLE ;  ' OS16<->32 % OS:, >PRF !
 
 ( ############## 80386 ASSEMBLER PROPER END ########################### )
-\ You may want to use these always instead of (Rx,)                     
+\ You may want to use these always instead of (Rx,)
 ( They accept an absolute address, convenient for using labels.         )
 : RB, _AP_ 1 + - (RB,) ;    ' .COMMA-SIGNED   % (RB,) >DSP !
 : RW, _AP_ 2 + - (RW,) ;    ' .COMMA-SIGNED   % (RW,) >DSP !
