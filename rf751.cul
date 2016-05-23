@@ -1,6 +1,6 @@
 \ This file is generated, stored in RCS for comparison only.
 0804,8000 -ORG-
-0000,1163 EQU filesz 
+1163 EQU filesz 
 0804,8000 EQU e_ident 
 0804,8010 EQU e_type 
 0804,8012 EQU e_machine 
@@ -193,8 +193,8 @@
 0804,87CF EQU flast 
 0804,87D3 EQU mlast 
 0804,87D7 EQU retroforth_f 
-0000,1163 EQU filesz 
-0000,09E0 EQU retrofilesz 
+1163 EQU filesz 
+09E0 EQU retrofilesz 
 0804,91B7 EQU tib 
 0804,9DB7 EQU s0 
 0804,A5B7 EQU d0 
