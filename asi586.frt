@@ -1,6 +1,9 @@
 ( $Id$ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 
+\ For the redefinitions in connection with SIB.
+WANT :2
+
  ASSEMBLER DEFINITIONS HEX
 
 ( ############## 80386 ASSEMBLER ADDITIONS ############################ )
@@ -245,11 +248,11 @@
 ( "[AX" instead of " ~SIB| SIB,, [AX"                                   )
 ( Note that the disassembly is made to look like the same. The ~SIB|    )
 ( and the ~SIB, inside the SIB,, are print-suppressed.                  )
-: [AX   ~SIB| SIB,, [AX ;       : [SP   ~SIB| SIB,, [SP ;
-: [CX   ~SIB| SIB,, [CX ;       : [BP   ~SIB| SIB,, [BP ;
-: [DX   ~SIB| SIB,, [DX ;       : [SI   ~SIB| SIB,, [SI ;
-: [BX   ~SIB| SIB,, [BX ;       : [DI   ~SIB| SIB,, [DI ;
-: [MEM  ~SIB| SIB,, [MEM ;
+:2 [AX   ~SIB| SIB,, [AX ;       :2 [SP   ~SIB| SIB,, [SP ;
+:2 [CX   ~SIB| SIB,, [CX ;       :2 [BP   ~SIB| SIB,, [BP ;
+:2 [DX   ~SIB| SIB,, [DX ;       :2 [SI   ~SIB| SIB,, [SI ;
+:2 [BX   ~SIB| SIB,, [BX ;       :2 [DI   ~SIB| SIB,, [DI ;
+:2 [MEM  ~SIB| SIB,, [MEM ;
 
 ( Fill in the transformation to TALLY-BA for `` AS:, OS:, ''            )
 ( This flags them as prefixes.                                          )
