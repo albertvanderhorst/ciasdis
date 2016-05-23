@@ -6,12 +6,21 @@
 
 \ ------------------------------------------------------------------------
 
-WANT H.
+WANT HEX:
 WANT RESTORED
+WANT $-PREFIX
+
+\ Print N in hex with comma separator and leaving out groups of zeroes.
+: (H.-)  0 <# BEGIN # # # # 2DUP OR WHILE &, HOLD REPEAT #> ;
+
+: H.- (H.-) TYPE ;
+
+: |W| $FFFF AND ;
+: |L| $FFFF,FFFF AND ;
 
 : .^   .S R@ @ >NFA @ $@ TYPE ;
 
-: \D POSTPONE \ ;
+: \D POSTPONE \ ; IMMEDIATE
 \ : \D ;
 
 \ Make QSORT safe by allowing an empty range.
@@ -23,7 +32,7 @@ WANT RESTORED
 : SHUTUP   '2DROP' >DFA @  'TYPE >DFA !    CO   'TYPE RESTORED ;
 
 \ Make ADDRESS return some label NAME, static memory so use immediately.
-: INVENT-NAME   "L" PAD $!   0 8 (DH.) PAD $+! PAD $@ ;
+: INVENT-NAME   "L" PAD $!   (H.-) PAD $+! PAD $@ ;
 
 \ For ADDRESS and NAME: "that name WAS invented".
 : INVENTED-NAME?  10 <> IF 2DROP 0 ELSE SWAP INVENT-NAME CORA 0= THEN ;

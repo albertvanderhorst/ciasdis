@@ -11,13 +11,12 @@ WANT QSORT
 WANT EXCHANGE
 WANT BIN-SEARCH
 WANT POSTFIX
-WANT H.      \ In behalf of (DH.)
 WANT 2>R
 WANT BAG             \ Simple bag facility
 
 1000 CONSTANT MAX-LABEL
 
-\ : \D ;
+: \D POSTPONE \ ; IMMEDIATE
 
 \ -------------------- INTRODUCTION --------------------------------
 
@@ -105,7 +104,6 @@ THE-REGISTER !BAG       \ Get rid of dummy registration.
 \ Print the addresses and payloads of the labels.
 : .LABELS  DO-LAB I @ .  I .PAY CR LOOP-LAB ;
 
-
 \ Return LOWER and UPPER indices of the labels , inclusive.
 \ The lower index is 1 and the upper index is corresponding.
 : LAB-BOUNDS   1 LAB-UPB ;
@@ -179,7 +177,7 @@ VARIABLE MAX-DEV-N   8  MAX-DEV-N !        \ Max deviation acceptable with next
 \ ---------------- Names of labels ------------------------------
 
 \ Decompile label INDEX.
-: .EQU    LABELS[] DUP @ H. " EQU " TYPE  CELL+ @ %ID. CR ;
+: .EQU    LABELS[] DUP @ |L| H.- " EQU " TYPE  CELL+ @ %ID. CR ;
 
 \ Contains equ labels, i.e. classes as associate with ``LABEL''
 MAX-LABEL ' .PAY-DEA ' .EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
@@ -212,14 +210,16 @@ MAX-LABEL ' .PAY-DEA ' .EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
 \ if any.
 : ADORN-WITH-LABEL   .EQU-ALL    0= IF 12 SPACES THEN ;
 
-HEX FFFF0000 CONSTANT LARGE-NUMBER-MASK
+HEX FFFF INVERT CONSTANT LARGE-NUMBER-MASK
 
 \ Prevent leading hex letter for NUMBER by printing a zero.
 : .0?   DUP 0A0 100 WITHIN SWAP 0A 10 WITHIN OR IF &0 EMIT THEN ;
 
+
 \ Print a NUMBER in hex in a smart way.
 : SMART.   DUP ABS 100 < IF DUP .0? . ELSE
-    LARGE-NUMBER-MASK OVER AND IF H. ELSE 0 4 (DH.) TYPE THEN SPACE THEN ;
+\    LARGE-NUMBER-MASK OVER AND IF H.- ELSE (H.-) TYPE THEN SPACE THEN ;
+    |L| H.- SPACE THEN ;
 
 \ For label INDEX and OFFSET print the label with offset.
 : .~LABEL   SWAP .PAY   ?DUP IF
@@ -289,7 +289,7 @@ VARIABLE SMALL-LABEL-LIMIT   100 SMALL-LABEL-LIMIT !
 \ ---------------- Comment till remainder of line ------------------------------
 
 \ Decompile comment: label INDEX.
-: .COMMENT:   LABELS[] DUP @ H. " COMMENT: " TYPE  CELL+ @ $@ TYPE CR ;
+: .COMMENT:   LABELS[] DUP @ H.- " COMMENT: " TYPE  CELL+ @ $@ TYPE CR ;
 
 \ Contains comment labels, i.e. classes as associate with ``COMMENT:''
 MAX-LABEL ' .PAY$ ' .COMMENT: LABELSTRUCT COMMENT:-LABELS LABELS !BAG
@@ -336,7 +336,7 @@ VARIABLE COMMENT:-TO-BE
 \ ---------------- Multiple line comment/command in front -------------------
 
 \ Decompile mcomment label INDEX.
-: .MDIRECTIVE   LABELS[] DUP CELL+ @ $@ ."$" SPACE @ H. " DIRECTIVE " TYPE  CR ;
+: .MDIRECTIVE   LABELS[] DUP CELL+ @ $@ ."$" SPACE @ H.- " DIRECTIVE " TYPE  CR ;
 
 \ Contains multiple line comment labels, i.e. classes as associate with ``COMMENT''
 MAX-LABEL ' .PAY$ ' .MDIRECTIVE LABELSTRUCT MCOMMENT-LABELS LABELS !BAG
@@ -451,7 +451,7 @@ VARIABLE CUT-SIZE    16 CUT-SIZE !   \ Chunks for data-disassembly.
 \ ---------------- Things to print at the start of a line --------------------------------------
 
 \ Print the ADDRES as target address in hex.
-: .TARGET-ADDRESS "( " TYPE DUP HOST>TARGET H. " )   " TYPE ;
+: .TARGET-ADDRESS "( " TYPE DUP HOST>TARGET H.- " )   " TYPE ;
 
 \ Start a new line, with printing the decompiled ADDRESS as seen
 : CR-ADORNED
@@ -509,7 +509,7 @@ endclass
 
 \ Print the range LAB as a matter of testing.
 : .PAY-RANGE CELL+ @ DUP EXECUTE
-   RANGE-START H.  SPACE RANGE-END H.  " BY " TYPE RANGE-XT %ID.  %ID. ;
+   RANGE-START H.-  SPACE RANGE-END H.-  " BY " TYPE RANGE-XT %ID.  %ID. ;
 
 20 BAG RANGE-TYPES  \ Contains dea of dumper, creator, alternating.
 
@@ -520,7 +520,7 @@ endclass
 : CREATOR-XT   RANGE-XT RANGE-TYPES BAG-WHERE CELL+ @ ;
 
 \ Display range INDEX in a reconsumable form.
-: DECOMP-RANGE   DUP MAKE-CURRENT RANGE-START H. SPACE RANGE-END H. SPACE
+: DECOMP-RANGE   DUP MAKE-CURRENT RANGE-START |L| H.- SPACE RANGE-END |L| H.- SPACE
     CREATOR-XT ID. LABEL-NAME TYPE CR ;
 
 \ Contains range specification, limits plus type.
@@ -586,7 +586,8 @@ MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 % DUMP-B    % -db:   ARE-COUPLED \ Register the decompiler.
 
 \ Print X as a word (4 hex digits).
-: W. 0 4 (DH.) TYPE SPACE ;
+\ : W. (H.-) TYPE SPACE ;
+: W. |W| H.- SPACE ;
 
 \ Dump words to ADDRESS1 from ADDRESS2, plain.
 : (DUMP-W)   DO I DUP CR+dw @ W. 2 +LOOP   PRINT-OLD-COMMENT: CR ;
@@ -692,7 +693,7 @@ MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 : DECOMP-ALL THE-REGISTER DO-BAG   I @ EXECUTE DECOMP-ONE   LOOP-BAG ;
 
 \ Make a full blown cul file from the internal data.
-: MAKE-CUL  TARGET-START H. " -ORG-" TYPE CR DECOMP-ALL ;
+: MAKE-CUL  TARGET-START |L| H.- " -ORG-" TYPE CR DECOMP-ALL ;
 
 \ Show what type of labels there are.
 : SHOW-REGISTER   THE-REGISTER DO-BAG I @ %ID. LOOP-BAG ;
