@@ -361,7 +361,7 @@ testas386a: asgen.frt asi386.frt testset386a ; \
 # Do all tests applicable to Pentium
 testasses : testasalpha testas6809 testas80 testas86 testallpentium
 
-testasses : testasalpha testas6809 testas80 testas86 testallpentium
+testallpentium : testas386 testas386a testaspentium
 
 gsetall : gsetalpha gset6809 gset80 gset86 gset386-16 gsetallpentium
 
