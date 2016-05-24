@@ -18,6 +18,9 @@ WANT $-PREFIX
 : |W| $FFFF AND ;
 : |L| $FFFF,FFFF AND ;
 
+\ Sign extend a 32 bit value into a cell.
+: L>C    DUP $8000,0000 AND 0= 0= $FFFF,FFFF INVERT AND OR ;
+
 : .^   .S R@ @ >NFA @ $@ TYPE ;
 
 : \D POSTPONE \ ; IMMEDIATE

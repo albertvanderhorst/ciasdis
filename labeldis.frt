@@ -607,7 +607,9 @@ MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 % DUMP-W    % -dw:   ARE-COUPLED
 
 \ Dump longs to ADDRESS1 from ADDRESS2, plain.
-: (DUMP-L)   DO I DUP CR+dl @ .LABEL/. 4 +LOOP PRINT-OLD-COMMENT: CR   ;
+\ Fetching a 4 byte entity with `` @ |L| '' only works with Intel's
+\ endianess.
+: (DUMP-L)   DO I DUP CR+dl @ |L| L>C .LABEL/. 4 +LOOP PRINT-OLD-COMMENT: CR   ;
 
 \ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
 : DUMP-L   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-L) ;
