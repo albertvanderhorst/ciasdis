@@ -359,20 +359,25 @@ testas386a: asgen.frt asi386.frt testset386a ; \
 # ------------------- TARGET TESTS ---------------------------------
 
 # Do all tests applicable to Pentium
-testallpentium : testas386 testas386a testaspentium
+testasses : testasalpha testas6809 testas80 testas86 testallpentium
 
 testasses : testasalpha testas6809 testas80 testas86 testallpentium
 
-# test386 is in fact testset386. It is an example how such testsets are
+gsetall : gsetalpha gset6809 gset80 gset86 gset386-16 gsetallpentium
+
+gsetallpentium : gset386 gsetpentium
+
+testinstructionsets : gset386.diff
+
+# test386 is in fact testset386. This is how such testsets are
 # generated in the first place.
 gset386: asgen.frt asi386.frt ; \
-    echo CR  \"INCLUDE\" WANTED INCLUDE asgen.frt INCLUDE asi386.frt ASSEMBLER HEX BITS-32   SHOW-ALL|\
+    (cat $+;echo ASSEMBLER HEX BITS-32   SHOW-ALL)|\
     $(FORTH) -a|\
     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
     sed 's/~SIB|   1C SIB,,/[AX +1* 0]/' |\
     sed 's/~SIB|   14 SIB,,/[AX +1* BX]/'|\
-    tee get386.spare |\
     grep -v ciforth >$@;\
     rcsdiff -bBw -r$(RCSVERSION) $@
 
@@ -380,11 +385,38 @@ gset386.diff: gset386 ; \
     diff -w $+ testset386 >$@ ;\
     rcsdiff -bBw -r$(RCSVERSION) $@;\
 
-testinstructionsets : gset386.diff
-
 gset386-16: asgen.frt asi386.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
-    $(FORTH) -e >$@       ;
+    $(FORTH) -a >$@       ; \
+    rcsdiff -bBw -r$(RCSVERSION) $@
+
+gset6809: asgen.frt as6809.frt ; \
+    (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
+    $(FORTH) -a >$@       ;\
+    rcsdiff -bBw -r$(RCSVERSION) $@
+
+gsetalpha: asgen.frt asalpha.frt ; \
+    echo CR \"INCLUDE\" WANTED  \"DUMP\" WANTED INCLUDE asgen.frt INCLUDE asalpha.frt ASSEMBLER HEX SHOW-ALL |\
+    $(FORTH) -a >$@       ; \
+    rcsdiff -bBw -r$(RCSVERSION) $@
+
+#  (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
+
+gset80: asgen.frt as80.frt ; \
+    (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
+    $(FORTH) -a >$@       ; \
+    rcsdiff -bBw -r$(RCSVERSION) $@
+
+gset86: asgen.frt asi86.frt ; \
+    (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
+    $(FORTH) -a >$@       ;  \
+    rcsdiff -bBw -r$(RCSVERSION) $@
+
+gsetpentium: asgen.frt asi386.frt asipentium.frt ; \
+    (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
+    $(FORTH) -a >$@       ;   \
+    rcsdiff -bBw -r$(RCSVERSION) $@
+
 #   diff -w $@ testset386 >$@.diff ;\
 #   diff $@.diff testresults
 
