@@ -1,0 +1,797 @@
+PULU,   8 STACK,   
+PSHU,   8 STACK,   
+PULS,   8 STACK,   
+PSHS,   8 STACK,   
+LEAU,   [##,PCR]___   C WO,   
+LEAU,   [##,PCR]__   C WO,   
+LEAU,   [##,PCR]_   C WO,   
+LEAU,   [##,PCR]   C WO,   
+LEAU,   ##,PCR___   C WO,   
+LEAU,   ##,PCR__   C WO,   
+LEAU,   ##,PCR_   C WO,   
+LEAU,   ##,PCR   C WO,   
+LEAU,   [#,PCR]___   C CO,   
+LEAU,   [#,PCR]__   C CO,   
+LEAU,   [#,PCR]_   C CO,   
+LEAU,   [#,PCR]   C CO,   
+LEAU,   #,PCR___   C CO,   
+LEAU,   #,PCR__   C CO,   
+LEAU,   #,PCR_   C CO,   
+LEAU,   #,PCR   C CO,   
+LEAU,   [##,R]   S   10 WO,   
+LEAU,   [##,R]   U   10 WO,   
+LEAU,   [##,R]   Y   10 WO,   
+LEAU,   [##,R]   X   10 WO,   
+LEAU,   ##,R   S   10 WO,   
+LEAU,   ##,R   U   10 WO,   
+LEAU,   ##,R   Y   10 WO,   
+LEAU,   ##,R   X   10 WO,   
+LEAU,   [#,R]   S   10 CO,   
+LEAU,   [#,R]   U   10 CO,   
+LEAU,   [#,R]   Y   10 CO,   
+LEAU,   [#,R]   X   10 CO,   
+LEAU,   #,R   S   10 CO,   
+LEAU,   #,R   U   10 CO,   
+LEAU,   #,R   Y   10 CO,   
+LEAU,   #,R   X   10 CO,   
+LEAU,   [D,R]   S   
+LEAU,   [D,R]   U   
+LEAU,   [D,R]   Y   
+LEAU,   [D,R]   X   
+LEAU,   D,R   S   
+LEAU,   D,R   U   
+LEAU,   D,R   Y   
+LEAU,   D,R   X   
+LEAU,   [A,R]   S   
+LEAU,   [A,R]   U   
+LEAU,   [A,R]   Y   
+LEAU,   [A,R]   X   
+LEAU,   [B,R]   S   
+LEAU,   [B,R]   U   
+LEAU,   [B,R]   Y   
+LEAU,   [B,R]   X   
+LEAU,   [,R]   S   
+LEAU,   [,R]   U   
+LEAU,   [,R]   Y   
+LEAU,   [,R]   X   
+LEAU,   [,--R]   S   
+LEAU,   [,--R]   U   
+LEAU,   [,--R]   Y   
+LEAU,   [,--R]   X   
+LEAU,   [,R++]   S   
+LEAU,   [,R++]   U   
+LEAU,   [,R++]   Y   
+LEAU,   [,R++]   X   
+LEAU,   A,R   S   
+LEAU,   A,R   U   
+LEAU,   A,R   Y   
+LEAU,   A,R   X   
+LEAU,   B,R   S   
+LEAU,   B,R   U   
+LEAU,   B,R   Y   
+LEAU,   B,R   X   
+LEAU,   ,R   S   
+LEAU,   ,R   U   
+LEAU,   ,R   Y   
+LEAU,   ,R   X   
+LEAU,   ,--R   S   
+LEAU,   ,--R   U   
+LEAU,   ,--R   Y   
+LEAU,   ,--R   X   
+LEAU,   ,-R   S   
+LEAU,   ,-R   U   
+LEAU,   ,-R   Y   
+LEAU,   ,-R   X   
+LEAU,   ,R++   S   
+LEAU,   ,R++   U   
+LEAU,   ,R++   Y   
+LEAU,   ,R++   X   
+LEAU,   ,R+   S   
+LEAU,   ,R+   U   
+LEAU,   ,R+   Y   
+LEAU,   ,R+   X   
+LEAU,   [##]   C WO,   
+LEAS,   [##,PCR]___   C WO,   
+LEAS,   [##,PCR]__   C WO,   
+LEAS,   [##,PCR]_   C WO,   
+LEAS,   [##,PCR]   C WO,   
+LEAS,   ##,PCR___   C WO,   
+LEAS,   ##,PCR__   C WO,   
+LEAS,   ##,PCR_   C WO,   
+LEAS,   ##,PCR   C WO,   
+LEAS,   [#,PCR]___   C CO,   
+LEAS,   [#,PCR]__   C CO,   
+LEAS,   [#,PCR]_   C CO,   
+LEAS,   [#,PCR]   C CO,   
+LEAS,   #,PCR___   C CO,   
+LEAS,   #,PCR__   C CO,   
+LEAS,   #,PCR_   C CO,   
+LEAS,   #,PCR   C CO,   
+LEAS,   [##,R]   S   10 WO,   
+LEAS,   [##,R]   U   10 WO,   
+LEAS,   [##,R]   Y   10 WO,   
+LEAS,   [##,R]   X   10 WO,   
+LEAS,   ##,R   S   10 WO,   
+LEAS,   ##,R   U   10 WO,   
+LEAS,   ##,R   Y   10 WO,   
+LEAS,   ##,R   X   10 WO,   
+LEAS,   [#,R]   S   10 CO,   
+LEAS,   [#,R]   U   10 CO,   
+LEAS,   [#,R]   Y   10 CO,   
+LEAS,   [#,R]   X   10 CO,   
+LEAS,   #,R   S   10 CO,   
+LEAS,   #,R   U   10 CO,   
+LEAS,   #,R   Y   10 CO,   
+LEAS,   #,R   X   10 CO,   
+LEAS,   [D,R]   S   
+LEAS,   [D,R]   U   
+LEAS,   [D,R]   Y   
+LEAS,   [D,R]   X   
+LEAS,   D,R   S   
+LEAS,   D,R   U   
+LEAS,   D,R   Y   
+LEAS,   D,R   X   
+LEAS,   [A,R]   S   
+LEAS,   [A,R]   U   
+LEAS,   [A,R]   Y   
+LEAS,   [A,R]   X   
+LEAS,   [B,R]   S   
+LEAS,   [B,R]   U   
+LEAS,   [B,R]   Y   
+LEAS,   [B,R]   X   
+LEAS,   [,R]   S   
+LEAS,   [,R]   U   
+LEAS,   [,R]   Y   
+LEAS,   [,R]   X   
+LEAS,   [,--R]   S   
+LEAS,   [,--R]   U   
+LEAS,   [,--R]   Y   
+LEAS,   [,--R]   X   
+LEAS,   [,R++]   S   
+LEAS,   [,R++]   U   
+LEAS,   [,R++]   Y   
+LEAS,   [,R++]   X   
+LEAS,   A,R   S   
+LEAS,   A,R   U   
+LEAS,   A,R   Y   
+LEAS,   A,R   X   
+LEAS,   B,R   S   
+LEAS,   B,R   U   
+LEAS,   B,R   Y   
+LEAS,   B,R   X   
+LEAS,   ,R   S   
+LEAS,   ,R   U   
+LEAS,   ,R   Y   
+LEAS,   ,R   X   
+LEAS,   ,--R   S   
+LEAS,   ,--R   U   
+LEAS,   ,--R   Y   
+LEAS,   ,--R   X   
+LEAS,   ,-R   S   
+LEAS,   ,-R   U   
+LEAS,   ,-R   Y   
+LEAS,   ,-R   X   
+LEAS,   ,R++   S   
+LEAS,   ,R++   U   
+LEAS,   ,R++   Y   
+LEAS,   ,R++   X   
+LEAS,   ,R+   S   
+LEAS,   ,R+   U   
+LEAS,   ,R+   Y   
+LEAS,   ,R+   X   
+LEAS,   [##]   C WO,   
+LEAY,   [##,PCR]___   C WO,   
+LEAY,   [##,PCR]__   C WO,   
+LEAY,   [##,PCR]_   C WO,   
+LEAY,   [##,PCR]   C WO,   
+LEAY,   ##,PCR___   C WO,   
+LEAY,   ##,PCR__   C WO,   
+LEAY,   ##,PCR_   C WO,   
+LEAY,   ##,PCR   C WO,   
+LEAY,   [#,PCR]___   C CO,   
+LEAY,   [#,PCR]__   C CO,   
+LEAY,   [#,PCR]_   C CO,   
+LEAY,   [#,PCR]   C CO,   
+LEAY,   #,PCR___   C CO,   
+LEAY,   #,PCR__   C CO,   
+LEAY,   #,PCR_   C CO,   
+LEAY,   #,PCR   C CO,   
+LEAY,   [##,R]   S   10 WO,   
+LEAY,   [##,R]   U   10 WO,   
+LEAY,   [##,R]   Y   10 WO,   
+LEAY,   [##,R]   X   10 WO,   
+LEAY,   ##,R   S   10 WO,   
+LEAY,   ##,R   U   10 WO,   
+LEAY,   ##,R   Y   10 WO,   
+LEAY,   ##,R   X   10 WO,   
+LEAY,   [#,R]   S   10 CO,   
+LEAY,   [#,R]   U   10 CO,   
+LEAY,   [#,R]   Y   10 CO,   
+LEAY,   [#,R]   X   10 CO,   
+LEAY,   #,R   S   10 CO,   
+LEAY,   #,R   U   10 CO,   
+LEAY,   #,R   Y   10 CO,   
+LEAY,   #,R   X   10 CO,   
+LEAY,   [D,R]   S   
+LEAY,   [D,R]   U   
+LEAY,   [D,R]   Y   
+LEAY,   [D,R]   X   
+LEAY,   D,R   S   
+LEAY,   D,R   U   
+LEAY,   D,R   Y   
+LEAY,   D,R   X   
+LEAY,   [A,R]   S   
+LEAY,   [A,R]   U   
+LEAY,   [A,R]   Y   
+LEAY,   [A,R]   X   
+LEAY,   [B,R]   S   
+LEAY,   [B,R]   U   
+LEAY,   [B,R]   Y   
+LEAY,   [B,R]   X   
+LEAY,   [,R]   S   
+LEAY,   [,R]   U   
+LEAY,   [,R]   Y   
+LEAY,   [,R]   X   
+LEAY,   [,--R]   S   
+LEAY,   [,--R]   U   
+LEAY,   [,--R]   Y   
+LEAY,   [,--R]   X   
+LEAY,   [,R++]   S   
+LEAY,   [,R++]   U   
+LEAY,   [,R++]   Y   
+LEAY,   [,R++]   X   
+LEAY,   A,R   S   
+LEAY,   A,R   U   
+LEAY,   A,R   Y   
+LEAY,   A,R   X   
+LEAY,   B,R   S   
+LEAY,   B,R   U   
+LEAY,   B,R   Y   
+LEAY,   B,R   X   
+LEAY,   ,R   S   
+LEAY,   ,R   U   
+LEAY,   ,R   Y   
+LEAY,   ,R   X   
+LEAY,   ,--R   S   
+LEAY,   ,--R   U   
+LEAY,   ,--R   Y   
+LEAY,   ,--R   X   
+LEAY,   ,-R   S   
+LEAY,   ,-R   U   
+LEAY,   ,-R   Y   
+LEAY,   ,-R   X   
+LEAY,   ,R++   S   
+LEAY,   ,R++   U   
+LEAY,   ,R++   Y   
+LEAY,   ,R++   X   
+LEAY,   ,R+   S   
+LEAY,   ,R+   U   
+LEAY,   ,R+   Y   
+LEAY,   ,R+   X   
+LEAY,   [##]   C WO,   
+LEAX,   [##,PCR]___   C WO,   
+LEAX,   [##,PCR]__   C WO,   
+LEAX,   [##,PCR]_   C WO,   
+LEAX,   [##,PCR]   C WO,   
+LEAX,   ##,PCR___   C WO,   
+LEAX,   ##,PCR__   C WO,   
+LEAX,   ##,PCR_   C WO,   
+LEAX,   ##,PCR   C WO,   
+LEAX,   [#,PCR]___   C CO,   
+LEAX,   [#,PCR]__   C CO,   
+LEAX,   [#,PCR]_   C CO,   
+LEAX,   [#,PCR]   C CO,   
+LEAX,   #,PCR___   C CO,   
+LEAX,   #,PCR__   C CO,   
+LEAX,   #,PCR_   C CO,   
+LEAX,   #,PCR   C CO,   
+LEAX,   [##,R]   S   10 WO,   
+LEAX,   [##,R]   U   10 WO,   
+LEAX,   [##,R]   Y   10 WO,   
+LEAX,   [##,R]   X   10 WO,   
+LEAX,   ##,R   S   10 WO,   
+LEAX,   ##,R   U   10 WO,   
+LEAX,   ##,R   Y   10 WO,   
+LEAX,   ##,R   X   10 WO,   
+LEAX,   [#,R]   S   10 CO,   
+LEAX,   [#,R]   U   10 CO,   
+LEAX,   [#,R]   Y   10 CO,   
+LEAX,   [#,R]   X   10 CO,   
+LEAX,   #,R   S   10 CO,   
+LEAX,   #,R   U   10 CO,   
+LEAX,   #,R   Y   10 CO,   
+LEAX,   #,R   X   10 CO,   
+LEAX,   [D,R]   S   
+LEAX,   [D,R]   U   
+LEAX,   [D,R]   Y   
+LEAX,   [D,R]   X   
+LEAX,   D,R   S   
+LEAX,   D,R   U   
+LEAX,   D,R   Y   
+LEAX,   D,R   X   
+LEAX,   [A,R]   S   
+LEAX,   [A,R]   U   
+LEAX,   [A,R]   Y   
+LEAX,   [A,R]   X   
+LEAX,   [B,R]   S   
+LEAX,   [B,R]   U   
+LEAX,   [B,R]   Y   
+LEAX,   [B,R]   X   
+LEAX,   [,R]   S   
+LEAX,   [,R]   U   
+LEAX,   [,R]   Y   
+LEAX,   [,R]   X   
+LEAX,   [,--R]   S   
+LEAX,   [,--R]   U   
+LEAX,   [,--R]   Y   
+LEAX,   [,--R]   X   
+LEAX,   [,R++]   S   
+LEAX,   [,R++]   U   
+LEAX,   [,R++]   Y   
+LEAX,   [,R++]   X   
+LEAX,   A,R   S   
+LEAX,   A,R   U   
+LEAX,   A,R   Y   
+LEAX,   A,R   X   
+LEAX,   B,R   S   
+LEAX,   B,R   U   
+LEAX,   B,R   Y   
+LEAX,   B,R   X   
+LEAX,   ,R   S   
+LEAX,   ,R   U   
+LEAX,   ,R   Y   
+LEAX,   ,R   X   
+LEAX,   ,--R   S   
+LEAX,   ,--R   U   
+LEAX,   ,--R   Y   
+LEAX,   ,--R   X   
+LEAX,   ,-R   S   
+LEAX,   ,-R   U   
+LEAX,   ,-R   Y   
+LEAX,   ,-R   X   
+LEAX,   ,R++   S   
+LEAX,   ,R++   U   
+LEAX,   ,R++   Y   
+LEAX,   ,R++   X   
+LEAX,   ,R+   S   
+LEAX,   ,R+   U   
+LEAX,   ,R+   Y   
+LEAX,   ,R+   X   
+LEAX,   [##]   C WO,   
+CWAI,   8 #,   
+ANDCC,   8 #,   
+ORCC,   8 #,   
+SWI3,   
+SWI2,   
+SWI,   
+MUL,   
+RTI,   
+ABX,   
+RTS,   
+SEX,   
+DAA,   
+SYNC,   
+NOP,   
+BR,   <=|   C #,   
+BR,   >|   C #,   
+BR,   <|   C #,   
+BR,   >=|   C #,   
+BR,   0<|   C #,   
+BR,   0>=|   C #,   
+BR,   VS|   C #,   
+BR,   VC|   C #,   
+BR,   <>|   C #,   
+BR,   =|   C #,   
+BR,   U<|   C #,   
+BR,   U>=|   C #,   
+BR,   U<=|   C #,   
+BR,   U>|   C #,   
+BR,   N|   C #,   
+BR,   Y|   C #,   
+BSR,   8 #,   
+LBRS,   8 ##,   
+LBRA,   8 ##,   
+JSR,   E|   C E,   
+JSR,   []   C IB,,   
+JSR,   DP|   C DO,   
+JMP,   E|   C E,   
+JMP,   []   C IB,,   
+STS,   E|   C E,   
+STS,   []   C IB,,   
+STS,   DP|   C DO,   
+STY,   E|   C E,   
+STY,   []   C IB,,   
+STY,   DP|   C DO,   
+LDS,   E|   C E,   
+LDS,   []   C IB,,   
+LDS,   DP|   C DO,   
+LDS,   #|   C ##,   
+LDY,   E|   C E,   
+LDY,   []   C IB,,   
+LDY,   DP|   C DO,   
+LDY,   #|   C ##,   
+CMPS,   E|   C E,   
+CMPS,   []   C IB,,   
+CMPS,   DP|   C DO,   
+CMPS,   #|   C ##,   
+CMPY,   E|   C E,   
+CMPY,   []   C IB,,   
+CMPY,   DP|   C DO,   
+CMPY,   #|   C ##,   
+CMPU,   E|   C E,   
+CMPU,   []   C IB,,   
+CMPU,   DP|   C DO,   
+CMPU,   #|   C ##,   
+CMPD,   E|   C E,   
+CMPD,   []   C IB,,   
+CMPD,   DP|   C DO,   
+CMPD,   #|   C ##,   
+STD,   E|   C E,   
+STD,   []   C IB,,   
+STD,   DP|   C DO,   
+LDU,   E|   C E,   
+LDU,   []   C IB,,   
+LDU,   DP|   C DO,   
+LDU,   #|   C ##,   
+LDX,   E|   C E,   
+LDX,   []   C IB,,   
+LDX,   DP|   C DO,   
+LDX,   #|   C ##,   
+LDD,   E|   C E,   
+LDD,   []   C IB,,   
+LDD,   DP|   C DO,   
+LDD,   #|   C ##,   
+CMPX,   E|   C E,   
+CMPX,   []   C IB,,   
+CMPX,   DP|   C DO,   
+CMPX,   #|   C ##,   
+ADDD,   E|   C E,   
+ADDD,   []   C IB,,   
+ADDD,   DP|   C DO,   
+ADDD,   #|   C ##,   
+SUBD,   E|   C E,   
+SUBD,   []   C IB,,   
+SUBD,   DP|   C DO,   
+SUBD,   #|   C ##,   
+STU,   E|   C E,   
+STU,   []   C IB,,   
+STU,   DP|   C DO,   
+STX,   E|   C E,   
+STX,   []   C IB,,   
+STX,   DP|   C DO,   
+STB,   E|   C E,   
+STB,   []   C IB,,   
+STB,   DP|   C DO,   
+STA,   E|   C E,   
+STA,   []   C IB,,   
+STA,   DP|   C DO,   
+ADDB,   E|   C E,   
+ADDB,   []   C IB,,   
+ADDB,   DP|   C DO,   
+ADDB,   #|   C #,   
+ORB,   E|   C E,   
+ORB,   []   C IB,,   
+ORB,   DP|   C DO,   
+ORB,   #|   C #,   
+ADCB,   E|   C E,   
+ADCB,   []   C IB,,   
+ADCB,   DP|   C DO,   
+ADCB,   #|   C #,   
+EORB,   E|   C E,   
+EORB,   []   C IB,,   
+EORB,   DP|   C DO,   
+EORB,   #|   C #,   
+LDB,   E|   C E,   
+LDB,   []   C IB,,   
+LDB,   DP|   C DO,   
+LDB,   #|   C #,   
+BITB,   E|   C E,   
+BITB,   []   C IB,,   
+BITB,   DP|   C DO,   
+BITB,   #|   C #,   
+ANDB,   E|   C E,   
+ANDB,   []   C IB,,   
+ANDB,   DP|   C DO,   
+ANDB,   #|   C #,   
+SBCB,   E|   C E,   
+SBCB,   []   C IB,,   
+SBCB,   DP|   C DO,   
+SBCB,   #|   C #,   
+CMPB,   E|   C E,   
+CMPB,   []   C IB,,   
+CMPB,   DP|   C DO,   
+CMPB,   #|   C #,   
+SUBB,   E|   C E,   
+SUBB,   []   C IB,,   
+SUBB,   DP|   C DO,   
+SUBB,   #|   C #,   
+ADDA,   E|   C E,   
+ADDA,   []   C IB,,   
+ADDA,   DP|   C DO,   
+ADDA,   #|   C #,   
+ORA,   E|   C E,   
+ORA,   []   C IB,,   
+ORA,   DP|   C DO,   
+ORA,   #|   C #,   
+ADCA,   E|   C E,   
+ADCA,   []   C IB,,   
+ADCA,   DP|   C DO,   
+ADCA,   #|   C #,   
+EORA,   E|   C E,   
+EORA,   []   C IB,,   
+EORA,   DP|   C DO,   
+EORA,   #|   C #,   
+LDA,   E|   C E,   
+LDA,   []   C IB,,   
+LDA,   DP|   C DO,   
+LDA,   #|   C #,   
+BITA,   E|   C E,   
+BITA,   []   C IB,,   
+BITA,   DP|   C DO,   
+BITA,   #|   C #,   
+ANDA,   E|   C E,   
+ANDA,   []   C IB,,   
+ANDA,   DP|   C DO,   
+ANDA,   #|   C #,   
+SBCA,   E|   C E,   
+SBCA,   []   C IB,,   
+SBCA,   DP|   C DO,   
+SBCA,   #|   C #,   
+CMPA,   E|   C E,   
+CMPA,   []   C IB,,   
+CMPA,   DP|   C DO,   
+CMPA,   #|   C #,   
+SUBA,   E|   C E,   
+SUBA,   []   C IB,,   
+SUBA,   DP|   C DO,   
+SUBA,   #|   C #,   
+CLR|D,   8 DO,   
+JMP|D,   8 DO,   
+TST|D,   8 DO,   
+INC|D,   8 DO,   
+DEC|D,   8 DO,   
+ROL|D,   8 DO,   
+ASL|D,   8 DO,   
+ASR|D,   8 DO,   
+ROR|D,   8 DO,   
+LSR|D,   8 DO,   
+COM|D,   8 DO,   
+NEG|D,   8 DO,   
+CLR,   E|   C E,   
+CLR,   []   C IB,,   
+CLR,   B|   
+CLR,   A|   
+TST,   E|   C E,   
+TST,   []   C IB,,   
+TST,   B|   
+TST,   A|   
+INC,   E|   C E,   
+INC,   []   C IB,,   
+INC,   B|   
+INC,   A|   
+DEC,   E|   C E,   
+DEC,   []   C IB,,   
+DEC,   B|   
+DEC,   A|   
+ROL,   E|   C E,   
+ROL,   []   C IB,,   
+ROL,   B|   
+ROL,   A|   
+ASL,   E|   C E,   
+ASL,   []   C IB,,   
+ASL,   B|   
+ASL,   A|   
+ASR,   E|   C E,   
+ASR,   []   C IB,,   
+ASR,   B|   
+ASR,   A|   
+ROR,   E|   C E,   
+ROR,   []   C IB,,   
+ROR,   B|   
+ROR,   A|   
+LSR,   E|   C E,   
+LSR,   []   C IB,,   
+LSR,   B|   
+LSR,   A|   
+COM,   E|   C E,   
+COM,   []   C IB,,   
+COM,   B|   
+COM,   A|   
+NEG,   E|   C E,   
+NEG,   []   C IB,,   
+NEG,   B|   
+NEG,   A|   
+TFR,   PC==   =>PC   
+TFR,   PC==   =>SP   
+TFR,   PC==   =>US   
+TFR,   PC==   =>Y   
+TFR,   PC==   =>X   
+TFR,   PC==   =>D   
+TFR,   SP==   =>PC   
+TFR,   SP==   =>SP   
+TFR,   SP==   =>US   
+TFR,   SP==   =>Y   
+TFR,   SP==   =>X   
+TFR,   SP==   =>D   
+TFR,   US==   =>PC   
+TFR,   US==   =>SP   
+TFR,   US==   =>US   
+TFR,   US==   =>Y   
+TFR,   US==   =>X   
+TFR,   US==   =>D   
+TFR,   Y==   =>PC   
+TFR,   Y==   =>SP   
+TFR,   Y==   =>US   
+TFR,   Y==   =>Y   
+TFR,   Y==   =>X   
+TFR,   Y==   =>D   
+TFR,   X==   =>PC   
+TFR,   X==   =>SP   
+TFR,   X==   =>US   
+TFR,   X==   =>Y   
+TFR,   X==   =>X   
+TFR,   X==   =>D   
+TFR,   D==   =>PC   
+TFR,   D==   =>SP   
+TFR,   D==   =>US   
+TFR,   D==   =>Y   
+TFR,   D==   =>X   
+TFR,   D==   =>D   
+TFR,   DPR==   =>DPR   
+TFR,   DPR==   =>CCR   
+TFR,   DPR==   =>B   
+TFR,   DPR==   =>A   
+TFR,   CCR==   =>DPR   
+TFR,   CCR==   =>CCR   
+TFR,   CCR==   =>B   
+TFR,   CCR==   =>A   
+TFR,   B==   =>DPR   
+TFR,   B==   =>CCR   
+TFR,   B==   =>B   
+TFR,   B==   =>A   
+TFR,   A==   =>DPR   
+TFR,   A==   =>CCR   
+TFR,   A==   =>B   
+TFR,   A==   =>A   
+EXG,   PC==   =>PC   
+EXG,   PC==   =>SP   
+EXG,   PC==   =>US   
+EXG,   PC==   =>Y   
+EXG,   PC==   =>X   
+EXG,   PC==   =>D   
+EXG,   SP==   =>PC   
+EXG,   SP==   =>SP   
+EXG,   SP==   =>US   
+EXG,   SP==   =>Y   
+EXG,   SP==   =>X   
+EXG,   SP==   =>D   
+EXG,   US==   =>PC   
+EXG,   US==   =>SP   
+EXG,   US==   =>US   
+EXG,   US==   =>Y   
+EXG,   US==   =>X   
+EXG,   US==   =>D   
+EXG,   Y==   =>PC   
+EXG,   Y==   =>SP   
+EXG,   Y==   =>US   
+EXG,   Y==   =>Y   
+EXG,   Y==   =>X   
+EXG,   Y==   =>D   
+EXG,   X==   =>PC   
+EXG,   X==   =>SP   
+EXG,   X==   =>US   
+EXG,   X==   =>Y   
+EXG,   X==   =>X   
+EXG,   X==   =>D   
+EXG,   D==   =>PC   
+EXG,   D==   =>SP   
+EXG,   D==   =>US   
+EXG,   D==   =>Y   
+EXG,   D==   =>X   
+EXG,   D==   =>D   
+EXG,   DPR==   =>DPR   
+EXG,   DPR==   =>CCR   
+EXG,   DPR==   =>B   
+EXG,   DPR==   =>A   
+EXG,   CCR==   =>DPR   
+EXG,   CCR==   =>CCR   
+EXG,   CCR==   =>B   
+EXG,   CCR==   =>A   
+EXG,   B==   =>DPR   
+EXG,   B==   =>CCR   
+EXG,   B==   =>B   
+EXG,   B==   =>A   
+EXG,   A==   =>DPR   
+EXG,   A==   =>CCR   
+EXG,   A==   =>B   
+EXG,   A==   =>A   
+~IB,   [##,PCR]___   C WO,   
+~IB,   [##,PCR]__   C WO,   
+~IB,   [##,PCR]_   C WO,   
+~IB,   [##,PCR]   C WO,   
+~IB,   ##,PCR___   C WO,   
+~IB,   ##,PCR__   C WO,   
+~IB,   ##,PCR_   C WO,   
+~IB,   ##,PCR   C WO,   
+~IB,   [#,PCR]___   C CO,   
+~IB,   [#,PCR]__   C CO,   
+~IB,   [#,PCR]_   C CO,   
+~IB,   [#,PCR]   C CO,   
+~IB,   #,PCR___   C CO,   
+~IB,   #,PCR__   C CO,   
+~IB,   #,PCR_   C CO,   
+~IB,   #,PCR   C CO,   
+~IB,   [##,R]   S   10 WO,   
+~IB,   [##,R]   U   10 WO,   
+~IB,   [##,R]   Y   10 WO,   
+~IB,   [##,R]   X   10 WO,   
+~IB,   ##,R   S   10 WO,   
+~IB,   ##,R   U   10 WO,   
+~IB,   ##,R   Y   10 WO,   
+~IB,   ##,R   X   10 WO,   
+~IB,   [#,R]   S   10 CO,   
+~IB,   [#,R]   U   10 CO,   
+~IB,   [#,R]   Y   10 CO,   
+~IB,   [#,R]   X   10 CO,   
+~IB,   #,R   S   10 CO,   
+~IB,   #,R   U   10 CO,   
+~IB,   #,R   Y   10 CO,   
+~IB,   #,R   X   10 CO,   
+~IB,   [D,R]   S   
+~IB,   [D,R]   U   
+~IB,   [D,R]   Y   
+~IB,   [D,R]   X   
+~IB,   D,R   S   
+~IB,   D,R   U   
+~IB,   D,R   Y   
+~IB,   D,R   X   
+~IB,   [A,R]   S   
+~IB,   [A,R]   U   
+~IB,   [A,R]   Y   
+~IB,   [A,R]   X   
+~IB,   [B,R]   S   
+~IB,   [B,R]   U   
+~IB,   [B,R]   Y   
+~IB,   [B,R]   X   
+~IB,   [,R]   S   
+~IB,   [,R]   U   
+~IB,   [,R]   Y   
+~IB,   [,R]   X   
+~IB,   [,--R]   S   
+~IB,   [,--R]   U   
+~IB,   [,--R]   Y   
+~IB,   [,--R]   X   
+~IB,   [,R++]   S   
+~IB,   [,R++]   U   
+~IB,   [,R++]   Y   
+~IB,   [,R++]   X   
+~IB,   A,R   S   
+~IB,   A,R   U   
+~IB,   A,R   Y   
+~IB,   A,R   X   
+~IB,   B,R   S   
+~IB,   B,R   U   
+~IB,   B,R   Y   
+~IB,   B,R   X   
+~IB,   ,R   S   
+~IB,   ,R   U   
+~IB,   ,R   Y   
+~IB,   ,R   X   
+~IB,   ,--R   S   
+~IB,   ,--R   U   
+~IB,   ,--R   Y   
+~IB,   ,--R   X   
+~IB,   ,-R   S   
+~IB,   ,-R   U   
+~IB,   ,-R   Y   
+~IB,   ,-R   X   
+~IB,   ,R++   S   
+~IB,   ,R++   U   
+~IB,   ,R++   Y   
+~IB,   ,R++   X   
+~IB,   ,R+   S   
+~IB,   ,R+   U   
+~IB,   ,R+   Y   
+~IB,   ,R+   X   
+~IB,   [##]   C WO,   
+_""_   
