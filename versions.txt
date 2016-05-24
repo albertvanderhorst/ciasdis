@@ -1,0 +1,35 @@
+Functional stages. Bugs removed are not mentionned.
+For a more elaborate log see the log of ciforth.
+
+                    MILESTONES
+LINA531_OK : with lina32 5.3.1 the regressiontest target succeeds.
+ (must still be created as per 2016 may 20)
+CLASS : classes used instead of structs
+LDETECT : detecting and usage of label names within -dl disassembly.
+           RCSVERSION in ``make''ing of tests.
+REGRESSDIS : handles the regression tests for test.bin and lina, and
+             is able to create a reasonable value for rf751.asm, that
+             not yet assembles.
+
+MULTLABELS : labeldis prints all labels for the same address.
+             the testciasdis target succeeds, also for rf751.
+
+RF751_COMPLETE : rfcrawl.cul with rf751equ.cul contains basically
+                 al reverse engineering information now.
+
+TSTCMP_RCS : all testresults are in RCS now (practically)
+             elaborate test of SIB via LEAX, (all three offsets).
+
+TESTAS49 : all tests for assemblers work again, including 6809
+         and alpha. But those are using asgen.frt 4.9.1.1.
+
+REGRESSION_FULL : test for all assemblers and the ciasdis targets build
+    for make target regressiontest, and succeed.
+
+                     RELEASES
+
+
+REL-1-0           2010/08/22 Supposedly very clean, published as .deb file.
+REL-0-3           2007/03/11 Latest published, quite stable.
+REL-0-2           2005/03/05
+REL-0-1           2004/05/21 First published.
