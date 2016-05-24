@@ -4,10 +4,24 @@
 # This defines the usage of ciforth to build assemblers and reverse
 # engineering tools.
 
-# FIXME: Bear with me. This was adapted from the Makefile of ciforth
-# and contains a lot of stuff that has to be cleaned out.
-# It distracts but does no harm, other than that non-assembler targets
-# don't build.
+# Conventions:
+#    testset<arc> : a comprehensive set of opcodes plus addressing modes.
+#    testas<arc>  : the outcome of a partical test on testset<arc>
+#       - it is assembled, and the code dumped
+#       - the result is disassembled
+#       Outcome:
+#           - the difference with testset<arc> should only be the code
+#           - the code should agree with what is stored.
+#      The mere presence of an opcode in the set, implies that the binary
+#      code has been checked, manually or against other assemblers.
+#    gset<arc> : The outcome of a SHOW-ALL.
+#         It must be the same than in the archive, except after a
+#         fix of a defect. Then it must be updated.
+#         It can be checked against testset<arc>. Any additions must
+#         be incorporated into testset<arc> and checked.
+#
+# This is lifted from the ciforth makefile. Some non-valid
+# targets may still not be removed.
 
 #.SUFFIXES:
 #.SUFFIXES:.bin.asm.v.o.c
@@ -206,7 +220,7 @@ install:  default $(MISC_DOC) ciasdis.1 cul.5 install_bin
 	cp -f copyright $(INSTALLDIR)/usr/share/doc/ciasdis
 
 # If tests fails, test targets must be inspected.
-.PRECIOUS: rf751.asm lina405.asm test.bin
+.PRECIOUS: rf751.asm rf751.cul lina405.asm test.bin
 
 .PHONY: RELEASE default all clean releaseproof zip regressiontest testexamples debian
 
@@ -351,25 +365,24 @@ testasses : testasalpha testas6809 testas80 testas86 testallpentium
 
 # test386 is in fact testset386. It is an example how such testsets are
 # generated in the first place.
-test386: asgen.frt asi386.frt ; \
+gset386: asgen.frt asi386.frt ; \
     echo CR  \"INCLUDE\" WANTED INCLUDE asgen.frt INCLUDE asi386.frt ASSEMBLER HEX BITS-32   SHOW-ALL|\
     $(FORTH) -a|\
     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
     sed 's/~SIB|   1C SIB,,/[AX +1* 0]/' |\
     sed 's/~SIB|   14 SIB,,/[AX +1* BX]/'|\
+    tee get386.spare |\
     grep -v ciforth >$@;\
     rcsdiff -bBw -r$(RCSVERSION) $@
 
-test386.diff: test386 ; \
-    cat testset386 >tempie;\
-    diff -w $+ tempie >$@ ;\
+gset386.diff: gset386 ; \
+    diff -w $+ testset386 >$@ ;\
     rcsdiff -bBw -r$(RCSVERSION) $@;\
-    rm tempie
 
-testinstructionsets : test386.diff
+testinstructionsets : gset386.diff
 
-test386-16: asgen.frt asi386.frt ; \
+gset386-16: asgen.frt asi386.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
     $(FORTH) -e >$@       ;
 #   diff -w $@ testset386 >$@.diff ;\
