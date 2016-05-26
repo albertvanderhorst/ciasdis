@@ -24,10 +24,10 @@ INCLUDE elf.cul
 0804,80C6 EQU H_syscall
 
 \ Name buffer for words
-CREATE NAME-BUFFER 0 , 256 ALLOT
+CREATE NAME-BUFFER 0 , 200 ALLOT
 
 \ Prefix: "N_" for forth words, "N_m" for macro words.
-CREATE N_PREFIX 10 ALLOT
+CREATE N_PREFIX 6 CELL+ ALLOT    \ Count plus 6 letters.
 
 \ Prepend to NAME a from ``N_PREFIX'', return prefixed NAME in a static buffer.
 : >N_  N_PREFIX $@ NAME-BUFFER $!   NAME-BUFFER $+! NAME-BUFFER $@ ;
