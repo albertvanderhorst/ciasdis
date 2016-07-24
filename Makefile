@@ -230,7 +230,7 @@ all: regressiontest
 clean: testclean asclean install_clean
 	rcsclean
 	rm -f ciasdis.lab
-	rm *.bin
+	rm -f *.bin
 
 # How to get rid of the Debian test directory
 install_clean:
@@ -372,7 +372,7 @@ testinstructionsets : gset386.diff
 # test386 is in fact testset386. This is how such testsets are
 # generated in the first place.
 gset386: asgen.frt asi386.frt ; \
-    (cat $+;echo ASSEMBLER HEX BITS-32   SHOW-ALL)|\
+    (echo CR; cat $+;echo ASSEMBLER HEX BITS-32   SHOW-ALL)|\
     $(FORTH) -a|\
     sed 's/~SIB|   10 SIB,,/[DX +1* DX]/' |\
     sed 's/~SIB|   18 SIB,,/[DX +1* BX]/' |\
