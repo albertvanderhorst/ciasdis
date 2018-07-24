@@ -130,6 +130,7 @@ WANT ALIAS
 WANT @+
 'NOOP ALIAS ?EXEC   \ Define it if you want notified.
 WANT BAG
+: BAG DATA BUILD-BAG ;
 WANT DO-BAG
 WANT POSTFIX
 WANT class
