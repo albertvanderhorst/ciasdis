@@ -8,6 +8,7 @@
 
 WANT H.
 WANT BAG
+: BAG DATA BUILD-BAG ;
 
 \ : \D ;
 

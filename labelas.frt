@@ -5,6 +5,8 @@
 ( Handle labels )
 \ Simple and facility more advanced bag facility
 WANT BAG DO-BAG
+: BAG DATA BUILD-BAG ;
+
 WANT POSTFIX
 
 ( Make sure undefined labels don't fool up the first pass of the        )
