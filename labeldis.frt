@@ -12,7 +12,9 @@ WANT EXCHANGE
 WANT BIN-SEARCH
 WANT POSTFIX
 WANT 2>R
-WANT BAG             \ Simple bag facility
+\ Simple bag facility
+WANT BAG
+ : BAG DATA BUILD-BAG ;
 
 1000 CONSTANT MAX-LABEL
 
