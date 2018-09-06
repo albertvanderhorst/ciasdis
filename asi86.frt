@@ -30,6 +30,7 @@
 ( By setting 20 an opcode can force a memory reference, e.g. CALLFARO  )
 (               10 Register op        20 Memory op                    )
 (               40 D0                 80 [BP]                         )
+
 ( Only valid for 16 bits real mode  A0JUL04 AvdH )
 20 0 07 T!
  01 0 8 FAMILY|R [BX+SI] [BX+DI] [BP+SI] [BP+DI] [SI] [DI] -- [BX]
@@ -51,9 +52,10 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 01 00 38 T!
  08 0 8 FAMILY|R AL'| CL'| DL'| BL'| AH'| CH'| DH'| BH'|
 
-00 00 0200 T!   0200 0 2 FAMILY|R F| T|
-01 00 0100 0000 FIR B|
-02 00 0100 0100 FIR W|
+0100 00 02 00 xFI F|
+0100 00 02 02 xFI T|
+0101 00 01 00 xFI B|
+0102 00 01 01 xFI W|
 
 ( --------- two fixup operands ----------)
 00 00 FF03 T!
@@ -66,10 +68,10 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 00 0400 C701 00C6 2PI MOVI,
 
 ( --------- one fixup operands ----------)
-12 00 07 T!   08 40 4 1FAMILY, INC|X, DEC|X, PUSH|X, POP|X,
-12 00 07 90 1PI XCHG|AX,
-11 0400 07 B0 1PI MOVI|BR,
-12 0400 07 B8 1PI MOVI|XR,
+0212 00 07 T!   08 40 4 1FAMILY, INC|X, DEC|X, PUSH|X, POP|X,
+0212 00 07 90 1PI XCHG|AX,
+0211 0400 07 B0 1PI MOVI|BR,
+0212 0400 07 B8 1PI MOVI|XR,
 00 0400 C701 T!
  0800 0080 8 2FAMILY, ADDI, ORI, ADCI, SBBI, ANDI, SUBI, XORI, CMPI,
 02 0800 C700 T!
@@ -84,15 +86,16 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 22 00 C700 T!  1000 18FF 2 2FAMILY, CALLFARO, JMPFARO,
 
 ( --------- no fixup operands ----------)
-01 00 0200,0001 cludge64  00 FIR B'|
-02 00 0200,0001 cludge64  01 FIR W'|
-8 0200 201 T!    02 A0 2 1FAMILY, MOVTA, MOVFA,
-0 0400 201 T!
+\ 01 00 0200,0001 cludge64  00 FIR B'|
+\ 02 00 0200,0001 cludge64  01 FIR W'|
+01 CONSTANT DAH
+8 0200 DAH T!    02 A0 2 1FAMILY, MOVTA, MOVFA,
+0 0400 DAH T!
  08 04 8 1FAMILY, ADDI|A, ORI|A, ADCI|A, SBBI|A, ANDI|A, SUBI|A, XORI|A, CMPI|A,
-00 00 201 A8 1PI TESTI|A,
-00 00 201 T!  02 A4 6 1FAMILY, MOVS, CMPS, -- STOS, LODS, SCAS,
-00 1000 201 T!   02 E4 2 1FAMILY, IN|P, OUT|P,
-00 0000 201 T!   02 EC 2 1FAMILY, IN|D, OUT|D,
+00 00 DAH A8 1PI TESTI|A,
+00 00 DAH T!  02 A4 6 1FAMILY, MOVS, CMPS, -- STOS, LODS, SCAS,
+00 1000 DAH T!   02 E4 2 1FAMILY, IN|P, OUT|P,
+00 0000 DAH T!   02 EC 2 1FAMILY, IN|D, OUT|D,
 
 ( --------- special fixups ----------)
 

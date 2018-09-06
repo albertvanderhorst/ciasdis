@@ -1353,46 +1353,46 @@ J, C| N| 10 (RB,)
 J, C| Y| 10 (RB,)
 J, O| N| 10 (RB,)
 J, O| Y| 10 (RB,)
-OUT|D, W'|
-OUT|D, B'|
-IN|D, W'|
-IN|D, B'|
-OUT|P, W'| C P,
-OUT|P, B'| C P,
-IN|P, W'| C P,
-IN|P, B'| C P,
-SCAS, W'|
-SCAS, B'|
-LODS, W'|
-LODS, B'|
-STOS, W'|
-STOS, B'|
-CMPS, W'|
-CMPS, B'|
-MOVS, W'|
-MOVS, B'|
-TESTI|A, W'|
-TESTI|A, B'|
-CMPI|A, W'| C IX,
-CMPI|A, B'| C IB,
-XORI|A, W'| C IX,
-XORI|A, B'| C IB,
-SUBI|A, W'| C IX,
-SUBI|A, B'| C IB,
-ANDI|A, W'| C IX,
-ANDI|A, B'| C IB,
-SBBI|A, W'| C IX,
-SBBI|A, B'| C IB,
-ADCI|A, W'| C IX,
-ADCI|A, B'| C IB,
-ORI|A, W'| C IX,
-ORI|A, B'| C IB,
-ADDI|A, W'| C IX,
-ADDI|A, B'| C IB,
-MOVFA, W'| C X,
-MOVFA, B'| C X,
-MOVTA, W'| C X,
-MOVTA, B'| C X,
+OUT|D, W|
+OUT|D, B|
+IN|D, W|
+IN|D, B|
+OUT|P, W| C P,
+OUT|P, B| C P,
+IN|P, W| C P,
+IN|P, B| C P,
+SCAS, W|
+SCAS, B|
+LODS, W|
+LODS, B|
+STOS, W|
+STOS, B|
+CMPS, W|
+CMPS, B|
+MOVS, W|
+MOVS, B|
+TESTI|A, W|
+TESTI|A, B|
+CMPI|A, W| C IX,
+CMPI|A, B| C IB,
+XORI|A, W| C IX,
+XORI|A, B| C IB,
+SUBI|A, W| C IX,
+SUBI|A, B| C IB,
+ANDI|A, W| C IX,
+ANDI|A, B| C IB,
+SBBI|A, W| C IX,
+SBBI|A, B| C IB,
+ADCI|A, W| C IX,
+ADCI|A, B| C IB,
+ORI|A, W| C IX,
+ORI|A, B| C IB,
+ADDI|A, W| C IX,
+ADDI|A, B| C IB,
+MOVFA, W| C X,
+MOVFA, B| C X,
+MOVTA, W| C X,
+MOVTA, B| C X,
 JMPFARO, MEM| C X,
 JMPFARO, DW| [BP] 10 X,
 JMPFARO, DW| [BX] 10 X,

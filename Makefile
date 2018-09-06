@@ -220,7 +220,7 @@ install:  default $(MISC_DOC) ciasdis.1 cul.5 install_bin
 	cp -f copyright $(INSTALLDIR)/usr/share/doc/ciasdis
 
 # If tests fails, test targets must be inspected.
-.PRECIOUS: rf751.asm rf751.cul lina405.asm test.bin
+.PRECIOUS: rf751.asm rf751.cul lina405.asm test.bin testas86
 
 .PHONY: RELEASE default all clean releaseproof zip regressiontest testexamples debian
 
@@ -356,21 +356,20 @@ testas386a: asgen.frt asi386.frt testset386a ; \
     diff -w $@ testset386a >$@.diff ;\
     rcsdiff -bBw $@.diff
 
-# ------------------- TARGET TESTS ---------------------------------
 
-# Do all tests applicable to Pentium
 testasses : testasalpha testas6809 testas80 testas86 testallpentium
 
 testallpentium : testas386 testas386a testaspentium
 
-gsetall : gsetalpha gset6809 gset80 gset86 gset386-16 gsetallpentium
 
+# ------------------- generating testsets --------------------------
+
+gsetall : gsetalpha gset6809 gset80 gset86 gset386-16 gsetallpentium
 gsetallpentium : gset386 gsetpentium
 
-testinstructionsets : gset386.diff
-
-# test386 is in fact testset386. This is how such testsets are
-# generated in the first place.
+# gsetxxx contains all instruction that can be accepted.
+# This can be checked against expectation. Once that is done
+# it can be used as a testsetxxx.
 gset386: asgen.frt asi386.frt ; \
     (echo CR; cat $+;echo ASSEMBLER HEX BITS-32   SHOW-ALL)|\
     $(FORTH) -a|\
@@ -380,10 +379,6 @@ gset386: asgen.frt asi386.frt ; \
     sed 's/~SIB|   14 SIB,,/[AX +1* BX]/'|\
     grep -v ciforth >$@;\
     rcsdiff -bBw -r$(RCSVERSION) $@
-
-gset386.diff: gset386 ; \
-    diff -w $+ testset386 >$@ ;\
-    rcsdiff -bBw -r$(RCSVERSION) $@;\
 
 gset386-16: asgen.frt asi386.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
@@ -417,9 +412,16 @@ gsetpentium: asgen.frt asi386.frt asipentium.frt ; \
     $(FORTH) -a >$@       ;   \
     rcsdiff -bBw -r$(RCSVERSION) $@
 
-#   diff -w $@ testset386 >$@.diff ;\
-#   diff $@.diff testresults
+# ---------------------------------------
 
+testinstructionsets : gset386.diff
+
+# Extra test for the precious 386 subset
+gset386.diff: gset386 ; \
+    diff -w $+ testset386 >$@ ;\
+    rcsdiff -bBw -r$(RCSVERSION) $@;\
+
+# ---------------------------------------
 # As by : make RELEASE VERSION=1-0-0
 RELEASE: $(RELEASEASSEMBLER) cias ciasdis cidis $(ASSRCCLUDGE) ;\
     echo ciasdis-$(VERSION).tgz $+ | xargs tar cfz

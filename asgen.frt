@@ -629,6 +629,8 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
     DUP AS-POINTER !   >R
     3 SPACES
     BEGIN disassemble-this >next pifuend? RESULT? OR UNTIL
+\ Comment in next line for desperado debugging.
+\     DISS DO-BAG I @   ID. LOOP-BAG
     RESULT? IF
       .DISS     \ Advances pointer past commaers
       LATEST-INSTRUCTION @ >PRF @ BA-XT !
