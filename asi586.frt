@@ -50,7 +50,10 @@ WANT :2
 (  OS:         1,0000 16 bit Op      2,0000 32 bit Operand              )
 (  Use debug   4,0000 no ..          8,0000 CR0 ..DB0                   )
 (  FP:        10,0000 FP-specific   20,0000 Not FP                      )
-
+\
+\ The following is probably superfluous using 500/800
+\ anyway           better solved with a ghost bit in SET,
+(            400,0000  X| B|       800,0000 Y'| N'| SET,                )
 ( Names *ending* in percent BP|% -- not BP'| the prime registers -- are )
 ( only valid for 16 bits mode, or with an address overwite. Use W, L,   )
 ( appropriately.                                                        )
@@ -96,15 +99,15 @@ WANT :2
  0008 0100 8 FAMILY|R DR0| DR1| DR2| DR3| DR4| DR5| DR6| DR7| ( 3)
 
 0020,0000 0000 0200 T!  0200 00 2 FAMILY|R F| T|
-0424,0401 0000 0100 0000 FIR B|
-0424,0402 0000 0100 0100 FIR X|
+0024,0401 0000 0100 0000 FIR B|
+0024,0402 0000 0100 0100 FIR X|
 
 ( --------- These must be found last -------)
 0600 0 01FF 0000 1PI ~SIB,
 ( --------- two fixup operands ----------)
-0404,1000 0000 FF03 T!
+0004,1400 0000 FF03 T!
  0008 0000 8 2FAMILY, ADD, OR, ADC, SBB, AND, SUB, XOR, CMP,
-0404,1000 0000 FF01 T!
+0004,1400 0000 FF01 T!
  0002 0084 2 2FAMILY, TEST, XCHG,
 0404,1000 0000 FF03 0088 2PI MOV,
 1022 0 FF00 008D 2PI LEA,
@@ -128,17 +131,17 @@ WANT :2
 0012 0 0007 90 1PI XCHG|AX,
 0011 04 0007 B0 1PI MOVI|B,
 0012 04 0007 B8 1PI MOVI|X,
-0 04 C701 T!
+0400 04 C701 T!
  0800 0080 8 2FAMILY, ADDI, ORI, ADCI, SBBI, ANDI, SUBI, XORI, CMPI,
 ( It is dubious but fairly intractible whether the logical operation    )
 ( with sign extended bytes belong in the 386 instruction set.           )
 ( They are certainly there in the Pentium.                              )
 0002 08 C700 T!
  0800 0083 8 2FAMILY, ADDSI, ORSI, ADCSI, SBBSI, ANDSI, SUBSI, XORSI, CMPSI,
-0000 0 C701 T!
+0400 0 C701 T!
  0800 10F6 6 2FAMILY, NOT, NEG, MUL|AD, IMUL|AD, DIV|AD, IDIV|AD,
  0800 00FE 2 2FAMILY, INC, DEC,
-0 04 C701 00F6 2PI TESTI,
+0400 04 C701 00F6 2PI TESTI,
 0002 0 C700 008F 2PI POP,
 0002 0 C700 30FF 2PI PUSH,
 0002 0 C700 T!  1000 10FF 2 2FAMILY, CALLO, JMPO,
@@ -167,18 +170,20 @@ WANT :2
 0800     0000 0100,0001 cludge64 T!     01 00 2 FAMILY|R Y| N|
 0800     0000 0400,000E cludge64 T!     02 00 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
 0800 40 050F 0070 1PI J,
+0000,0800 80 5,0F00 800F 2PI J|X,                                           ( 3)
 
 2102 0 FF02 008C 2PI MOV|SG,
 
 0000 0 0200,0200 cludge64 0000 FIR 1|          ( 3)
 0000 0 0200,0200 cludge64 0200 FIR V|          ( 3)
-0100 0 2,C703 T! ( 2,0000 is a lockin for 1| V|)                   ( 3)
+0000,0500 0 2,C703 T! ( 2,0000 is a lockin for 1| V|)                   ( 3)
  0800 00D0 8 2FAMILY, ROL, ROR, RCL, RCR, SHL, SHR, -- SAR,  ( 3)
-0000 8 C701 T!
+\ 0400,0000 8 C701 T!
+0000,0400 8 C701 T!
  0800 00C0 8 2FAMILY, ROLI, RORI, RCLI, RCRI, SHLI, SHRI, -- SARI,  ( 3)
 8,0012 0000 3F,0300 C0,200F 3PI  MOV|CD,  ( 3)
 
-0800 80 5,0F00 800F 2PI J|X,                                           ( 3)
+
 0800,0800 0 0100 T!  0100 0000 2 FAMILY|R Y'| N'|                      ( 3)
 0800 0 0E00 T!  0200 0000 8 FAMILY|R O'| C'| Z'| CZ'| S'| P'| L'| LE'| ( 3)
 0901 0 C7,0F00 00,900F 3PI SET,  ( 3)

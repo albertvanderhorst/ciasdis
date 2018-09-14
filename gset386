@@ -580,22 +580,6 @@ SET,   O'|   Y'|   ZO|   [BX]
 SET,   O'|   Y'|   ZO|   [DX]   
 SET,   O'|   Y'|   ZO|   [CX]   
 SET,   O'|   Y'|   ZO|   [AX]   
-J|X,   LE|   N|   10 (RL,)   
-J|X,   LE|   Y|   10 (RL,)   
-J|X,   L|   N|   10 (RL,)   
-J|X,   L|   Y|   10 (RL,)   
-J|X,   P|   N|   10 (RL,)   
-J|X,   P|   Y|   10 (RL,)   
-J|X,   S|   N|   10 (RL,)   
-J|X,   S|   Y|   10 (RL,)   
-J|X,   CZ|   N|   10 (RL,)   
-J|X,   CZ|   Y|   10 (RL,)   
-J|X,   Z|   N|   10 (RL,)   
-J|X,   Z|   Y|   10 (RL,)   
-J|X,   C|   N|   10 (RL,)   
-J|X,   C|   Y|   10 (RL,)   
-J|X,   O|   N|   10 (RL,)   
-J|X,   O|   Y|   10 (RL,)   
 MOV|CD,   T|   DR7|   DI|   
 MOV|CD,   T|   DR7|   SI|   
 MOV|CD,   T|   DR7|   BP|   
@@ -2516,6 +2500,22 @@ MOV|SG,   F|   ES|   ZO|   [BX]
 MOV|SG,   F|   ES|   ZO|   [DX]   
 MOV|SG,   F|   ES|   ZO|   [CX]   
 MOV|SG,   F|   ES|   ZO|   [AX]   
+J|X,   LE|   N|   10 (RL,)   
+J|X,   LE|   Y|   10 (RL,)   
+J|X,   L|   N|   10 (RL,)   
+J|X,   L|   Y|   10 (RL,)   
+J|X,   P|   N|   10 (RL,)   
+J|X,   P|   Y|   10 (RL,)   
+J|X,   S|   N|   10 (RL,)   
+J|X,   S|   Y|   10 (RL,)   
+J|X,   CZ|   N|   10 (RL,)   
+J|X,   CZ|   Y|   10 (RL,)   
+J|X,   Z|   N|   10 (RL,)   
+J|X,   Z|   Y|   10 (RL,)   
+J|X,   C|   N|   10 (RL,)   
+J|X,   C|   Y|   10 (RL,)   
+J|X,   O|   N|   10 (RL,)   
+J|X,   O|   Y|   10 (RL,)   
 J,   LE|   N|   10 (RB,)   
 J,   LE|   Y|   10 (RB,)   
 J,   L|   N|   10 (RB,)   
