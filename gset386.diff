@@ -9,6 +9,40 @@
 > AS-HERE
 70a76
 > firstset
+582a589,604
+> J|X, LE| N| 10 (RL,)
+> J|X, LE| Y| 10 (RL,)
+> J|X, L| N| 10 (RL,)
+> J|X, L| Y| 10 (RL,)
+> J|X, P| N| 10 (RL,)
+> J|X, P| Y| 10 (RL,)
+> J|X, S| N| 10 (RL,)
+> J|X, S| Y| 10 (RL,)
+> J|X, CZ| N| 10 (RL,)
+> J|X, CZ| Y| 10 (RL,)
+> J|X, Z| N| 10 (RL,)
+> J|X, Z| Y| 10 (RL,)
+> J|X, C| N| 10 (RL,)
+> J|X, C| Y| 10 (RL,)
+> J|X, O| N| 10 (RL,)
+> J|X, O| Y| 10 (RL,)
+2503,2518d2524
+< J|X,   LE|   N|   10 (RL,)   
+< J|X,   LE|   Y|   10 (RL,)   
+< J|X,   L|   N|   10 (RL,)   
+< J|X,   L|   Y|   10 (RL,)   
+< J|X,   P|   N|   10 (RL,)   
+< J|X,   P|   Y|   10 (RL,)   
+< J|X,   S|   N|   10 (RL,)   
+< J|X,   S|   Y|   10 (RL,)   
+< J|X,   CZ|   N|   10 (RL,)   
+< J|X,   CZ|   Y|   10 (RL,)   
+< J|X,   Z|   N|   10 (RL,)   
+< J|X,   Z|   Y|   10 (RL,)   
+< J|X,   C|   N|   10 (RL,)   
+< J|X,   C|   Y|   10 (RL,)   
+< J|X,   O|   N|   10 (RL,)   
+< J|X,   O|   Y|   10 (RL,)   
 3843,3874d3848
 < XORSI,   MEM|   C L,   10 IS,   
 < XORSI,   R|   DI|   10 IS,   
