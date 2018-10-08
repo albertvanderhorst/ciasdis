@@ -743,11 +743,4 @@ ASSEMBLER
 
 PREVIOUS
 
-\ The manipulation with reversing byte orders are obscure.
-\ There is this trick of having a dummy bit that hangs overboard,
-\ and is filled by a zero by fixups. This is better solved by BAD
-\ bits. In a 64 bit system it lands on the wrong place,
-\ unless corrected by cludge64.
-HEX
-: cludge64   DUP 0FFFF > IF DUP 0FFFF AND SWAP OVER XOR  20 LSHIFT OR THEN ;
 DECIMAL
