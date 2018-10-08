@@ -246,7 +246,8 @@ VARIABLE BA-XT
 : RESET-BAD   BA-XT @ DUP IF EXECUTE ELSE
    DROP  BA-DEFAULT @ TALLY-BA ! THEN ;
 ( Initialise ``TALLY''                                                  )
-: !TALLY   0 TALLY-BI !   0 TALLY-BY !   RESET-BAD   0 OLDCOMMA ! ;
+: !TALLY   0 TALLY-BI !   0 TALLY-BY !   0 TALLY-GO !   RESET-BAD
+    0 OLDCOMMA ! ;
    0 BA-XT !   !TALLY
 ( Return: instruction IS complete, or not started)
 : AT-REST? TALLY-BI @ 0=   TALLY-BY @ 0=  AND TALLY-GO @ 0= AND ;
@@ -505,7 +506,7 @@ IS-A IS-DFIs : DFIs  CHECK31A CREATE '.DFI 'DIS-DFI 'TRY-DFI NEW-PIFU
     TALLY:|R this +DISS THEN THEN THEN THEN ;
 \ Match the tally to a (current) fixup from reverse pifu.
 : TRY-FIR   BI-R TALLY-BI @ CONTAINED-IN IF
-    ^GO @ TALLY-GO CONTAINED-IN IF
+    ^GO @ TALLY-GO @ CONTAINED-IN IF
     TALLY:|R this +DISS THEN THEN ;
 ( Define a fixup-from-reverse by BA BY BI and the FIXUP bits )
 ( One size fits all, because of the character of the or-operations. )
