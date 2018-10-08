@@ -474,4 +474,4 @@ cidis386.zip : $(ASSRC) asi386.frt asipentium.frt ;  zip $@ $+
 testexamples : test.bin lina405.asm rf751.asm
 
 # -----------------
-regressiontest : testasses testexamples testinstructionsets
+regressiontest : gsetall testasses testexamples testinstructionsets
