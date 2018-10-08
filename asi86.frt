@@ -96,20 +96,25 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 
 ( --------- special fixups ----------)
 
-00 00 0100,0001 T!   01 0 2 FAMILY|R Y| N|
+01 GO!
+00 00 01 T!   01 0 2 FAMILY|R Y| N|
+00 GO!
 00 00 0E T!   02 0 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
-00 4000 10F 70 1PI J,
+01 GO!
+00 4000 0F 70 1PI J,
+00 GO!
 
 00 00 18 T!   08 0 4 FAMILY|R ES| CS| SS| DS|
 00 00 18 T!   01 06 2 1FAMILY, PUSH|SG, POP|SG,
 02 00 DF02 08C 2PI MOV|SG,
 
-00 00  0100,0200  0000 FIR 1|
-00 800 0100,0200  0200 FIR V|
+02 GO!
+00 00  0200  0000 FIR 1|
+00 800 0200  0200 FIR V|
 
-00 0 01,C703 T!
-(    0800 00D0 8 2FAMILY, ROL, ROR, RCL, RCR, SHL, SHR, -- SAR,         )
+00 0 00,C703 T!
  0800 00D0 8 2FAMILY, ROL, ROR, RCL, RCR, SHL, SHR, SAL, SAR,
+00 GO!
 
 ( --------- no fixups ---------------)
 

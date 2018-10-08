@@ -220,7 +220,8 @@ install:  default $(MISC_DOC) ciasdis.1 cul.5 install_bin
 	cp -f copyright $(INSTALLDIR)/usr/share/doc/ciasdis
 
 # If tests fails, test targets must be inspected.
-.PRECIOUS: rf751.asm rf751.cul lina405.asm test.bin testas86
+.PRECIOUS: rf751.asm rf751.cul lina405.asm test.bin
+.PRECIOUS: testas80 testas86 testas386
 
 .PHONY: RELEASE default all clean releaseproof zip regressiontest testexamples debian
 

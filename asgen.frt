@@ -104,6 +104,8 @@
 ( The bit in `TALLY-BA' means a 16 bit operation. Now if `TALLY-BA'     )
 ( contains 3 it would mean that it is at the same time an 8 bit and 16  )
 ( bit operation. Bad!                                                   )
+( In this example the GO bits are not affected, as is almost always     )
+( the case.                                                             )
 
 ( The following problems can be detected:                               )
 ( - postit when `TALLY-BI' or `TALLY-BY' contains bits up               )
@@ -121,6 +123,14 @@
 ( the Pentium. Instead of putting the information that we are in a      )
 ( 16 bit operand segment in TALLY-BA , it transforms that information   )
 ( to 32 bit.                                                            )
+
+( Some bits of BI fall before the instruction proper, and they          )
+( require a 0 in the corresponding fixup. In this way it is possible    )
+( that fixups are filled in the same position than other instruction    )
+( but are separate by virtue of the bits. This bit manipulation can     )
+( be done in one go with the normal BI operations and are called        )
+( ghost bits, but for the moment they are separate and they are         )
+( called good bits, and the name is GO either way.                      )
 
 ( ############### PRELUDE ############################################# )
 
@@ -219,9 +229,11 @@ NAMESPACE ASSEMBLER             ASSEMBLER DEFINITIONS HEX
 
 ( ------------- ASSEMBLER, BOOKKEEPING -------------------------------- )
 ( The bookkeeping is needed for error detection and disassembly.        )
-VARIABLE TALLY-BI  ( Bits that needs fixed up)
+VARIABLE TALLY-BI  ( Bits that needs fixed up, and are filled in. )
+VARIABLE TALLY-GO  ( Bits that needs fixed up, but are always zero. )
 VARIABLE TALLY-BY  ( Bits represent a commaer that is to be supplied)
 VARIABLE TALLY-BA  ( State bits, bad if two consequitive bits are up)
+
 ( Bits set in the default can be used to exclude certain classes of     )
 ( instructions, e.g. because they are not implemented.                  )
 VARIABLE BA-DEFAULT    0 BA-DEFAULT !
@@ -237,12 +249,20 @@ VARIABLE BA-XT
 : !TALLY   0 TALLY-BI !   0 TALLY-BY !   RESET-BAD   0 OLDCOMMA ! ;
    0 BA-XT !   !TALLY
 ( Return: instruction IS complete, or not started)
-: AT-REST? TALLY-BI @ 0=   TALLY-BY @ 0=  AND ;
+: AT-REST? TALLY-BI @ 0=   TALLY-BY @ 0=  AND TALLY-GO @ 0= AND ;
 ( For N : it CONTAINS bad pairs)
 : BADPAIRS? DUP 1 LSHIFT AND AAAAAAAAAAAAAAAA AND ;
 : BAD? TALLY-BA @ BADPAIRS? ;  ( The state of assembling IS inconsistent)
 ( If STATUS were added to `TALLY-BA' would that CREATE a bad situation? )
 : COMPATIBLE? TALLY-BA @ OR BADPAIRS? 0= ;
+\ Prototypes for tallies.
+CREATE PRO-TALLY 3 CELLS ALLOT  ( Prototype for TALLY-BI BY BA )
+CREATE PRO-GO    1 CELLS ALLOT  ( Prototype for good/ghost bit)
+( Fill in the tally prototype with BA BY BI information                 )
+: T! PRO-TALLY !+ !+ !+ DROP ;
+: GO! PRO-GO ! ;
+( Get the data from the tally prototype back BA BY BI )
+: T@ PRO-TALLY 3 CELLS +  @- @- @- DROP ;
 DECIMAL
 ( Generate errors. None have net stack effects, such that they may be   )
 ( replaced by NULL definitions.                                         )
@@ -354,6 +374,7 @@ class PIFU
    M: BI^      M;
    M: BI-R   @ CORRECT-R M;   ( fixup bit if "from-reverse" )
   M: BI    @  M; ,            ( postit or regular fixup bits)
+  M: ^GO    M; 0 ,            ( ghost/good bits )
    M: BY^      M;
   M: BY    @  M; ,            ( bytes, mask for commaers )
    M: BA^      M;
@@ -405,7 +426,7 @@ endclass
 : !POSTIT  AS-HERE ISS !  0 OLDCOMMA ! ;  ( Initialise in behalf of postit )
 ( Bookkeeping for a commaer that is the current PIFU                    )
 ( Is also used for disassembling.                                       )
-: TALLY:,   BI TALLY-BI !   BY TALLY-BY !   BA TALLY-BA OR!U
+: TALLY:,   BI TALLY-BI !   BY TALLY-BY !   BA TALLY-BA OR!U  ^GO @ TALLY-GO !
     CNT ISL !   PRF @ BA-XT ! ;
 ( Post the instruction using a POINTER to a postit pifu                  )
 : POSTIT   CHECK26 PIFU!   !POSTIT !TALLY TALLY:,   DAT assemble, ;
@@ -419,7 +440,8 @@ endclass
 IS-A IS-PI   \ Awaiting REMEMBER.
 ( Define an instruction by BA BY BI and the OPCODE plus COUNT           )
 : PI  >R CHECK33 CREATE  '%~ID. 'DIS-PI 'TRY-PI NEW-PIFU R>
-    CNT^ !   DOES> REMEMBER POSTIT ;
+   CNT^ ! PRO-GO @ ^GO ! DOES>
+   REMEMBER POSTIT ;
 ( 1 .. 4 byte instructions ( BA BY BI OPCODE : - )
 : 1PI   1 PI ;     : 2PI   2 PI ;    : 3PI   3 PI ;    : 4PI   4 PI ;
 
@@ -469,7 +491,7 @@ IS-A IS-DFIs : DFIs  CHECK31A CREATE '.DFI 'DIS-DFI 'TRY-DFI NEW-PIFU
 
 ( Bookkeeping for a fixup-from-reverse that is the current pifu         )
 ( Is also used for disassembling.                                       )
-: TALLY:|R  BI-R TALLY-BI AND!   BY TALLY-BY OR!
+: TALLY:|R  BI-R TALLY-BI AND!   BY TALLY-BY OR!   ^GO @ TALLY-GO AND!
     BA TALLY-BA OR!U ;
 ( Fix up the instruction using a POINTER to a reverse fixup pifu    )
 : FIXUP-REVERSE PIFU!   DAT-R ISS @ OR!   TALLY:|R  CHECK32 ;
@@ -477,17 +499,20 @@ IS-A IS-DFIs : DFIs  CHECK31A CREATE '.DFI 'DIS-DFI 'TRY-DFI NEW-PIFU
 : FIXUP-N-REVERSE   PIFU! SHT LSHIFT REVERSE-BYTES CORRECT-R   ISS @ OR!
     TALLY:|R CHECK32 ;
 ( A disassembler for the current, fixup from reverse pifu.              )
-: DIS-FIR   BI-R   TALLY-BI @ CONTAINED-IN IF   BI-R
-  INSTRUCTION AND   DAT-R = IF   BA COMPATIBLE? IF TALLY:|R
-  this +DISS THEN THEN THEN ;
+: DIS-FIR   BI-R   TALLY-BI @ CONTAINED-IN IF
+    ^GO @ TALLY-GO @ CONTAINED-IN IF
+    BI-R INSTRUCTION AND   DAT-R = IF   BA COMPATIBLE? IF
+    TALLY:|R this +DISS THEN THEN THEN THEN ;
 \ Match the tally to a (current) fixup from reverse pifu.
-: TRY-FIR   BI-R TALLY-BI @ CONTAINED-IN IF   TALLY:|R this +DISS THEN ;
+: TRY-FIR   BI-R TALLY-BI @ CONTAINED-IN IF
+    ^GO @ TALLY-GO CONTAINED-IN IF
+    TALLY:|R this +DISS THEN THEN ;
 ( Define a fixup-from-reverse by BA BY BI and the FIXUP bits )
 ( One size fits all, because of the character of the or-operations. )
 ( bi and fixup are specified that last byte is lsb, such as you read it )
 IS-A IS-FIR   : FIR   CHECK31 CREATE
    REVERSE-BYTES SWAP REVERSE-BYTES SWAP '%~ID. 'DIS-FIR 'TRY-FIR NEW-PIFU
-    DOES> REMEMBER FIXUP-REVERSE ;
+   PRO-GO @ ^GO ! DOES> REMEMBER FIXUP-REVERSE ;
 ( Print a disassembly for the current, 'data-fixup from reverse' pifu )
 : .DFIR   INSTRUCTION   BI-R AND   SHT RSHIFT   REVERSE-BYTES
     CORRECT-R U.   %ID. ;
@@ -526,11 +551,6 @@ IS-A  IS-COMMA   : COMMAER   CREATE BUILD-COMMA  DOES> REMEMBER COMMA ;
 
 ( ------------- ASSEMBLER, SUPER DEFINING WORDS ----------------------)
 
-CREATE PRO-TALLY 3 CELLS ALLOT  ( Prototype for TALLY-BI BY BA )
-( Fill in the tally prototype with BA BY BI information                 )
-: T! PRO-TALLY !+ !+ !+ DROP ;
-( Get the data from the tally prototype back BA BY BI )
-: T@ PRO-TALLY 3 CELLS +  @- @- @- DROP ;
 ( Return "The next word IS not -- "                                           )
 : no--  PP @ >R NAME 2 <> SWAP "--" CORA OR DUP IF R> PP !
     ELSE RDROP THEN ;
