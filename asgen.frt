@@ -189,13 +189,13 @@ NAMESPACE ASSEMBLER             ASSEMBLER DEFINITIONS HEX
 : IGNORE? >NFA @ CELL+ C@ &~ = ;
 
 ( Build: allocate place to remember a DOES> address of a `CREATE'd word )
-( Leave that ADDRESS  to be filled in by ``REMEMBER''                   )
+( Leave that address in the variable `REMEMBERED                        )
 ( Execution: Leave for DEA : it IS of same type as the remembered DOES> )
-: IS-A CREATE HERE 1 CELLS ALLOT DOES> @ SWAP %>DOES @ = ;
+VARIABLE REMEMBERED
+: IS-A CREATE HERE REMEMBERED ! _ , DOES> @ SWAP %>DOES @ = ;
 ( Patch up the data field of a preceeding word defined by `IS-A'        )
 ( To be called when sitting at the DOES> address                        )
-( The !CSP / ?CSP detects stack changes. Now split it into 2 checks.    )
-: REMEMBER ?CSP HERE SWAP ! !CSP ; IMMEDIATE
+: REMEMBER HERE REMEMBERED @ ! ; IMMEDIATE
 
 ( Also needed : ?ERROR                                                  )
 (   `` : ?ERROR DROP DROP ; '' defeats all checks.                      )
