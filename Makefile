@@ -30,10 +30,8 @@
 # + are generated files if they are mentionned on the next line
 #
 #* .ps : as usual (See TeX)
-# .frt : text file : contains blocks in an \n separated stream
+# .frt : text file containing Forth code
 #* .bin : a binary image without header
-
-# ALL FILES STARTING IN ``ci86'' (OUTHER ``ci86.gnr'') ARE GENERATED
 
 FORTH=./lina
 
@@ -43,13 +41,13 @@ INSTALLDIR=/
 INSTALLED_LAB=$(INSTALLDIR)/usr/lib/ciasdis.lab
 INSTALLED_BIN=$(INSTALLDIR)/usr/bin/ciasdis
 
-
 MISC_DOC= \
 RCS_changelog \
 README.assembler.txt \
 # That's all folks!
 
 ASTARGETS= cias cidis ciasdis test.bin test2.bin test2.asm
+TESTTARGETS= test.bin lina405.asm rf751.asm rf751.cul
 
 # Generic source for assembler
 # Include two pass, reverse engineering.
@@ -70,6 +68,17 @@ cias.frt \
 cidis.frt \
 # That's all folks!
 
+# Plug ins for generic assembler
+PGSRC= \
+as6809.frt \
+as80.frt        \
+asi86.frt       \
+asi386.frt      \
+asipentium.frt      \
+asalpha.frt     \
+# That's all folks!
+
+# Test files for assemblers.
 TESTSETS= \
 testset386   \
 testset386a  \
@@ -78,27 +87,33 @@ testset8080  \
 testset8086  \
 testsetalpha   \
 testsetpentium \
-#asm386endtest   ---- WHAT? ---
-# That's all folks!
-# Test files for assemblers.
 # That's all folks!
 
-# Plug ins for stand alone assembler
+# asm386endtest is burned down, very early test.
+
+# Output of running testsets, they should be the same
+# as the testset itself, except for the binary code.
+TESTAS= \
+testas386       \
+testas386a      \
+testas6809      \
+testas80        \
+testas86        \
+testasalpha     \
+testaspentium   \
+# That's all folks!
+
+#  Complete small, stand alone assemblers without error detection
+# for export to SBC or .lab files.
 PGSRC= \
 as6809s.frt \
-as80.frt        \
-asi86.frt       \
-asi386.frt      \
-asalpha.frt     \
+as8086s.frt \
 # That's all folks!
 
 # Other Forth source.
 #   Quick reference sheet generator
-#   Complete small, stand alone assemblers
 UNPSRC= \
 ps.frt    \
-ass.frt  \
-#as6809s.frt \
 # That's all folks!
 
 # Consult files for general use
@@ -121,18 +136,6 @@ p0.asi386.ps    \
 p0F.asi386.ps   \
 qr8086.ps       \
 qr8080.ps       \
-# That's all folks!
-
-
-# More test files for assemblers.
-TESTAS= \
-testas386       \
-testas386a      \
-testas6809      \
-testas80        \
-testas86        \
-testasalpha     \
-testaspentium   \
 # That's all folks!
 
 # Test files for reverse engineering and two pass.
@@ -186,12 +189,27 @@ TEMPFILE=/tmp/ciforthscratch
 MASK=FF
 PREFIX=0
 TITLE=QUICK REFERENCE PAGE FOR 80386 ASSEMBLER
-TESTTARGETS= test.bin lina405.asm rf751.asm rf751.cul
 DEBIANFILES=control
 
 # How to check out, anything
 %:RCS/%,v
 	co -r$(RCSVERSION) $<
+
+# Using the elective screen requires the exact library coming
+# with the assembler!
+%.ps : asgen.frt %.frt ps.frt ; \
+    ( \
+	echo  \"INCLUDE\" WANTED  \"DUMP\" WANTED ;\
+	cat $+ ;\
+	echo 'PRELUDE' ;\
+	echo 'HEX $(MASK) MASK ! $(PREFIX) PREFIX ! DECIMAL ' ;\
+	echo ' "$(TITLE)"   TITLE $$!' ;\
+	echo ' QUICK-REFERENCE BYE' \
+    )|\
+    $(FORTH) -e |\
+    sed '1,/SNIP TILL HERE/d' |\
+    sed '/SI[MB]/d' |\
+    sed '/OK/d' >p$(PREFIX).$@
 
 # Default target for convenience
 default : ciasdis ciasdis.lab
@@ -221,17 +239,19 @@ install:  default $(MISC_DOC) ciasdis.1 cul.5 install_bin
 
 # If tests fails, test targets must be inspected.
 .PRECIOUS: rf751.asm rf751.cul lina405.asm test.bin
-.PRECIOUS: testas80 testas86 testas386
+.PRECIOUS: $(TESTAS)
 
-.PHONY: RELEASE default all clean releaseproof zip regressiontest testexamples debian
+.PHONY: RELEASE default all clean releaseproof zip \
+    regressiontest testexamples debian
 
 # Some of these targets make no sense and will fail
 all: regressiontest
 
-clean: testclean asclean install_clean
+clean: testclean install_clean
 	rcsclean
 	rm -f ciasdis.lab
 	rm -f *.bin
+	rm -f ciasdis_tbi*
 
 # How to get rid of the Debian test directory
 install_clean:
@@ -252,30 +272,12 @@ srczip : $(RELEASECONTENT) ; echo ciasdis-dev-$(VERSION).tar.gz $+ | xargs tar -
 # Make a normal, binary distribution.
 zip : $(BINRELEASE) ; echo ciasdis-$(VERSION).tar.gz $+ | xargs tar -cvzf
 
-testclean: ; rm -f $(TESTTARGETS) $(TESTSETS)  $(TESTAS)
-
-asclean: ; rm -f $(ASTARGETS)
+testclean: ; rm -f $(TESTAS) $(TESTTARGETS) $(ASTARGETS)
 
 releaseproof : ; for i in $(RELEASECONTENT); do  rcsdiff -w $$i ; done
 
 # WARNING : the generation of postscript and pdf use the same files
 # for indices, but with different content.
-
-# Using the elective screen requires the exact library coming
-# with the assembler!
-%.ps : asgen.frt %.frt ps.frt ; \
-    ( \
-	echo  \"INCLUDE\" WANTED  \"DUMP\" WANTED ;\
-	cat $+ ;\
-	echo 'PRELUDE' ;\
-	echo 'HEX $(MASK) MASK ! $(PREFIX) PREFIX ! DECIMAL ' ;\
-	echo ' "$(TITLE)"   TITLE $$!' ;\
-	echo ' QUICK-REFERENCE BYE' \
-    )|\
-    $(FORTH) -e |\
-    sed '1,/SNIP TILL HERE/d' |\
-    sed '/SI[MB]/d' |\
-    sed '/OK/d' >p$(PREFIX).$@
 
 qr8080.ps       :; make as80.ps TITLE='QUICK REFERENCE PAGE FOR 8080 ASSEMBLER'; mv p0.as80.ps $@
 qr8086.ps       :; make asi86.ps TITLE='QUICK REFERENCE PAGE FOR 8086 ASSEMBLER'; mv p0.asi86.ps $@
@@ -315,7 +317,7 @@ testas80: asgen.frt as80.frt testset8080 ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8080 >$@.diff ;\
-    rcsdiff -bBw $@.diff
+    rcsdiff -bBw -r$(RCSVERSION) $@.diff
 
 testas86: asgen.frt asi86.frt testset8086 ; \
     rm -f $@.diff ;\
@@ -324,7 +326,7 @@ testas86: asgen.frt asi86.frt testset8086 ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8086 >$@.diff ;\
-    rcsdiff -bBw $@.diff
+    rcsdiff -bBw -r$(RCSVERSION) $@.diff
 
 testas386: asgen.frt asi386.frt testset386 ; \
     rm -f $@.diff ;\
@@ -333,7 +335,7 @@ testas386: asgen.frt asi386.frt testset386 ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset386 >$@.diff ;\
-    rcsdiff -bBw $@.diff
+    rcsdiff -bBw -r$(RCSVERSION) $@.diff
 
 # This is limited to pentium instructions common to all pemtiums,
 # excluded those tested by testas386
@@ -344,7 +346,7 @@ testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testsetpentium >$@.diff ;\
-    rcsdiff -bBw $@.diff
+    rcsdiff -bBw -r$(RCSVERSION) $@.diff
 
 # Special test to exercise otherwise hidden instructions.
 testas386a: asgen.frt asi386.frt testset386a ; \
@@ -355,15 +357,26 @@ testas386a: asgen.frt asi386.frt testset386a ; \
     sed '/^OK$$/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset386a >$@.diff ;\
-    rcsdiff -bBw $@.diff
+    rcsdiff -bBw -r$(RCSVERSION) $@.diff
 
 
 testasses : testasalpha testas6809 testas80 testas86 testallpentium
 
 testallpentium : testas386 testas386a testaspentium
 
+# ---------------------------------------
+
+
+# Extra test for the precious 386 subset
+gset386.diff: gset386 ; \
+    diff -w $+ testset386 >$@ ;\
+    rcsdiff -bBw -r$(RCSVERSION) $@;\
+
 
 # ------------------- generating testsets --------------------------
+
+# Testsets are generated by the SHOW-ALL command.
+# Once testsets are present, they can be used to test SHOW-ALL
 
 gsetall : gsetalpha gset6809 gset80 gset86 gset386-16 gsetallpentium
 gsetallpentium : gset386 gsetpentium
@@ -412,15 +425,6 @@ gsetpentium: asgen.frt asi386.frt asipentium.frt ; \
     (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
     $(FORTH) -a >$@       ;   \
     rcsdiff -bBw -r$(RCSVERSION) $@
-
-# ---------------------------------------
-
-testinstructionsets : gset386.diff
-
-# Extra test for the precious 386 subset
-gset386.diff: gset386 ; \
-    diff -w $+ testset386 >$@ ;\
-    rcsdiff -bBw -r$(RCSVERSION) $@;\
 
 # ---------------------------------------
 # As by : make RELEASE VERSION=1-0-0
@@ -474,4 +478,4 @@ cidis386.zip : $(ASSRC) asi386.frt asipentium.frt ;  zip $@ $+
 testexamples : test.bin lina405.asm rf751.asm
 
 # -----------------
-regressiontest : gsetall testasses testexamples testinstructionsets
+regressiontest : testasses testexamples gsetall gset386.diff
