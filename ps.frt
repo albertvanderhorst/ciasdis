@@ -11,6 +11,7 @@ DECIMAL
 : DEFAULT "QUICK REFERENCE PAGE FOR 8086 ASSEMBLER" ;
 DEFAULT TITLE $!
 : PRELUDE
+  CR
   ." SNIP TILL HERE" CR
   ." %!" CR
   ." /Helvetica findfont 10 scalefont setfont " CR
@@ -56,11 +57,11 @@ DECIMAL
   ." showpage" CR
 ;
 
-( Print the DEA at place N in the opcode map )
+( Print the opcode of the current pifu at place N in the opcode map )
 : OPCODE
    8 /MOD 31 SWAP - SWAP
    . ." .15 add wt mul " . ." .5 add ht mul 5 sub moveto " CR
-   &( EMIT ID. &) EMIT ." show" CR
+   &( EMIT this %~ID. &) EMIT ." show" CR
 ;
 
 
@@ -68,14 +69,14 @@ DECIMAL
 ( For DEA and N : this dea FITS in box n )
 : MATCH?
     INCREMENT @ * PREFIX @ + ( Opcode)
-    OVER >DATA @ XOR ( Difference)
-    SWAP >BI @ INVERT AND ( Valid bits)
+    DAT XOR ( Difference)
+    SWAP BI INVERT AND ( Valid bits)
     MASK @ AND ( Relevant byte)
     0=
 ;
 
 
-( Fill in a box of the opcode wherever DEA fits.                        )
+( Fill in a box of the opcode wherever cuurent pifu fits.               )
 : OPCODES
   MASK @ 1+ 256 / INCREMENT !
   256 0 DO
@@ -87,12 +88,12 @@ DECIMAL
 : QUICK-REFERENCE
     FRAME
     !DISS   !TALLY
-    STARTVOC BEGIN
-        DUP IS-PI IF
-           DUP OPCODES
+    pifustart BEGIN
+        this IS-PI IF
+           OPCODES
         THEN
-        >NEXT%
-    DUP VOCEND? UNTIL DROP
+        >next
+    pifuend? UNTIL
     POSTLUDE
 ;
 PREVIOUS

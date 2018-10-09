@@ -206,10 +206,12 @@ DEBIANFILES=control
 	echo ' "$(TITLE)"   TITLE $$!' ;\
 	echo ' QUICK-REFERENCE BYE' \
     )|\
-    $(FORTH) -e |\
+    $(FORTH) -a |\
     sed '1,/SNIP TILL HERE/d' |\
-    sed '/SI[MB]/d' |\
-    sed '/OK/d' >p$(PREFIX).$@
+    cat >p$(PREFIX).$@
+
+#     sed '/SI[MB]/d' |\
+#     sed '/OK/d' |\
 
 # Default target for convenience
 default : ciasdis ciasdis.lab
