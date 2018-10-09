@@ -8,37 +8,37 @@
 ( This makes the assembler such that it runs on 32 bit systems.         )
 : W, lsbyte, lsbyte, DROP ;
 ( FIXME: it is not clear whether this is still true.                    )
-( There are some fixups-from-reverse that are larger than 2 l bytes.    )
+( There are some fixups-from-reverse that are larger than 02 l bytes.    )
 ( Using the out of mask bit trick, that has to be eliminated.           )
 ." This 8086 assembler runs only on 32 bits systems!" CR
 
 ( ############## 8086 ASSEMBLER PROPER ################################ )
 ( The decreasing order means that a decompiler hits them in the         )
 ( right order                                                           )
-0 2        0 8000 ' W,    COMMAER (RX,) ( cell relative to IP )
-0 1        0 4000 ' AS-C, COMMAER (RB,) ( byte relative to IP )
-0 2        0 2000 ' W,    COMMAER SG,   (  Segment: WORD      )
-0 1        0 1000 ' AS-C, COMMAER P,    ( port number ; byte     )
-0 1        0  800 ' AS-C, COMMAER IS,   ( immediate byte data, obligatory size)
-0 2        2  400 ' W,    COMMAER IX,   ( immediate data : cell)
-0 1        1  400 ' AS-C, COMMAER IB,   ( immediate byte data)
-0 2        8  200 ' W,    COMMAER X,    ( immediate data : address/offset )
-0 1        4  200 ' AS-C, COMMAER B,    ( immediate byte : address/offset )
-0 2        0  100 ' W,    COMMAER OW,    ( obligatory word     )
-( Bits in TALLY  1 OPERAND IS BYTE     2 OPERAND IS CELL                )
-(                4 OFFSET   DB|        8 ADDRESS      DW|               )
+00 02        00 8000 ' W,    COMMAER (RX,) ( cell relative to IP )
+00 01        00 4000 ' AS-C, COMMAER (RB,) ( byte relative to IP )
+00 02        00 2000 ' W,    COMMAER SG,   (  Segment: WORD      )
+00 01        00 1000 ' AS-C, COMMAER P,    ( port number ; byte     )
+00 01        00  800 ' AS-C, COMMAER IS,   ( immediate byte data, obligatory size)
+00 02        02  400 ' W,    COMMAER IX,   ( immediate data : cell)
+00 01        01  400 ' AS-C, COMMAER IB,   ( immediate byte data)
+00 02        08  200 ' W,    COMMAER X,    ( immediate data : address/offset )
+00 01        04  200 ' AS-C, COMMAER B,    ( immediate byte : address/offset )
+00 02        00  100 ' W,    COMMAER OW,    ( obligatory word     )
+( Bits in TALLY  01 OPERAND IS BYTE     02 OPERAND IS CELL                )
+(                04 OFFSET   DB|        08 ADDRESS      DW|               )
 ( By setting 20 an opcode can force a memory reference, e.g. CALLFARO  )
 (               10 Register op        20 Memory op                    )
 (               40 D0                 80 [BP]                         )
 
 ( Only valid for 16 bits real mode  A0JUL04 AvdH )
-20 0 07 T!
- 01 0 8 FAMILY|R [BX+SI] [BX+DI] [BP+SI] [BP+DI] [SI] [DI] -- [BX]
-A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
-12 0 07 T!
- 01 0 8 FAMILY|R AX| CX| DX| BX| SP| BP| SI| DI|
-11 0 07 T!
- 01 0 8 FAMILY|R AL| CL| DL| BL| AH| CH| DH| BH|
+20 00 07 T!
+ 01 00 8 FAMILY|R [BX+SI] [BX+DI] [BP+SI] [BP+DI] [SI] [DI] -- [BX]
+A0 00 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
+12 00 07 T!
+ 01 00 8 FAMILY|R AX| CX| DX| BX| SP| BP| SI| DI|
+11 00 07 T!
+ 01 00 8 FAMILY|R AL| CL| DL| BL| AH| CH| DH| BH|
 
 60 000  C0 00 FIR      D0|
 24 200  C0 40 FIR      DB|
@@ -48,9 +48,9 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
  ( Overrules D0| [BP] )
 
 02 00 38 T!
- 08 0 8 FAMILY|R AX'| CX'| DX'| BX'| SP'| BP'| SI'| DI'|
+ 08 00 8 FAMILY|R AX'| CX'| DX'| BX'| SP'| BP'| SI'| DI'|
 01 00 38 T!
- 08 0 8 FAMILY|R AL'| CL'| DL'| BL'| AH'| CH'| DH'| BH'|
+ 08 00 8 FAMILY|R AL'| CL'| DL'| BL'| AH'| CH'| DH'| BH'|
 
 0100 00 02 00 xFI F|
 0100 00 02 02 xFI T|
@@ -86,8 +86,8 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 22 00 C700 T!  1000 18FF 2 2FAMILY, CALLFARO, JMPFARO,
 
 ( --------- no fixup operands ----------)
-8 0200 01 T!    02 A0 2 1FAMILY, MOVTA, MOVFA,
-0 0400 01 T!
+08 0200 01 T!    02 A0 2 1FAMILY, MOVTA, MOVFA,
+00 0400 01 T!
  08 04 8 1FAMILY, ADDI|A, ORI|A, ADCI|A, SBBI|A, ANDI|A, SUBI|A, XORI|A, CMPI|A,
 00 00 01 A8 1PI TESTI|A,
 00 00 01 T!  02 A4 6 1FAMILY, MOVS, CMPS, -- STOS, LODS, SCAS,
@@ -97,14 +97,14 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 ( --------- special fixups ----------)
 
 01 GO!
-00 00 01 T!   01 0 2 FAMILY|R Y| N|
+00 00 01 T!   01 00 2 FAMILY|R Y| N|
 00 GO!
-00 00 0E T!   02 0 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
+00 00 0E T!   02 00 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
 01 GO!
 00 4000 0F 70 1PI J,
 00 GO!
 
-00 00 18 T!   08 0 4 FAMILY|R ES| CS| SS| DS|
+00 00 18 T!   08 00 4 FAMILY|R ES| CS| SS| DS|
 00 00 18 T!   01 06 2 1FAMILY, PUSH|SG, POP|SG,
 02 00 DF02 08C 2PI MOV|SG,
 
@@ -112,7 +112,7 @@ A0 0 07 06 FIR [BP]  ( Fits in the hole, safe incompatibility)
 00 00  0200  0000 FIR 1|
 00 800 0200  0200 FIR V|
 
-00 0 00,C703 T!
+00 00 00,C703 T!
  0800 00D0 8 2FAMILY, ROL, ROR, RCL, RCR, SHL, SHR, SAL, SAR,
 00 GO!
 
