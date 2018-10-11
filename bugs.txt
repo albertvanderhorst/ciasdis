@@ -38,3 +38,42 @@ Example: disassembling at priority 1 hits a data area with priority
 0. The disassembling stop there.
 Disassembling at priority 1 would stop at an unknown instruction,
 at priority 0 it would not.
+
+------------------------ REPORTED ---------------------------------
+
+The colorforth crew reports that there is a space missing after
+RB, (resulting in collated comment RB,\ )
+Solution: end ID-NO() with a SPACE .
+
+----------------------- AFTER 2018 ----------------------
+Confirmed per 2018 sep 4
+The 8080 assembler allows things as
+MOV M'| M|
+PUSH SP
+LDAX HL
+because no BAD bit at all are used in the thingies.
+
+Confirmed per 2018 sep 4
+4.53
+Completion now works generally ok with one exception:
+  [MEM expects tally bits surviving the SIB instruction,
+  but after `` LEA, AX'| ZO| [MEM '' SHOW-COMPLETION
+  doesn't work. ( error 28)
+  This looks most like a bug in the 386 assembler than the
+  generic system.
+Not so easy involves sib-byte.
+
+Rejected per 2018 sep 11
+There is a problem around the disassembly of variables like
+base and h0 in rf751.asm
+
+make gsetalpha is different in 32 and 64 bit mode.
+Almost nothing works in 64 bits.
+
+rf751 gives a phase error on tib. This can be ignored.
+It is not understood either. It has nothing to do with the
+existance of a word TIB in the kernel of Forth.
+.
+
+The greatest problem is that in fact the format of the
+data in the PIFU's is not documented.
