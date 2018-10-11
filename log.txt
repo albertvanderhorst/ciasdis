@@ -1,0 +1,279 @@
+
+Old notes from when?
+ ALL DONE!
+
+
+Adding data to the assembler
+
+Up till now, the assembler can only generate code.
+
+For data we could propose:
+(The all too familiar "Define Byte" of before.)
+
+        d$      ^[ &A 0 &B 0 &[ ^J  83
+        d$      "we gaan er voor" ^J ^M  " and more"
+        db      17 4F 17 1B 01 13
+        dw      17F6 17F9
+        dl      7898,ABCD  7898,ABCD  7898,ABCD
+        dq      7898,ABCD,7898,ABCD
+
+This cannot be defined in the assembler proper, because
+the endianess comes into play. It must use the W, L,
+of the underlying specific assembler module.
+
+The first thing to do is to make a range specifying labelstruct.
+
+This has a payload of a structured word:
+   end of range,
+   xt of disassembler,
+   target address of first word
+
+
+F0000 F8000 -DS-
+Old notes from when?
+Elementary :
+*Allow to assemble to a buffer that can be dumped into a binary file.
+*switch the here pointer
+
+Secondary :
+ Allow to specify the basic look of the disassembly
+ * code range
+ * chars range
+ * bytes range
+ * cells range
+ ?? - addresses range ?? postponed ??
+
+Note those range should be sorted. So they must be in the same table,
+in ascending order. They can be easily checked for overlaps.
+
+* add d$ / db
+* have a list of labels
+  a set of dea's , executing a dea reveals the labels value
+* look up a label into the labelset
+* identfiy a commaer that must be looked up.
+* discriminate between relative and absolute labels.
+* begin and if lines that start an Assembler Structure
+* allow the buffer disassembled to be at an offset address
+
+
+* nice if labels of entry points are garanteed to be named.
+* collapsing unnamed similar intervals into one.
+* starting at nice boundaries like multiples of 10
+
+The above: ALL DONE !
+
+
+\\\\\\\\\\\\\\\\\\\ 2016 may 24 : look into this :
+
+1. Fill in execution tokens handled by NEW-PIFU
+2. renaming DSP @ EXECUTE --> display etc.
+  passing execution tokens during creation, instead of filling them in.
+3. renaming >DSP to specifiy-display
+4. rethinking %
+5. making vocabularies no more immediate, compatible with 5.0
+6. make it run on version 5 using `` WANT -version4- ''
+7. get rid of REMEMBER
+8. explicit linked list instead of using the dictionary.
+This will result in >%NEXT making the next PIFU current,
+skipping the -- names, and make IS-PIFU superfluous.
+9. run a test with version 5 wina
+10. cleanup the makefile, w.r.t. disassembly
+11. check that show-all for 386 pentium combined doesn't
+ show more than 386 and pentium separately.
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+- make the target gsetall work for 64 bits.
+- make the target rf751cul work for 64 bits.
+- make a mechanism for debian archives
+2018 sep 4
+After `` make clean '' and `` make regressiontest '' all seem okay.
+
+Bug:
+    MOV, F| AX'| R| BX|
+    accepts
+    N'|
+
+    although the bits for N'| are hanging out of the bit fields
+    that are acceptable.
+solved in asi386.frt  4.30
+
+Bug: STx| as a possible target for POP, no longer a problem.
+
+Make rf751 gives a phase error for tib, because there is
+TIB in Forth itself. This could be remedied by defining
+rftib instead of tib. This has been tried but not put back
+in the archive.
+
+2018 sep 4
+Fiddling around with asi86.frt
+The conclusion is that it is not a good idea to get rid of the
+fake bits that hang outside the area that is changed.
+This is a very flexible mechanism and it is hard to replace it
+by extra bad bits, because the instruction that used the fake
+bit would have one bad flag, and *all* other instructions
+potentially need the conflicting bad flag.
+I coint the term ghost bit for the bits that hanging out.
+
+2018 sep 6
+It is disturbing that bits are not in the correct order,
+or that mask bits are not corresponding to the order of
+postit or fixup, or that ghost bits are not at the position
+in the mask compared to where they are in the tally.
+This can be remedied if the postits are in memory order.
+Then the fixup from behind and the mask corresponding to the postits
+can be in memory order. Both must be applied from the end of the
+instruction, which is no biggy. This accomodates ghost bits
+that are before the start of the instruction.
+Fixups from the front can have a ghost bit, provided they are
+applied from the back. This can be accomodated if the size of the
+fixup is known. So we need 1FI and 2FI instead of xFI.
+This again is no biggy.
+
+-------------------------------
+To go in the doc
+
+Every two operand instruction has a primary register fixup
+either like AX'| or AL'|. Not counting as two operand instructions
+are those that have an implied register AX or an immediate data.
+Mostly also a T| or F| is needed wich means to or from the primary
+operand. This is not applicable for i.a. LEA, and XCHG, instructions.
+
+The 64 bit prefix is   Q'.[ and L'.[
+Q means 64 bits operation, L 32 bits.
+' means the primary operand is taken from the extended set
+. means the unprimed operand is taken from the extended set
+] means the index register is taken from the extended set.
+Any combination is possible. Q: means just 64 bits without
+extended registers.
+Example
+Q'[ LEA, AX'| [BX] means that both are from the extended set
+Q.  MOV, T| AX'| X| BX| means that BX| is from the extended set.
+Q: is instead of a lone Q
+------------------------------
+
+What we must get rid off is the cludge64.
+However it is pretty easy to fixup from behind.
+XOR a byte at `` HERE 1- '' then `` 8 RSHIFT '' until zero.
+
+Furthermore. The conclusion is that V| and X| are proper normal
+xFI's while AX| is done from behind.
+However whenever ghost bits are necessary it is easiest to
+fixup from behind.
+
+So the battle plan is to define FIR' that is as simple as possible
+and 32/64 bit clean. Then introduce that everywhere, then
+rename.
+
+I gotrid of B'| W'| in asi86.frt (asi86.frt 4.11).
+
+sep 8
+There is  only one way, make a reasonable architectural
+description. Then adapt the code to that.
+
+2018 sep 11
+It makes no sense to get rid of B'| . The B| bit is at the end
+of the first byte of one, the first byte of two, or the
+second byte of three. Having B| as a fixup of the paenultimate
+byte is then the best idea. This leaves us with B'| for some
+instructions like IN OUT and string instructions.
+
+Y'| N'| came up spuriously. This has been solved by introducing
+8000,0000 bad bit to conflict with B| N|
+
+2018 sep 14
+It turns out there were already bad bits for Y'| !
+To wit 400/800 . Introducing those passes all tests.
+
+2018 sep 15
+The conclusion is that the internal format of pifu's must be
+documented. Then strive towards defining the data such that
+it can be filled in from the least significant bytes
+from the higher towards the lower addresses.
+- This is easy,
+- the bi masks are always compatible
+- ghost bits are at their natural place
+- the printiout is compatible with Intel documentation/
+ memory byte order
+
+2018 oct 1
+It appears to be really cumbersome to make incremental
+changes.
+
+2018 oct 2
+This is the plan:
+Add a 1PI` that is using the new approach.
+Add a FIR` that is using the new approach.
+Make 1PI's without ghost bits use 1PI`
+Make FIR's that are used only on 1PI's use FIR`
+This should be sufficient to convert as80.frt.
+
+We can separate between 4PI and xFI DFI and the rest.
+This can be accomodated by L, and the like.
+This means that for the moment asalpha just remains
+working.
+A possible problem is the DFI for 6809.
+
+2018 oct 4
+A version that is stable and passes all tests is called 1-1-0.
+If 1-2 fails, this will be the one presented to Debian.
+The idea is to have CORRECT-NEW that will inverse the order of
+bytes within the length prescribed by ISL.
+The entry will be corrected upon PI (creation) then the new version
+is used.
+
+2018 oct 5
+The trick to have the BI filled in with data that can be ored in from behind
+has succeeded.
+The ghost bit must be separated out into a separate field.
+We need two global adjusters ; ghost-pt and isl-pt.
+ghost-pt is the stuff hanging outboard and usl-pt is what we
+expect the instruction length to be.
+
+2018 oct 7
+At last there is a plan:
+ write a document where it is explained how to handle the
+ big-endian/small-endian and firxup from behind issues.
+
+Introduce a good bit instead of a ghost bit. Because good bits
+must agree between the postit and the reverse pickups they can be corrected
+one by one.
+Starting with asi86.frt
+
+2018 oct 8
+asi86.frt works with target testas86.
+Work underway for asi386.frt
+It is discovered that there is another testtarget : gset86.
+This failed because of two remaining defects in the GO mechanism.
+asgen.frt,v 4.66 asi86.frt,v 4.13 pass all tests for the 8086.
+Testing a 64 bit version of lina: the memory must be increased
+to 64 Mbyte.
+Then the target testasses succeeds.
+Now we can eliminate cludge from asgen.frt too (done).
+The whole regressiontest succeeds.
+
+Next: using FIR's in their natural order.
+This is only relevant to multiple byte FIR's.
+as6809.frt : only one byte FIR's
+as80.frt asalpha.frt : no FIR
+asi86.frt : only one byte FIR's
+asi386.frt : only two byte FIR's are
+1| V| / CRx| DRx| / F| B| / Y'| LE'|
+asipentium : only two byte FIR's are
+u| m|  / s| d| / 16| 32|
+
+2018 oct 9
+The whole regressiontest succeeds even for 64 bit lina 5.3.0.
+The rf751 lina405 and test.asm have small problems, more
+related to the use of ciasdis than with defects in ciasdis.
+
+With a few adaptations, the opcode sheets for 8080
+6809 and 8086 succeed however there is a shift and the
+makefile is not correct. The file need for x.ps is
+x.frt but that is not automatically made.
+This was sufficient success to check in ps.frt 4.3.
+
+2018 oct 11
+I must cleanup, throwing away experiments and superfluous files.
+A terrible cleanup has been done, with lot of stuf sorted
+into subdirectories.
