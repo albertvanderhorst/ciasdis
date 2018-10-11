@@ -38,7 +38,7 @@ DUP LABEL e_shstrndx        2  +
 \D  e_shstrndx        W@  ."  e_shstrndx  " . CR
 
 e_phoff           L@  \ Where the programheader starts
-DUP 0= "Not a program, cidis can't handle multiple segments" ?ABORT
+DUP 0= "Not a program, elf.cul has no provision for multiple segments" ?ABORT
 DUP LABEL p_type     4 +
 DUP LABEL p_offset   4 +
 DUP LABEL p_vaddr    4 +
