@@ -1,0 +1,88 @@
+( $Id$ )
+( Copyright{2004}: Albert van der Horst, HCC FIG Holland by GNU Public License)
+
+\ The folling is intended for a disassembler running in 32 bits mode.
+: Q@ L@ ;
+
+0 -ORG-         \ Preliminary, to analyse header
+0 B@ 7F <> "Fatal, not an elf header!" ?ABORT
+1 TARGET>HOST 3 "ELF" $= 0 = "Fatal, not an elf header!" ?ABORT
+: \D ;             \ Comment in for debugging.
+0
+DUP LABEL e_ident           10 +
+DUP LABEL e_type            2  +
+DUP LABEL e_machine         2  +
+DUP LABEL e_version         4  +
+DUP LABEL e_entry           8  +
+DUP LABEL e_phoff           8  +
+DUP LABEL e_shoff           8  +
+DUP LABEL e_flags           4  +
+DUP LABEL e_ehsize          2  +
+DUP LABEL e_phentsize       2  +
+DUP LABEL e_phnum           2  +
+DUP LABEL e_shentsize       2  +
+DUP LABEL e_shnum           2  +
+DUP LABEL e_shstrndx        2  +
+    LABEL e_headerend
+\D
+\D  e_ident  TARGET>HOST  ."  e_ident      " CR     10 DUMP
+\D  e_type            W@  ."  e_type     " . CR
+\D  e_machine         W@  ."  e_machine  " . CR
+\D  e_version         L@  ."  e_version  " . CR
+\D  e_entry           Q@  ."  e_entry    " . CR
+\D  e_phoff           Q@  ."  e_phoff    " . CR
+\D  e_shoff           Q@  ."  e_shoff    " . CR
+\D  e_flags           L@  ."  e_flags    " . CR
+\D  e_ehsize          W@  ."  e_ehsize   " . CR
+\D  e_phentsize       W@  ."  e_phentsize " . CR
+\D  e_phnum           W@  ."  e_phnum     " . CR
+\D  e_shentsize       W@  ."  e_shentsize " . CR
+\D  e_shnum           W@  ."  e_shnum     " . CR
+\D  e_shstrndx        W@  ."  e_shstrndx  " . CR
+
+e_phoff           L@  \ Where the programheader starts
+DUP 0= "Not a program, cidis can't handle multiple segments" ?ABORT
+DUP LABEL p_type     8 +
+DUP LABEL p_offset   8 +
+DUP LABEL p_vaddr    8 +
+DUP LABEL p_paddr    8 +
+DUP LABEL p_filesz   8 +
+DUP LABEL p_memsz    8 +
+DUP LABEL p_flags    4 +
+DUP LABEL p_align    4 +
+    LABEL p_headerend
+
+\D  p_type     Q@   ."  p_type    " . CR
+\D  p_offset   Q@   ."  p_offset  " . CR
+\D  p_vaddr    Q@   ."  p_vaddr   " . CR
+\D  p_paddr    Q@   ."  p_paddr   " . CR
+\D  p_filesz   Q@   ."  p_filesz  " . CR
+\D  p_memsz    Q@   ."  p_memsz   " . CR
+\D  p_flags    L@   ."  p_flags   " . CR
+\D  p_align    L@   ."  p_align   " . CR
+\D  MAKE-CUL
+
+p_vaddr Q@ p_offset Q@ -   -ORG-
+
+\ Correct the labels to have the target position.
+\ Note that the value of the label was stored at 2 places,
+\ this may be a design error.
+: test EQU-LABELS DO-LAB
+    TARGET-START I +!   TARGET-START I CELL+ @ >DFA +!
+LOOP-LAB ; test
+
+e_ident    DUP        10 +  -d$-
+e_type    e_version     -dw-
+e_version e_ehsize      -dl-
+e_ehsize  e_headerend   -dw-
+p_type    p_headerend   -dl-
+
+p_filesz L@ EQU filesz
+p_vaddr L@ EQU  filest
+filest filesz + LABEL _end
+
+e_entry  L@ LABEL _start
+
+\ Crawl using elf's information. In rare case it is ill-advised
+\ to do it automatically.
+: ELF-CRAWL   _start CRAWL ;
