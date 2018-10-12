@@ -34,6 +34,8 @@
 #* .bin : a binary image without header
 
 FORTH=./lina
+DIFF_TXT=rcsdiff -bBw -r$(RCSVERSION)
+DIFF_BIN=rcsdiff -r$(RCSVERSION)
 
 # The following directory are supposedly in line with the
 # Debian FHS directory philosophy.
@@ -301,7 +303,7 @@ testasalpha: asgen.frt asalpha.frt testsetalpha ; \
 	sed '1,/TEST STARTS HERE/d' |\
 	sed 's/^[0-9A-F \.,]*://' >$@ ;\
 	diff -w $@ testsetalpha >$@.diff ;\
-	rcsdiff -bBw -r$(RCSVERSION) $@.diff
+	$(DIFF_TXT) $@.diff
 
 testas6809: asgen.frt as6809.frt testset6809 ; \
 	rm -f $@.diff ;\
@@ -310,7 +312,7 @@ testas6809: asgen.frt as6809.frt testset6809 ; \
 	sed '1,/TEST STARTS HERE/d' |\
 	sed 's/^[0-9A-F \.,]*://' >$@ ;\
 	diff -w $@ testset6809 >$@.diff ;\
-	rcsdiff -bBw -r$(RCSVERSION) $@.diff
+	$(DIFF_TXT) $@.diff
 
 testas80: asgen.frt as80.frt testset8080 ; \
 	rm -f $@.diff ;\
@@ -319,7 +321,7 @@ testas80: asgen.frt as80.frt testset8080 ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8080 >$@.diff ;\
-    rcsdiff -bBw -r$(RCSVERSION) $@.diff
+    $(DIFF_TXT) $@.diff
 
 testas86: asgen.frt asi86.frt testset8086 ; \
     rm -f $@.diff ;\
@@ -328,7 +330,7 @@ testas86: asgen.frt asi86.frt testset8086 ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset8086 >$@.diff ;\
-    rcsdiff -bBw -r$(RCSVERSION) $@.diff
+    $(DIFF_TXT) $@.diff
 
 testas386: asgen.frt asi386.frt testset386 ; \
     rm -f $@.diff ;\
@@ -337,7 +339,7 @@ testas386: asgen.frt asi386.frt testset386 ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset386 >$@.diff ;\
-    rcsdiff -bBw -r$(RCSVERSION) $@.diff
+    $(DIFF_TXT) $@.diff
 
 # This is limited to pentium instructions common to all pemtiums,
 # excluded those tested by testas386
@@ -348,7 +350,7 @@ testaspentium: asgen.frt asi386.frt asipentium.frt testsetpentium ; \
     sed '1,/TEST STARTS HERE/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testsetpentium >$@.diff ;\
-    rcsdiff -bBw -r$(RCSVERSION) $@.diff
+    $(DIFF_TXT) $@.diff
 
 # Special test to exercise otherwise hidden instructions.
 testas386a: asgen.frt asi386.frt testset386a ; \
@@ -359,7 +361,7 @@ testas386a: asgen.frt asi386.frt testset386a ; \
     sed '/^OK$$/d' |\
     sed 's/^[0-9A-F \.,]*://' >$@       ;\
     diff -w $@ testset386a >$@.diff ;\
-    rcsdiff -bBw -r$(RCSVERSION) $@.diff
+    $(DIFF_TXT) $@.diff
 
 
 testasses : testasalpha testas6809 testas80 testas86 testallpentium
@@ -372,7 +374,7 @@ testallpentium : testas386 testas386a testaspentium
 # Extra test for the precious 386 subset
 gset386.diff: gset386 ; \
     diff -w $+ testset386 >$@ ;\
-    rcsdiff -bBw -r$(RCSVERSION) $@;\
+    $(DIFF_TXT) $@;\
 
 
 # ------------------- generating testsets --------------------------
@@ -394,39 +396,39 @@ gset386: asgen.frt asi386.frt ; \
     sed 's/~SIB|   1C SIB,,/[AX +1* 0]/' |\
     sed 's/~SIB|   14 SIB,,/[AX +1* BX]/'|\
     grep -v ciforth >$@;\
-    rcsdiff -bBw -r$(RCSVERSION) $@
+    $(DIFF_TXT) $@
 
 gset386-16: asgen.frt asi386.frt ; \
     (cat $+;echo ASSEMBLER HEX BITS-16   SHOW-ALL)|\
     $(FORTH) -a >$@       ; \
-    rcsdiff -bBw -r$(RCSVERSION) $@
+    $(DIFF_TXT) $@
 
 gset6809: asgen.frt as6809.frt ; \
     (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
     $(FORTH) -a >$@       ;\
-    rcsdiff -bBw -r$(RCSVERSION) $@
+    $(DIFF_TXT) $@
 
 gsetalpha: asgen.frt asalpha.frt ; \
     echo CR \"INCLUDE\" WANTED  \"DUMP\" WANTED INCLUDE asgen.frt INCLUDE asalpha.frt ASSEMBLER HEX SHOW-ALL |\
     $(FORTH) -a >$@       ; \
-    rcsdiff -bBw -r$(RCSVERSION) $@
+    $(DIFF_TXT) $@
 
 #  (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
 
 gset80: asgen.frt as80.frt ; \
     (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
     $(FORTH) -a >$@       ; \
-    rcsdiff -bBw -r$(RCSVERSION) $@
+    $(DIFF_TXT) $@
 
 gset86: asgen.frt asi86.frt ; \
     (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
     $(FORTH) -a >$@       ;  \
-    rcsdiff -bBw -r$(RCSVERSION) $@
+    $(DIFF_TXT) $@
 
 gsetpentium: asgen.frt asi386.frt asipentium.frt ; \
     (cat $+;echo ASSEMBLER HEX SHOW-ALL)|\
     $(FORTH) -a >$@       ;   \
-    rcsdiff -bBw -r$(RCSVERSION) $@
+    $(DIFF_TXT) $@
 
 # ---------------------------------------
 # As by : make RELEASE VERSION=1-0-0
@@ -444,34 +446,34 @@ test.bin : ciasdis cidis cias test.asm test.cul
 	ciasdis -d test.bin test.cul > test2.asm
 	ciasdis -a test2.asm test2.bin
 	diff test2.bin test.bin
-	rcsdiff -r$(RCSVERSION) test.bin
-	rcsdiff -b -B -r$(RCSVERSION) test2.asm
+	$(DIFF_BIN) test.bin
+	$(DIFF_TXT) test2.asm
 	cias test.asm test.bin
 	cidis test.bin test.cul > test2.asm
 	cias test2.asm test2.bin
 	diff test2.bin test.bin
-	rcsdiff -r$(RCSVERSION) test.bin
-	rcsdiff -b -B -r$(RCSVERSION) test2.asm
+	$(DIFF_BIN) test.bin
+	$(DIFF_TXT) test2.asm
 
 lina405.asm : ciasdis lina405equ.cul lina405.cul
 	co -p lina405  > lina405
 	ciasdis -d lina405 lina405.cul >$@
 	ciasdis -a $@ lina405
-	rcsdiff -r$(RCSVERSION) lina405
-	rcsdiff -b -B -r$(RCSVERSION) $@
+	$(DIFF_BIN) lina405
+	$(DIFF_TXT) $@
 
 # Test case, reverse engineer retroforth version 7.5.1.
 rf751.cul : ciasdis rf751equ.cul rfcrawl.cul elf.cul
 	co -p rf751  > rf751
 	echo FETCH rf751 INCLUDE rfcrawl.cul | ciasdis >$@
-	rcsdiff -bBw -r$(RCSVERSION) $@
+	$(DIFF_TXT) $@
 
 rf751.asm : ciasdis rf751equ.cul rf751.cul
 	co -p rf751  > rf751
 	ciasdis -d rf751 rf751.cul >$@
-	rcsdiff -bBw -r$(RCSVERSION) $@
+	$(DIFF_TXT) $@
 	ciasdis -a $@ rf751
-	rcsdiff -r$(RCSVERSION) rf751
+	$(DIFF_BIN) rf751
 
 %.bin : %.asm ; ciasdis -a $< $@
 
