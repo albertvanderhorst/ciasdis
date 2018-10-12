@@ -2,8 +2,23 @@ Functional stages. Bugs removed are not mentionned.
 For a more elaborate log see the log of ciforth.
 
                     MILESTONES
+REL-1-1-0: elaborate test for lina32 5.3.0, assemblers work voor lina64
+  grand cleanup
 LINA531_OK : with lina32 5.3.1 the regressiontest target succeeds.
- (must still be created as per 2016 may 20)
+ (must still be created as per 2016 may 20) (dubious)
+LAST_FOR_LINA4: The last version that works with lina 4.0.6/4.0.7
+REL-1-0-0: debianized and published on hcc page.
+        SECTION:          }
+        REL-0-3-0:        }
+        REL-0-2-0:        }
+        REGRESSION_FULL:  }
+        CLASS_IN_LAB:     }
+        LINA405:          }  See logforth.txt
+        TESTAS49:         }
+        RF751_COMPLETE:   }
+        MULTLABEL:        }
+        REGRESSDIS:       }
+        LDETECT:          }
 CLASS : classes used instead of structs
 LDETECT : detecting and usage of label names within -dl disassembly.
            RCSVERSION in ``make''ing of tests.
