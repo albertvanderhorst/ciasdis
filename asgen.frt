@@ -294,6 +294,7 @@ DECIMAL
 : CHECK30 DUP OLDCOMMA @ < 30 ?ERROR DUP OLDCOMMA ! ;
 HEX
 ( Or DATA into ADDRESS. If bits were already up its wrong.)
+: COR! >R R@ C@  CHECK28 OR R> C! ;   \ unused but tested.
 : OR! >R R@ @  CHECK28 OR R> ! ;
 : OR!U >R R@ @  OR R> ! ; ( Or DATA into ADDRESS. Unchecked.)
 ( Reset bits of DATA into ADDRESS. If bits were already down it's wrong )
