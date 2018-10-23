@@ -4,10 +4,10 @@
 ( Instructions to compare with, last byte 0..FF )
 ALSO ASSEMBLER
 DECIMAL
-0 VARIABLE PREFIX
+VARIABLE PREFIX     0 PREFIX  !
 ( Mask to compare with, contains valid bytes of PREFIX )
-255 VARIABLE MASK
-0 VARIABLE TITLE 255 ALLOT
+VARIABLE MASK       255 MASK !
+CREATE TITLE 256 CELL+ ALLOT
 : DEFAULT "QUICK REFERENCE PAGE FOR 8086 ASSEMBLER" ;
 DEFAULT TITLE $!
 : PRELUDE
@@ -65,9 +65,9 @@ DECIMAL
 ;
 
 
-0 VARIABLE INCREMENT
+VARIABLE INCREMENT
 ( For DEA and N : this dea FITS in box n )
-: MATCH?
+: MATCH? 1+
     INCREMENT @ * PREFIX @ + ( Opcode)
     DAT XOR ( Difference)
     SWAP BI INVERT AND ( Valid bits)
@@ -79,7 +79,7 @@ DECIMAL
 ( Fill in a box of the opcode wherever cuurent pifu fits.               )
 : OPCODES
   MASK @ 1+ 256 / INCREMENT !
-  256 0 DO
+  256 -1 DO
     DUP I MATCH? IF DUP I OPCODE THEN
   LOOP
   DROP
