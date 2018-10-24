@@ -696,8 +696,9 @@ CREATE SOMEMORE
 
 ( Show all possible completions of the current partially completed      )
 ( instruction.                                                          )
-: SHOW-COMPLETION   >_""_ !DISS    '_""_ +DISS REBUILD
-    pifustart BEGIN AT-REST? 0= DISS? AND pifuend? 0= AND WHILE
+: SHOW-COMPLETION   AT-REST? IF EXIT THEN
+    >_""_ !DISS    '_""_ +DISS REBUILD
+    pifustart BEGIN DISS? pifuend? 0= AND WHILE
     SHOW-STEP REPEAT   _""_> ;
 
 ( ********************* DEFINING WORDS FRAMEWORK ********************** )
