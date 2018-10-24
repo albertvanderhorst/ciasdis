@@ -89,7 +89,7 @@ VARIABLE INCREMENT
     FRAME
     !DISS   !TALLY
     pifustart BEGIN
-        this IS-PI IF
+        this IS-PI   this '_""_ <> AND IF
            OPCODES
         THEN
         >next
