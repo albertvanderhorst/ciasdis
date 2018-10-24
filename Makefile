@@ -197,12 +197,12 @@ DEBIANFILES=control
 %:RCS/%,v
 	co -r$(RCSVERSION) $<
 
-# Using the elective screen requires the exact library coming
-# with the assembler!
-%.ps : asgen.frt %.frt ps.frt ; \
+# Generate an opcode sheet for the mnemonics present in one
+# assembler file, possibly a second sheet for e.g. OFxx .
+%.ps : %.frt ; \
     ( \
 	echo  \"INCLUDE\" WANTED  \"DUMP\" WANTED ;\
-	cat $+ ;\
+	cat asgen.frt $+ ps.frt ;\
 	echo 'PRELUDE' ;\
 	echo 'HEX $(MASK) MASK ! $(PREFIX) PREFIX ! DECIMAL ' ;\
 	echo ' "$(TITLE)"   TITLE $$!' ;\
@@ -283,11 +283,17 @@ releaseproof : ; for i in $(RELEASECONTENT); do  rcsdiff -w $$i ; done
 # WARNING : the generation of postscript and pdf use the same files
 # for indices, but with different content.
 
-qr8080.ps       :; make as80.ps TITLE='QUICK REFERENCE PAGE FOR 8080 ASSEMBLER'; mv p0.as80.ps $@
-qr8086.ps       :; make asi86.ps TITLE='QUICK REFERENCE PAGE FOR 8086 ASSEMBLER'; mv p0.asi86.ps $@
-p0.asi386    :; make asi386.ps PREFIX=0 MASK=FF
-p0F.asi386.ps   :; make asi386.ps PREFIX=0F MASK=FFFF
-p0F.asiP.ps   :; make asiP.ps PREFIX=0F MASK=FFFF
+qr8080.ps       :asgen.frt ps.frt as80.frt; make as80.ps TITLE='QUICK REFERENCE PAGE FOR 8080 ASSEMBLER'; mv p0.as80.ps $@
+qr8086.ps       :asgen.frt ps.frt asi86.frt ; make asi86.ps TITLE='QUICK REFERENCE PAGE FOR 8086 ASSEMBLER'; mv p0.asi86.ps $@
+p0.asi386.ps    :asgen.frt ps.frt asi386.frt; make asi386.ps PREFIX=0 MASK=FF
+p0F.asi386.ps   :asgen.frt ps.frt asi386.frt; make asi386.ps PREFIX=0F MASK=FFFF
+p0.asipentium.ps   :asgen.frt ps.frt asipentium.frt ; make asipentium.ps PREFIX=0 MASK=FF  TITLE='QUICK REFERENCE PAGE FOR PENTIUM ASSEMBLER'
+pD8.asipentium.ps   :asgen.frt ps.frt asipentium.frt ; make asipentium.ps PREFIX=D8 MASK=FFFF TITLE='QUICK REFERENCE PAGE FOR PENTIUM ASSEMBLER'
+p0F.asipentium.ps   :asgen.frt ps.frt asipentium.frt ; make asipentium.ps PREFIX=0F MASK=FFFF TITLE='QUICK REFERENCE PAGE FOR PENTIUM ASSEMBLER'
+pDF.asipentium.ps   :asgen.frt ps.frt asipentium.frt ; make asipentium.ps PREFIX=DF MASK=FFFF TITLE='QUICK REFERENCE PAGE FOR PENTIUM ASSEMBLER'
+p0.as6809.ps   ::asgen.frt ps.frt as6809.frt; make as6809.ps PREFIX=00 MASK=FF
+# Prototype
+#p0F.asiP.ps   ::asgen.frt ps.frt asiP.frt; make asiP.ps PREFIX=00 MASK=FF
 
 showcontent : ; echo $(RELEASECONTENT)
 
