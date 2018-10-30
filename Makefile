@@ -34,8 +34,8 @@
 #* .bin : a binary image without header
 
 FORTH=./lina
-DIFF_TXT=rcsdiff -bBw -r$(RCSVERSION)
-DIFF_BIN=rcsdiff -r$(RCSVERSION)
+DIFF_TXT=diff -bBw testcmp
+DIFF_BIN=diff -bBw testcmp
 
 # The following directory are supposedly in line with the
 # Debian FHS directory philosophy.
@@ -252,7 +252,6 @@ install:  default $(MISC_DOC) ciasdis.1 cul.5 install_bin
 all: regressiontest
 
 clean: testclean install_clean
-	rcsclean
 	rm -f ciasdis.lab
 	rm -f *.bin
 	rm -f ciasdis_tbi*
@@ -276,9 +275,7 @@ srczip : $(RELEASECONTENT) ; echo ciasdis-dev-$(VERSION).tar.gz $+ | xargs tar -
 # Make a normal, binary distribution.
 zip : $(BINRELEASE) ; echo ciasdis-$(VERSION).tar.gz $+ | xargs tar -cvzf
 
-testclean: ; rm -f $(TESTAS) $(TESTTARGETS) $(ASTARGETS)
-
-releaseproof : ; for i in $(RELEASECONTENT); do  rcsdiff -w $$i ; done
+testclean: ; rm -f $(TESTAS) $(TESTTARGETS) $(ASTARGETS) gset* *.diff
 
 # WARNING : the generation of postscript and pdf use the same files
 # for indices, but with different content.
@@ -461,21 +458,22 @@ test.bin : ciasdis cidis cias test.asm test.cul
 	$(DIFF_BIN) test.bin
 	$(DIFF_TXT) test2.asm
 
-lina405.asm : ciasdis lina405equ.cul lina405.cul
-	co -p lina405  > lina405
+lina405.asm : ciasdis lina405equ.cul lina405.cul testcmp/lina405
+	cp testcmp/lina405 .
 	ciasdis -d lina405 lina405.cul >$@
 	ciasdis -a $@ lina405
 	$(DIFF_BIN) lina405
 	$(DIFF_TXT) $@
 
 # Test case, reverse engineer retroforth version 7.5.1.
-rf751.cul : ciasdis rf751equ.cul rfcrawl.cul elf.cul
-	co -p rf751  > rf751
+rf751.cul : ciasdis rf751equ.cul rfcrawl.cul elf.cul testcmp/rf751
+	cp testcmp/rf751  .
 	echo FETCH rf751 INCLUDE rfcrawl.cul | ciasdis >$@
 	$(DIFF_TXT) $@
+	rm rf751
 
-rf751.asm : ciasdis rf751equ.cul rf751.cul
-	co -p rf751  > rf751
+rf751.asm : ciasdis rf751equ.cul rf751.cul testcmp/rf751
+	cp testcmp/rf751  .
 	ciasdis -d rf751 rf751.cul >$@
 	$(DIFF_TXT) $@
 	ciasdis -a $@ rf751
