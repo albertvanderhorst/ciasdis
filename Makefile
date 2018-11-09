@@ -49,7 +49,7 @@ README.assembler.txt \
 # That's all folks!
 
 ASTARGETS= cias cidis ciasdis test.bin test2.bin test2.asm
-TESTTARGETS= test.bin lina405.asm rf751.asm rf751.cul
+TESTTARGETS= test.bin lina405.asm lina405 rf751.asm rf751.cul rf751
 
 # Generic source for assembler
 # Include two pass, reverse engineering.
@@ -248,16 +248,16 @@ install:  default $(MISC_DOC) ciasdis.1 cul.5 install_bin
 .PHONY: RELEASE default all clean releaseproof zip \
     regressiontest testexamples debian
 
-# Some of these targets make no sense and will fail
 all: regressiontest
 
 clean: testclean install_clean
 	rm -f ciasdis.lab
 	rm -f *.bin
 	rm -f ciasdis_tbi*
+	rm -f *.ps
 
 # How to get rid of the Debian test directory
-install_clean:
+install_clean:   ; # TBS
 
 # Get the library file to be used, trim it.
 ciasdis.lab :
