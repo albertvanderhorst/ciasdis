@@ -1,7 +1,7 @@
 This is the CVS archive of ciasdis, the ci assembler disassembler,
 (or possibly a git copy of the cvs archive).
 
-From
+From debian's "control"
 "
  The package ciasdis contains an assembler-disassembler
  combination that allows to reassemble to a byte-for-byte
