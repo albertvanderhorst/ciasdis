@@ -2,6 +2,7 @@ This is the CVS archive of ciasdis, the ci assembler disassembler,
 (or possibly a git copy of the cvs archive).
 
 From debian's "control"
+
 "
  The package ciasdis contains an assembler-disassembler
  combination that allows to reassemble to a byte-for-byte
@@ -16,8 +17,11 @@ From debian's "control"
  DEC Alpha or M6809, use the source package.
 "
 
+
 In order to build ciasdis:
-  make ciasdis FORTH=<ciforth-path>
+
+ make ciasdis FORTH=<ciforth-path>
+ 
 FORTH shall on Linux contain the path of lina. The default for FORTH is
 ./lina.
 FORTH shall on MS-Windows Linux contain the path of wina.
@@ -25,13 +29,17 @@ In the following ciforth refers to lina lina64 wina wina64 whatever
 is appropriate for you OS.
 
 In order to do a regressiontest:
+
   make regressiontest
+  
 which include Intel's 8086, 80386,Pentium I, the 8080, the 6809 and
 the DEC Alpha and for Pentium the disassembly and reassembly of 3
 executables.
 
 In order to install
-  make install INSTALL_DIR=<debian-install-path>
+
+ make install INSTALL_DIR=<debian-install-path>
+  
 If the installation is not to a proposed .deb archive,
 debian-related lines in the Makefile must be removed.
 Binary installation involves only two files, one being
