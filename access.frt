@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: access.frt,v 1.6 2005/01/04 19:20:35 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 

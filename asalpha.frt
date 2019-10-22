@@ -1,4 +1,4 @@
-( $Id$)
+( $Id: asalpha.frt,v 4.5 2019/10/17 10:37:07 albert Exp $)
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Reference Alpha Architecture Handbook Order Number EX-QD2KC-TE )
 ( Also down loadable as .pdf file from dec sites.                       )
@@ -291,8 +291,10 @@ BI: 01.0 BI: 30.0 8 4FAMILY, -- FBEQ, FBLT, FBLE, -- FBNE, FBGE, FBGT,
 ( Dirty trick out board hanging bit, to prevent matches with other      )
 ( assembler parts. Doing this via the ``BAD'' mechanism is just too     )
 ( expensive.                                                            )
-0 0 1,03FF,FFFF 0 DFI n#|    ( 26 bits number built in)
-0 0 1,03FF,FFFF BI: 0.0     4PI CALL_PAL
+80 GO!
+0 0 03FF,FFFF 0 DFI n#|    ( 26 bits number built in)
+0 0 03FF,FFFF BI: 0.0     4PI CALL_PAL
+00 GO!
 0 0   001F,0000  6000,E800 4PI ECB
 0 0   0000,0000  6000,0400 4PI EXCB
 0 0 001F,0000 T!

@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: elf.cul,v 1.9 2018/10/11 12:35:37 albert Exp $ )
 ( Copyright{2004}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 
 0 -ORG-         \ Preliminary, to analyse header

@@ -1,4 +1,4 @@
-( $Id$)
+( $Id: as80.frt,v 4.6 2019/10/15 19:53:46 albert Exp $)
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( ############## 8080 ASSEMBLER PROPER ################################ )
 ASSEMBLER DEFINITIONS  HEX
@@ -8,7 +8,7 @@ ASSEMBLER DEFINITIONS  HEX
 ( Note the decompiler hits them in the reverse order                    )
 ( ' CNT      BA BY DATA                                                )
   0 1        0 100 ' AS-C,  COMMAER IB, ( immediate byte data)
-  0 2        0 200 ' W,     COMMAER IX, ( immediate data : cell) 
+  0 2        0 200 ' W,     COMMAER IX, ( immediate data : cell)
   0 2        0 400 ' W,     COMMAER X,  ( immediate data : address)
   0 1        0 800 ' AS-C,  COMMAER P,  ( port number ; byte     )
 
@@ -50,7 +50,7 @@ ASSEMBLER DEFINITIONS  HEX
 00 00 00 00 1PI NOP       00 00 00 C9 1PI RET       00 00 00 76 1PI HLT
 ( ############## 8080 ASSEMBLER PROPER END ############################ )
  ( Assume a NOOP written low level code.)
-' NOOP >DFA @ CONSTANT (NEXT)
+HEX 0BAD CONSTANT (NEXT)  \ Not actually running!
 : NEXT JMP (NEXT) X, ;
 : PSH1 JMP (NEXT) 1 - X, ;
 : PSH2 JMP (NEXT) 2 - X, ;

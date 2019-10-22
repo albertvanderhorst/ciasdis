@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: labelas.frt,v 1.21 2018/07/24 11:45:24 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 

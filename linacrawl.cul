@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: linacrawl.cul,v 1.14 2019/10/18 16:33:41 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
@@ -92,7 +92,7 @@ H_ENVIRONMENT   DUP 10 + -dl-
 H_FORTH         DUP 10 + -dl-
 
 MAKE-CUL
-EXIT
+\ EXIT
 CLEANUP-SECTIONS
 MAKE-CUL
 PLUG-HOLES

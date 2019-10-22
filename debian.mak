@@ -1,4 +1,4 @@
-# $Id$
+# $Id: debian.mak,v 1.1 2016/05/21 20:05:57 albert Exp $
 # Copyright(2000): Albert van der Horst, HCC FIG Holland by GNU Public License
 #
 # This defines the usage of ciforth to build assemblers and reverse

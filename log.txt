@@ -1,68 +1,3 @@
-
-Old notes from when?
- ALL DONE!
-
-
-Adding data to the assembler
-
-Up till now, the assembler can only generate code.
-
-For data we could propose:
-(The all too familiar "Define Byte" of before.)
-
-        d$      ^[ &A 0 &B 0 &[ ^J  83
-        d$      "we gaan er voor" ^J ^M  " and more"
-        db      17 4F 17 1B 01 13
-        dw      17F6 17F9
-        dl      7898,ABCD  7898,ABCD  7898,ABCD
-        dq      7898,ABCD,7898,ABCD
-
-This cannot be defined in the assembler proper, because
-the endianess comes into play. It must use the W, L,
-of the underlying specific assembler module.
-
-The first thing to do is to make a range specifying labelstruct.
-
-This has a payload of a structured word:
-   end of range,
-   xt of disassembler,
-   target address of first word
-
-
-F0000 F8000 -DS-
-Old notes from when?
-Elementary :
-*Allow to assemble to a buffer that can be dumped into a binary file.
-*switch the here pointer
-
-Secondary :
- Allow to specify the basic look of the disassembly
- * code range
- * chars range
- * bytes range
- * cells range
- ?? - addresses range ?? postponed ??
-
-Note those range should be sorted. So they must be in the same table,
-in ascending order. They can be easily checked for overlaps.
-
-* add d$ / db
-* have a list of labels
-  a set of dea's , executing a dea reveals the labels value
-* look up a label into the labelset
-* identfiy a commaer that must be looked up.
-* discriminate between relative and absolute labels.
-* begin and if lines that start an Assembler Structure
-* allow the buffer disassembled to be at an offset address
-
-
-* nice if labels of entry points are garanteed to be named.
-* collapsing unnamed similar intervals into one.
-* starting at nice boundaries like multiples of 10
-
-The above: ALL DONE !
-
-
 \\\\\\\\\\\\\\\\\\\ 2016 may 24 : look into this :
 
 1. Fill in execution tokens handled by NEW-PIFU
@@ -277,3 +212,91 @@ This was sufficient success to check in ps.frt 4.3.
 I must cleanup, throwing away experiments and superfluous files.
 A terrible cleanup has been done, with lot of stuf sorted
 into subdirectories.
+
+One year later!
+
+2019 oct 11
+The plan :
+- cleanup to the point that all targets succeed with 32 and 64 bit.
+- a debian release for 64 bit.
+What doesn't work:
+  target rf751
+  gset* , but mostly it is constants that are off
+What works is for 32 and 64 bits:
+   make testasses
+
+2019 oct 13
+The problem with the differences is that they are not problematic
+1. START 1+  versus :L04FF    een gegenereerd label
+2. V_base defined another time, leading to
+    ( 0804,87AF )   :V_base :V_base   dl 0A
+3.
+
+What is a real bug is that the target rf751.asm fails for 64 bit.
+On 32 bit we get a phase error on tib. This has nothing to do
+with the existance of TIB in forth itself.
+
+make regressiontest FORTH=/usr/bin/lina
+succeeds. Maybe a phase error but that is all.
+
+make regressiontest
+use the local lina. That passes testasses.
+It fails the gsetall target, constants are printed incorrectly
+such as C instead of 18.
+
+2019 oct 14
+The random data was in fact the offset of the commaer in the disassembly.
+Divide by the cell size and multiply by 4 gives the same result on
+64 bits. Now gsetall works for 64 bit and only fails on 32 bit for
+gsetalpha because CALL_PAL requires a 64 bit constant.
+
+The target rf751.asm still fails on 64 bits, not on 32 bits.
+However with a proper cul file the 64 can disassemble rf751
+correctly. Also it can assemble it correctly.
+So the problem is in crawling the rf751 executable.
+This is not a priority.
+
+2019 oct 15
+label PASS32_5_3_0 is is a version where all tests pass for
+the ciasdis such as compile using the official 5.3.0 release.
+The test comparison for gsetalpha is incorrect but passes.
+An improvement is made to asgen.frt such that lina as used
+in this directory works: AMDX86 ciforth beta 2019Feb04
+The test comparison for gsetalpha is corrected to work with
+64 bits.
+2019 oct 16
+asalpha.frt used a hanging out bit. It is now replaced by the
+GO mechanism which required extending that in asgen.frt.
+Test for asalpha now pass on 32 bits.
+2019 oct 17
+There is an asAMD.frt added and a target ciasdis64 in the Makefile.
+The label PASS32_5_3_0 is moved to the new versions.
+
+2019 oct 18
+This version of ciasdis can be released.
+This version 2.0 is a extensable assembler/ disassembler for Intel 86
+The binary is intended for 32 bit i86. It can handle 16 bit segments
+so it can be used for 8086. After loading asAMD.frt it can handle
+64 bits. You can do complicated disassemblies -- such as wirlpools
+of code, data and text -- using scripts; extracting names from the
+binary to show up in disassemblies.
+As an example a compiler rf751 is disassembled. It has
+over 200 transition between code, data and text segments.
+The debian archive comes for two architectures i386 and AMD64.
+
+Sources are in github. Compilation of the 32 bit version requires
+lina 32 bits 5.3.0 (or compatible version of ciforth for the
+other 32 bit Intel based OS's).
+Compilation of the 64 bit version requires lina64 bits beta of 2017oct29.
+
+The tag PASS32 is moved to the latest checkedin version of CVS.
+Introduced a file with CIASVERSION that figures in ENVIRONMENT.
+The target srczip works but it is not clear that it is any good,
+in particular some files are missing such as asalpha.frt.
+The completion for J, was wrong, because TALLY-GO was not saved in
+SHOW-COMPLETION. Fixed.
+
+2019 oct 20
+Clean up of text files in preparation of copying to github.
+2019 oct 21
+THose updated text are added and form release 2.0.0

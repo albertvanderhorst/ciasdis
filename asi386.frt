@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: asi386.frt,v 4.33 2018/10/09 22:13:55 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 
 \ For the redefinitions in connection with SIB.

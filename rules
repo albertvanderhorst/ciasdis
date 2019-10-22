@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# $Id$
+# $Id: rules,v 1.4 2010/08/22 14:15:41 albert Exp $
 # Copyright(2000): Albert van der Horst, HCC FIG Holland by GNU Public License
 #
 # This is the debian/rules , in behalf of debhelper, for ciasdis

@@ -1,7 +1,7 @@
 COMES JAN
    MOV M'| C| 
    LXI DE| 1223 IX, 
-   JMP 873C X,    MOV M'| C|    LXI DE| 1223 IX,    JMP 873C X, HLT   
+   JMP BAD X,    MOV M'| C|    LXI DE| 1223 IX,    JMP BAD X, HLT   
 RET   
 NOP   
 CC,   Y|   LS|   10 X,   

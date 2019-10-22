@@ -1,4 +1,4 @@
- ( $Id$ )
+ ( $Id: labeldis.frt,v 1.95 2018/07/24 11:48:07 albert Exp $ )
  ( Copyright{2004}: Albert van der Horst, HCC FIG Holland by GNU Public License)
  ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 

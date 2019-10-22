@@ -1,4 +1,18 @@
-$Id$
+$Id: bugs.txt,v 1.6 2019/10/18 18:53:50 albert Exp $
+
+*1.Make gsetalpha is different in 32 and 64 bit mode.
+Almost nothing works in 64 bits.
+Solution: log of 2019 oct 14 & oct 16
+
+*2. J, gives a completion containing  n| which is wrong.
+ Observation: n| sets the TALLY-GO to 0.
+ The reason show-completion did not save/restore TALLY-GO.
+
+-----------------------------------------------------------
+OLD RANTS.
+
+Unsolved:
+
 In the documentation there is a need to warn for redefinitions.
 
 The -dc- thingies should be generated with a automatic tool.
@@ -7,7 +21,6 @@ MAKE-CUL should print symbolic names for ranges where possible
 
 There is some worry because QSORT can't handle empty ranges
 (or so it seems).
-
 
 A lone EQU leads to a not unique warning in the second pass.
 If a label is defined using EQU the not-unique-message
@@ -41,9 +54,6 @@ at priority 0 it would not.
 
 ------------------------ REPORTED ---------------------------------
 
-The colorforth crew reports that there is a space missing after
-RB, (resulting in collated comment RB,\ )
-Solution: end ID-NO() with a SPACE .
 
 ----------------------- AFTER 2018 ----------------------
 Confirmed per 2018 sep 4
@@ -67,8 +77,6 @@ Rejected per 2018 sep 11
 There is a problem around the disassembly of variables like
 base and h0 in rf751.asm
 
-make gsetalpha is different in 32 and 64 bit mode.
-Almost nothing works in 64 bits.
 
 rf751 gives a phase error on tib. This can be ignored.
 It is not understood either. It has nothing to do with the
@@ -77,3 +85,14 @@ existance of a word TIB in the kernel of Forth.
 
 The greatest problem is that in fact the format of the
 data in the PIFU's is not documented.
+
+As per 2019 the J, no longer disassembles correctly.
+
+Bug in 64 bits ciasdis only:
+As per 2019 oct 15 in the test example, the disassembly doesn't
+try to find a nearby label. So START 1 + is a diff.
+
+As per 2019 oct 15 in the test example, on the 64 bit system
+the rf751 example fails, because of V_base not defined.
+The problem is identified as to be with the crawling of
+rf751, so restricted to rfcrawl.cul

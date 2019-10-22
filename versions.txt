@@ -2,6 +2,18 @@ Functional stages. Bugs removed are not mentionned.
 For a more elaborate log see the log of ciforth.
 
                     MILESTONES
+
+The following tags are official and eligible for a copy to github.
+
+REL-2-0-0: release 2.0.0 also on github.
+
+PASS32_5_3_0 : Is to be compiled 32 bit with any ciforth 5.3.0 ,
+    64 bit with 2017oct beta.
+    lina32 : passes the regression test as such.
+    lina64 beta 2019feb04 : Passes test-target resgressiontest64
+       [test.bin has a different labelname in test.bin, considered cosmetic.
+       rf751.asm passes assembly/disassembly, but failed in crawling. ]
+
 REL-1-1-0: elaborate test for lina32 5.3.0, assemblers work voor lina64
   grand cleanup
 LINA531_OK : with lina32 5.3.1 the regressiontest target succeeds.

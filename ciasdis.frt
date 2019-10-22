@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: ciasdis.frt,v 1.39 2019/10/18 16:33:41 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
@@ -30,6 +30,7 @@ WANT OLD:    WANT $=      WANT class   WANT W/O
 
 \ --------------------------------------------------------------
 
+INCLUDE version.frt
 INCLUDE tools.frt
 INCLUDE asgen.frt
 INCLUDE aswrap.frt
@@ -156,7 +157,7 @@ WANT DUMP
 \ The name determines what to do.
 : MAIN
    \ Defeat the correction for the bizarre byte manipulation, if not wanted.
-   RESTORE-ALL DEFAULT-SECTION HANDLE-ARG CHANGE-PROMPT
+   RESTORE-ALL DEFAULT-SECTION HANDLE-ARG \ CHANGE-PROMPT
         DUP 0 = IF DROP INTERACTIVE
    ELSE DUP 1 = IF DROP cias
    ELSE DUP 2 = IF DROP cidis

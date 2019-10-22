@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: elf64.cul,v 1.1 2018/10/11 12:37:29 albert Exp $ )
 ( Copyright{2004}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 
 \ The folling is intended for a disassembler running in 32 bits mode.

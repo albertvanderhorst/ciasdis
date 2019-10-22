@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: asipentium.frt,v 1.12 2014/02/28 17:22:36 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
  ASSEMBLER DEFINITIONS HEX
 

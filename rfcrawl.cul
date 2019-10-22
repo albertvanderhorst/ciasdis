@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: rfcrawl.cul,v 1.10 2016/05/26 19:18:31 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 

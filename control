@@ -1,16 +1,16 @@
 Package: ciasdis
-Version: 1.0
+Version: 2.0
 Section: devel
 Priority: optional
 Architecture: all
-Suggests: ciforth-doc
+Suggests: lina
 Conflicts:
 Homepage: http://home.hccnet.nl/a.w.m.van.der.horst/ciasdis.html
 Replaces:
 Installed-Size:
 Maintainer: Albert van der Horst <albert@spenarnc.xs4all.nl>
 Description: A reverse engineering assembler/disassembler
- The package ciasdis contains an assembler-disassembler
+ The package ciasdis contains an i86 assembler-disassembler
  combination that allows to reassemble to a byte-for-byte
  same binary. This is useful for modifying programs where
  the source was lost, analysing viruses, etc. and general

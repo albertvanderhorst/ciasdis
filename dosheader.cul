@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: dosheader.cul,v 1.1 2018/10/11 12:47:15 albert Exp $ )
 ( Copyright{2004}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 
 \ Consult file for ciasdis. (See man 5 cul).

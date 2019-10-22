@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: asi86.frt,v 4.14 2018/10/09 22:13:55 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 
  ASSEMBLER DEFINITIONS

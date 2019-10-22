@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: cidis.frt,v 1.1 2004/05/23 09:52:51 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 

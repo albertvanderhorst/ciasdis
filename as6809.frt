@@ -1,4 +1,4 @@
-( $Id$)
+( $Id: as6809.frt,v 4.11 2012/11/21 23:30:56 albert Exp $)
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( ############## 8089 ASSEMBLER ADDITIONS ############################# )
 ASSEMBLER DEFINITIONS  HEX

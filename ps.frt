@@ -1,4 +1,4 @@
-( $Id$)
+( $Id: ps.frt,v 4.5 2018/10/24 11:14:05 albert Exp $)
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Generate postscript data sheet. )
 ( Instructions to compare with, last byte 0..FF )

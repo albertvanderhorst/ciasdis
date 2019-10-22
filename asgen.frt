@@ -1,4 +1,4 @@
-( $Id$ )
+( $Id: asgen.frt,v 4.73 2019/10/18 18:53:50 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
@@ -376,7 +376,7 @@ class PIFU
    M: BI^      M;
    M: BI-R   @ CORRECT-R M;   ( fixup bit if "from-reverse" )
   M: BI    @  M; ,            ( postit or regular fixup bits)
-  M: ^GO    M; 0 ,            ( ghost/good bits )
+  M: GO^    M; 0 ,            ( ghost/good bits )
    M: BY^      M;
   M: BY    @  M; ,            ( bytes, mask for commaers )
    M: BA^      M;
@@ -428,7 +428,7 @@ endclass
 : !POSTIT  AS-HERE ISS !  0 OLDCOMMA ! ;  ( Initialise in behalf of postit )
 ( Bookkeeping for a commaer that is the current PIFU                    )
 ( Is also used for disassembling.                                       )
-: TALLY:,   BI TALLY-BI !   BY TALLY-BY !   BA TALLY-BA OR!U  ^GO @ TALLY-GO !
+: TALLY:,   BI TALLY-BI !   BY TALLY-BY !   BA TALLY-BA OR!U  GO^ @ TALLY-GO !
     CNT ISL !   PRF @ BA-XT ! ;
 ( Post the instruction using a POINTER to a postit pifu                  )
 : POSTIT   CHECK26 PIFU!   !POSTIT !TALLY TALLY:,   DAT assemble, ;
@@ -442,7 +442,7 @@ endclass
 IS-A IS-PI   \ Awaiting REMEMBER.
 ( Define an instruction by BA BY BI and the OPCODE plus COUNT           )
 : PI  >R CHECK33 CREATE  '%~ID. 'DIS-PI 'TRY-PI NEW-PIFU R>
-   CNT^ ! PRO-GO @ ^GO ! DOES>
+   CNT^ ! PRO-GO @ GO^ ! DOES>
    REMEMBER POSTIT ;
 ( 1 .. 4 byte instructions ( BA BY BI OPCODE : - )
 : 1PI   1 PI ;     : 2PI   2 PI ;    : 3PI   3 PI ;    : 4PI   4 PI ;
@@ -450,7 +450,8 @@ IS-A IS-PI   \ Awaiting REMEMBER.
 ( ------------- PIFU's : xFI---------------------------------------------)
 ( Bookkeeping for a fixup that is the current pifu                      )
 ( Is also used for disassembling.                                       )
-: TALLY:|   BI TALLY-BI AND!   BY TALLY-BY OR!   BA TALLY-BA OR!U ;
+: TALLY:|   BI TALLY-BI AND!   BY TALLY-BY OR!   BA TALLY-BA OR!U
+  GO^ @ TALLY-GO AND! ;
 ( Fix up the instruction using a POINTER to a fixup pifu                )
 : FIXUP>   PIFU! DAT ISS @ OR!   TALLY:|   CHECK32 ;
 : DIS-xFI   BI TALLY-BI @ CONTAINED-IN IF   BI INSTRUCTION AND   DAT = IF
@@ -474,17 +475,18 @@ IS-A IS-xFI   : xFI   CHECK31 CREATE '%~ID. 'DIS-xFI 'TRY-xFI NEW-PIFU
 : .DFI    INSTRUCTION   BI AND   SHT RSHIFT   U. %ID. ;
 \ A disassembler for the current, data fixup pifu.
 : DIS-DFI   BI TALLY-BI @ CONTAINED-IN IF   BA COMPATIBLE? IF
-    TALLY:| this +DISS THEN THEN ;
+    GO^ @ TALLY-GO @ CONTAINED-IN IF
+    TALLY:| this +DISS THEN THEN THEN ;
 \ Match the tally to a (current) fixup pifu.
 : TRY-DFI   BI TALLY-BI @ CONTAINED-IN IF TALLY:| this +DISS THEN ;
 ( Define a data fixup by BA BY BI, and LEN the bit position.            )
 ( At assembly time: expect DATA that is shifted before use              )
 ( Because of the or character of the operations, the bytecount is dummy )
 IS-A IS-DFI  : DFI   CHECK31A CREATE '.DFI 'DIS-DFI 'TRY-DFI NEW-PIFU
-    DOES> ( u -- )REMEMBER FIXUP-NUMBER ;
+   PRO-GO @ GO^ ! DOES> ( u -- )REMEMBER FIXUP-NUMBER ;
 ( Same, but for signed data, a convenience. Disassembly shows unsigned  )
 IS-A IS-DFIs : DFIs  CHECK31A CREATE '.DFI 'DIS-DFI 'TRY-DFI NEW-PIFU
-    DOES> ( n -- ) REMEMBER FIXUP-SIGNED ;
+   PRO-GO @ GO^ ! DOES> ( n -- ) REMEMBER FIXUP-SIGNED ;
 
 ( ------------- PIFU's : FIR DFIR ---------------------------------------)
 \ Reverses bytes in a WORD. Return IT.
@@ -493,8 +495,8 @@ IS-A IS-DFIs : DFIs  CHECK31A CREATE '.DFI 'DIS-DFI 'TRY-DFI NEW-PIFU
 
 ( Bookkeeping for a fixup-from-reverse that is the current pifu         )
 ( Is also used for disassembling.                                       )
-: TALLY:|R  BI-R TALLY-BI AND!   BY TALLY-BY OR!   ^GO @ TALLY-GO AND!
-    BA TALLY-BA OR!U ;
+: TALLY:|R  BI-R TALLY-BI AND!   BY TALLY-BY OR!   BA TALLY-BA OR!U
+   GO^ @ TALLY-GO AND! ;
 ( Fix up the instruction using a POINTER to a reverse fixup pifu    )
 : FIXUP-REVERSE PIFU!   DAT-R ISS @ OR!   TALLY:|R  CHECK32 ;
 ( Fix up the instruction from reverse with DATA. )
@@ -502,31 +504,32 @@ IS-A IS-DFIs : DFIs  CHECK31A CREATE '.DFI 'DIS-DFI 'TRY-DFI NEW-PIFU
     TALLY:|R CHECK32 ;
 ( A disassembler for the current, fixup from reverse pifu.              )
 : DIS-FIR   BI-R   TALLY-BI @ CONTAINED-IN IF
-    ^GO @ TALLY-GO @ CONTAINED-IN IF
+    GO^ @ TALLY-GO @ CONTAINED-IN IF
     BI-R INSTRUCTION AND   DAT-R = IF   BA COMPATIBLE? IF
     TALLY:|R this +DISS THEN THEN THEN THEN ;
 \ Match the tally to a (current) fixup from reverse pifu.
 : TRY-FIR   BI-R TALLY-BI @ CONTAINED-IN IF
-    ^GO @ TALLY-GO @ CONTAINED-IN IF
+    GO^ @ TALLY-GO @ CONTAINED-IN IF
     TALLY:|R this +DISS THEN THEN ;
 ( Define a fixup-from-reverse by BA BY BI and the FIXUP bits )
 ( One size fits all, because of the character of the or-operations. )
 ( bi and fixup are specified that last byte is lsb, such as you read it )
 IS-A IS-FIR   : FIR   CHECK31 CREATE
    REVERSE-BYTES SWAP REVERSE-BYTES SWAP '%~ID. 'DIS-FIR 'TRY-FIR NEW-PIFU
-   PRO-GO @ ^GO ! DOES> REMEMBER FIXUP-REVERSE ;
+   PRO-GO @ GO^ ! DOES> REMEMBER FIXUP-REVERSE ;
 ( Print a disassembly for the current, 'data-fixup from reverse' pifu )
 : .DFIR   INSTRUCTION   BI-R AND   SHT RSHIFT   REVERSE-BYTES
     CORRECT-R U.   %ID. ;
 \ Disassemble the current, data fixup from reverse pifu.
 : DIS-DFIR   BI-R   TALLY-BI @ CONTAINED-IN IF   BA COMPATIBLE? IF
-    TALLY:|R this +DISS THEN THEN ;
+    GO^ @ TALLY-GO @ CONTAINED-IN IF
+    TALLY:|R this +DISS THEN THEN THEN ;
 ( Define a data fixup-from-reverse by BA BY BI and LEN to shift )
 ( One size fits all, because of the character of the or-operations. )
 ( bi and fixup are specified that last byte is lsb, such as you read it )
 IS-A IS-DFIR   : DFIR   CHECK31 CREATE   SWAP REVERSE-BYTES SWAP
     '.DFIR 'DIS-DFIR 'NOOP NEW-PIFU
-    DOES> ( data -- )REMEMBER FIXUP-N-REVERSE ;
+    PRO-GO @ GO^ ! DOES> ( data -- ) REMEMBER FIXUP-N-REVERSE ;
 
 ( ------------- PIFU's : COMMAER ----------------------------------------)
 ( Bookkeeping for a commaer that is the current pifu                    )
@@ -574,7 +577,8 @@ IS-A  IS-COMMA   : COMMAER   CREATE BUILD-COMMA  DOES> REMEMBER COMMA ;
 \ Show the disassembled instruction with arbitrary data.
 : .DISS-AUX DISS DO-BAG
     I @ DUP IS-COMMA OVER IS-DFI OR OVER IS-DFIs OR IF I DISS -
-    ( Whatever) . THEN ID.
+    \ DROP 0 ( Whatever) . THEN ID.
+    1 CELLS / 4 * ( Whatever) . THEN ID.
   LOOP-BAG CR ;
 ( DISS-VECTOR can be redefined to generate testsets)
 VARIABLE DISS-VECTOR    ['] .DISS-AUX DISS-VECTOR !
@@ -688,11 +692,11 @@ CREATE SOMEMORE
 
 ( Catch current state in `` _""_ ''                                     )
 : >_""_   '_""_ PIFU'!   TALLY-BI @ BI^ !   TALLY-BY @ BY^ !
-    TALLY-BA @ BA^ !   ISL @ CNT^ ! ;
+    TALLY-BA @ BA^ !   TALLY-GO @ GO^ !   ISL @ CNT^ ! ;
 
 ( Restore current state from `` _""_ ''                                 )
 : _""_>   '_""_ PIFU'!   BI^ @ TALLY-BI !   BY^ @ TALLY-BY !
-     BA^ @ TALLY-BA !   CNT^ @ ISL ! ;
+     BA^ @ TALLY-BA !   GO^ @ TALLY-GO !   CNT^ @ ISL ! ;
 
 ( Show all possible completions of the current partially completed      )
 ( instruction.                                                          )

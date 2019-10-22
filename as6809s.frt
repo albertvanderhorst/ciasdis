@@ -1,5 +1,5 @@
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
-( $Id$)
+( $Id: as6809s.frt,v 1.9 2004/01/07 21:43:10 albert Exp $)
 
 ( ############## GENERIC PART OF ASSEMBER ############################# )
 

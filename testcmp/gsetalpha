@@ -28,18 +28,6 @@ ECB   Rzb
 ECB   R7b   
 ECB   R0b   
 CALL_PAL   8 n#|   
-CALL_PAL   8 c#|   Rza   
-CALL_PAL   8 c#|   R7a   
-CALL_PAL   8 c#|   R0a   
-CALL_PAL   8 w#|   Rza   Rzb   
-CALL_PAL   8 w#|   Rza   R7b   
-CALL_PAL   8 w#|   Rza   R0b   
-CALL_PAL   8 w#|   R7a   Rzb   
-CALL_PAL   8 w#|   R7a   R7b   
-CALL_PAL   8 w#|   R7a   R0b   
-CALL_PAL   8 w#|   R0a   Rzb   
-CALL_PAL   8 w#|   R0a   R7b   
-CALL_PAL   8 w#|   R0a   R0b   
 AMASK,   #|   C b#|   Rzc   
 AMASK,   #|   C b#|   R7c   
 AMASK,   #|   C b#|   R0c   
