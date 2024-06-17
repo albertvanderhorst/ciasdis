@@ -1,6 +1,11 @@
 This is the CVS archive of ciasdis, the ci assembler disassembler,
 (or possibly a git copy of the cvs archive).
 
+
+*Note that the documentation is a chapter of the ciforth lina/wina documentation.*
+==================================================================================
+
+
 From debian's "control"
 
 "
