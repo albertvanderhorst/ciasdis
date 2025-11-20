@@ -35,11 +35,16 @@ is appropriate for you OS.
 
 In order to do a regressiontest:
 
-  make regressiontest
+  make regressiontest64
+or
+
+  make regressiontest32
   
 which include Intel's 8086, 80386,Pentium I, the 8080, the 6809 and
-the DEC Alpha and for Pentium the disassembly and reassembly of 3
-executables.
+the DEC Alpha and for Pentium RISCV the disassembly and reassembly of 4
+executables on a 64 bit Forth. 
+regressiontest32 must be used for a 32 bit Forth, as it cannot handle specific targets.
+
 
 In order to install
 
@@ -63,4 +68,4 @@ A guide is found in the ciforth documentation.
 
 The binary is for Intel Pentium only.
 For other processors you must load the assembler from within ciforth,
-then proceed as with a a compiled binary.
+then proceed as with a compiled binary.
