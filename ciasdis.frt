@@ -1,4 +1,4 @@
-( $Id: ciasdis.frt,v 1.39 2019/10/18 16:33:41 albert Exp $ )
+( $Id: ciasdis.frt,v 1.45 2025/10/25 17:12:51 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
@@ -15,7 +15,7 @@
 WANT -scripting-
 
 WANT INCLUDE
-WANT OLD:    WANT $=      WANT class   WANT W/O
+WANT OLD: $= class W/O 2>R
 
 \ ------------------Disgraceful adaptations. -------------------
 
@@ -31,6 +31,7 @@ WANT OLD:    WANT $=      WANT class   WANT W/O
 \ --------------------------------------------------------------
 
 INCLUDE version.frt
+
 INCLUDE tools.frt
 INCLUDE asgen.frt
 INCLUDE aswrap.frt
@@ -45,8 +46,11 @@ INCLUDE labelas.frt
 INCLUDE labeldis.frt
 INCLUDE crawl.frt
 
-\ In behalf of user.
-WANT #-PREFIX
+\ Before release 6 there is a defect in the library.
+\ In behalf of user define it afresh.
+: # BASE @ >R DECIMAL (NUMBER) R> BASE ! POSTPONE SDLITERAL ;
+PREFIX IMMEDIATE
+
 \ In behalf of building an executable.
 WANT ARGC
 
@@ -90,12 +94,15 @@ WANT ARGC
 
 \ Return the NAME of the target file.
 : TARGET-DIS 2 ARG[] ;
-
+DATA START-DIRECTIVE 0 , 256 ALLOT
 WANT DUMP
 \ Using (only) information from file with NAME,
-\ disassemble the current program as stored in the ``CODE-BUFFER''.
-: CONSULTED   INIT-ALL   HEX INCLUDED ( file)   SORT-ALL
-    PLUG-HOLES ALL-L-LABELS DISASSEMBLE-TARGET DECIMAL ;
+\ disassemble the current `SECTION of the program.
+\ FIXME! It is as yet unclear how to handle programs with multiple sections.
+: CONSULTED   INIT-ALL   HEX INCLUDED
+    START-DIRECTIVE $@ TARGET-START DIRECTIVE
+    SORT-ALL PLUG-HOLES ALL-L-LABELS ALL-Q-LABELS
+    DISASSEMBLE-TARGET DECIMAL ;
 
 \ Consult "file" as per ``CONSULT''
 : CONSULT   NAME CONSULTED ;

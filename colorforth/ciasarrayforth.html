@@ -1,0 +1,157 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="byhand" >
+   <META NAME=description content="Forth assemblers for ciforth.">
+   <META NAME=keywords content="Post-it-fix-up,Forth,assembler,
+reverse engineering, colorforth, vim syntax coloring, in-Forth">
+   <TITLE>
+     computer_intelligence_assembler_disassembler
+   </TITLE>
+   <LINK REV="AvdH" HREF="mailto:albert@spenarnc.xs4all.nl">
+</HEAD>
+<HTML>
+
+<BODY>
+<PRE>
+Welcome to the tutorial for the colorforth tool ciasa.
+
+Introduction
+
+The code for the GA144 is defined in Huffman codes, that can
+only be interpreted in a system that runs from a floppy, called
+colorforth. This is subdivided into screens: blocks from 1024
+bytes, in principle without layout.
+Fortunately we can interpret the floppy image by an emulator
+under windows. Fortunately we can run that emulator under wine,
+the linux emulator for MS-windows.
+
+What do we want?
+
+1. Turn the code from a pseudo floppy into an ascii file.
+2. Edit code in it ascii form (and do other manipulations,
+   like source control.)
+3. Run that code. This means that it has to be reintegrated into
+the pseudo floppy.
+
+Ascii files.
+
+The pseudo floppy has the extension .cf. Thanks to the Huffman codes
+this is not amenable to normal tools. The only thing a hex dump
+in Linux reveals is that screens are padded with zeroes.
+
+The only means to turn the pseudo floppy into ascii is via a
+powerful reverse engineering tools. We use the Forth based
+ciasdis, which is a  generic disassembler with plug ins for i.a.
+80x86. In order to understand the Huffman codes the plugins
+colorname.frt and colordump.frt have been created.
+
+In order to make a pseudo floppy into an ascii file use the command
+
+cidisa OkadWork.cf all.cul OkadWork.cfs
+
+This is mainly useful to get started from an existing project.
+You can also save the result of a debug session, where you made
+patches directly in the pseudo floppy image.
+
+A cul file is a script file that handles the loading of the colorname.frt
+and colordump.frt plug ins and knows about the subdivision in screens.
+It ends with the command
+
+    #1440 #18 DO I ONE-SCREEN LOOP
+
+So all screens are disassembled, but empty screens and zeroes will
+not be output. The binary kernel of colorforth (up till 18 ) is left
+alone.
+
+This would be rather unpleasant without a means to display colors.
+This is done by gvim and three files:
+filestype.vim   : register .cfs and couple it to colorforth.syntax
+colorforth.vim : the definition of the colors, i.e. prefix : is a
+      definition.
+leon.vim : the actual colors. I.e. a definition is red.
+
+The bottom line is that the screens look much like the real thing
+especially of the font is enlarged to 18 point.
+Look at man vim section FILES to see where those files go.
+Also put
+    .color leon
+    .font 18
+in your .vimrc file.
+
+
+Editing the code and using it.
+
+The file parpi.cfs contains a non-trivial example.
+You will see that each screen has a preambule like
+    ( SCREEN) #216 400 * DUP SEGMENT SCR216    EDIT-TIME
+This will define a section (formerly known as segment) with
+a name, and turns the special vocabulary EDIT-TIME on.
+So the parens and the # are ciforth commands.
+After EDIT-TIME all words start with : [ ] ( + or some such.
+Note that ciforth comment is still possible, because the
+prefixes are all collated, using the ciforth PREFIX facility.
+
+You can edit at will, as long as you don't overfill up a screen.
+
+Running the code.
+
+The first step is to compile the .cfs file
+ciasa myapplication.cfs myapplic.cf
+
+The resulting pseudo floppy can be combined with the pseudo floppy
+from GreenArrays using combine (a Forth program)
+combine OkadWorkFrame.cf myapplic.cf OkadWork.cf
+
+The program will investigate the image myapplic.cf and will ruthlessly
+copy all screens that are not empty over a corresponding screen
+in OkadWorkFrame.cf.
+
+The name `` OkadWork.cf '' is obligatory as the emulator with names
+like Okad2-41a-pd.exe works with a fixed burned in filename.
+There are other caveats.
+- parpi.cfs only runs with a patched version of the emulator.
+- the emulator is not only an emulator for the floppy startup
+   but also has the full Ga144 emulator built in.
+- the normal use (like "contrary to what we do here") is to patch your
+   one and only floppy image with the experimental programs.
+- how do we get a good OkadWorkFrame.cf ? This is just a copy of
+  the original OkadWork.cf released by GreenArrays with carefully
+  applied patches and screens erased. (Be prepared to do that again
+  when a new release appears.) 1]
+
+The file OkadWork.cf must be treated as a scratch file that can be
+recreated at will. Fortunately is it much easier to copy images than
+real floppies.
+
+Run the code
+
+This is something like
+ 218 load
+Unfortunately i didn't write it down, so I have to consult Leon
+Konings again.
+The parpi code calculates pi(n) the number of primes under n, in parallel.
+It uses a pipeline (the most sophisticated version several pipelines)
+and has run on the old Seaforth board (actual hardware!) and on an earlier
+emulator for the GA144, running on a Pentium colorforth.
+(3 levels of emulation, Forthers should *hate* this.).
+
+What do you need.
+
+Some version of linux
+A GA144 release
+ciasa
+cidisa
+colorname.frt
+colordump.frt
+all.cul
+<your own program>
+vim: filestype.vim colorforth.vim leon.vim .vimrc
+
+
+1] In the case of parpi this was even more cumbersome as Leon Konings had
+made numerous patches in behalf of routing and I had added some
+macro's to make control flow easier. In fact parpi still doesn't
+work on the latest pseudo floppy.
+</PRE>
+</BODY>

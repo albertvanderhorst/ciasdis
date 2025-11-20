@@ -1,0 +1,13 @@
+CAVEATS IN BUILDING CIASDIS
+
+The default section is 2 Mbyte.
+If the forth doesn't accomodate this it terminates with error 7.
+
+Depending on the needs you may need to grow lina by the -g option.
+
+For the moment the definition of BAG not via DATA is problematic.
+So BAG is redefined locally.
+
+There is a defect in ciriscv : #-PREFIX is not a PREFIX.
+For the moment it is properly defined in ciasdis.frt overriding
+a faulty definition.

@@ -1,7 +1,7 @@
-BITS-32
 8048000  ORG
 
-INCLUDE rf751equ.cul   
+INCLUDE rf751equ.cul
+   
 ( 0804,8000 )   :e_ident   d$  7F  "ELF" 1 
 ( 0804,8005 )                 d$  1  1  0  0  0  0  0  0  0  0  0 
 
@@ -30,8 +30,8 @@ INCLUDE rf751equ.cul
 ( 0804,804C )   :p_flags   dl 7 
 ( 0804,8050 )   :p_align   dl 1000 
 
-( 0804,8054 )   :p_headerend :filest :_start    CALL, L0804,8191 RL,
-( 0804,8059 )                  CALL, L0804,81B0 RL,
+( 0804,8054 )   :p_headerend :filest :_start    CALL, L0804,8191 RL, 
+( 0804,8059 )                  CALL, L0804,81B0 RL, 
 ( 0804,805E )   :H_emit   dl 0 X_emit 
 
 ( 0804,8066 )   :N_emit   d$  4  "emit"
@@ -84,19 +84,19 @@ INCLUDE rf751equ.cul
 ( 0804,80D6 )   :X_syscall    PUSH|X, AX| 
 ( 0804,80D7 )                  LODS, X'| 
 ( 0804,80D8 )                  CMPSI, R| AX| 0 IS, 
-( 0804,80DB )                  J, Z| Y| L0804,8102 RB,
+( 0804,80DB )                  J, Z| Y| L0804,8102 RB, 
 ( 0804,80DD )                  CMPSI, R| AX| 1 IS, 
-( 0804,80E0 )                  J, Z| Y| L0804,8106 RB,
+( 0804,80E0 )                  J, Z| Y| L0804,8106 RB, 
 ( 0804,80E2 )                  CMPSI, R| AX| 2 IS, 
-( 0804,80E5 )                  J, Z| Y| L0804,810F RB,
+( 0804,80E5 )                  J, Z| Y| L0804,810F RB, 
 ( 0804,80E7 )                  CMPSI, R| AX| 3 IS, 
-( 0804,80EA )                  J, Z| Y| L0804,811D RB,
+( 0804,80EA )                  J, Z| Y| L0804,811D RB, 
 ( 0804,80EC )                  CMPSI, R| AX| 4 IS, 
-( 0804,80EF )                  J, Z| Y| L0804,8130 RB,
+( 0804,80EF )                  J, Z| Y| L0804,8130 RB, 
 ( 0804,80F1 )                  CMPSI, R| AX| 5 IS, 
-( 0804,80F4 )                  J, Z| Y| L0804,814A RB,
+( 0804,80F4 )                  J, Z| Y| L0804,814A RB, 
 ( 0804,80F6 )                  CMPSI, R| AX| 6 IS, 
-( 0804,80F9 )                  J, Z| Y| L0804,816B RB,
+( 0804,80F9 )                  J, Z| Y| L0804,816B RB, 
 ( 0804,80FB )                  SUBSI, R| SI| 4 IS, 
 ( 0804,80FE )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8100 )                  POP|X, AX| 
@@ -223,27 +223,27 @@ INCLUDE rf751equ.cul
 ( 0804,81A0 )                  SUBSI, R| SI| 4 IS, 
 ( 0804,81A3 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,81A5 )                  MOVI|X, AX| retrofilesz IL, 
-( 0804,81AA )                  CALL, X_eval RL,
+( 0804,81AA )                  CALL, X_eval RL, 
 ( 0804,81AF )                  RET, 
-( 0804,81B0 )   :L0804,81B0    CALL, L0804,82DA RL,
+( 0804,81B0 )   :L0804,81B0    CALL, L0804,82DA RL, 
 ( 0804,81B5 )   :L0804,81B5    SUBSI, R| SI| 4 IS, 
 ( 0804,81B8 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,81BA )                  MOVI|X, AX| 20 IL, 
-( 0804,81BF )                  CALL, X_parse RL,
-( 0804,81C4 )                  J, Z| N| L0804,81CA RB,
+( 0804,81BF )                  CALL, X_parse RL, 
+( 0804,81C4 )                  J, Z| N| L0804,81CA RB, 
 ( 0804,81C6 )                  LODS, X'| 
 ( 0804,81C7 )                  LODS, X'| 
-( 0804,81C8 )                  JMPS, L0804,81B0 RB,
-( 0804,81CA )   :L0804,81CA    CALL, X_find RL,
-( 0804,81CF )                  J, C| N| L0804,81DF RB,
-( 0804,81D1 )                  CALL, X_>number RL,
-( 0804,81D6 )                  J, C| N| L0804,81B5 RB,
-( 0804,81D8 )                  CALL, L0804,8739 RL,
-( 0804,81DD )                  JMPS, L0804,81B0 RB,
+( 0804,81C8 )                  JMPS, L0804,81B0 RB, 
+( 0804,81CA )   :L0804,81CA    CALL, X_find RL, 
+( 0804,81CF )                  J, C| N| L0804,81DF RB, 
+( 0804,81D1 )                  CALL, X_>number RL, 
+( 0804,81D6 )                  J, C| N| L0804,81B5 RB, 
+( 0804,81D8 )                  CALL, L0804,8739 RL, 
+( 0804,81DD )                  JMPS, L0804,81B0 RB, 
 ( 0804,81DF )   :L0804,81DF    MOV, X| F| AX'| R| DI| 
 ( 0804,81E1 )                  LODS, X'| 
 ( 0804,81E2 )                  CALLO, R| DI| 
-( 0804,81E4 )                  JMPS, L0804,81B5 RB,
+( 0804,81E4 )                  JMPS, L0804,81B5 RB, 
 ( 0804,81E6 )                 d$  0C3 
 
 ( 0804,81E7 )   :H_mfind   dl H_syscall X_mfind 
@@ -252,7 +252,7 @@ INCLUDE rf751equ.cul
 
 ( 0804,81F5 )   :X_mfind    PUSH|X, BX| 
 ( 0804,81F6 )                  MOVI|X, BX| mlast IL, 
-( 0804,81FB )                  JMPS, L0804,8210 RB,
+( 0804,81FB )                  JMPS, L0804,8210 RB, 
 ( 0804,81FD )   :H_find   dl H_mfind X_find 
 
 ( 0804,8205 )   :N_find   d$  4  "find"
@@ -264,23 +264,22 @@ INCLUDE rf751equ.cul
 ( 0804,8213 )                  LODS, X'| 
 ( 0804,8214 )   :L0804,8214    MOV, X| T| BX'| ZO| [BX] 
 ( 0804,8216 )                  OR, X| F| BX'| R| BX| 
-( 0804,8218 )                  J, Z| Y| L0804,8234 RB,
+( 0804,8218 )                  J, Z| Y| L0804,8234 RB, 
 ( 0804,821A )                  CMP, B| T| CL'| BO| [BX] 8 B, 
-( 0804,821D )                  J, Z| N| L0804,8214 RB,
+( 0804,821D )                  J, Z| N| L0804,8214 RB, 
 ( 0804,821F )                  PUSH|X, SI| 
 ( 0804,8220 )                  PUSH|X, DI| 
 ( 0804,8221 )                  PUSH|X, CX| 
 ( 0804,8222 )                  MOV, X| F| AX'| R| SI| 
 ( 0804,8224 )                  LEA, DI'| BO| [BX] 9 B, 
-( 0804,8227 )                  REPZ, 
-( 0804,8228 )                  CMPS, B'| 
+( 0804,8227 )                  REPZ,    CMPS, B'| 
 ( 0804,8229 )                  POP|X, CX| 
 ( 0804,822A )                  POP|X, DI| 
 ( 0804,822B )                  POP|X, SI| 
-( 0804,822C )                  J, Z| N| L0804,8214 RB,
+( 0804,822C )                  J, Z| N| L0804,8214 RB, 
 ( 0804,822E )                  MOV, X| T| AX'| BO| [BX] 4 B, 
 ( 0804,8231 )                  CLC, 
-( 0804,8232 )                  JMPS, L0804,823C RB,
+( 0804,8232 )                  JMPS, L0804,823C RB, 
 ( 0804,8234 )   :L0804,8234    SUBSI, R| SI| 4 IS, 
 ( 0804,8237 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8239 )                  MOV, X| F| CX'| R| AX| 
@@ -302,45 +301,45 @@ INCLUDE rf751equ.cul
 ( 0804,8262 )                  MOV, B| T| DL'| ZO| [BX] 
 ( 0804,8264 )                  CMPI, B| R| DL| 2D IB, 
 ( 0804,8267 )                  PUSHF, 
-( 0804,8268 )                  J, Z| N| L0804,826E RB,
+( 0804,8268 )                  J, Z| N| L0804,826E RB, 
 ( 0804,826A )                  INC|X, BX| 
 ( 0804,826B )                  DEC|X, CX| 
 ( 0804,826C )                  MOV, B| T| DL'| ZO| [BX] 
 ( 0804,826E )   :L0804,826E    SUBI, B| R| DL| 24 IB, 
 ( 0804,8271 )                  CMPI, B| R| DL| 4 IB, 
-( 0804,8274 )                  J, CZ| N| L0804,8284 RB,
+( 0804,8274 )                  J, CZ| N| L0804,8284 RB, 
 ( 0804,8276 )                  MOV, B| T| DL'| XO| [DX] bases L, 
 ( 0804,827C )                  MOV, B| F| DL'| MEM| V_base L, 
 ( 0804,8282 )                  INC|X, BX| 
 ( 0804,8283 )                  DEC|X, CX| 
 ( 0804,8284 )   :L0804,8284    MOV, B| T| DL'| ZO| [BX] 
 ( 0804,8286 )                  INC|X, BX| 
-( 0804,8287 )                  CALL, L0804,82A9 RL,
-( 0804,828C )                  J, C| Y| L0804,8292 RB,
-( 0804,828E )                  LOOP, L0804,8284 RB,
-( 0804,8290 )                  JMPS, L0804,8299 RB,
+( 0804,8287 )                  CALL, L0804,82A9 RL, 
+( 0804,828C )                  J, C| Y| L0804,8292 RB, 
+( 0804,828E )                  LOOP, L0804,8284 RB, 
+( 0804,8290 )                  JMPS, L0804,8299 RB, 
 ( 0804,8292 )   :L0804,8292    ADDSI, R| SP| 4 IS, 
 ( 0804,8295 )                  LODS, X'| 
 ( 0804,8296 )                  STC, 
-( 0804,8297 )                  JMPS, L0804,82A2 RB,
+( 0804,8297 )                  JMPS, L0804,82A2 RB, 
 ( 0804,8299 )   :L0804,8299    POPF, 
-( 0804,829A )                  J, Z| N| L0804,829E RB,
+( 0804,829A )                  J, Z| N| L0804,829E RB, 
 ( 0804,829C )                  NEG, X| R| AX| 
 ( 0804,829E )   :L0804,829E    ADDSI, R| SI| 8 IS, 
 ( 0804,82A1 )                  CLC, 
 ( 0804,82A2 )   :L0804,82A2    POP, MEM| V_base L, 
 ( 0804,82A8 )                  RET, 
 ( 0804,82A9 )   :L0804,82A9    CMPI, B| MEM| V_base L, 0FF IB, 
-( 0804,82B0 )                  J, Z| Y| L0804,82CF RB,
+( 0804,82B0 )                  J, Z| Y| L0804,82CF RB, 
 ( 0804,82B2 )                  CMPI, B| R| DL| 39 IB, 
-( 0804,82B5 )                  J, CZ| Y| L0804,82C2 RB,
+( 0804,82B5 )                  J, CZ| Y| L0804,82C2 RB, 
 ( 0804,82B7 )                  ANDI, B| R| DL| 5F IB, 
 ( 0804,82BA )                  CMPI, B| R| DL| 41 IB, 
-( 0804,82BD )                  J, C| Y| L0804,82CD RB,
+( 0804,82BD )                  J, C| Y| L0804,82CD RB, 
 ( 0804,82BF )                  SUBI, B| R| DL| 7 IB, 
 ( 0804,82C2 )   :L0804,82C2    SUBI, B| R| DL| 30 IB, 
 ( 0804,82C5 )                  CMP, B| T| DL'| MEM| V_base L, 
-( 0804,82CB )                  J, C| Y| L0804,82CF RB,
+( 0804,82CB )                  J, C| Y| L0804,82CF RB, 
 ( 0804,82CD )   :L0804,82CD    STC, 
 ( 0804,82CE )                  RET, 
 ( 0804,82CF )   :L0804,82CF    IMUL, AX'| MEM| V_base L, 
@@ -349,19 +348,19 @@ INCLUDE rf751equ.cul
 ( 0804,82D9 )                  RET, 
 ( 0804,82DA )   :L0804,82DA    MOV, X| T| CX'| MEM| source L, 
 ( 0804,82E0 )                  OR, X| F| CX'| R| CX| 
-( 0804,82E2 )                  J, Z| N| L0804,8317 RB,
+( 0804,82E2 )                  J, Z| N| L0804,8317 RB, 
 ( 0804,82E4 )                  MOVI, X| MEM| tp L, _end IL, 
 ( 0804,82EE )                  MOVI, X| MEM| tin L, _end IL, 
-( 0804,82F8 )   :L0804,82F8    CALL, X_key RL,
+( 0804,82F8 )   :L0804,82F8    CALL, X_key RL, 
 ( 0804,82FD )                  CMPI|A, B'| 0D IB, 
-( 0804,82FF )                  J, Z| Y| L0804,8315 RB,
+( 0804,82FF )                  J, Z| Y| L0804,8315 RB, 
 ( 0804,8301 )                  CMPI|A, B'| 0A IB, 
-( 0804,8303 )                  J, Z| Y| L0804,8315 RB,
+( 0804,8303 )                  J, Z| Y| L0804,8315 RB, 
 ( 0804,8305 )                  XCHG, X| DI'| MEM| tp L, 
 ( 0804,830B )                  STOS, B'| 
 ( 0804,830C )                  XCHG, X| DI'| MEM| tp L, 
 ( 0804,8312 )                  LODS, X'| 
-( 0804,8313 )                  JMPS, L0804,82F8 RB,
+( 0804,8313 )                  JMPS, L0804,82F8 RB, 
 ( 0804,8315 )   :L0804,8315    LODS, X'| 
 ( 0804,8316 )                  RET, 
 ( 0804,8317 )   :L0804,8317    MOV, X| T| DI'| MEM| tin L, 
@@ -371,19 +370,18 @@ INCLUDE rf751equ.cul
 ( 0804,8324 )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8327 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8329 )                  CMPI, B| ZO| [DI] 0A IB, 
-( 0804,832C )                  J, Z| N| L0804,832F RB,
+( 0804,832C )                  J, Z| N| L0804,832F RB, 
 ( 0804,832E )                  INC|X, DI| 
 ( 0804,832F )   :L0804,832F    MOV, X| F| DI'| MEM| tin L, 
 ( 0804,8335 )                  SUB, X| F| DI'| R| CX| 
-( 0804,8337 )                  J, CZ| Y| L0804,8351 RB,
+( 0804,8337 )                  J, CZ| Y| L0804,8351 RB, 
 ( 0804,8339 )                  MOVI|B, AL| 0A IB, 
-( 0804,833B )                  REPNZ, 
-( 0804,833C )                  SCAS, B'| 
+( 0804,833B )                  REPNZ,    SCAS, B'| 
 ( 0804,833D )                  MOV, X| F| DI'| R| AX| 
-( 0804,833F )                  J, Z| N| L0804,8349 RB,
+( 0804,833F )                  J, Z| N| L0804,8349 RB, 
 ( 0804,8341 )                  DEC|X, AX| 
 ( 0804,8342 )                  CMPI, B| BO| [AX] 0FF B, 0D IB, 
-( 0804,8346 )                  J, Z| N| L0804,8349 RB,
+( 0804,8346 )                  J, Z| N| L0804,8349 RB, 
 ( 0804,8348 )                  DEC|X, AX| 
 ( 0804,8349 )   :L0804,8349    MOV|FA, X'| tp L, 
 ( 0804,834E )                  LODS, X'| 
@@ -408,7 +406,7 @@ INCLUDE rf751equ.cul
 ( 0804,838F )                  LODS, X'| 
 ( 0804,8390 )                  MOV|FA, X'| tin L, 
 ( 0804,8395 )                  LODS, X'| 
-( 0804,8396 )                  JMP, L0804,81B0 RL,
+( 0804,8396 )                  JMP, L0804,81B0 RL, 
 ( 0804,839B )   :L0804,839B    RET, 
 ( 0804,839C )   :dovar    SUBSI, R| SI| 4 IS, 
 ( 0804,839F )                  MOV, X| F| AX'| ZO| [SI] 
@@ -431,19 +429,19 @@ INCLUDE rf751equ.cul
 ( 0804,83D6 )   :N_1,   d$  2  "1,"
 
 ( 0804,83D9 )   :X_1,    MOVI|X, CX| 1 IL, 
-( 0804,83DE )                  JMPS, L0804,83B2 RB,
+( 0804,83DE )                  JMPS, L0804,83B2 RB, 
 ( 0804,83E0 )   :H_2,   dl H_1, X_2, 
 
 ( 0804,83E8 )   :N_2,   d$  2  "2,"
 
 ( 0804,83EB )   :X_2,    MOVI|X, CX| 2 IL, 
-( 0804,83F0 )                  JMPS, L0804,83B2 RB,
+( 0804,83F0 )                  JMPS, L0804,83B2 RB, 
 ( 0804,83F2 )   :H_3,   dl H_2, X_3, 
 
 ( 0804,83FA )   :N_3,   d$  2  "3,"
 
 ( 0804,83FD )   :X_3,    MOVI|X, CX| 3 IL, 
-( 0804,8402 )                  JMPS, L0804,83B2 RB,
+( 0804,8402 )                  JMPS, L0804,83B2 RB, 
 ( 0804,8404 )   :L0804,8404    SUBSI, R| SI| 4 IS, 
 ( 0804,8407 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8409 )                  POP|X, AX| 
@@ -462,8 +460,8 @@ INCLUDE rf751equ.cul
 ( 0804,842C )   :X_create    SUBSI, R| SI| 4 IS, 
 ( 0804,842F )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8431 )                  MOVI|X, AX| 20 IL, 
-( 0804,8436 )                  CALL, X_parse RL,
-( 0804,843B )                  JMPS, X_(create) RB,
+( 0804,8436 )                  CALL, X_parse RL, 
+( 0804,843B )                  JMPS, X_(create) RB, 
 ( 0804,843D )   :H_(create)   dl H_create X_(create) 
 
 ( 0804,8445 )   :N_(create)   d$  8  "(create)"
@@ -482,13 +480,12 @@ INCLUDE rf751equ.cul
 ( 0804,8472 )                  LODS, X'| 
 ( 0804,8473 )                  PUSH|X, SI| 
 ( 0804,8474 )                  MOV, X| F| AX'| R| SI| 
-( 0804,8476 )                  REPZ, 
-( 0804,8477 )                  MOVS, B'| 
+( 0804,8476 )                  REPZ,    MOVS, B'| 
 ( 0804,8478 )                  MOV, X| F| DI'| MEM| V_d0 L, 
 ( 0804,847E )                  POP|X, SI| 
 ( 0804,847F )                  POP|X, CX| 
 ( 0804,8480 )                  MOVI|X, AX| dovar IL, 
-( 0804,8485 )                  JMP, X_compile RL,
+( 0804,8485 )                  JMP, X_compile RL, 
 ( 0804,848A )   :H_mdoes>   dl 0 X_mdoes> 
 
 ( 0804,8492 )   :N_mdoes>   d$  5  "does>"
@@ -496,11 +493,11 @@ INCLUDE rf751equ.cul
 ( 0804,8498 )   :X_mdoes>    SUBSI, R| SI| 4 IS, 
 ( 0804,849B )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,849D )                  MOVI|X, AX| L0804,84B6 IL, 
-( 0804,84A2 )                  CALL, X_compile RL,
+( 0804,84A2 )                  CALL, X_compile RL, 
 ( 0804,84A7 )                  SUBSI, R| SI| 4 IS, 
 ( 0804,84AA )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,84AC )                  MOVI|X, AX| L0804,8404 IL, 
-( 0804,84B1 )                  JMP, X_compile RL,
+( 0804,84B1 )                  JMP, X_compile RL, 
 ( 0804,84B6 )   :L0804,84B6    SUBSI, R| SI| 4 IS, 
 ( 0804,84B9 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,84BB )                  MOV|TA, X'| last L, 
@@ -519,36 +516,36 @@ INCLUDE rf751equ.cul
 ( 0804,84DA )   :X_]    SUBSI, R| SI| 4 IS, 
 ( 0804,84DD )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,84DF )                  MOVI|X, AX| 20 IL, 
-( 0804,84E4 )                  CALL, X_parse RL,
-( 0804,84E9 )                  J, Z| N| L0804,84F4 RB,
+( 0804,84E4 )                  CALL, X_parse RL, 
+( 0804,84E9 )                  J, Z| N| L0804,84F4 RB, 
 ( 0804,84EB )                  LODS, X'| 
 ( 0804,84EC )                  LODS, X'| 
-( 0804,84ED )                  CALL, L0804,82DA RL,
-( 0804,84F2 )                  JMPS, X_] RB,
-( 0804,84F4 )   :L0804,84F4    CALL, X_mfind RL,
-( 0804,84F9 )                  J, C| N| L0804,851F RB,
-( 0804,84FB )                  CALL, X_find RL,
-( 0804,8500 )                  J, C| N| L0804,8526 RB,
-( 0804,8502 )                  CALL, X_>number RL,
-( 0804,8507 )                  J, C| N| L0804,852D RB,
-( 0804,8509 )                  CALL, L0804,8739 RL,
+( 0804,84ED )                  CALL, L0804,82DA RL, 
+( 0804,84F2 )                  JMPS, X_] RB, 
+( 0804,84F4 )   :L0804,84F4    CALL, X_mfind RL, 
+( 0804,84F9 )                  J, C| N| L0804,851F RB, 
+( 0804,84FB )                  CALL, X_find RL, 
+( 0804,8500 )                  J, C| N| L0804,8526 RB, 
+( 0804,8502 )                  CALL, X_>number RL, 
+( 0804,8507 )                  J, C| N| L0804,852D RB, 
+( 0804,8509 )                  CALL, L0804,8739 RL, 
 ( 0804,850E )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8511 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8513 )                  MOVI|X, AX| 0C3 IL, 
-( 0804,8518 )                  CALL, X_1, RL,
-( 0804,851D )                  JMPS, X_] RB,
+( 0804,8518 )                  CALL, X_1, RL, 
+( 0804,851D )                  JMPS, X_] RB, 
 ( 0804,851F )   :L0804,851F    MOV, X| F| AX'| R| DI| 
 ( 0804,8521 )                  LODS, X'| 
 ( 0804,8522 )                  CALLO, R| DI| 
-( 0804,8524 )                  JMPS, X_] RB,
-( 0804,8526 )   :L0804,8526    CALL, X_compile RL,
-( 0804,852B )                  JMPS, X_] RB,
+( 0804,8524 )                  JMPS, X_] RB, 
+( 0804,8526 )   :L0804,8526    CALL, X_compile RL, 
+( 0804,852B )                  JMPS, X_] RB, 
 ( 0804,852D )   :L0804,852D    SUBSI, R| SI| 4 IS, 
 ( 0804,8530 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8532 )                  MOVI|X, AX| L0804,840E IL, 
-( 0804,8537 )                  CALL, X_compile RL,
-( 0804,853C )                  CALL, X_, RL,
-( 0804,8541 )                  JMPS, X_] RB,
+( 0804,8537 )                  CALL, X_compile RL, 
+( 0804,853C )                  CALL, X_, RL, 
+( 0804,8541 )                  JMPS, X_] RB, 
 ( 0804,8543 )   :H_compile   dl H_] X_compile 
 
 ( 0804,854B )   :N_compile   d$  7  "compile"
@@ -558,8 +555,8 @@ INCLUDE rf751equ.cul
 ( 0804,855C )                  SUBSI, R| SI| 4 IS, 
 ( 0804,855F )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8561 )                  MOVI|X, AX| 0E8 IL, 
-( 0804,8566 )                  CALL, X_1, RL,
-( 0804,856B )                  CALL, X_, RL,
+( 0804,8566 )                  CALL, X_1, RL, 
+( 0804,856B )                  CALL, X_, RL, 
 ( 0804,8570 )                  MOVI, X| MEM| tail L, 0 IL, 
 ( 0804,857A )                  RET, 
 ( 0804,857B )   :H_m[   dl H_mdoes> X_m[ 
@@ -575,9 +572,9 @@ INCLUDE rf751equ.cul
 ( 0804,8594 )   :X_m;;    MOV, X| T| DX'| MEM| V_h0 L, 
 ( 0804,859A )                  SUBSI, R| DX| 5 IS, 
 ( 0804,859D )                  CMPI, B| ZO| [DX] 0E8 IB, 
-( 0804,85A0 )                  J, Z| N| L0804,85AE RB,
+( 0804,85A0 )                  J, Z| N| L0804,85AE RB, 
 ( 0804,85A2 )                  CMPSI, MEM| tail L, 0 IS, 
-( 0804,85A9 )                  J, Z| N| L0804,85AE RB,
+( 0804,85A9 )                  J, Z| N| L0804,85AE RB, 
 ( 0804,85AB )                  INC, B| ZO| [DX] 
 ( 0804,85AD )                  RET, 
 ( 0804,85AE )   :L0804,85AE    MOVI, B| BO| [DX] 5 B, 0C3 IB, 
@@ -587,15 +584,15 @@ INCLUDE rf751equ.cul
 
 ( 0804,85C1 )   :N_m;   d$  1  &;
 
-( 0804,85C3 )   :X_m;    CALL, X_m;; RL,
-( 0804,85C8 )                  JMPS, X_m[ RB,
+( 0804,85C3 )   :X_m;    CALL, X_m;; RL, 
+( 0804,85C8 )                  JMPS, X_m[ RB, 
 ( 0804,85CA )   :H_:   dl H_compile X_: 
 
 ( 0804,85D2 )   :N_:   d$  1  &:
 
-( 0804,85D4 )   :X_:    CALL, X_create RL,
+( 0804,85D4 )   :X_:    CALL, X_create RL, 
 ( 0804,85D9 )                  SUBSI, MEM| V_h0 L, 5 IS, 
-( 0804,85E0 )                  JMP, X_] RL,
+( 0804,85E0 )                  JMP, X_] RL, 
 ( 0804,85E5 )   :H_mliteral   dl H_m; X_mliteral 
 
 ( 0804,85ED )   :N_mliteral   d$  7  "literal"
@@ -603,8 +600,8 @@ INCLUDE rf751equ.cul
 ( 0804,85F5 )   :X_mliteral    SUBSI, R| SI| 4 IS, 
 ( 0804,85F8 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,85FA )                  MOVI|X, AX| L0804,840E IL, 
-( 0804,85FF )                  CALL, X_compile RL,
-( 0804,8604 )                  CALL, X_, RL,
+( 0804,85FF )                  CALL, X_compile RL, 
+( 0804,8604 )                  CALL, X_, RL, 
 ( 0804,8609 )                  RET, 
 ( 0804,860A )   :H_forth   dl H_: X_forth 
 
@@ -627,34 +624,34 @@ INCLUDE rf751equ.cul
 ( 0804,8648 )                  MOV, X| F| SI'| R| DI| 
 ( 0804,864A )                  SUBSI, R| DI| 4 IS, 
 ( 0804,864D )                  OR, X| F| AX'| R| AX| 
-( 0804,864F )                  J, S| N| L0804,8662 RB,
+( 0804,864F )                  J, S| N| L0804,8662 RB, 
 ( 0804,8651 )                  NEG, X| R| AX| 
 ( 0804,8653 )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8656 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8658 )                  MOVI|X, AX| 2D IL, 
-( 0804,865D )                  CALL, X_emit RL,
+( 0804,865D )                  CALL, X_emit RL, 
 ( 0804,8662 )   :L0804,8662    XOR, X| F| DX'| R| DX| 
 ( 0804,8664 )                  DIV|AD, X| MEM| V_base L, 
 ( 0804,866A )                  ADDI, B| R| DL| 30 IB, 
 ( 0804,866D )                  CMPI, B| R| DL| 39 IB, 
-( 0804,8670 )                  J, CZ| Y| L0804,8675 RB,
+( 0804,8670 )                  J, CZ| Y| L0804,8675 RB, 
 ( 0804,8672 )                  ADDI, B| R| DL| 27 IB, 
 ( 0804,8675 )   :L0804,8675    DEC|X, DI| 
 ( 0804,8676 )                  MOV, B| F| DL'| ZO| [DI] 
 ( 0804,8678 )                  OR, X| F| AX'| R| AX| 
-( 0804,867A )                  J, Z| N| L0804,8662 RB,
+( 0804,867A )                  J, Z| N| L0804,8662 RB, 
 ( 0804,867C )                  MOV, X| F| DI'| R| AX| 
 ( 0804,867E )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8681 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8683 )                  MOV, X| F| SI'| R| AX| 
 ( 0804,8685 )                  SUB, X| F| DI'| R| AX| 
-( 0804,8687 )                  CALL, X_type RL,
+( 0804,8687 )                  CALL, X_type RL, 
 ( 0804,868C )                  POP|X, DI| 
 ( 0804,868D )                  POP|X, DX| 
 ( 0804,868E )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8691 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8693 )                  MOVI|X, AX| 20 IL, 
-( 0804,8698 )                  CALL, X_emit RL,
+( 0804,8698 )                  CALL, X_emit RL, 
 ( 0804,869D )                  RET, 
 ( 0804,869E )   :H_type   dl H_. X_type 
 
@@ -667,16 +664,16 @@ INCLUDE rf751equ.cul
 ( 0804,86B0 )                  MOV, X| F| AX'| R| BX| 
 ( 0804,86B2 )                  LODS, X'| 
 ( 0804,86B3 )                  OR, X| F| CX'| R| CX| 
-( 0804,86B5 )                  J, Z| Y| L0804,86CA RB,
+( 0804,86B5 )                  J, Z| Y| L0804,86CA RB, 
 ( 0804,86B7 )   :L0804,86B7    PUSH|X, CX| 
 ( 0804,86B8 )                  SUBSI, R| SI| 4 IS, 
 ( 0804,86BB )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,86BD )                  XOR, X| F| AX'| R| AX| 
 ( 0804,86BF )                  MOV, B| T| AL'| ZO| [BX] 
 ( 0804,86C1 )                  INC|X, BX| 
-( 0804,86C2 )                  CALL, X_emit RL,
+( 0804,86C2 )                  CALL, X_emit RL, 
 ( 0804,86C7 )                  POP|X, CX| 
-( 0804,86C8 )                  LOOP, L0804,86B7 RB,
+( 0804,86C8 )                  LOOP, L0804,86B7 RB, 
 ( 0804,86CA )   :L0804,86CA    POP|X, CX| 
 ( 0804,86CB )                  POP|X, BX| 
 ( 0804,86CC )                  RET, 
@@ -688,15 +685,13 @@ INCLUDE rf751equ.cul
 ( 0804,86E1 )                  MOV, X| T| CX'| MEM| tp L, 
 ( 0804,86E7 )                  SUB, X| F| DI'| R| CX| 
 ( 0804,86E9 )                  INC|X, CX| 
-( 0804,86EA )                  REPZ, 
-( 0804,86EB )                  SCAS, B'| 
+( 0804,86EA )                  REPZ,    SCAS, B'| 
 ( 0804,86EC )                  DEC|X, DI| 
 ( 0804,86ED )                  INC|X, CX| 
 ( 0804,86EE )                  SUBSI, R| SI| 4 IS, 
 ( 0804,86F1 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,86F3 )                  MOV, X| F| DI'| ZO| [SI] 
-( 0804,86F5 )                  REPNZ, 
-( 0804,86F6 )                  SCAS, B'| 
+( 0804,86F5 )                  REPNZ,    SCAS, B'| 
 ( 0804,86F7 )                  MOV, X| F| DI'| R| AX| 
 ( 0804,86F9 )                  DEC|X, AX| 
 ( 0804,86FA )                  SUB, X| T| AX'| ZO| [SI] 
@@ -722,19 +717,19 @@ INCLUDE rf751equ.cul
 ( 0804,8730 )                  MOV, B| F| DL'| ZO| [DI] 
 ( 0804,8732 )                  INC|X, DI| 
 ( 0804,8733 )                  INC|X, SI| 
-( 0804,8734 )                  LOOP, L0804,872E RB,
+( 0804,8734 )                  LOOP, L0804,872E RB, 
 ( 0804,8736 )                  POP|X, SI| 
 ( 0804,8737 )                  LODS, X'| 
 ( 0804,8738 )                  RET, 
-( 0804,8739 )   :L0804,8739    CALL, X_type RL,
+( 0804,8739 )   :L0804,8739    CALL, X_type RL, 
 ( 0804,873E )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8741 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8743 )                  MOVI|X, AX| 3F IL, 
-( 0804,8748 )                  CALL, X_emit RL,
+( 0804,8748 )                  CALL, X_emit RL, 
 ( 0804,874D )                  SUBSI, R| SI| 4 IS, 
 ( 0804,8750 )                  MOV, X| F| AX'| ZO| [SI] 
 ( 0804,8752 )                  MOVI|X, AX| 0A IL, 
-( 0804,8757 )                  CALL, X_emit RL,
+( 0804,8757 )                  CALL, X_emit RL, 
 ( 0804,875C )                  RET, 
 ( 0804,875D )   :H_last   dl H_cmove X_last 
 
@@ -748,19 +743,19 @@ INCLUDE rf751equ.cul
 
 ( 0804,877D )   :N_h0   d$  2  "h0"
 
-( 0804,8780 )   :X_h0    CALL, dovar RL,
+( 0804,8780 )   :X_h0    CALL, dovar RL, 
 ( 0804,8785 )   :V_h0   dl dictend 
 ( 0804,8789 )   :H_d0   dl H_h0 X_d0 
 
 ( 0804,8791 )   :N_d0   d$  2  "d0"
 
-( 0804,8794 )   :X_d0    CALL, dovar RL,
+( 0804,8794 )   :X_d0    CALL, dovar RL, 
 ( 0804,8799 )   :V_d0   dl d0 
 ( 0804,879D )   :H_base   dl H_d0 X_base 
 
 ( 0804,87A5 )   :N_base   d$  4  "base"
 
-( 0804,87AA )   :X_base    CALL, dovar RL,
+( 0804,87AA )   :X_base    CALL, dovar RL, 
 ( 0804,87AF )   :V_base   dl 0A 
 ( 0804,87B3 )   :tail   dl 0 \   Allow tail-calls?
 ( 0804,87B7 )   :buffer   dl 0 \   Buffer (for ports to use as needed)

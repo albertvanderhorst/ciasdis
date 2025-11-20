@@ -5,7 +5,20 @@ For a more elaborate log see the log of ciforth.
 
 The following tags are official and eligible for a copy to github.
 
-REL-2-0-0: release 2.0.0 also on github.
+REL-3-0-0 : Is to be compiled with any ciforth better than 5.4.0 ,
+             Tested on ciforth riscv 6.0.0
+
+PASS_5_4_0 : Is to be compiled with any ciforth 5.4.0 ,
+    the 64 bit version passes regressiontest64
+    the 32 bit version passes regressiontest32
+The 64 bit version passes regressiontest64 on arm 64, except one.
+
+REL-2-0-1 : MOVI|X, enahnced by xx:MOVI|X, for 64 bits.
+This label is not yet assigned, until we are happy with how the
+optimiser works after this change.
+
+REL-2-0-0 : Version officially released on my hcc website and github,
+also used for optimiser.
 
 PASS32_5_3_0 : Is to be compiled 32 bit with any ciforth 5.3.0 ,
     64 bit with 2017oct beta.

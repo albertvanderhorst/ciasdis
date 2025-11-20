@@ -1,0 +1,22 @@
+
+How to bring up an assembler.
+
+1. identify the mnemonics and get the masks right, i.e. the bits
+   that have not been filled in by the instruction
+
+2. define all mnemonics for fixup.
+
+3. Run SHOW-ALL.
+   Inspect for postits that are not wanted.
+   Use bad bits for supressing those.
+
+4. Debug "make testas<processor>"
+  This can fail because contrary to SHOW: it doesn't use
+  backtracking.
+  This means:
+    All fixups must be defined prior to corresponding mnemonics,
+    such that they are inspected later.
+    A fixup in the wrong place can result in the instruction not
+    properly disassembled, mostly it will fail and fall back into byte
+    disassembly. This can be remedied by properly adjusting more bad
+    bits.

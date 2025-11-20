@@ -1,0 +1,142 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="byhand" >
+   <META NAME=description content="Forth assemblers for ciforth.">
+   <META NAME=keywords content="Post-it-fix-up,Forth,assembler,
+reverse engineering, Intel-386, in-Forth">
+   <TITLE>
+     computer_intelligence_assembler_disassembler
+   </TITLE>
+   <LINK REV="AvdH" HREF="mailto:albert@spenarnc.xs4all.nl">
+</HEAD>
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <TITLE>Alberts home page</TITLE>
+</HEAD>
+<BODY>
+<H1> ciasdis</H1>
+<H2> computer_intelligence_assembler_disassembler </H2>
+This page is about how the
+<A HREF="postitfixup.html">
+Post-It Fix-Up principle   </A>
+works
+out in practical program code in Forth in order to make an
+assembler where the elements opcode, operands and modifiers
+are all objects, that are reusable for disassembly.
+This is important for artificial intelligence and optimising
+compilers.
+More about the details and problems of
+this in <A HREF="forthassembler.html"> forthassembler.html</A>
+
+<A NAME="DESCRIPTION"></A>
+<H1>DESCRIPTION</H1>
+The 80386 ISO assembler has been enhanced to a reverse
+engineering system.
+It can regenerate source from a binary and a <I>consult</I>
+file with information about that binary.
+Then it use a classical two-pass assembler to regenerate the binary.
+There is a difference with the forthassembler package that
+contains <B>all</B> assemblers in source form and can
+run on all implementations of ciforth
+you can download from this site.
+(Obvious restrictions apply, the 64 bit DEC alpha assembler
+cannot be handled in a 16 bits Forth.)
+<BR>
+However ciasdis is a turnkey system, with a built-in Pentium
+assembler and disassembler, where the user may no longer be
+aware that it is loaded on top of a Forth system.
+<A NAME="APPLICATION"></A>
+<H1>APPLICATION</H1>
+As a test this reverse engineering system has been used to recover a source
+for <A HREF=http://www.colorforth.com>colorforth</A>.
+<B>colorforth</B> features a number of hurdles for reverse engineering,
+much more than the average software does.
+It is however not made intentionally difficult to disassemble.
+<BR>
+As usual in Forth, data and code are interspersed.
+<BR>
+Names are in a non-standard format, several characters are compressed in
+32-bit word. Still a dedicated plug-in allows to use these names for labels.
+<BR>
+Source screens are an essential part of colorforth, because they
+are loaded on start-up. They too contain characters in compressed
+form, and colors that had to be rendered somehow in the disassembly,
+and recovered upon re-assembly.
+<BR>
+You may find this example on my
+<A HREF="ftp://80.100.243.19/pub">FTP site</A>
+<H2>ARRAYFORTH</H2>
+An other application is the handling of arrayforth, in particular
+the colorforth (pseudo floppy image) with code for the GA144 chips.
+This provides a means to work with ascii files in a colorful way
+on a linux system.
+<A HREF="ciasarrayforth.tgz">Download the tool</A> from here.
+<A HREF="ciasarrayforth.html">The tutorial </A> explains how to use it.
+
+<HR>
+<A NAME="DOWNLOAD"></A>
+<H1>DOWNLOADS BEFORE VERSION 1.0.0</H1>
+You can still
+<A HREF=as4d0.zip>download</A>
+an early version with all testsets,
+but not organized as reverse engineering system.
+<BR>
+Newer version are reverse engineering systems with matching
+assemblers and disassemblers.
+All versions of <B>ciasdis</B> before 2.0.0 are
+based on the stable lina version 4 (4.0.6 or 4.0.7).
+
+In particular the first version with Debian packaging:
+<A HREF="ciasdis-0-3-0.tgz">ciasdis version 0.3.0 </A>.
+For the documentation you're referred partly to the lina documentation.
+<BR>
+This can be seen as a first step in realizing
+<A HREF="forthprojects.html#The Ultimate Debugger">The Ultimate Debugger.</A>
+<BR>
+If you want to compile the sources
+on other forth's, even ciforth version 5,
+there may be a few hitches.
+Files are in Unix format (no CR/LF DOS line endings),
+but for wina that is no problem.
+This distribution contains the very demanding
+regression tests, that require sections and two passes from the
+assembler, and you may detect errors.
+On the other hand they don't contain the testsets for the
+assemblers proper, although 8080, Dec Alpha and 6809 assemblers
+are present.
+<A NAME="STABLE"></A>
+<H1>VERSION 1.0.0  AND LATER</H1>
+After version 0.4 I've done a lot of cleanup, in particular
+the disassembler is more object-oriented.
+The <I>PIFU</I>'s (postit-fixup's) have methods for assembling
+and disassembling,
+instead of cumbersome words that find out what type they are.
+Furthermore the language used to specify the disassembly has been
+documented in a man page.
+At the point that ciasdis had been stable for 5 years,
+passing all regression tests with each
+improvement, I released version 1.0.
+I make this available as a
+<A HREF=ciasdis_1.0_all.deb>debian package</A>
+that you can download.
+It is also available via <A HREF=
+https://github.com/albertvanderhorst/ciasdis>github</A>.
+<A NAME="LATEST"></A>
+<H1>VERSION 2.0.0  AND LATER</H1>
+The <B>ciasdis</B> version 2.0.0 is compiled with <B>ciforth</B>
+<A HREF=lina.html> version 5</A> be it 32 or 64 bit version of the compiler,
+with small differences in testing.
+You are well advised to run the latest stable beta version,
+especially if you want to exercise the harder tests.
+It is available as a <A  HREF=ciasdis-dev-2.0.0.tar.gz>source<A/> and
+<A HREF=ciasdis-2.0.0.tar.gz>binary</A> distribution.
+The label <B>REL-2-0-0</B> at
+<A HREF=https://github.com/albertvanderhorst/ciasdis>github</A>
+ marks a complete source release of all files pertinent to version 2.0.0
+ and then some.
+<HR><P>
+<A HREF=index.html> Go to the home page of Albert van der Horst</A>
+</BODY>
+</HTML>

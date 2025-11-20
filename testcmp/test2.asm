@@ -1,4 +1,3 @@
-BITS-32
 4FE  ORG
 
 \ 
@@ -6,7 +5,8 @@ BITS-32
 \ #################### "WELCOME" he said ####################
 
 \ Here it all starts
-\ Fasten Your Seat Belts (tm)   
+\ Fasten Your Seat Belts (tm)
+BITS-32   
 ( 04FE )   :START    CLD, \ First instruction
 ( 04FF )   :L04FF    MOV, X| T| DI'| MEM| XXX L, 
 ( 0505 )   :QQQ    POP|ES, 
@@ -26,8 +26,7 @@ BITS-32
 \ XXX is a target for backward jumps:   
 ( 053F )   :XXX    MOV, X| T| DI'| MEM| QQQ L, \   Move a xell to register DI from memory at QQQ
 ( 0545 )                  JMP, XXX RL, 
-( 054A )                  AS:, 
-( 054B )                  JMP, XXX RW, \ RW, didn't end in a blank, before
+( 054A )                  AS:,    JMP, XXX RW, \ RW, didn't end in a blank, before
 ( 054E )                  JMP, XXX RL, 
 ( 0553 )                  JMP, XXX 1 - RL, 
 ( 0558 )                  JMPS, XXX RB, 
@@ -55,40 +54,26 @@ BITS-32
 \ YYY is a target for forward jumps:   
 ( 066A )   :BUFFERTILL-END    LEA, AX'| BO|    [AX +4* AX] 0 B, 
 ( 066E )                  LEA, AX'| XO|    [AX +4* AX] 0C L, 
-( 0675 )                  OS:, 
-( 0676 )                  LEA, AX'| XO|    [AX +4* AX] 0D L, 
-( 067D )                  AS:, 
-( 067E )                  LEA, AX'| XO| [BX+SI]% 0E W, 
-( 0682 )                  AS:, 
-( 0683 )                  OS:, 
-( 0684 )                  LEA, AX'| XO| [BX+SI]% 0F W, 
-( 0688 )                  OS:, 
-( 0689 )                  AS:, 
-( 068A )                  LEA, AX'| XO| [BX+SI]% 10 W, 
+( 0675 )                  OS:,    LEA, AX'| XO|    [AX +4* AX] 0D L, 
+( 067D )                  AS:,    LEA, AX'| XO| [BX+SI]% 0E W, 
+( 0682 )                  AS:,    OS:,    LEA, AX'| XO| [BX+SI]% 0F W, 
+( 0688 )                  OS:,    AS:,    LEA, AX'| XO| [BX+SI]% 10 W, 
 ( 068E )                  RET, 
 ( 068F )                  INC|X, AX| 
 ( 0690 )                  MOVI, X| XO| [BX] 0E L, 12 IL, 
 ( 069A )                  INC|X, AX| 
-( 069B )                  OS:, 
-( 069C )                  MOVI, X| XO| [BX] 0E L, 12 IW, 
+( 069B )                  OS:,    MOVI, X| XO| [BX] 0E L, 12 IW, 
 ( 06A4 )                  INC|X, AX| 
-( 06A5 )                  AS:, 
-( 06A6 )                  MOVI, X| XO| [BX]% 14 W, 18 IL, 
-( 06AE )                  AS:, 
-( 06AF )                  OS:, 
-( 06B0 )                  MOVI, X| XO| [BX]% 14 W, 18 IW, 
+( 06A5 )                  AS:,    MOVI, X| XO| [BX]% 14 W, 18 IL, 
+( 06AE )                  AS:,    OS:,    MOVI, X| XO| [BX]% 14 W, 18 IW, 
 ( 06B6 )                  RET, 
 BITS-16
 ( 06B7 )                  INC|X, AX| 
-( 06B8 )                  AS:, 
-( 06B9 )                  OS:, 
-( 06BA )                  MOVI, X| XO| [BX] 0E L, 12 IL, 
+( 06B8 )                  AS:,    OS:,    MOVI, X| XO| [BX] 0E L, 12 IL, 
 ( 06C4 )                  INC|X, AX| 
-( 06C5 )                  AS:, 
-( 06C6 )                  MOVI, X| XO| [BX] 0E L, 12 IW, 
+( 06C5 )                  AS:,    MOVI, X| XO| [BX] 0E L, 12 IW, 
 ( 06CE )                  INC|X, AX| 
-( 06CF )                  OS:, 
-( 06D0 )                  MOVI, X| XO| [BX]% 14 W, 18 IL, 
+( 06CF )                  OS:,    MOVI, X| XO| [BX]% 14 W, 18 IL, 
 ( 06D8 )                  MOVI, X| XO| [BX]% 14 W, 18 IW, 
 ( 06DE )                  RET, 
 BITS-32

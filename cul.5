@@ -1,4 +1,4 @@
-.\" $Id: cul.5,v 1.16 2016/05/13 15:49:23 albert Exp $
+.\" $Id: cul.5,v 1.17 2019/10/27 18:19:25 albert Exp $
 .TH cul "5" "jan 2015" "cul 0.1.15" DFW
 .SH "NAME"
 cul \- consult file format for
@@ -152,6 +152,13 @@ The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
 They are printed as symbolic names,
 if they occur as a plain label.
 .TP
+\fI<expr1>\ <expr2>\fR \fB-dq:\fR \fI<name>\fR
+.br
+The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
+\fI<name>\fR and is a section to be disassembled as quad (64-bit) values.
+They are printed as symbolic names,
+if they occur as a plain label.
+.TP
 \fI<expr1>\ <expr2>\fR \fB-d$:\fR \fI<name>\fR
 .br
 The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
@@ -175,12 +182,12 @@ The range \fI<expr1>\ <expr2>\fR is hence-to-forth known by
 \fI<name>\fR and is a section to be disassembled as a normal code section.
 For the Intel 80386 this means a 32-bit code section.
 .TP
-\fI<expr1>\ <expr2>\fR \fI<string>\fR \fB[-dn|-db|-bw|-dl|-dc|-d$]\fR
-These commands are equivalent to \fB-dn: -db: -dw: -dl: -dc: -d$: \fR but the
+\fI<expr1>\ <expr2>\fR \fI<string>\fR \fB[-dn|-db|-bw|-dl|-dq|-dc|-d$]\fR
+These commands are equivalent to \fB-dn: -db: -dw: -dl: -dq: -dc: -d$: \fR but the
 sections get their names from \fI<string>\fR.
 .TP
-\fI<expr1>\ <expr2>\fR \fB[-dn-|-db-|-bw-|-dl-|-dc-|-d$-]\fR
-These commands are equivalent to \fB-dn: -db: -dw: -dl: -dc: -d$: \fR but the
+\fI<expr1>\ <expr2>\fR \fB[-dn-|-db-|-bw-|-dl-|-dq-|-dc-|-d$-]\fR
+These commands are equivalent to \fB-dn: -db: -dw: -dl: -dq: -dc: -d$: \fR but the
 sections are anonymous.
 .TP
 \fI<expr>\fR \fBORG\fR
@@ -229,7 +236,7 @@ This includes all information added interactively.
 .br
 Read in the file named \fI<name>\fR and execute all commands there in.
 .TP
-\fB[PLAIN-LABELS|SECTION-LABELS]\ REMOVE:\fR \fI<name>\fR
+\fB[EQU-LABELS|RANGE-LABELS]\ REMOVE:\fR \fI<name>\fR
 .br
 Select the plain labels or the sections labels class and
 remove the label \fI<name>\fR from it.
@@ -239,7 +246,7 @@ the selection.
 When redefining a label is intended,
 the old label must be removed first.
 .TP
- \fB[PLAIN-LABELS|SECTION-LABELS]\fR \fI<expr>\fR \fBREMOVED\fR
+ \fB[EQU-LABELS|RANGE-LABELS]\fR \fI<expr>\fR \fBREMOVED\fR
 .br
 Like REMOVE: but the label is identified by its address in \fI<expr>\fR.
 .TP
@@ -252,11 +259,6 @@ cannot be determined, and assuming jumps and calls refer to more
 code addresses.
 Add new knowledge to the labeled sections,
 then combine any anonymous sections.
-.TP
-\fI<expr>\fR \fBCRAWL!\fR
-.br
-Add the information that \fI<expr>\fR is a target code address.
-It will be taken into account at the next invocation of CRAWL .
 
 .SH "FETCHING FROM BINARY"
 Extracting label names from the binary is a vital capability.
@@ -264,15 +266,13 @@ Also especially in headers, there are addresses to be fetched from
 the binary.
 Note that the keywords in this section are operators,
 in the sense that they leave a result for further processing.
-The string operators on addresses in the host space (unlike \fBL@\fR e.a.),
+The string operators work on addresses in the host space
+(unlike \fBL@\fR e.a.),
 so they are normally preceeded by \fBTARGET>HOST\fR.
 .TP
-\fI<addr>\fR \fB[B@|W@|L@]\fR
-Get an 8 bit, 16 bit or 32 bit value from target address \fI<addr>\fR,
+\fI<addr>\fR \fB[B@|W@|L@|Q@]\fR
+Get an 8 bit, 16 bit, 32 bit or 64 bit value from target address \fI<addr>\fR,
 in a big-endian (Intel) fashion.
-.br
-Note the conflict with the built-in \fBL@\fR .
-The old \fBL@\fR is available under the name \fBFAR@\fR.
 .TP
 \fI<addr>\fR \fBTARGET>HOST\fR
 Transform the target address to a host address.
@@ -346,7 +346,6 @@ As are the corresponding \fB[-dc16|-dc16-]\fR commands.
 .br
 This command is like \fBCRAWL16\fR but applies to 16 bits code segments
 and generates \fB-dc16\fR family directives.
-\fBCRAWL!\fR is recognized for start addresses.
 .SH "COMMAND"
 After the command \fBASSEMBLER\fR ,
 all assembler commands can be tried
@@ -435,10 +434,13 @@ lina(1) Linux Native version of ciforth.
 .\"
 .SH "CAVEAT"
 Mistakes in Forth mode can easily crash \fBcias / cidis\fR.
+.br
+Versions of lina before 5 have a conflict with the built-in \fBL@\fR .
+The old \fBL@\fR is available under the name \fBFAR@\fR.
 
 \fBcias / cdis\fR is case sensitive.
 .SH "AUTHOR"
-Copyright \(co 2004-2015
+Copyright \(co 2004-2019
 Albert van der Horst \fI albert@spenarnc.xs4all.nl\fR.
 \fBcias / cidis\fR
 are made available under the GNU Public License:

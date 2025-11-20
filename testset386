@@ -1,4 +1,5 @@
 ASSEMBLER
+BITS-32
 : firstset ." First set" ;
 !TALLY
 HEX
@@ -21417,5 +21418,6 @@ DUP 10 ERASE    \ Padding for dump
 ." TEST STARTS HERE"
 2DUP OVER - DUMP
 2DUP OVER - "test386.bin" PUT-FILE
+BITS-32
 DISASSEMBLE-RANGE
 BYE

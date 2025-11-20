@@ -1,4 +1,4 @@
-( $Id: crawl.frt,v 1.38 2018/07/24 11:44:49 albert Exp $ )
+( $Id: crawl.frt,v 1.40 2019/11/05 12:16:02 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
@@ -227,12 +227,9 @@ ASSEMBLER
 \ until the end is detected.
 1000 BAG STARTERS
 
-VARIABLE (R-XT)        \ Required xt.
+VARIABLE (R-XT)         'D-R-T (R-XT) !         \ Required xt.
 \ Return the XT that is required for the current disassembly.
 : REQUIRED-XT (R-XT) @ ;
-\ Specify normal disassembly.
-: NORMAL-DISASSEMBLY 'D-R-T (R-XT) ! BITS-32 ;
-NORMAL-DISASSEMBLY
 
 \ The following are auxiliary words for `` KNOWN-CODE? '' mainly.
 \ For all those range labels must be current and sorted.
@@ -313,7 +310,7 @@ NORMAL-DISASSEMBLY
 : NEW-LABEL?    DUP PLAUSIBLE-LABEL? IF ?INSERT-EQU? _ THEN DROP ;
 
 \ For dl-range from ADDR1 to ADDR2 add all plausible labels found in data.
-: ADD-L-LABELS   SWAP DO   I L@ NEW-LABEL?   0 CELL+ +LOOP ;
+: ADD-L-LABELS   SWAP DO   I L@ NEW-LABEL?   4 +LOOP ;
 
 \ For all dl-ranges add all plausible labels.
 : ALL-L-LABELS
@@ -321,12 +318,25 @@ NORMAL-DISASSEMBLY
         RANGE-XT 'DUMP-L =   IF   RANGE-START RANGE-END ADD-L-LABELS   THEN
     LOOP-LAB ;
 
+\ ------------------------ dq range  ------------------------------
+
+\ For ADDR create a label if it points in the target space.
+: NEW-LABEL?    DUP PLAUSIBLE-LABEL? IF ?INSERT-EQU? _ THEN DROP ;
+
+\ For dq-range from ADDR1 to ADDR2 add all plausible labels found in data.
+: ADD-Q-LABELS   SWAP DO   I Q@ NEW-LABEL?   8 +LOOP ;
+
+\ For all dq-ranges add all plausible labels.
+: ALL-Q-LABELS
+    RANGE-LABELS DO-LAB   I CELL+ @ EXECUTE
+        RANGE-XT 'DUMP-Q =   IF   RANGE-START RANGE-END ADD-Q-LABELS   THEN
+    LOOP-LAB ;
+
 \ ------------------------ INTEL 80386 ------------------------------
 \ Intel specific. There is a need to specify the disassembly xt.
-\ Crawl with normal disassembly (observing `` TALLY-BA '')
-\ resp. crawl through 16 / 32 bits code.
-\ The other owns change it all the time.
-: CRAWL16  'D-R-T-16 (R-XT) ! BITS-16 CRAWL NORMAL-DISASSEMBLY ;
+\ Crawl 16 bits by temporatily switching away from 32 bits mode.
+\ This will not work within BITS-64.
+: CRAWL16  'D-R-T-16 (R-XT) ! BITS-16 CRAWL 'D-R-T (R-XT) !  BITS-32 ;
 
 PREVIOUS
 : \D ;

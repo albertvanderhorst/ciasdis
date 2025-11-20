@@ -1,15 +1,17 @@
-1c1,6
+1c1,8
 < 
 ---
 > ASSEMBLER
+> BITS-32
 > : firstset ." First set" ;
 > !TALLY
 > HEX
 > 10 AS-HERE 10 MOD - AS-ALLOT ( To get a nice DUMP)
 > AS-HERE
-70a76
+> CLTS,
+69a77
 > firstset
-582a589,604
+581a590,605
 > J|X, LE| N| 10 (RL,)
 > J|X, LE| Y| 10 (RL,)
 > J|X, L| N| 10 (RL,)
@@ -26,7 +28,7 @@
 > J|X, C| Y| 10 (RL,)
 > J|X, O| N| 10 (RL,)
 > J|X, O| Y| 10 (RL,)
-2503,2518d2524
+2502,2517d2525
 < J|X,   LE|   N|   10 (RL,)   
 < J|X,   LE|   Y|   10 (RL,)   
 < J|X,   L|   N|   10 (RL,)   
@@ -43,7 +45,7 @@
 < J|X,   C|   Y|   10 (RL,)   
 < J|X,   O|   N|   10 (RL,)   
 < J|X,   O|   Y|   10 (RL,)   
-3843,3874d3848
+3842,3873d3849
 < XORSI,   MEM|   C L,   10 IS,   
 < XORSI,   R|   DI|   10 IS,   
 < XORSI,   R|   SI|   10 IS,   
@@ -76,7 +78,7 @@
 < XORSI,   ZO|   [DX]   10 IS,   
 < XORSI,   ZO|   [CX]   10 IS,   
 < XORSI,   ZO|   [AX]   10 IS,   
-3907,3938d3880
+3906,3937d3881
 < ANDSI,   MEM|   C L,   10 IS,   
 < ANDSI,   R|   DI|   10 IS,   
 < ANDSI,   R|   SI|   10 IS,   
@@ -109,7 +111,7 @@
 < ANDSI,   ZO|   [DX]   10 IS,   
 < ANDSI,   ZO|   [CX]   10 IS,   
 < ANDSI,   ZO|   [AX]   10 IS,   
-4003,4034d3944
+4002,4033d3945
 < ORSI,   MEM|   C L,   10 IS,   
 < ORSI,   R|   DI|   10 IS,   
 < ORSI,   R|   SI|   10 IS,   
@@ -142,7 +144,7 @@
 < ORSI,   ZO|   [DX]   10 IS,   
 < ORSI,   ZO|   [CX]   10 IS,   
 < ORSI,   ZO|   [AX]   10 IS,   
-21403,21691c21313,21421
+21402,21690c21314,21423
 < ~SIB,   [MEM   +8*   DI]   14 L,   
 < ~SIB,   [MEM   +8*   SI]   14 L,   
 < ~SIB,   [MEM   +8*   BP]   14 L,   
@@ -540,5 +542,6 @@
 > ." TEST STARTS HERE"
 > 2DUP OVER - DUMP
 > 2DUP OVER - "test386.bin" PUT-FILE
+> BITS-32
 > DISASSEMBLE-RANGE
 > BYE

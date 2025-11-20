@@ -1,4 +1,4 @@
-( $Id: tools.frt,v 1.5 2016/05/24 01:24:34 albert Exp $ )
+( $Id: tools.frt,v 1.6 2025/10/25 17:12:51 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
@@ -8,8 +8,9 @@
 
 WANT HEX:
 WANT RESTORED
+WANT UNUSED
 WANT $-PREFIX
-
+'% HIDDEN
 \ Print N in hex with comma separator and leaving out groups of zeroes.
 : (H.-)  0 <# BEGIN # # # # 2DUP OR WHILE &, HOLD REPEAT #> ;
 

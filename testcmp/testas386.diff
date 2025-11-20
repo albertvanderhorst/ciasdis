@@ -1,4 +1,4 @@
-1,5299c1,6
+1,5299c1,7
 <  0F06 D7C9 C808 0C00 6A08 6808 0000 000F |........j.h.....|
 <  A90F A80F A20F A10F A067 6665 6461 60FD |.........gfeda`.|
 <  FCFB FAF9 F8F5 F4F3 F2F0 CFCE CCCB C39F |................|
@@ -5300,14 +5300,38 @@
 < 
 ---
 > ASSEMBLER
+> BITS-32
 > : firstset ." First set" ;
 > !TALLY
 > HEX
 > 10 AS-HERE 10 MOD - AS-ALLOT ( To get a nice DUMP)
 > AS-HERE
-5368a76
+5311c19,23
+<    AS:,    OS:,    GS:,    FS:,    POP|ALL, 
+---
+> AS:,
+> OS:,
+> GS:,
+> FS:,
+> POP|ALL,
+5321c33,36
+<    REPZ,    REPNZ,    LOCK,    IRET, 
+---
+> REPZ,
+> REPNZ,
+> LOCK,
+> IRET,
+5337c52,56
+<    DS:,    SS:,    CS:,    ES:,    JCXZ, 8 (RB,) 
+---
+> DS:,
+> SS:,
+> CS:,
+> ES:,
+> JCXZ, 8 (RB,)
+5357a77
 > firstset
-26700a21409,21421
+26689a21410,21423
 > 
 > 
 > 
@@ -5319,5 +5343,6 @@
 > ." TEST STARTS HERE"
 > 2DUP OVER - DUMP
 > 2DUP OVER - "test386.bin" PUT-FILE
+> BITS-32
 > DISASSEMBLE-RANGE
 > BYE

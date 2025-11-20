@@ -1,0 +1,134 @@
+( $Id: lina530crawl.cul,v 1.2 2023/01/30 15:24:33 albert Exp $ )
+( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
+( Uses Richard Stallmans convention. Uppercased word are parameters.    )
+
+INIT-ALL
+INCLUDE elf64.cul
+ASSEMBLER
+BITS-64
+1 CELLS 8 <> "Fatal, requires 64 bit ciasdis!" ?ABORT
+
+HEX
+\ Labels defined here, because they are used in the tools
+0040,2BA0 EQU docol
+0040,2CB0 EQU docon
+0040,2D88 EQU dodat
+0040,2DF0 EQU douser
+0040,4FC0 EQU dodoes
+0040,70D0 EQU VOCAB
+
+0040,2048 CONSTANT semis        \ Will be replaced by label x_(;)
+0040,4EE8 CONSTANT semiscode    \ Same x_(;CODE)
+
+\ ------------- tools --------------------
+\ Names are extracted from the source.
+
+\ Align an address in the host space.
+: hALIGN 1- 7 OR 1+ ;
+
+\ For  th-address  pointing to a name, add sections for the name.
+: ADD-NAME-SECTIONS   >R  R@ R@ 8 + -dq-   R@ 8 + R> Q@ OVER +   hALIGN -d$- ;
+
+\ For  th-address  pointing to a dea("xt"), add a section for the head.
+: ADD-XT-SECTION   DUP 38 + -dq- ;
+
+CREATE NAME-BUFFER 0 , 256 ALLOT
+\ Prepend to  NAME  PREFIX , return prefixed  NAME  in a static buffer.
+: PRE-PEND NAME-BUFFER $! NAME-BUFFER $+! NAME-BUFFER $@ ;
+
+DATA AS-PREFIX 0 , 20 ALLOT
+
+\ Transform NAME into: NAMELABEL (prepended "n_").
+: >n_  AS-PREFIX $@ PRE-PEND ;
+
+\ The  thaddress  points to a valid name. Add a label to address the name.
+: ADD-NAME-LABEL  DUP th $@ >n_ INSERT-EQU ;
+
+\ The  thaddress  points to high/low code (or data). Add a label.
+: ADD-CODE-LABEL &c NAME-BUFFER CELL+ C!   Q@ NAME-BUFFER $@ INSERT-EQU ;
+
+\ Add a section for the high level code at  DFA(th)  .
+\ It may end in low level code with `(;CODE) but others will crawl there.
+: HIGH-CRAWL  DUP BEGIN DUP Q@ DUP semis <> SWAP semiscode <> AND WHILE
+    8 + REPEAT 8 + -dq- ;
+
+\ Add code section for  dea(th)  .
+: CRAWL-DEFINITION
+    DUP Q@ docol = IF DUP 8 + Q@ HIGH-CRAWL THEN
+    DUP Q@ dodat = IF DUP 8 + Q@ DUP 8 + -dq- THEN
+    Q@ CRAWL ;
+
+: IS-DUMMY DROP ;
+
+\ Add the information that ADDRESS is a nfa.
+: IS-A-NAME Q@ DUP IF DUP ADD-NAME-LABEL ADD-NAME-SECTIONS _ THEN DROP ;
+
+\ For  address  add as an xt label.
+: ADD-XT-LABEL &x NAME-BUFFER CELL+ C!   NAME-BUFFER $@ INSERT-EQU ;
+
+\ Accumulate the information that  dea  is a dea.
+: IS-A-DEA
+    DUP 10 + Q@ 1 AND IF IS-DUMMY EXIT THEN \ Dummy field
+    DUP 20 + Q@ DUP ADD-NAME-LABEL DUP ADD-NAME-SECTIONS DROP
+    DUP   ADD-XT-LABEL         \ Derive from name label!
+    DUP   8 +  ADD-CODE-LABEL
+    DUP   ADD-XT-SECTION
+    DUP   CRAWL-DEFINITION
+    DROP ;
+
+\ Accumulate the information from DEA as a wid, follow the link field.
+: CRAWL-WID BEGIN DUP IS-A-DEA 18 + Q@ DUP 0= UNTIL DROP ;
+
+\ Accumulate the information from VOC , leave next VOC.
+: IS-A-VOC 8 + Q@   DUP DUP 48 + -dq-  8 + Q@ ;
+
+\ Accumulate the information from DEA as a namespace.
+: CRAWL-VOC BEGIN DUP IS-A-VOC DUP 0= UNTIL DROP ;
+
+\ ----------------- end tools -----------------------------------
+
+\ Crawling actions
+ELF-CRAWL
+"n_" AS-PREFIX $!        0040,D9F8 CRAWL-WID  \ FORTH
+"n__" AS-PREFIX $!   \ Other prefix prevents conflicts
+0040,0968 CRAWL-WID  \ ONLY
+0040,0BC8 CRAWL-WID  \ ENVIRONMENT
+0040,0CF8 CRAWL-VOC
+
+\ Special areas
+\ Invented names.
+0040,1320 EQU figorigin
+0040,1300 figorigin -dc-
+figorigin 0040,1520 -dq: ORIGIN_AREA
+0040,2C10 0040,2C38 -dq: CODE-OF-;
+0040,75F0 0040,75F8 -dc-
+0040,8AC0 38 + 0040,8B60 -dq-
+0040,9220 EQU MS-BUFFER
+MS-BUFFER DUP 10 + -dl: r_MS-BUFFER
+0040,9288 0040,A280 -dn: r_RW-BUFFER
+0040,AFB8 0040,B0B8 -dn-
+c_TERMIO 8 +     n_SET-TERM       -db: r_TERMIO
+c_BLOCK-FILE 8 + n_BLOCK-HANDLE   -d$: r_BLOCK-FILE
+c_SHELL   8 + n_SYSTEM   -d$: r_SHELL
+0040,BCA0 EQU SYSTEM-BUFFER
+SYSTEM-BUFFER 10 - 0040,BDC8 -d$: r_SYSTEM-BUFFER
+
+\ Strings, not introduced, because they split a dq area.
+\ 0040,7528 DUP EQU $_OK        DUP 8  + -d$-
+\ 0040,0B00 DUP EQU $_VERSION   DUP 8  + -d$-
+\ 0040,0B88 DUP EQU $_NAME      DUP 8  + -d$-
+\ 0040,0C10 DUP EQU $_SUPPLIER  DUP 24 + -d$-
+\ 0040,6140 DUP EQU $_ERROR     DUP 24 + -d$-
+\ 0040,D3F0 DUP EQU $_SCREEN    DUP 8  + -d$-
+
+SORT-ALL
+CLEANUP-RANGES
+\ Steering the disassembly
+' -d$- DEFAULT-DISASSEMBLY !
+PLUG-HOLES
+40 CUT-SIZE !
+\ Abuse MAKE-CUL for disassembly.
+CLEAN-LABELS    \ At least remove duplicates of douser etc.
+MAKE-CUL
+\ DISASSEMBLE-ALL
+\ BYE

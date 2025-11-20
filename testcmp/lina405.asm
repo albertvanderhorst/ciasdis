@@ -1,8 +1,8 @@
-BITS-32
 8049000  ORG
 
 _end e_ident - EQU filesz
-INCLUDE lina405equ.cul   
+INCLUDE lina405equ.cul
+BITS-32   
 ( 0804,9000 )   :e_ident   d$  7F  "ELF" 1 
 ( 0804,9005 )                 d$  1  1  0  0  0  0  0  0  0  0  0 
 
@@ -238,7 +238,7 @@ INCLUDE lina405equ.cul
 ( 0804,9538 )   :X_VERSION   dl docol H_VERSION 0 X_CPU 
 ( 0804,9548 )                 dl N_VERSION 0 
 ( 0804,9550 )   :H_VERSION   dl X_SKIP 5 
-( 0804,9558 )   :NAME1   dl 2E30,2E34 9090,9035 X_LIT NAME1 
+( 0804,9558 )   :NAME1   dl 2E30,2E34 -6F6F,6FCB X_LIT NAME1 
 ( 0804,9568 )                 dl X_LIT 5 X_(;) 
 
 ( 0804,9574 )   :N_NAME   d$  4  0  0  0  "NAME"
@@ -246,7 +246,7 @@ INCLUDE lina405equ.cul
 ( 0804,957C )   :X_NAME   dl docol H_NAME 0 X_VERSION 
 ( 0804,958C )                 dl N_NAME 0 
 ( 0804,9594 )   :H_NAME   dl X_SKIP 7 
-( 0804,959C )   :NAME2   dl 6F66,6963 9068,7472 X_LIT NAME2 
+( 0804,959C )   :NAME2   dl 6F66,6963 -6F97,8B8E X_LIT NAME2 
 ( 0804,95AC )                 dl X_LIT 7 X_(;) 
 
 ( 0804,95B8 )   :N_SUPPLIER   d$  8  0  0  0  "SUPPLIER"
@@ -338,7 +338,7 @@ INCLUDE lina405equ.cul
 
 ( 0804,97B4 )   :H_0BRANCH    POP|X, AX| 
 ( 0804,97B5 )                  OR, X| F| AX'| R| AX| 
-( 0804,97B7 )                  J, Z| Y| L0804,9784 RB,
+( 0804,97B7 )                  J, Z| Y| L0804,9784 RB, 
 ( 0804,97B9 )                  LEA, SI'| BO| [SI] 4 B, 
 ( 0804,97BC )                  LODS, X'| 
 ( 0804,97BD )                  JMPO, ZO| [AX] 
@@ -355,7 +355,7 @@ INCLUDE lina405equ.cul
 ( 0804,97EC )                  MOV, X| T| AX'| BO| [BP] 0 B, 
 ( 0804,97EF )                  SUB, X| T| AX'| BO| [BP] 4 B, 
 ( 0804,97F2 )                  XOR, X| F| BX'| R| AX| 
-( 0804,97F4 )                  J, S| Y| L0804,9784 RB,
+( 0804,97F4 )                  J, S| Y| L0804,9784 RB, 
 ( 0804,97F6 )                  LEA, BP'| BO| [BP] 0C B, 
 ( 0804,97F9 )                  LEA, SI'| BO| [SI] 4 B, 
 ( 0804,97FC )                  LODS, X'| 
@@ -368,7 +368,7 @@ INCLUDE lina405equ.cul
 ( 0804,981C )                 dl N_(+LOOP) 0 
 
 ( 0804,9824 )   :H_(+LOOP)    POP|X, BX| 
-( 0804,9825 )                  JMPS, L0804,97E9 RB,
+( 0804,9825 )                  JMPS, L0804,97E9 RB, 
 ( 0804,9827 )                 d$  0AD  0FF  BL 90 
 ( 0804,982B )                 d$  90 
 
@@ -401,7 +401,7 @@ INCLUDE lina405equ.cul
 ( 0804,9883 )                  POP|X, DX| 
 ( 0804,9884 )                  POP|X, BX| 
 ( 0804,9885 )                  CMP, X| F| BX'| R| DX| 
-( 0804,9887 )                  J, Z| Y| L0804,9893 RB,
+( 0804,9887 )                  J, Z| Y| L0804,9893 RB, 
 ( 0804,9889 )                  XCHG, X| BP'| R| SP| 
 ( 0804,988B )                  PUSH|X, AX| 
 ( 0804,988C )                  PUSH|X, BX| 
@@ -481,14 +481,14 @@ INCLUDE lina405equ.cul
 ( 0804,9A8C )   :H_DIGIT    POP|X, DX| 
 ( 0804,9A8D )                  POP|X, AX| 
 ( 0804,9A8E )                  SUBI|A, B'| H_WHERE IB, 
-( 0804,9A90 )                  J, C| Y| L0804,9AAD RB,
+( 0804,9A90 )                  J, C| Y| L0804,9AAD RB, 
 ( 0804,9A92 )                  CMPI|A, B'| 9 IB, 
-( 0804,9A94 )                  J, CZ| Y| L0804,9A9C RB,
+( 0804,9A94 )                  J, CZ| Y| L0804,9A9C RB, 
 ( 0804,9A96 )                  SUBI|A, B'| 7 IB, 
 ( 0804,9A98 )                  CMPI|A, B'| 0A IB, 
-( 0804,9A9A )                  J, C| Y| L0804,9AAD RB,
+( 0804,9A9A )                  J, C| Y| L0804,9AAD RB, 
 ( 0804,9A9C )   :L0804,9A9C    CMP, B| F| DL'| R| AL| 
-( 0804,9A9E )                  J, C| N| L0804,9AAD RB,
+( 0804,9A9E )                  J, C| N| L0804,9AAD RB, 
 ( 0804,9AA0 )                  SUB, X| F| DX'| R| DX| 
 ( 0804,9AA2 )                  MOV, B| F| AL'| R| DL| 
 ( 0804,9AA4 )                  MOVI|B, AL| 1 IB, 
@@ -601,8 +601,7 @@ INCLUDE lina405equ.cul
 ( 0804,9E0F )                  POP|X, CX| 
 ( 0804,9E10 )                  POP|X, DI| 
 ( 0804,9E11 )                  POP|X, SI| 
-( 0804,9E12 )                  REPZ, 
-( 0804,9E13 )                  MOVS, B'| 
+( 0804,9E12 )                  REPZ,    MOVS, B'| 
 ( 0804,9E14 )                  MOV, X| F| BX'| R| SI| 
 ( 0804,9E16 )                  LODS, X'| 
 ( 0804,9E17 )                  JMPO, ZO| [AX] 
@@ -618,16 +617,15 @@ INCLUDE lina405equ.cul
 ( 0804,9E3F )                  POP|X, DI| 
 ( 0804,9E40 )                  POP|X, SI| 
 ( 0804,9E41 )                  CMP, X| F| DI'| R| SI| 
-( 0804,9E43 )                  J, C| Y| L0804,9E48 RB,
+( 0804,9E43 )                  J, C| Y| L0804,9E48 RB, 
 ( 0804,9E45 )                  CLD, 
-( 0804,9E46 )                  JMPS, L0804,9E4F RB,
+( 0804,9E46 )                  JMPS, L0804,9E4F RB, 
 ( 0804,9E48 )   :L0804,9E48    STD, 
 ( 0804,9E49 )                  ADD, X| F| CX'| R| DI| 
 ( 0804,9E4B )                  DEC|X, DI| 
 ( 0804,9E4C )                  ADD, X| F| CX'| R| SI| 
 ( 0804,9E4E )                  DEC|X, SI| 
-( 0804,9E4F )   :L0804,9E4F    REPZ, 
-( 0804,9E50 )                  MOVS, B'| 
+( 0804,9E4F )   :L0804,9E4F    REPZ,    MOVS, B'| 
 ( 0804,9E51 )                  CLD, 
 ( 0804,9E52 )                  MOV, X| F| BX'| R| SI| 
 ( 0804,9E54 )                  LODS, X'| 
@@ -646,17 +644,16 @@ INCLUDE lina405equ.cul
 ( 0804,9E82 )                  POP|X, DI| 
 ( 0804,9E83 )                  POP|X, DX| 
 ( 0804,9E84 )                  AND, X| F| DX'| R| DX| 
-( 0804,9E86 )                  J, Z| Y| L0804,9E8A RB,
+( 0804,9E86 )                  J, Z| Y| L0804,9E8A RB, 
 ( 0804,9E88 )                  MOV|SG, T| ES| R| DX| 
 ( 0804,9E8A )   :L0804,9E8A    POP|X, SI| 
 ( 0804,9E8B )                  POP|X, DX| 
 ( 0804,9E8C )                  PUSH|DS, 
 ( 0804,9E8D )                  PUSH|X, BX| 
 ( 0804,9E8E )                  AND, X| F| DX'| R| DX| 
-( 0804,9E90 )                  J, Z| Y| L0804,9E94 RB,
+( 0804,9E90 )                  J, Z| Y| L0804,9E94 RB, 
 ( 0804,9E92 )                  MOV|SG, T| DS| R| DX| 
-( 0804,9E94 )   :L0804,9E94    REPZ, 
-( 0804,9E95 )                  MOVS, B'| 
+( 0804,9E94 )   :L0804,9E94    REPZ,    MOVS, B'| 
 ( 0804,9E96 )                  MOV, X| F| AX'| R| SI| 
 ( 0804,9E98 )                  POP|ES, 
 ( 0804,9E99 )                  POP|DS, 
@@ -891,7 +888,7 @@ INCLUDE lina405equ.cul
 ( 0804,A218 )   :H_0<    POP|X, AX| 
 ( 0804,A219 )                  OR, X| F| AX'| R| AX| 
 ( 0804,A21B )                  MOVI|X, AX| 0 IL, 
-( 0804,A220 )                  J, S| N| L0804,A223 RB,
+( 0804,A220 )                  J, S| N| L0804,A223 RB, 
 ( 0804,A222 )                  DEC|X, AX| 
 ( 0804,A223 )   :L0804,A223    PUSH|X, AX| 
 ( 0804,A224 )                  LODS, X'| 
@@ -1692,7 +1689,7 @@ INCLUDE lina405equ.cul
 ( 0804,B0C1 )                  POP|X, BX| 
 ( 0804,B0C2 )                  XOR, X| F| AX'| R| AX| 
 ( 0804,B0C4 )                  CMP, X| F| DX'| R| BX| 
-( 0804,B0C6 )                  J, L| N| L0804,B0C9 RB,
+( 0804,B0C6 )                  J, L| N| L0804,B0C9 RB, 
 ( 0804,B0C8 )                  DEC|X, AX| 
 ( 0804,B0C9 )   :L0804,B0C9    PUSH|X, AX| 
 ( 0804,B0CA )                  LODS, X'| 
@@ -2071,8 +2068,7 @@ INCLUDE lina405equ.cul
 ( 0804,BA75 )                  POP|X, CX| 
 ( 0804,BA76 )                  POP|X, DI| 
 ( 0804,BA77 )                  CLD, 
-( 0804,BA78 )                  REPZ, 
-( 0804,BA79 )                  STOS, B'| 
+( 0804,BA78 )                  REPZ,    STOS, B'| 
 ( 0804,BA7A )                  LODS, X'| 
 ( 0804,BA7B )                  JMPO, ZO| [AX] 
 ( 0804,BA7D )                 d$  90  90  90 
@@ -2088,11 +2084,10 @@ INCLUDE lina405equ.cul
 ( 0804,BAA5 )                  POP|X, DI| 
 ( 0804,BAA6 )                  POP|X, SI| 
 ( 0804,BAA7 )                  CLD, 
-( 0804,BAA8 )                  REPZ, 
-( 0804,BAA9 )                  CMPS, B'| 
-( 0804,BAAA )                  J, Z| Y| L0804,BAB2 RB,
+( 0804,BAA8 )                  REPZ,    CMPS, B'| 
+( 0804,BAAA )                  J, Z| Y| L0804,BAB2 RB, 
 ( 0804,BAAC )                  MOVI|B, AL| 1 IB, 
-( 0804,BAAE )                  J, C| N| L0804,BAB2 RB,
+( 0804,BAAE )                  J, C| N| L0804,BAB2 RB, 
 ( 0804,BAB0 )                  NEG, X| R| AX| 
 ( 0804,BAB2 )   :L0804,BAB2    MOV, X| F| DX'| R| SI| 
 ( 0804,BAB4 )                  PUSH|X, AX| 
@@ -2109,9 +2104,8 @@ INCLUDE lina405equ.cul
 ( 0804,BADA )                  POP|X, DI| 
 ( 0804,BADB )                  OR, X| F| DI'| R| DI| 
 ( 0804,BADD )                  CLD, 
-( 0804,BADE )                  REPNZ, 
-( 0804,BADF )                  SCAS, B'| 
-( 0804,BAE0 )                  J, Z| Y| L0804,BAE5 RB,
+( 0804,BADE )                  REPNZ,    SCAS, B'| 
+( 0804,BAE0 )                  J, Z| Y| L0804,BAE5 RB, 
 ( 0804,BAE2 )                  XOR, X| F| DI'| R| DI| 
 ( 0804,BAE4 )                  INC|X, DI| 
 ( 0804,BAE5 )   :L0804,BAE5    DEC|X, DI| 
@@ -2133,11 +2127,10 @@ INCLUDE lina405equ.cul
 ( 0804,BB11 )                  OR, X| F| DI'| R| DI| 
 ( 0804,BB13 )                  MOV, X| F| DI'| R| DX| 
 ( 0804,BB15 )                  CLD, 
-( 0804,BB16 )                  REPNZ, 
-( 0804,BB17 )                  SCAS, B'| 
-( 0804,BB18 )                  J, Z| Y| L0804,BB20 RB,
+( 0804,BB16 )                  REPNZ,    SCAS, B'| 
+( 0804,BB18 )                  J, Z| Y| L0804,BB20 RB, 
 ( 0804,BB1A )                  PUSH|X, CX| 
-( 0804,BB1B )                  JMP, L0804,BB24 RL,
+( 0804,BB1B )                  JMP, L0804,BB24 RL, 
 ( 0804,BB20 )   :L0804,BB20    PUSH|X, DI| 
 ( 0804,BB21 )                  SUB, X| F| CX'| R| BX| 
 ( 0804,BB23 )                  DEC|X, BX| 
@@ -2309,7 +2302,7 @@ INCLUDE lina405equ.cul
 ( 0804,C110 )                 dl X_MAX X_SWAP X_OVER X_- 
 ( 0804,C120 )                 dl X_ETYPE X_SKIP H_TIB 2 + 
 ( 0804,C12C )   :NAME4   dl 6963,203F 
-( 0804,C130 )                 dl 7472,6F66 5245,2068 2052,4F52 9090,2023 
+( 0804,C130 )                 dl 7472,6F66 5245,2068 2052,4F52 -6F6F,DFDD 
 ( 0804,C140 )                 dl X_LIT NAME4 X_LIT H_TIB 2 + 
 ( 0804,C150 )                 dl X_ETYPE X_BASE X_@ X_DECIMAL 
 ( 0804,C160 )                 dl X_OVER X_S>D X_0 X_(D.R) 
@@ -2553,7 +2546,7 @@ INCLUDE lina405equ.cul
 ( 0804,CA58 )   :H_OK   dl X_STATE X_@ 
 ( 0804,CA60 )                 dl X_0= X_0BRANCH H_DP X_SKIP 
 ( 0804,CA70 )                 dl 3 
-( 0804,CA74 )   :NAME5   dl 904B,4F20 X_LIT NAME5 
+( 0804,CA74 )   :NAME5   dl -6FB4,B0E0 X_LIT NAME5 
 ( 0804,CA80 )                 dl X_LIT 3 X_TYPE X_CR 
 ( 0804,CA90 )                 dl X_(;) 
 
@@ -2621,7 +2614,7 @@ INCLUDE lina405equ.cul
 ( 0804,CCE8 )   :H_S>D    POP|X, DX| 
 ( 0804,CCE9 )                  SUB, X| F| AX'| R| AX| 
 ( 0804,CCEB )                  OR, X| F| DX'| R| DX| 
-( 0804,CCED )                  J, S| N| L0804,CCF0 RB,
+( 0804,CCED )                  J, S| N| L0804,CCF0 RB, 
 ( 0804,CCEF )                  DEC|X, AX| 
 ( 0804,CCF0 )   :L0804,CCF0    PUSH|X, DX| 
 ( 0804,CCF1 )                  PUSH|X, AX| 
@@ -3876,7 +3869,7 @@ INCLUDE lina405equ.cul
 ( 0804,F504 )                 dl N_LIST 0 
 ( 0804,F50C )   :H_LIST   dl X_SCR X_! 
 ( 0804,F514 )                 dl X_SKIP 6 
-( 0804,F51C )   :L0804,F51C   dl 2052,4353 9090,2023 
+( 0804,F51C )   :L0804,F51C   dl 2052,4353 -6F6F,DFDD 
 ( 0804,F524 )                 dl X_LIT L0804,F51C X_LIT 6 
 ( 0804,F534 )                 dl X_TYPE X_BASE X_@ X_DECIMAL 
 ( 0804,F544 )                 dl X_SCR X_@ X_. X_BASE 

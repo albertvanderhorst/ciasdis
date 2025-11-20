@@ -1,4 +1,4 @@
-( $Id: asgen.frt,v 4.73 2019/10/18 18:53:50 albert Exp $ )
+( $Id: asgen.frt,v 4.80 2025/10/27 18:40:24 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
@@ -62,17 +62,14 @@
 ( machine! It is not sure that all traces of this have vanished.        )
 ( You cannot use this program as a cross-assembler if there are         )
 ( instructions that don't fit in a hosts cell {Its postit that is.}     )
-( IT USES THE VOCABULARY AS A LINKED LIST OF STRUCTS: ciforth!
-( IT USED KNOWLEDGE OF THE INTERPRETER AND THE HEADERS!                 )
-( Now if you think that this makes this code non-portable, think again. )
-( You have to change about 8 lines to adapt. Now if you only have to    )
-( adapt 8 lines in a 40k lines c-program with the same functionality,   )
-( it would smack portable. Wouldn't it?
+( It relies heavily on the ciforth type classes. In particular all      )
+( instruction parts have a link field that makes them into a            )
+( linked list. {Once the Forth wordlist mechanism was used for that.    )
 
-( The blackboard consist of three bit arrays. At the start of an        )
+( The blackboard consist of four bit arrays. At the start of an         )
 ( instruction they are all zero. `TALLY-BI' `TALLY-BY' `TALLY-BA' keep  )
 ( track of instruction bits, instruction byte and bad things            )
-( respectively.                                                         )
+( respectively. `TALLY-GO' are the good bits, that must match.          )
 
 ( An instructions generally has a single postit that defines the        )
 ( opcode. It assembles the opcode, advancing `HERE' leaving zero bits   )
@@ -116,13 +113,16 @@
 
 ( A prefix is an instruction in its own right. It communicates only     )
 ( through the BAD bits to restrict the instructions following.          )
-( A prefix PostIt has its prefix field filled in with an execution      )
+( A prefix PostIt has its PRF field filled in with an execution         )
 ( token. This token represents the action performed on the TALLY-BA     )
 ( flags, that the next POSTIT uses, instead of resetting it. This       )
 ( can be used for example for the OS -- operand size -- prefix in       )
 ( the Pentium. Instead of putting the information that we are in a      )
 ( 16 bit operand segment in TALLY-BA , it transforms that information   )
-( to 32 bit.                                                            )
+( to 32 bit. Prefixes are supposed to put in front of the               )
+( instruction proper on the same line. Some prefixes such as LOCK do    )
+( not add information to the tallies. Then a NOOP is inserted in the    )
+( PRF field.                                                            )
 
 ( Some bits of BI fall before the instruction proper, and they          )
 ( require a 0 in the corresponding fixup. In this way it is possible    )
@@ -153,7 +153,9 @@ WANT class
 'C,    ALIAS AS-C,
 'ALLOT  ALIAS AS-ALLOT
 'HERE  ALIAS _AP_
-: ADORN-ADDRESS DROP CR ;   ( Action between two disassembled instr.    )
+
+\ Action between two disassembled instr for  address .
+: ADORN-ADDRESS DROP CR ;     \ This is revectored all the time!
 
 ( ############### PART I ASSEMBLER #################################### )
 ( MAYBE NOT PRESENT UTILITIES                                           )
@@ -179,6 +181,7 @@ CREATE TABLE 1 , 1 , ( x TABLE + @ yields $100^[-x mod 4] )
 ' ' ALIAS %
 
 : %ID. >NFA @ $@ TYPE SPACE ;   ( Print a definitions name from its DEA.)
+\ WARNING: The assembler in the library is not used.
 NAMESPACE ASSEMBLER             ASSEMBLER DEFINITIONS HEX
 
 : %>BODY   >BODY ; ( From DEA to the DATA field of a created word )
@@ -252,7 +255,7 @@ VARIABLE BA-XT
 ( Return: instruction IS complete, or not started)
 : AT-REST? TALLY-BI @ 0=   TALLY-BY @ 0=  AND TALLY-GO @ 0= AND ;
 ( For N : it CONTAINS bad pairs)
-: BADPAIRS? DUP 1 LSHIFT AND AAAAAAAAAAAAAAAA AND ;
+: BADPAIRS? DUP 1 LSHIFT AND 0,AAAA,AAAA,AAAA,AAAA AND ;
 : BAD? TALLY-BA @ BADPAIRS? ;  ( The state of assembling IS inconsistent)
 ( If STATUS were added to `TALLY-BA' would that CREATE a bad situation? )
 : COMPATIBLE? TALLY-BA @ OR BADPAIRS? 0= ;
@@ -383,8 +386,8 @@ class PIFU
   M: BA    @  M; ,            ( Bad mask)
    M: CNT^     M;
   M: CNT   @  M; 0 , (  `HERE' advances with count, commaer or postit )
-  M: PRF      M; 0 ,  ( prefix xt, only for PI ,  0 -> default )
-   M: lastpifu? @ 0= M; ( Current word is the last of the pifu's       )
+  M: PRF      M; 0 ,  ( prefix xt, only for PI ,  0 -> not a prefix )
+   M: lastpifu? @ 0= M; ( Current word is the last of the pifu's )
   M: >next @ ^PIFU ! M; (pifulist) @ , ( Make next word current pifu )
   R@ (pifulist) !       ( Link in )
 endclass
@@ -408,10 +411,10 @@ endclass
 : >DATA PIFU'! DAT^ ;
 : >BI   PIFU'! BI^  ;      \ Not needed
 : >BY   PIFU'! BY^  ;      \ Not needed
-: >BA   PIFU'! BA^  ;      \ Needed in asalpha.frt
+: >BA   PIFU'! BA^  ;      \ Needed in asalpha.frt/asAMD.frt
 : >CNT  PIFU'! CNT^  ;
 : >DSP  PIFU'! DSP^  ;
-: >PRF  PIFU'! PRF  ;      ( prefix flag, only for PI , 0 -> default  )
+: >PRF  PIFU'! PRF  ;      ( prefix xt, only for PI , 0 -> not a prefix )
 
 ( All pifu words have a defining word, such as PI, a tally word such    )
 ( as TALLY:, , a doer like POSTIT, a builder mostly directly after      )
@@ -434,8 +437,10 @@ endclass
 : POSTIT   CHECK26 PIFU!   !POSTIT !TALLY TALLY:,   DAT assemble, ;
 ( A disassembler for the current, postit PIFU. leave IT.                )
 : DIS-PI   AT-REST? IF   BI^ CNT MC@ INVERT   >R AS-POINTER @ CNT MC@ R>
-    AND   DAT = IF   TALLY:, this +DISS   this LATEST-INSTRUCTION !
-    AS-POINTER @ ISS !   CNT AS-POINTER +! THEN THEN ;
+    AND   DAT =  BA COMPATIBLE? AND IF
+        TALLY:, this +DISS   this LATEST-INSTRUCTION !
+        AS-POINTER @ ISS !   CNT AS-POINTER +!
+    THEN THEN ;
 \ Match the tally to PIFU, a (current) postit. Leave IT.
 : TRY-PI AT-REST? IF TALLY:, this +DISS THEN ;
 ( For DEA : it REPRESENTS some kind of opcode.                          )
@@ -446,6 +451,7 @@ IS-A IS-PI   \ Awaiting REMEMBER.
    REMEMBER POSTIT ;
 ( 1 .. 4 byte instructions ( BA BY BI OPCODE : - )
 : 1PI   1 PI ;     : 2PI   2 PI ;    : 3PI   3 PI ;    : 4PI   4 PI ;
+: 1PIP  1 PI 'NOOP PRF ! ;
 
 ( ------------- PIFU's : xFI---------------------------------------------)
 ( Bookkeeping for a fixup that is the current pifu                      )
@@ -571,6 +577,7 @@ IS-A  IS-COMMA   : COMMAER   CREATE BUILD-COMMA  DOES> REMEMBER COMMA ;
 : xFAMILY|    0 DO no-- IF DUP >R T@ R> xFI THEN   OVER + LOOP 2DROP ;
 : FAMILY|R    0 DO no-- IF DUP >R T@ R> FIR THEN   OVER + LOOP 2DROP ;
 : xFAMILY|F   0 DO no-- IF DUP >R T@ R> DFI THEN   OVER + LOOP 2DROP ;
+: 1PIPFAMILY, 0 DO no-- IF DUP >R T@ R> 1PIP THEN   OVER + LOOP 2DROP ;
 
 ( ################## DISASSEMBLER ################################# )
 
@@ -648,16 +655,19 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 ( disassembled. Leave incremented AS-POINTER.                              )
 : SHOW-MEMORY  BEGIN COUNT . ."  C, " DUP I-ALIGNMENT @ MOD WHILE REPEAT ;
 
-( Dissassemble one instruction from AS-POINTER using the pifu's from    )
-( PIFU on. Build on what is currently left in `TALLY!'                  )
-( Leave a AS-POINTER pointing after that instruction.                   )
+\   Dissassemble one instruction from  aspointer  using the pifu's from
+\   the current `PIFU on. Build on what is currently left in the tallies.
+\   Leave  aspointer  pointing after that instruction.
+\   This is essentially a listing action. The instruction parts are
+\   printed on the standard output, and as a side effect whenever a
+\   commaer is displayed, the aspointer is advanced accordingly.
 : ((DISASSEMBLE))
     DUP AS-POINTER !   >R
     3 SPACES
     BEGIN disassemble-this >next pifuend? RESULT? OR UNTIL
 \ Comment in next line for desperado debugging.
-\     DISS DO-BAG I @   ID. LOOP-BAG
-    RESULT? IF
+\      DISS DO-BAG I @   ID. LOOP-BAG    \ KEY DROP
+     RESULT? DISS BAG? AND IF
       .DISS     \ Advances pointer past commaers
       LATEST-INSTRUCTION @ >PRF @ BA-XT !
       RDROP AS-POINTER @
@@ -680,7 +690,9 @@ VARIABLE I-ALIGNMENT    1 I-ALIGNMENT !   ( Instruction alignment )
 
 ( Dissassemble instructions from address ONE to address TWO. )
 : DISASSEMBLE-RANGE
-    SWAP   BEGIN DUP ADORN-ADDRESS    (DISASSEMBLE) 2DUP > 0= UNTIL   2DROP
+    SWAP   BEGIN
+   ^PIFU @ IF PRF @ 0= IF DUP ADORN-ADDRESS THEN THEN
+   (DISASSEMBLE) 2DUP > 0= UNTIL   2DROP
 ;
 
 \ MOVE TO END!    MOVE TO END!
@@ -727,10 +739,11 @@ ASSEMBLER
     ?EXEC NAME (CREATE) ASSEMBLER !TALLY !CSP
 ; IMMEDIATE
 
-( Like ``DOES>'' but assembly code follows, closed by END-CODE )
-: ;CODE
-    ?CSP   POSTPONE (;CODE)   POSTPONE [   ASSEMBLER
-; IMMEDIATE
+\ ( Like ``DOES>'' but assembly code follows, closed by END-CODE )
+\    : (;CODE)    R> LATEST >CFA ! ;
+\ : ;CODE
+\     ?CSP   POSTPONE (;CODE)   POSTPONE [   ASSEMBLER
+\ ; IMMEDIATE
 
 ( ------------------------- user convenience -------------------------- )
 

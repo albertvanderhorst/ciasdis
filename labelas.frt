@@ -1,4 +1,4 @@
-( $Id: labelas.frt,v 1.21 2018/07/24 11:45:24 albert Exp $ )
+( $Id: labelas.frt,v 1.22 2019/10/27 18:19:25 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
@@ -104,22 +104,29 @@ R> ;
 \ Add remainder of line to codespace, as bytes.
 : db   !DX-SET  GET-DX-SET    C,-DX-SET  ;
 
-\ NOTE: The following assumes (W,) and (L,) are defined in the specific assembler.
-\ These must not be commaers, just lay down 16 or 32 bits entities in the
-\ right endian format.
+\ NOTE: The following assumes {W,} {L,} {Q,} are defined in the specific
+\ assembler. These must not be commaers, just lay down word longs quads
+\ entities in the right endian format.
 
 ASSEMBLER
 \ Output ``DX-SET'' as words (16-bits)
-: W,-DX-SET  BEGIN DX-SET BAG@- (W,)  DX-SET BAG? 0= UNTIL ;
+: W,-DX-SET  BEGIN DX-SET BAG@- {W,}  DX-SET BAG? 0= UNTIL ;
 
 \ Add remainder of line to codespace, as words.
 : dw   !DX-SET  GET-DX-SET    W,-DX-SET  ;
 
 \ Output ``DX-SET'' as longs (32-bits)
-: L,-DX-SET  BEGIN DX-SET BAG@- (L,)  DX-SET BAG? 0= UNTIL ;
+: L,-DX-SET  BEGIN DX-SET BAG@- {L,}  DX-SET BAG? 0= UNTIL ;
 
 \ Add remainder of line to codespace, as longs (or, mostly, cells).
 : dl   !DX-SET  GET-DX-SET    L,-DX-SET  ;
+
+: {Q,} 8 0 DO lsbyte, LOOP DROP ;
+\ Output ``DX-SET'' as quads (64-bits)
+: Q,-DX-SET  BEGIN DX-SET BAG@- {Q,}  DX-SET BAG? 0= UNTIL ;
+
+\ Add remainder of line to codespace, as longs (or, mostly, cells).
+: dq   !DX-SET  GET-DX-SET    Q,-DX-SET  ;
 
 \ Lay down a STRING in assembler memory.
 : ($,) AS-HERE SWAP DUP AS-ALLOT MOVE ;

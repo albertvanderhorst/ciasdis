@@ -1,4 +1,5 @@
 04FE EQU START
+"BITS-32" START-DIRECTIVE $!
 6D9 6B1 -  EQU LEN16
 6DF EQU END
 \ ciforth allows multiple line strings in files
@@ -35,7 +36,7 @@ YY 100 +  END LEN16 -   -dc-            \ Unnamed section
 END LEN16 -  END  -dc16: AAP               \ Named section
 
 "XXX is a target for backward jumps:" 053F COMMENT
-054B COMMENT: RW, didn't end in a blank, before
+054A COMMENT: RW, didn't end in a blank, before
 053F  LABEL XXX
 \ From now on the label ``XXXX'' can be used: like this
 XXX  COMMENT:   Move a xell to register DI from memory at QQQ

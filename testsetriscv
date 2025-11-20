@@ -1,0 +1,1114 @@
+ASSEMBLER
+!TALLY
+HEX
+10 AS-HERE 10 MOD - AS-ALLOT ( To get a nice DUMP)
+AS-HERE
+
+REMUW,   R7%   R7>   >R7
+REMUW,   R7%   R7>   >R1
+REMUW,   R7%   R7>   >Rz
+REMUW,   R7%   R1>   >R7
+REMUW,   R7%   R1>   >R1
+REMUW,   R7%   R1>   >Rz
+REMUW,   R7%   Rz>   >R7
+REMUW,   R7%   Rz>   >R1
+REMUW,   R7%   Rz>   >Rz
+REMUW,   R1%   R7>   >R7
+REMUW,   R1%   R7>   >R1
+REMUW,   R1%   R7>   >Rz
+REMUW,   R1%   R1>   >R7
+REMUW,   R1%   R1>   >R1
+REMUW,   R1%   R1>   >Rz
+REMUW,   R1%   Rz>   >R7
+REMUW,   R1%   Rz>   >R1
+REMUW,   R1%   Rz>   >Rz
+REMUW,   Rz%   R7>   >R7
+REMUW,   Rz%   R7>   >R1
+REMUW,   Rz%   R7>   >Rz
+REMUW,   Rz%   R1>   >R7
+REMUW,   Rz%   R1>   >R1
+REMUW,   Rz%   R1>   >Rz
+REMUW,   Rz%   Rz>   >R7
+REMUW,   Rz%   Rz>   >R1
+REMUW,   Rz%   Rz>   >Rz
+REMW,   R7%   R7>   >R7
+REMW,   R7%   R7>   >R1
+REMW,   R7%   R7>   >Rz
+REMW,   R7%   R1>   >R7
+REMW,   R7%   R1>   >R1
+REMW,   R7%   R1>   >Rz
+REMW,   R7%   Rz>   >R7
+REMW,   R7%   Rz>   >R1
+REMW,   R7%   Rz>   >Rz
+REMW,   R1%   R7>   >R7
+REMW,   R1%   R7>   >R1
+REMW,   R1%   R7>   >Rz
+REMW,   R1%   R1>   >R7
+REMW,   R1%   R1>   >R1
+REMW,   R1%   R1>   >Rz
+REMW,   R1%   Rz>   >R7
+REMW,   R1%   Rz>   >R1
+REMW,   R1%   Rz>   >Rz
+REMW,   Rz%   R7>   >R7
+REMW,   Rz%   R7>   >R1
+REMW,   Rz%   R7>   >Rz
+REMW,   Rz%   R1>   >R7
+REMW,   Rz%   R1>   >R1
+REMW,   Rz%   R1>   >Rz
+REMW,   Rz%   Rz>   >R7
+REMW,   Rz%   Rz>   >R1
+REMW,   Rz%   Rz>   >Rz
+DIVUW,   R7%   R7>   >R7
+DIVUW,   R7%   R7>   >R1
+DIVUW,   R7%   R7>   >Rz
+DIVUW,   R7%   R1>   >R7
+DIVUW,   R7%   R1>   >R1
+DIVUW,   R7%   R1>   >Rz
+DIVUW,   R7%   Rz>   >R7
+DIVUW,   R7%   Rz>   >R1
+DIVUW,   R7%   Rz>   >Rz
+DIVUW,   R1%   R7>   >R7
+DIVUW,   R1%   R7>   >R1
+DIVUW,   R1%   R7>   >Rz
+DIVUW,   R1%   R1>   >R7
+DIVUW,   R1%   R1>   >R1
+DIVUW,   R1%   R1>   >Rz
+DIVUW,   R1%   Rz>   >R7
+DIVUW,   R1%   Rz>   >R1
+DIVUW,   R1%   Rz>   >Rz
+DIVUW,   Rz%   R7>   >R7
+DIVUW,   Rz%   R7>   >R1
+DIVUW,   Rz%   R7>   >Rz
+DIVUW,   Rz%   R1>   >R7
+DIVUW,   Rz%   R1>   >R1
+DIVUW,   Rz%   R1>   >Rz
+DIVUW,   Rz%   Rz>   >R7
+DIVUW,   Rz%   Rz>   >R1
+DIVUW,   Rz%   Rz>   >Rz
+DIVW,   R7%   R7>   >R7
+DIVW,   R7%   R7>   >R1
+DIVW,   R7%   R7>   >Rz
+DIVW,   R7%   R1>   >R7
+DIVW,   R7%   R1>   >R1
+DIVW,   R7%   R1>   >Rz
+DIVW,   R7%   Rz>   >R7
+DIVW,   R7%   Rz>   >R1
+DIVW,   R7%   Rz>   >Rz
+DIVW,   R1%   R7>   >R7
+DIVW,   R1%   R7>   >R1
+DIVW,   R1%   R7>   >Rz
+DIVW,   R1%   R1>   >R7
+DIVW,   R1%   R1>   >R1
+DIVW,   R1%   R1>   >Rz
+DIVW,   R1%   Rz>   >R7
+DIVW,   R1%   Rz>   >R1
+DIVW,   R1%   Rz>   >Rz
+DIVW,   Rz%   R7>   >R7
+DIVW,   Rz%   R7>   >R1
+DIVW,   Rz%   R7>   >Rz
+DIVW,   Rz%   R1>   >R7
+DIVW,   Rz%   R1>   >R1
+DIVW,   Rz%   R1>   >Rz
+DIVW,   Rz%   Rz>   >R7
+DIVW,   Rz%   Rz>   >R1
+DIVW,   Rz%   Rz>   >Rz
+MULW,   R7%   R7>   >R7
+MULW,   R7%   R7>   >R1
+MULW,   R7%   R7>   >Rz
+MULW,   R7%   R1>   >R7
+MULW,   R7%   R1>   >R1
+MULW,   R7%   R1>   >Rz
+MULW,   R7%   Rz>   >R7
+MULW,   R7%   Rz>   >R1
+MULW,   R7%   Rz>   >Rz
+MULW,   R1%   R7>   >R7
+MULW,   R1%   R7>   >R1
+MULW,   R1%   R7>   >Rz
+MULW,   R1%   R1>   >R7
+MULW,   R1%   R1>   >R1
+MULW,   R1%   R1>   >Rz
+MULW,   R1%   Rz>   >R7
+MULW,   R1%   Rz>   >R1
+MULW,   R1%   Rz>   >Rz
+MULW,   Rz%   R7>   >R7
+MULW,   Rz%   R7>   >R1
+MULW,   Rz%   R7>   >Rz
+MULW,   Rz%   R1>   >R7
+MULW,   Rz%   R1>   >R1
+MULW,   Rz%   R1>   >Rz
+MULW,   Rz%   Rz>   >R7
+MULW,   Rz%   Rz>   >R1
+MULW,   Rz%   Rz>   >Rz
+REMU,   R7%   R7>   >R7
+REMU,   R7%   R7>   >R1
+REMU,   R7%   R7>   >Rz
+REMU,   R7%   R1>   >R7
+REMU,   R7%   R1>   >R1
+REMU,   R7%   R1>   >Rz
+REMU,   R7%   Rz>   >R7
+REMU,   R7%   Rz>   >R1
+REMU,   R7%   Rz>   >Rz
+REMU,   R1%   R7>   >R7
+REMU,   R1%   R7>   >R1
+REMU,   R1%   R7>   >Rz
+REMU,   R1%   R1>   >R7
+REMU,   R1%   R1>   >R1
+REMU,   R1%   R1>   >Rz
+REMU,   R1%   Rz>   >R7
+REMU,   R1%   Rz>   >R1
+REMU,   R1%   Rz>   >Rz
+REMU,   Rz%   R7>   >R7
+REMU,   Rz%   R7>   >R1
+REMU,   Rz%   R7>   >Rz
+REMU,   Rz%   R1>   >R7
+REMU,   Rz%   R1>   >R1
+REMU,   Rz%   R1>   >Rz
+REMU,   Rz%   Rz>   >R7
+REMU,   Rz%   Rz>   >R1
+REMU,   Rz%   Rz>   >Rz
+REM,   R7%   R7>   >R7
+REM,   R7%   R7>   >R1
+REM,   R7%   R7>   >Rz
+REM,   R7%   R1>   >R7
+REM,   R7%   R1>   >R1
+REM,   R7%   R1>   >Rz
+REM,   R7%   Rz>   >R7
+REM,   R7%   Rz>   >R1
+REM,   R7%   Rz>   >Rz
+REM,   R1%   R7>   >R7
+REM,   R1%   R7>   >R1
+REM,   R1%   R7>   >Rz
+REM,   R1%   R1>   >R7
+REM,   R1%   R1>   >R1
+REM,   R1%   R1>   >Rz
+REM,   R1%   Rz>   >R7
+REM,   R1%   Rz>   >R1
+REM,   R1%   Rz>   >Rz
+REM,   Rz%   R7>   >R7
+REM,   Rz%   R7>   >R1
+REM,   Rz%   R7>   >Rz
+REM,   Rz%   R1>   >R7
+REM,   Rz%   R1>   >R1
+REM,   Rz%   R1>   >Rz
+REM,   Rz%   Rz>   >R7
+REM,   Rz%   Rz>   >R1
+REM,   Rz%   Rz>   >Rz
+DIVU,   R7%   R7>   >R7
+DIVU,   R7%   R7>   >R1
+DIVU,   R7%   R7>   >Rz
+DIVU,   R7%   R1>   >R7
+DIVU,   R7%   R1>   >R1
+DIVU,   R7%   R1>   >Rz
+DIVU,   R7%   Rz>   >R7
+DIVU,   R7%   Rz>   >R1
+DIVU,   R7%   Rz>   >Rz
+DIVU,   R1%   R7>   >R7
+DIVU,   R1%   R7>   >R1
+DIVU,   R1%   R7>   >Rz
+DIVU,   R1%   R1>   >R7
+DIVU,   R1%   R1>   >R1
+DIVU,   R1%   R1>   >Rz
+DIVU,   R1%   Rz>   >R7
+DIVU,   R1%   Rz>   >R1
+DIVU,   R1%   Rz>   >Rz
+DIVU,   Rz%   R7>   >R7
+DIVU,   Rz%   R7>   >R1
+DIVU,   Rz%   R7>   >Rz
+DIVU,   Rz%   R1>   >R7
+DIVU,   Rz%   R1>   >R1
+DIVU,   Rz%   R1>   >Rz
+DIVU,   Rz%   Rz>   >R7
+DIVU,   Rz%   Rz>   >R1
+DIVU,   Rz%   Rz>   >Rz
+DIV,   R7%   R7>   >R7
+DIV,   R7%   R7>   >R1
+DIV,   R7%   R7>   >Rz
+DIV,   R7%   R1>   >R7
+DIV,   R7%   R1>   >R1
+DIV,   R7%   R1>   >Rz
+DIV,   R7%   Rz>   >R7
+DIV,   R7%   Rz>   >R1
+DIV,   R7%   Rz>   >Rz
+DIV,   R1%   R7>   >R7
+DIV,   R1%   R7>   >R1
+DIV,   R1%   R7>   >Rz
+DIV,   R1%   R1>   >R7
+DIV,   R1%   R1>   >R1
+DIV,   R1%   R1>   >Rz
+DIV,   R1%   Rz>   >R7
+DIV,   R1%   Rz>   >R1
+DIV,   R1%   Rz>   >Rz
+DIV,   Rz%   R7>   >R7
+DIV,   Rz%   R7>   >R1
+DIV,   Rz%   R7>   >Rz
+DIV,   Rz%   R1>   >R7
+DIV,   Rz%   R1>   >R1
+DIV,   Rz%   R1>   >Rz
+DIV,   Rz%   Rz>   >R7
+DIV,   Rz%   Rz>   >R1
+DIV,   Rz%   Rz>   >Rz
+MULHU,   R7%   R7>   >R7
+MULHU,   R7%   R7>   >R1
+MULHU,   R7%   R7>   >Rz
+MULHU,   R7%   R1>   >R7
+MULHU,   R7%   R1>   >R1
+MULHU,   R7%   R1>   >Rz
+MULHU,   R7%   Rz>   >R7
+MULHU,   R7%   Rz>   >R1
+MULHU,   R7%   Rz>   >Rz
+MULHU,   R1%   R7>   >R7
+MULHU,   R1%   R7>   >R1
+MULHU,   R1%   R7>   >Rz
+MULHU,   R1%   R1>   >R7
+MULHU,   R1%   R1>   >R1
+MULHU,   R1%   R1>   >Rz
+MULHU,   R1%   Rz>   >R7
+MULHU,   R1%   Rz>   >R1
+MULHU,   R1%   Rz>   >Rz
+MULHU,   Rz%   R7>   >R7
+MULHU,   Rz%   R7>   >R1
+MULHU,   Rz%   R7>   >Rz
+MULHU,   Rz%   R1>   >R7
+MULHU,   Rz%   R1>   >R1
+MULHU,   Rz%   R1>   >Rz
+MULHU,   Rz%   Rz>   >R7
+MULHU,   Rz%   Rz>   >R1
+MULHU,   Rz%   Rz>   >Rz
+MULHSU,   R7%   R7>   >R7
+MULHSU,   R7%   R7>   >R1
+MULHSU,   R7%   R7>   >Rz
+MULHSU,   R7%   R1>   >R7
+MULHSU,   R7%   R1>   >R1
+MULHSU,   R7%   R1>   >Rz
+MULHSU,   R7%   Rz>   >R7
+MULHSU,   R7%   Rz>   >R1
+MULHSU,   R7%   Rz>   >Rz
+MULHSU,   R1%   R7>   >R7
+MULHSU,   R1%   R7>   >R1
+MULHSU,   R1%   R7>   >Rz
+MULHSU,   R1%   R1>   >R7
+MULHSU,   R1%   R1>   >R1
+MULHSU,   R1%   R1>   >Rz
+MULHSU,   R1%   Rz>   >R7
+MULHSU,   R1%   Rz>   >R1
+MULHSU,   R1%   Rz>   >Rz
+MULHSU,   Rz%   R7>   >R7
+MULHSU,   Rz%   R7>   >R1
+MULHSU,   Rz%   R7>   >Rz
+MULHSU,   Rz%   R1>   >R7
+MULHSU,   Rz%   R1>   >R1
+MULHSU,   Rz%   R1>   >Rz
+MULHSU,   Rz%   Rz>   >R7
+MULHSU,   Rz%   Rz>   >R1
+MULHSU,   Rz%   Rz>   >Rz
+MULH,   R7%   R7>   >R7
+MULH,   R7%   R7>   >R1
+MULH,   R7%   R7>   >Rz
+MULH,   R7%   R1>   >R7
+MULH,   R7%   R1>   >R1
+MULH,   R7%   R1>   >Rz
+MULH,   R7%   Rz>   >R7
+MULH,   R7%   Rz>   >R1
+MULH,   R7%   Rz>   >Rz
+MULH,   R1%   R7>   >R7
+MULH,   R1%   R7>   >R1
+MULH,   R1%   R7>   >Rz
+MULH,   R1%   R1>   >R7
+MULH,   R1%   R1>   >R1
+MULH,   R1%   R1>   >Rz
+MULH,   R1%   Rz>   >R7
+MULH,   R1%   Rz>   >R1
+MULH,   R1%   Rz>   >Rz
+MULH,   Rz%   R7>   >R7
+MULH,   Rz%   R7>   >R1
+MULH,   Rz%   R7>   >Rz
+MULH,   Rz%   R1>   >R7
+MULH,   Rz%   R1>   >R1
+MULH,   Rz%   R1>   >Rz
+MULH,   Rz%   Rz>   >R7
+MULH,   Rz%   Rz>   >R1
+MULH,   Rz%   Rz>   >Rz
+MUL,   R7%   R7>   >R7
+MUL,   R7%   R7>   >R1
+MUL,   R7%   R7>   >Rz
+MUL,   R7%   R1>   >R7
+MUL,   R7%   R1>   >R1
+MUL,   R7%   R1>   >Rz
+MUL,   R7%   Rz>   >R7
+MUL,   R7%   Rz>   >R1
+MUL,   R7%   Rz>   >Rz
+MUL,   R1%   R7>   >R7
+MUL,   R1%   R7>   >R1
+MUL,   R1%   R7>   >Rz
+MUL,   R1%   R1>   >R7
+MUL,   R1%   R1>   >R1
+MUL,   R1%   R1>   >Rz
+MUL,   R1%   Rz>   >R7
+MUL,   R1%   Rz>   >R1
+MUL,   R1%   Rz>   >Rz
+MUL,   Rz%   R7>   >R7
+MUL,   Rz%   R7>   >R1
+MUL,   Rz%   R7>   >Rz
+MUL,   Rz%   R1>   >R7
+MUL,   Rz%   R1>   >R1
+MUL,   Rz%   R1>   >Rz
+MUL,   Rz%   Rz>   >R7
+MUL,   Rz%   Rz>   >R1
+MUL,   Rz%   Rz>   >Rz
+CSRRCI,   8 uim#|   C sd#|   >R7
+CSRRCI,   8 uim#|   C sd#|   >R1
+CSRRCI,   8 uim#|   C sd#|   >Rz
+CSRRSI,   8 uim#|   C sd#|   >R7
+CSRRSI,   8 uim#|   C sd#|   >R1
+CSRRSI,   8 uim#|   C sd#|   >Rz
+CSRRWI,   8 uim#|   C sd#|   >R7
+CSRRWI,   8 uim#|   C sd#|   >R1
+CSRRWI,   8 uim#|   C sd#|   >Rz
+CSRRC,   8 sd#|   R7>   >R7
+CSRRC,   8 sd#|   R7>   >R1
+CSRRC,   8 sd#|   R7>   >Rz
+CSRRC,   8 sd#|   R1>   >R7
+CSRRC,   8 sd#|   R1>   >R1
+CSRRC,   8 sd#|   R1>   >Rz
+CSRRC,   8 sd#|   Rz>   >R7
+CSRRC,   8 sd#|   Rz>   >R1
+CSRRC,   8 sd#|   Rz>   >Rz
+CSRRS,   8 sd#|   R7>   >R7
+CSRRS,   8 sd#|   R7>   >R1
+CSRRS,   8 sd#|   R7>   >Rz
+CSRRS,   8 sd#|   R1>   >R7
+CSRRS,   8 sd#|   R1>   >R1
+CSRRS,   8 sd#|   R1>   >Rz
+CSRRS,   8 sd#|   Rz>   >R7
+CSRRS,   8 sd#|   Rz>   >R1
+CSRRS,   8 sd#|   Rz>   >Rz
+CSRRW,   8 sd#|   R7>   >R7
+CSRRW,   8 sd#|   R7>   >R1
+CSRRW,   8 sd#|   R7>   >Rz
+CSRRW,   8 sd#|   R1>   >R7
+CSRRW,   8 sd#|   R1>   >R1
+CSRRW,   8 sd#|   R1>   >Rz
+CSRRW,   8 sd#|   Rz>   >R7
+CSRRW,   8 sd#|   Rz>   >R1
+CSRRW,   8 sd#|   Rz>   >Rz
+EBREAK,
+ECALL,
+FENCEI,   8 sd#|   R7>   >R7
+FENCEI,   8 sd#|   R7>   >R1
+FENCEI,   8 sd#|   R7>   >Rz
+FENCEI,   8 sd#|   R1>   >R7
+FENCEI,   8 sd#|   R1>   >R1
+FENCEI,   8 sd#|   R1>   >Rz
+FENCEI,   8 sd#|   Rz>   >R7
+FENCEI,   8 sd#|   Rz>   >R1
+FENCEI,   8 sd#|   Rz>   >Rz
+FENCE,   8 sd#|   R7>   >R7
+FENCE,   8 sd#|   R7>   >R1
+FENCE,   8 sd#|   R7>   >Rz
+FENCE,   8 sd#|   R1>   >R7
+FENCE,   8 sd#|   R1>   >R1
+FENCE,   8 sd#|   R1>   >Rz
+FENCE,   8 sd#|   Rz>   >R7
+FENCE,   8 sd#|   Rz>   >R1
+FENCE,   8 sd#|   Rz>   >Rz
+SRAW,   R7%   R7>   >R7
+SRAW,   R7%   R7>   >R1
+SRAW,   R7%   R7>   >Rz
+SRAW,   R7%   R1>   >R7
+SRAW,   R7%   R1>   >R1
+SRAW,   R7%   R1>   >Rz
+SRAW,   R7%   Rz>   >R7
+SRAW,   R7%   Rz>   >R1
+SRAW,   R7%   Rz>   >Rz
+SRAW,   R1%   R7>   >R7
+SRAW,   R1%   R7>   >R1
+SRAW,   R1%   R7>   >Rz
+SRAW,   R1%   R1>   >R7
+SRAW,   R1%   R1>   >R1
+SRAW,   R1%   R1>   >Rz
+SRAW,   R1%   Rz>   >R7
+SRAW,   R1%   Rz>   >R1
+SRAW,   R1%   Rz>   >Rz
+SRAW,   Rz%   R7>   >R7
+SRAW,   Rz%   R7>   >R1
+SRAW,   Rz%   R7>   >Rz
+SRAW,   Rz%   R1>   >R7
+SRAW,   Rz%   R1>   >R1
+SRAW,   Rz%   R1>   >Rz
+SRAW,   Rz%   Rz>   >R7
+SRAW,   Rz%   Rz>   >R1
+SRAW,   Rz%   Rz>   >Rz
+SUBW,   R7%   R7>   >R7
+SUBW,   R7%   R7>   >R1
+SUBW,   R7%   R7>   >Rz
+SUBW,   R7%   R1>   >R7
+SUBW,   R7%   R1>   >R1
+SUBW,   R7%   R1>   >Rz
+SUBW,   R7%   Rz>   >R7
+SUBW,   R7%   Rz>   >R1
+SUBW,   R7%   Rz>   >Rz
+SUBW,   R1%   R7>   >R7
+SUBW,   R1%   R7>   >R1
+SUBW,   R1%   R7>   >Rz
+SUBW,   R1%   R1>   >R7
+SUBW,   R1%   R1>   >R1
+SUBW,   R1%   R1>   >Rz
+SUBW,   R1%   Rz>   >R7
+SUBW,   R1%   Rz>   >R1
+SUBW,   R1%   Rz>   >Rz
+SUBW,   Rz%   R7>   >R7
+SUBW,   Rz%   R7>   >R1
+SUBW,   Rz%   R7>   >Rz
+SUBW,   Rz%   R1>   >R7
+SUBW,   Rz%   R1>   >R1
+SUBW,   Rz%   R1>   >Rz
+SUBW,   Rz%   Rz>   >R7
+SUBW,   Rz%   Rz>   >R1
+SUBW,   Rz%   Rz>   >Rz
+SRLW,   R7%   R7>   >R7
+SRLW,   R7%   R7>   >R1
+SRLW,   R7%   R7>   >Rz
+SRLW,   R7%   R1>   >R7
+SRLW,   R7%   R1>   >R1
+SRLW,   R7%   R1>   >Rz
+SRLW,   R7%   Rz>   >R7
+SRLW,   R7%   Rz>   >R1
+SRLW,   R7%   Rz>   >Rz
+SRLW,   R1%   R7>   >R7
+SRLW,   R1%   R7>   >R1
+SRLW,   R1%   R7>   >Rz
+SRLW,   R1%   R1>   >R7
+SRLW,   R1%   R1>   >R1
+SRLW,   R1%   R1>   >Rz
+SRLW,   R1%   Rz>   >R7
+SRLW,   R1%   Rz>   >R1
+SRLW,   R1%   Rz>   >Rz
+SRLW,   Rz%   R7>   >R7
+SRLW,   Rz%   R7>   >R1
+SRLW,   Rz%   R7>   >Rz
+SRLW,   Rz%   R1>   >R7
+SRLW,   Rz%   R1>   >R1
+SRLW,   Rz%   R1>   >Rz
+SRLW,   Rz%   Rz>   >R7
+SRLW,   Rz%   Rz>   >R1
+SRLW,   Rz%   Rz>   >Rz
+SLLW,   R7%   R7>   >R7
+SLLW,   R7%   R7>   >R1
+SLLW,   R7%   R7>   >Rz
+SLLW,   R7%   R1>   >R7
+SLLW,   R7%   R1>   >R1
+SLLW,   R7%   R1>   >Rz
+SLLW,   R7%   Rz>   >R7
+SLLW,   R7%   Rz>   >R1
+SLLW,   R7%   Rz>   >Rz
+SLLW,   R1%   R7>   >R7
+SLLW,   R1%   R7>   >R1
+SLLW,   R1%   R7>   >Rz
+SLLW,   R1%   R1>   >R7
+SLLW,   R1%   R1>   >R1
+SLLW,   R1%   R1>   >Rz
+SLLW,   R1%   Rz>   >R7
+SLLW,   R1%   Rz>   >R1
+SLLW,   R1%   Rz>   >Rz
+SLLW,   Rz%   R7>   >R7
+SLLW,   Rz%   R7>   >R1
+SLLW,   Rz%   R7>   >Rz
+SLLW,   Rz%   R1>   >R7
+SLLW,   Rz%   R1>   >R1
+SLLW,   Rz%   R1>   >Rz
+SLLW,   Rz%   Rz>   >R7
+SLLW,   Rz%   Rz>   >R1
+SLLW,   Rz%   Rz>   >Rz
+ADDW,   R7%   R7>   >R7
+ADDW,   R7%   R7>   >R1
+ADDW,   R7%   R7>   >Rz
+ADDW,   R7%   R1>   >R7
+ADDW,   R7%   R1>   >R1
+ADDW,   R7%   R1>   >Rz
+ADDW,   R7%   Rz>   >R7
+ADDW,   R7%   Rz>   >R1
+ADDW,   R7%   Rz>   >Rz
+ADDW,   R1%   R7>   >R7
+ADDW,   R1%   R7>   >R1
+ADDW,   R1%   R7>   >Rz
+ADDW,   R1%   R1>   >R7
+ADDW,   R1%   R1>   >R1
+ADDW,   R1%   R1>   >Rz
+ADDW,   R1%   Rz>   >R7
+ADDW,   R1%   Rz>   >R1
+ADDW,   R1%   Rz>   >Rz
+ADDW,   Rz%   R7>   >R7
+ADDW,   Rz%   R7>   >R1
+ADDW,   Rz%   R7>   >Rz
+ADDW,   Rz%   R1>   >R7
+ADDW,   Rz%   R1>   >R1
+ADDW,   Rz%   R1>   >Rz
+ADDW,   Rz%   Rz>   >R7
+ADDW,   Rz%   Rz>   >R1
+ADDW,   Rz%   Rz>   >Rz
+AND,   R7%   R7>   >R7
+AND,   R7%   R7>   >R1
+AND,   R7%   R7>   >Rz
+AND,   R7%   R1>   >R7
+AND,   R7%   R1>   >R1
+AND,   R7%   R1>   >Rz
+AND,   R7%   Rz>   >R7
+AND,   R7%   Rz>   >R1
+AND,   R7%   Rz>   >Rz
+AND,   R1%   R7>   >R7
+AND,   R1%   R7>   >R1
+AND,   R1%   R7>   >Rz
+AND,   R1%   R1>   >R7
+AND,   R1%   R1>   >R1
+AND,   R1%   R1>   >Rz
+AND,   R1%   Rz>   >R7
+AND,   R1%   Rz>   >R1
+AND,   R1%   Rz>   >Rz
+AND,   Rz%   R7>   >R7
+AND,   Rz%   R7>   >R1
+AND,   Rz%   R7>   >Rz
+AND,   Rz%   R1>   >R7
+AND,   Rz%   R1>   >R1
+AND,   Rz%   R1>   >Rz
+AND,   Rz%   Rz>   >R7
+AND,   Rz%   Rz>   >R1
+AND,   Rz%   Rz>   >Rz
+OR,   R7%   R7>   >R7
+OR,   R7%   R7>   >R1
+OR,   R7%   R7>   >Rz
+OR,   R7%   R1>   >R7
+OR,   R7%   R1>   >R1
+OR,   R7%   R1>   >Rz
+OR,   R7%   Rz>   >R7
+OR,   R7%   Rz>   >R1
+OR,   R7%   Rz>   >Rz
+OR,   R1%   R7>   >R7
+OR,   R1%   R7>   >R1
+OR,   R1%   R7>   >Rz
+OR,   R1%   R1>   >R7
+OR,   R1%   R1>   >R1
+OR,   R1%   R1>   >Rz
+OR,   R1%   Rz>   >R7
+OR,   R1%   Rz>   >R1
+OR,   R1%   Rz>   >Rz
+OR,   Rz%   R7>   >R7
+OR,   Rz%   R7>   >R1
+OR,   Rz%   R7>   >Rz
+OR,   Rz%   R1>   >R7
+OR,   Rz%   R1>   >R1
+OR,   Rz%   R1>   >Rz
+OR,   Rz%   Rz>   >R7
+OR,   Rz%   Rz>   >R1
+OR,   Rz%   Rz>   >Rz
+SRL,   R7%   R7>   >R7
+SRL,   R7%   R7>   >R1
+SRL,   R7%   R7>   >Rz
+SRL,   R7%   R1>   >R7
+SRL,   R7%   R1>   >R1
+SRL,   R7%   R1>   >Rz
+SRL,   R7%   Rz>   >R7
+SRL,   R7%   Rz>   >R1
+SRL,   R7%   Rz>   >Rz
+SRL,   R1%   R7>   >R7
+SRL,   R1%   R7>   >R1
+SRL,   R1%   R7>   >Rz
+SRL,   R1%   R1>   >R7
+SRL,   R1%   R1>   >R1
+SRL,   R1%   R1>   >Rz
+SRL,   R1%   Rz>   >R7
+SRL,   R1%   Rz>   >R1
+SRL,   R1%   Rz>   >Rz
+SRL,   Rz%   R7>   >R7
+SRL,   Rz%   R7>   >R1
+SRL,   Rz%   R7>   >Rz
+SRL,   Rz%   R1>   >R7
+SRL,   Rz%   R1>   >R1
+SRL,   Rz%   R1>   >Rz
+SRL,   Rz%   Rz>   >R7
+SRL,   Rz%   Rz>   >R1
+SRL,   Rz%   Rz>   >Rz
+XOR,   R7%   R7>   >R7
+XOR,   R7%   R7>   >R1
+XOR,   R7%   R7>   >Rz
+XOR,   R7%   R1>   >R7
+XOR,   R7%   R1>   >R1
+XOR,   R7%   R1>   >Rz
+XOR,   R7%   Rz>   >R7
+XOR,   R7%   Rz>   >R1
+XOR,   R7%   Rz>   >Rz
+XOR,   R1%   R7>   >R7
+XOR,   R1%   R7>   >R1
+XOR,   R1%   R7>   >Rz
+XOR,   R1%   R1>   >R7
+XOR,   R1%   R1>   >R1
+XOR,   R1%   R1>   >Rz
+XOR,   R1%   Rz>   >R7
+XOR,   R1%   Rz>   >R1
+XOR,   R1%   Rz>   >Rz
+XOR,   Rz%   R7>   >R7
+XOR,   Rz%   R7>   >R1
+XOR,   Rz%   R7>   >Rz
+XOR,   Rz%   R1>   >R7
+XOR,   Rz%   R1>   >R1
+XOR,   Rz%   R1>   >Rz
+XOR,   Rz%   Rz>   >R7
+XOR,   Rz%   Rz>   >R1
+XOR,   Rz%   Rz>   >Rz
+SLTU,   R7%   R7>   >R7
+SLTU,   R7%   R7>   >R1
+SLTU,   R7%   R7>   >Rz
+SLTU,   R7%   R1>   >R7
+SLTU,   R7%   R1>   >R1
+SLTU,   R7%   R1>   >Rz
+SLTU,   R7%   Rz>   >R7
+SLTU,   R7%   Rz>   >R1
+SLTU,   R7%   Rz>   >Rz
+SLTU,   R1%   R7>   >R7
+SLTU,   R1%   R7>   >R1
+SLTU,   R1%   R7>   >Rz
+SLTU,   R1%   R1>   >R7
+SLTU,   R1%   R1>   >R1
+SLTU,   R1%   R1>   >Rz
+SLTU,   R1%   Rz>   >R7
+SLTU,   R1%   Rz>   >R1
+SLTU,   R1%   Rz>   >Rz
+SLTU,   Rz%   R7>   >R7
+SLTU,   Rz%   R7>   >R1
+SLTU,   Rz%   R7>   >Rz
+SLTU,   Rz%   R1>   >R7
+SLTU,   Rz%   R1>   >R1
+SLTU,   Rz%   R1>   >Rz
+SLTU,   Rz%   Rz>   >R7
+SLTU,   Rz%   Rz>   >R1
+SLTU,   Rz%   Rz>   >Rz
+SLT,   R7%   R7>   >R7
+SLT,   R7%   R7>   >R1
+SLT,   R7%   R7>   >Rz
+SLT,   R7%   R1>   >R7
+SLT,   R7%   R1>   >R1
+SLT,   R7%   R1>   >Rz
+SLT,   R7%   Rz>   >R7
+SLT,   R7%   Rz>   >R1
+SLT,   R7%   Rz>   >Rz
+SLT,   R1%   R7>   >R7
+SLT,   R1%   R7>   >R1
+SLT,   R1%   R7>   >Rz
+SLT,   R1%   R1>   >R7
+SLT,   R1%   R1>   >R1
+SLT,   R1%   R1>   >Rz
+SLT,   R1%   Rz>   >R7
+SLT,   R1%   Rz>   >R1
+SLT,   R1%   Rz>   >Rz
+SLT,   Rz%   R7>   >R7
+SLT,   Rz%   R7>   >R1
+SLT,   Rz%   R7>   >Rz
+SLT,   Rz%   R1>   >R7
+SLT,   Rz%   R1>   >R1
+SLT,   Rz%   R1>   >Rz
+SLT,   Rz%   Rz>   >R7
+SLT,   Rz%   Rz>   >R1
+SLT,   Rz%   Rz>   >Rz
+SLL,   R7%   R7>   >R7
+SLL,   R7%   R7>   >R1
+SLL,   R7%   R7>   >Rz
+SLL,   R7%   R1>   >R7
+SLL,   R7%   R1>   >R1
+SLL,   R7%   R1>   >Rz
+SLL,   R7%   Rz>   >R7
+SLL,   R7%   Rz>   >R1
+SLL,   R7%   Rz>   >Rz
+SLL,   R1%   R7>   >R7
+SLL,   R1%   R7>   >R1
+SLL,   R1%   R7>   >Rz
+SLL,   R1%   R1>   >R7
+SLL,   R1%   R1>   >R1
+SLL,   R1%   R1>   >Rz
+SLL,   R1%   Rz>   >R7
+SLL,   R1%   Rz>   >R1
+SLL,   R1%   Rz>   >Rz
+SLL,   Rz%   R7>   >R7
+SLL,   Rz%   R7>   >R1
+SLL,   Rz%   R7>   >Rz
+SLL,   Rz%   R1>   >R7
+SLL,   Rz%   R1>   >R1
+SLL,   Rz%   R1>   >Rz
+SLL,   Rz%   Rz>   >R7
+SLL,   Rz%   Rz>   >R1
+SLL,   Rz%   Rz>   >Rz
+ADD,   R7%   R7>   >R7
+ADD,   R7%   R7>   >R1
+ADD,   R7%   R7>   >Rz
+ADD,   R7%   R1>   >R7
+ADD,   R7%   R1>   >R1
+ADD,   R7%   R1>   >Rz
+ADD,   R7%   Rz>   >R7
+ADD,   R7%   Rz>   >R1
+ADD,   R7%   Rz>   >Rz
+ADD,   R1%   R7>   >R7
+ADD,   R1%   R7>   >R1
+ADD,   R1%   R7>   >Rz
+ADD,   R1%   R1>   >R7
+ADD,   R1%   R1>   >R1
+ADD,   R1%   R1>   >Rz
+ADD,   R1%   Rz>   >R7
+ADD,   R1%   Rz>   >R1
+ADD,   R1%   Rz>   >Rz
+ADD,   Rz%   R7>   >R7
+ADD,   Rz%   R7>   >R1
+ADD,   Rz%   R7>   >Rz
+ADD,   Rz%   R1>   >R7
+ADD,   Rz%   R1>   >R1
+ADD,   Rz%   R1>   >Rz
+ADD,   Rz%   Rz>   >R7
+ADD,   Rz%   Rz>   >R1
+ADD,   Rz%   Rz>   >Rz
+SRA,   R7%   R7>   >R7
+SRA,   R7%   R7>   >R1
+SRA,   R7%   R7>   >Rz
+SRA,   R7%   R1>   >R7
+SRA,   R7%   R1>   >R1
+SRA,   R7%   R1>   >Rz
+SRA,   R7%   Rz>   >R7
+SRA,   R7%   Rz>   >R1
+SRA,   R7%   Rz>   >Rz
+SRA,   R1%   R7>   >R7
+SRA,   R1%   R7>   >R1
+SRA,   R1%   R7>   >Rz
+SRA,   R1%   R1>   >R7
+SRA,   R1%   R1>   >R1
+SRA,   R1%   R1>   >Rz
+SRA,   R1%   Rz>   >R7
+SRA,   R1%   Rz>   >R1
+SRA,   R1%   Rz>   >Rz
+SRA,   Rz%   R7>   >R7
+SRA,   Rz%   R7>   >R1
+SRA,   Rz%   R7>   >Rz
+SRA,   Rz%   R1>   >R7
+SRA,   Rz%   R1>   >R1
+SRA,   Rz%   R1>   >Rz
+SRA,   Rz%   Rz>   >R7
+SRA,   Rz%   Rz>   >R1
+SRA,   Rz%   Rz>   >Rz
+SUB,   R7%   R7>   >R7
+SUB,   R7%   R7>   >R1
+SUB,   R7%   R7>   >Rz
+SUB,   R7%   R1>   >R7
+SUB,   R7%   R1>   >R1
+SUB,   R7%   R1>   >Rz
+SUB,   R7%   Rz>   >R7
+SUB,   R7%   Rz>   >R1
+SUB,   R7%   Rz>   >Rz
+SUB,   R1%   R7>   >R7
+SUB,   R1%   R7>   >R1
+SUB,   R1%   R7>   >Rz
+SUB,   R1%   R1>   >R7
+SUB,   R1%   R1>   >R1
+SUB,   R1%   R1>   >Rz
+SUB,   R1%   Rz>   >R7
+SUB,   R1%   Rz>   >R1
+SUB,   R1%   Rz>   >Rz
+SUB,   Rz%   R7>   >R7
+SUB,   Rz%   R7>   >R1
+SUB,   Rz%   R7>   >Rz
+SUB,   Rz%   R1>   >R7
+SUB,   Rz%   R1>   >R1
+SUB,   Rz%   R1>   >Rz
+SUB,   Rz%   Rz>   >R7
+SUB,   Rz%   Rz>   >R1
+SUB,   Rz%   Rz>   >Rz
+SRAIW,   8 shift#|   R7>   >R7
+SRAIW,   8 shift#|   R7>   >R1
+SRAIW,   8 shift#|   R7>   >Rz
+SRAIW,   8 shift#|   R1>   >R7
+SRAIW,   8 shift#|   R1>   >R1
+SRAIW,   8 shift#|   R1>   >Rz
+SRAIW,   8 shift#|   Rz>   >R7
+SRAIW,   8 shift#|   Rz>   >R1
+SRAIW,   8 shift#|   Rz>   >Rz
+SRLIW,   8 shift#|   R7>   >R7
+SRLIW,   8 shift#|   R7>   >R1
+SRLIW,   8 shift#|   R7>   >Rz
+SRLIW,   8 shift#|   R1>   >R7
+SRLIW,   8 shift#|   R1>   >R1
+SRLIW,   8 shift#|   R1>   >Rz
+SRLIW,   8 shift#|   Rz>   >R7
+SRLIW,   8 shift#|   Rz>   >R1
+SRLIW,   8 shift#|   Rz>   >Rz
+SLLIW,   8 shift#|   R7>   >R7
+SLLIW,   8 shift#|   R7>   >R1
+SLLIW,   8 shift#|   R7>   >Rz
+SLLIW,   8 shift#|   R1>   >R7
+SLLIW,   8 shift#|   R1>   >R1
+SLLIW,   8 shift#|   R1>   >Rz
+SLLIW,   8 shift#|   Rz>   >R7
+SLLIW,   8 shift#|   Rz>   >R1
+SLLIW,   8 shift#|   Rz>   >Rz
+ADDIW,   8 sd#|   R7>   >R7
+ADDIW,   8 sd#|   R7>   >R1
+ADDIW,   8 sd#|   R7>   >Rz
+ADDIW,   8 sd#|   R1>   >R7
+ADDIW,   8 sd#|   R1>   >R1
+ADDIW,   8 sd#|   R1>   >Rz
+ADDIW,   8 sd#|   Rz>   >R7
+ADDIW,   8 sd#|   Rz>   >R1
+ADDIW,   8 sd#|   Rz>   >Rz
+SRAI,   8 shift#|   R7>   >R7
+SRAI,   8 shift#|   R7>   >R1
+SRAI,   8 shift#|   R7>   >Rz
+SRAI,   8 shift#|   R1>   >R7
+SRAI,   8 shift#|   R1>   >R1
+SRAI,   8 shift#|   R1>   >Rz
+SRAI,   8 shift#|   Rz>   >R7
+SRAI,   8 shift#|   Rz>   >R1
+SRAI,   8 shift#|   Rz>   >Rz
+SRLI,   8 shift#|   R7>   >R7
+SRLI,   8 shift#|   R7>   >R1
+SRLI,   8 shift#|   R7>   >Rz
+SRLI,   8 shift#|   R1>   >R7
+SRLI,   8 shift#|   R1>   >R1
+SRLI,   8 shift#|   R1>   >Rz
+SRLI,   8 shift#|   Rz>   >R7
+SRLI,   8 shift#|   Rz>   >R1
+SRLI,   8 shift#|   Rz>   >Rz
+SLLI,   8 shift#|   R7>   >R7
+SLLI,   8 shift#|   R7>   >R1
+SLLI,   8 shift#|   R7>   >Rz
+SLLI,   8 shift#|   R1>   >R7
+SLLI,   8 shift#|   R1>   >R1
+SLLI,   8 shift#|   R1>   >Rz
+SLLI,   8 shift#|   Rz>   >R7
+SLLI,   8 shift#|   Rz>   >R1
+SLLI,   8 shift#|   Rz>   >Rz
+ANDI,   8 sd#|   R7>   >R7
+ANDI,   8 sd#|   R7>   >R1
+ANDI,   8 sd#|   R7>   >Rz
+ANDI,   8 sd#|   R1>   >R7
+ANDI,   8 sd#|   R1>   >R1
+ANDI,   8 sd#|   R1>   >Rz
+ANDI,   8 sd#|   Rz>   >R7
+ANDI,   8 sd#|   Rz>   >R1
+ANDI,   8 sd#|   Rz>   >Rz
+ORI,   8 sd#|   R7>   >R7
+ORI,   8 sd#|   R7>   >R1
+ORI,   8 sd#|   R7>   >Rz
+ORI,   8 sd#|   R1>   >R7
+ORI,   8 sd#|   R1>   >R1
+ORI,   8 sd#|   R1>   >Rz
+ORI,   8 sd#|   Rz>   >R7
+ORI,   8 sd#|   Rz>   >R1
+ORI,   8 sd#|   Rz>   >Rz
+XORI,   8 sd#|   R7>   >R7
+XORI,   8 sd#|   R7>   >R1
+XORI,   8 sd#|   R7>   >Rz
+XORI,   8 sd#|   R1>   >R7
+XORI,   8 sd#|   R1>   >R1
+XORI,   8 sd#|   R1>   >Rz
+XORI,   8 sd#|   Rz>   >R7
+XORI,   8 sd#|   Rz>   >R1
+XORI,   8 sd#|   Rz>   >Rz
+SLTIU,   8 sd#|   R7>   >R7
+SLTIU,   8 sd#|   R7>   >R1
+SLTIU,   8 sd#|   R7>   >Rz
+SLTIU,   8 sd#|   R1>   >R7
+SLTIU,   8 sd#|   R1>   >R1
+SLTIU,   8 sd#|   R1>   >Rz
+SLTIU,   8 sd#|   Rz>   >R7
+SLTIU,   8 sd#|   Rz>   >R1
+SLTIU,   8 sd#|   Rz>   >Rz
+SLTI,   8 sd#|   R7>   >R7
+SLTI,   8 sd#|   R7>   >R1
+SLTI,   8 sd#|   R7>   >Rz
+SLTI,   8 sd#|   R1>   >R7
+SLTI,   8 sd#|   R1>   >R1
+SLTI,   8 sd#|   R1>   >Rz
+SLTI,   8 sd#|   Rz>   >R7
+SLTI,   8 sd#|   Rz>   >R1
+SLTI,   8 sd#|   Rz>   >Rz
+ADDI,   8 sd#|   R7>   >R7
+ADDI,   8 sd#|   R7>   >R1
+ADDI,   8 sd#|   R7>   >Rz
+ADDI,   8 sd#|   R1>   >R7
+ADDI,   8 sd#|   R1>   >R1
+ADDI,   8 sd#|   R1>   >Rz
+ADDI,   8 sd#|   Rz>   >R7
+ADDI,   8 sd#|   Rz>   >R1
+ADDI,   8 sd#|   Rz>   >Rz
+SD,   8 br#2|   C sd7|   R7%   R7>
+SD,   8 br#2|   C sd7|   R7%   R1>
+SD,   8 br#2|   C sd7|   R7%   Rz>
+SD,   8 br#2|   C sd7|   R1%   R7>
+SD,   8 br#2|   C sd7|   R1%   R1>
+SD,   8 br#2|   C sd7|   R1%   Rz>
+SD,   8 br#2|   C sd7|   Rz%   R7>
+SD,   8 br#2|   C sd7|   Rz%   R1>
+SD,   8 br#2|   C sd7|   Rz%   Rz>
+SW,   8 br#2|   C sd7|   R7%   R7>
+SW,   8 br#2|   C sd7|   R7%   R1>
+SW,   8 br#2|   C sd7|   R7%   Rz>
+SW,   8 br#2|   C sd7|   R1%   R7>
+SW,   8 br#2|   C sd7|   R1%   R1>
+SW,   8 br#2|   C sd7|   R1%   Rz>
+SW,   8 br#2|   C sd7|   Rz%   R7>
+SW,   8 br#2|   C sd7|   Rz%   R1>
+SW,   8 br#2|   C sd7|   Rz%   Rz>
+SH,   8 br#2|   C sd7|   R7%   R7>
+SH,   8 br#2|   C sd7|   R7%   R1>
+SH,   8 br#2|   C sd7|   R7%   Rz>
+SH,   8 br#2|   C sd7|   R1%   R7>
+SH,   8 br#2|   C sd7|   R1%   R1>
+SH,   8 br#2|   C sd7|   R1%   Rz>
+SH,   8 br#2|   C sd7|   Rz%   R7>
+SH,   8 br#2|   C sd7|   Rz%   R1>
+SH,   8 br#2|   C sd7|   Rz%   Rz>
+SB,   8 br#2|   C sd7|   R7%   R7>
+SB,   8 br#2|   C sd7|   R7%   R1>
+SB,   8 br#2|   C sd7|   R7%   Rz>
+SB,   8 br#2|   C sd7|   R1%   R7>
+SB,   8 br#2|   C sd7|   R1%   R1>
+SB,   8 br#2|   C sd7|   R1%   Rz>
+SB,   8 br#2|   C sd7|   Rz%   R7>
+SB,   8 br#2|   C sd7|   Rz%   R1>
+SB,   8 br#2|   C sd7|   Rz%   Rz>
+LWU,   8 sd#|   R7>   >R7
+LWU,   8 sd#|   R7>   >R1
+LWU,   8 sd#|   R7>   >Rz
+LWU,   8 sd#|   R1>   >R7
+LWU,   8 sd#|   R1>   >R1
+LWU,   8 sd#|   R1>   >Rz
+LWU,   8 sd#|   Rz>   >R7
+LWU,   8 sd#|   Rz>   >R1
+LWU,   8 sd#|   Rz>   >Rz
+LHU,   8 sd#|   R7>   >R7
+LHU,   8 sd#|   R7>   >R1
+LHU,   8 sd#|   R7>   >Rz
+LHU,   8 sd#|   R1>   >R7
+LHU,   8 sd#|   R1>   >R1
+LHU,   8 sd#|   R1>   >Rz
+LHU,   8 sd#|   Rz>   >R7
+LHU,   8 sd#|   Rz>   >R1
+LHU,   8 sd#|   Rz>   >Rz
+LBU,   8 sd#|   R7>   >R7
+LBU,   8 sd#|   R7>   >R1
+LBU,   8 sd#|   R7>   >Rz
+LBU,   8 sd#|   R1>   >R7
+LBU,   8 sd#|   R1>   >R1
+LBU,   8 sd#|   R1>   >Rz
+LBU,   8 sd#|   Rz>   >R7
+LBU,   8 sd#|   Rz>   >R1
+LBU,   8 sd#|   Rz>   >Rz
+LD,   8 sd#|   R7>   >R7
+LD,   8 sd#|   R7>   >R1
+LD,   8 sd#|   R7>   >Rz
+LD,   8 sd#|   R1>   >R7
+LD,   8 sd#|   R1>   >R1
+LD,   8 sd#|   R1>   >Rz
+LD,   8 sd#|   Rz>   >R7
+LD,   8 sd#|   Rz>   >R1
+LD,   8 sd#|   Rz>   >Rz
+LW,   8 sd#|   R7>   >R7
+LW,   8 sd#|   R7>   >R1
+LW,   8 sd#|   R7>   >Rz
+LW,   8 sd#|   R1>   >R7
+LW,   8 sd#|   R1>   >R1
+LW,   8 sd#|   R1>   >Rz
+LW,   8 sd#|   Rz>   >R7
+LW,   8 sd#|   Rz>   >R1
+LW,   8 sd#|   Rz>   >Rz
+LH,   8 sd#|   R7>   >R7
+LH,   8 sd#|   R7>   >R1
+LH,   8 sd#|   R7>   >Rz
+LH,   8 sd#|   R1>   >R7
+LH,   8 sd#|   R1>   >R1
+LH,   8 sd#|   R1>   >Rz
+LH,   8 sd#|   Rz>   >R7
+LH,   8 sd#|   Rz>   >R1
+LH,   8 sd#|   Rz>   >Rz
+LB,   8 sd#|   R7>   >R7
+LB,   8 sd#|   R7>   >R1
+LB,   8 sd#|   R7>   >Rz
+LB,   8 sd#|   R1>   >R7
+LB,   8 sd#|   R1>   >R1
+LB,   8 sd#|   R1>   >Rz
+LB,   8 sd#|   Rz>   >R7
+LB,   8 sd#|   Rz>   >R1
+LB,   8 sd#|   Rz>   >Rz
+JALR,   8 sd#|   R7>   >R7
+JALR,   8 sd#|   R7>   >R1
+JALR,   8 sd#|   R7>   >Rz
+JALR,   8 sd#|   R1>   >R7
+JALR,   8 sd#|   R1>   >R1
+JALR,   8 sd#|   R1>   >Rz
+JALR,   8 sd#|   Rz>   >R7
+JALR,   8 sd#|   Rz>   >R1
+JALR,   8 sd#|   Rz>   >Rz
+BGEU,   8 br#2|   C sd7|   R7%   R7>
+BGEU,   8 br#2|   C sd7|   R7%   R1>
+BGEU,   8 br#2|   C sd7|   R7%   Rz>
+BGEU,   8 br#2|   C sd7|   R1%   R7>
+BGEU,   8 br#2|   C sd7|   R1%   R1>
+BGEU,   8 br#2|   C sd7|   R1%   Rz>
+BGEU,   8 br#2|   C sd7|   Rz%   R7>
+BGEU,   8 br#2|   C sd7|   Rz%   R1>
+BGEU,   8 br#2|   C sd7|   Rz%   Rz>
+BLTU,   8 br#2|   C sd7|   R7%   R7>
+BLTU,   8 br#2|   C sd7|   R7%   R1>
+BLTU,   8 br#2|   C sd7|   R7%   Rz>
+BLTU,   8 br#2|   C sd7|   R1%   R7>
+BLTU,   8 br#2|   C sd7|   R1%   R1>
+BLTU,   8 br#2|   C sd7|   R1%   Rz>
+BLTU,   8 br#2|   C sd7|   Rz%   R7>
+BLTU,   8 br#2|   C sd7|   Rz%   R1>
+BLTU,   8 br#2|   C sd7|   Rz%   Rz>
+BGE,   8 br#2|   C sd7|   R7%   R7>
+BGE,   8 br#2|   C sd7|   R7%   R1>
+BGE,   8 br#2|   C sd7|   R7%   Rz>
+BGE,   8 br#2|   C sd7|   R1%   R7>
+BGE,   8 br#2|   C sd7|   R1%   R1>
+BGE,   8 br#2|   C sd7|   R1%   Rz>
+BGE,   8 br#2|   C sd7|   Rz%   R7>
+BGE,   8 br#2|   C sd7|   Rz%   R1>
+BGE,   8 br#2|   C sd7|   Rz%   Rz>
+BLT,   8 br#2|   C sd7|   R7%   R7>
+BLT,   8 br#2|   C sd7|   R7%   R1>
+BLT,   8 br#2|   C sd7|   R7%   Rz>
+BLT,   8 br#2|   C sd7|   R1%   R7>
+BLT,   8 br#2|   C sd7|   R1%   R1>
+BLT,   8 br#2|   C sd7|   R1%   Rz>
+BLT,   8 br#2|   C sd7|   Rz%   R7>
+BLT,   8 br#2|   C sd7|   Rz%   R1>
+BLT,   8 br#2|   C sd7|   Rz%   Rz>
+BNE,   8 br#2|   C sd7|   R7%   R7>
+BNE,   8 br#2|   C sd7|   R7%   R1>
+BNE,   8 br#2|   C sd7|   R7%   Rz>
+BNE,   8 br#2|   C sd7|   R1%   R7>
+BNE,   8 br#2|   C sd7|   R1%   R1>
+BNE,   8 br#2|   C sd7|   R1%   Rz>
+BNE,   8 br#2|   C sd7|   Rz%   R7>
+BNE,   8 br#2|   C sd7|   Rz%   R1>
+BNE,   8 br#2|   C sd7|   Rz%   Rz>
+BEQ,   8 br#2|   C sd7|   R7%   R7>
+BEQ,   8 br#2|   C sd7|   R7%   R1>
+BEQ,   8 br#2|   C sd7|   R7%   Rz>
+BEQ,   8 br#2|   C sd7|   R1%   R7>
+BEQ,   8 br#2|   C sd7|   R1%   R1>
+BEQ,   8 br#2|   C sd7|   R1%   Rz>
+BEQ,   8 br#2|   C sd7|   Rz%   R7>
+BEQ,   8 br#2|   C sd7|   Rz%   R1>
+BEQ,   8 br#2|   C sd7|   Rz%   Rz>
+JAL,   8 n#|   >R7
+JAL,   8 n#|   >R1
+JAL,   8 n#|   >Rz
+AUIPC,   8 n#|   >R7
+AUIPC,   8 n#|   >R1
+AUIPC,   8 n#|   >Rz
+LUI,   8 n#|   >R7
+LUI,   8 n#|   >R1
+LUI,   8 n#|   >Rz
+
+AS-HERE
+DUP 10 ERASE  10 AS-ALLOT
+." TEST STARTS HERE"
+2DUP OVER - DUMP
+2DUP OVER - "testsetriscv.bin" PUT-FILE
+DISASSEMBLE-RANGE
+BYE

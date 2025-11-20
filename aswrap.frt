@@ -1,4 +1,4 @@
-( $Id: aswrap.frt,v 1.22 2014/10/21 22:59:47 albert Exp $ )
+( $Id: aswrap.frt,v 1.24 2025/10/25 17:12:51 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
@@ -40,6 +40,7 @@ SECTION-REGISTRY !BAG       \ Get rid of dummy registration.
 : DEFAULT-SECTION
     0   \ File start address
     0   \ Target start address
+    UNUSED CODE-LENGTH @ < 7 ?ERROR
     HERE CODE-LENGTH @ ALLOT \ Host start address
     "the-default-section" POSTFIX (SECTION) ;
 
@@ -57,11 +58,8 @@ SECTION-REGISTRY !BAG       \ Get rid of dummy registration.
 \ The end of the code area while disassembling: a host address.
 : HOST-END CP @ ;
 
-\ Associate target ADDRESS with start of ``CODE-BUFFER''
-\ The valid range from the code buffer goes to ``CP @'' and is not
-\ affected.
-
-\ Associate ADDRESS with the start of ``CODE-SPACE''.
+\ Associate ADDRESS with the start of the code of the current `SECTION.
+\ Put the code cursor for that section to the start too.
 : ORG      -ORG-              CODE-SPACE CP ! ;
 
 \ Convert host memory ADDRESS. Leave target memory ADDRESS.

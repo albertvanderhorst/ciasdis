@@ -1,5 +1,7 @@
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
-( $Id: as6809s.frt,v 1.9 2004/01/07 21:43:10 albert Exp $)
+( $Id: as6809s.frt,v 1.10 2022/04/10 10:09:39 albert Exp $)
+
+WANT ABORT"
 
 ( ############## GENERIC PART OF ASSEMBER ############################# )
 

@@ -1,16 +1,17 @@
-( $Id: asi386.frt,v 4.33 2018/10/09 22:13:55 albert Exp $ )
+( $Id: asi386.frt,v 4.41 2020/08/16 18:58:07 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 
-\ For the redefinitions in connection with SIB.
+\ For the redefinitions in connection with SIB and forward ref to L@.
 WANT :2
 
  ASSEMBLER DEFINITIONS HEX
 
 ( ############## 80386 ASSEMBLER ADDITIONS ############################ )
-( These definitions are such that they work regardless of the endianness)
-( of the host. Lay down word {16 bits} and long {32} bits constants.    )
-: (W,) lsbyte, lsbyte, DROP ;
-: (L,) lsbyte, lsbyte, lsbyte, lsbyte, DROP ;
+\   These definitions are such that they work regardless of the endianness
+\   of the host. Lay down word long quad constants.
+: {W,} lsbyte, lsbyte, DROP ;
+: {L,} lsbyte, lsbyte, lsbyte, lsbyte, DROP ;
+: {Q,} 8 0 DO lsbyte, LOOP DROP ;
 
 ( ############## 80386 ASSEMBLER PROPER ############################### )
 ( The decreasing BY means that a decompiler hits them in the right      )
@@ -20,25 +21,26 @@ WANT :2
 ( Where there is a placeholder ``_'' the execution token is filled in   )
 ( later. )
 (   CNT                                                                 )
-( XT   BA   BY     XT-AS          NAME                                  )
-  00 02  0000 00,0100 ' (W,) COMMAER OW,    ( obligatory word     )
-  00 04  8000 00,0080 ' (L,) COMMAER (RL,)  ( cell relative to IP )
-  00 02  4000 00,0080 ' (W,) COMMAER (RW,)  ( cell relative to IP )
+( XT 1]   BA  BY     XT-AS          NAME                                  )
+  00 08  0000 00,0200 ' {Q,} COMMAER IQ,    ( immediate quad )
+  00 02  0000 00,0100 ' {W,} COMMAER OW,    ( obligatory word     )
+  00 04  8000 00,0080 ' {L,} COMMAER (RL,)  ( cell relative to IP )
+  00 02  4000 00,0080 ' {W,} COMMAER (RW,)  ( cell relative to IP )
   00 01  0000 00,0040 ' AS-C, COMMAER (RB,) ( byte relative to IP )
-  00 02  0000 00,0020 ' (W,) COMMAER SG,    (  Segment: WORD      )
+  00 02  0000 00,0020 ' {W,} COMMAER SG,    (  Segment: WORD      )
   00 01  0000 00,0010 ' AS-C, COMMAER P,    ( port number ; byte     )
   00 01  0000 00,0008 ' AS-C, COMMAER IS,   ( Single -obl-  byte )
-  00 04 20002 00,0004 ' (L,) COMMAER IL,    ( immediate data : cell)
-  00 02 10002 00,0004 ' (W,) COMMAER IW,    ( immediate data : cell)
+  00 04 20002 00,0004 ' {L,} COMMAER IL,    ( immediate data : cell)
+  00 02 10002 00,0004 ' {W,} COMMAER IW,    ( immediate data : cell)
   00 01  0001 00,0004 ' AS-C, COMMAER IB,   ( immediate byte data)
-  00 04  8008 00,0002 ' (L,) COMMAER L,     ( immediate data : address/offset )
-  00 02  4008 00,0002 ' (W,) COMMAER W,     ( immediate data : address/offset )
+  00 04  8008 00,0002 ' {L,} COMMAER L,     ( immediate data : address/offset )
+  00 02  4008 00,0002 ' {W,} COMMAER W,     ( immediate data : address/offset )
   00 01  0004 00,0002 ' AS-C, COMMAER B,    ( immediate byte : address/offset )
-  _ 01  0000 00,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
+  _  01  0000 00,0001 _    COMMAER SIB,, ( An instruction with in an instruction )
 
-
+\ 1] # of bytes
 ( Meaning of the bits in TALLY-BA :                                     )
-( Inconsistent:  0001 OPERAND IS BYTE     0002 OPERAND IS CELL  W/L     )
+( Inconsistent:  0001 OPERAND IS BYTE     0002 OPERAND IS CELL  W/L/Q   )
 (                0004 OFFSET  IS BYTE     0008 OFFSET  IS CELL  W/L
 ( By setting 0020 an opcode can force a memory reference, e.g. CALLFARO )
 (               0010 Register op         0020 Memory op                 )
@@ -49,11 +51,18 @@ WANT :2
 (  AS:          4000 16 bit Addr       8000 32 bit Address              )
 (  OS:         01,0000 16 bit Op      02,0000 32 bit Operand              )
 (  Use debug   04,0000 no ..          08,0000 CR0 ..DB0                   )
-(  FP:        10,0000 FP-specific   20,0000 Not FP                      )
+(  FP:         10,0000 FP-specific     20,0000 Not FP                      )
+(  FP:         40,0000 m| disallowed   80,0000 m| in use                )
+(  FP: second 100,0000 integer op    200,0000 FP operand                )
+
+(            4000,0000  32bit       8000,0000  64 bit                   )
+
 \
+\ remove if test succeeds  v
 \ The following is probably superfluous using 500/800
 \ anyway           better solved with a ghost bit in SET,
 (            400,0000  X| B|       800,0000 Y'| N'| SET,                )
+\ remove if test succeeds  ^
 ( Names *ending* in percent BP|% -- not BP'| the prime registers -- are )
 ( only valid for 16 bits mode, or with an address overwite. Use W, L,   )
 ( appropriately.                                                        )
@@ -62,7 +71,7 @@ WANT :2
  08 00 8 FAMILY|R AX] CX] DX] BX] 0] BP] SI] DI]
 8200 00 C0 T!
  40 00 4 FAMILY|R  +1* +2* +4* +8*
-80 GO!
+80 GO!   \ See ~SIB,
 8200 00 07 T!
  01 00 8 FAMILY|R [AX [CX [DX [BX [SP -- [SI [DI
 8280 00 07 05 FIR [BP   ( Fits in the hole, but disallow ZO| )
@@ -88,8 +97,9 @@ WANT :2
 0124 02 C0 40 FIR      BO|
 0128 02 C0 80 FIR      XO|
 20,0110 00 C0 C0 FIR      R|
-20,4048 02 C7 06 FIR      MEM|% ( Overrules ZO| [BP]% )
-20,8108 02 C7 05 FIR      MEM| ( Overrules ZO| [BP] )
+0020,4048 02 C7 06 FIR      MEM|% ( Overrules ZO| [BP]% )
+4020,8108 02 C7 05 FIR      MEM| ( Overrules ZO| [BP] )
+8020,8108 80 C7 05 FIR      REL| ( Overrules ZO| [BP] 64 bits)
 
 24,1101 0000 38 T!
  08 00 8 FAMILY|R AL'| CL'| DL'| BL'| AH'| CH'| DH'| BH'|
@@ -105,7 +115,7 @@ WANT :2
 0024,0402 0000 0100 0100 FIR X|
 
 ( --------- These must be found last -------)
-80 GO!
+80 GO!    \ The instruction demands one of the [AX initiations.
 0600 00 FF 0000 1PI ~SIB,
 00 GO!
 ( --------- two fixup operands ----------)
@@ -131,10 +141,13 @@ WANT :2
 1002 00 FF,0000 00,AF0F 3PI IMUL,                     ( 3)
 ( --------- one fixup operands ----------)
 00 04 C701 00C6 2PI MOVI,
-0012 00 0007 T!   0008 40 4 1FAMILY, INC|X, DEC|X, PUSH|X, POP|X,
+4000,0012 00 0007 T!   0008 40 2 1FAMILY, INC|X, DEC|X,
+0012 00 0007 T!   0008 50 2 1FAMILY, PUSH|X, POP|X,
 0012 00 0007 90 1PI XCHG|AX,
 0011 04 0007 B0 1PI MOVI|B,
-0012 04 0007 B8 1PI MOVI|X,
+\ See also Q:MOVI|X, for 64 bit mode.
+\ It just is a valid opcode so no 4000,0000 in the bad bits.
+0000,0012 04 0007 B8 1PI MOVI|X,
 0400 04 C701 T!
  0800 0080 8 2FAMILY, ADDI, ORI, ADCI, SBBI, ANDI, SUBI, XORI, CMPI,
 ( It is dubious but fairly intractible whether the logical operation    )
@@ -158,7 +171,7 @@ WANT :2
   08,0000 00,010F 4 3FAMILY, SGDT, SIDT, LGDT, LIDT, ( 3)
 
 ( --------- no fixup operands ----------)
-02 GO!
+02 GO!      \ The instructions demand one of two following fixups.
 0001 00 01 00 FIR B'|
 0002 00 01 01 FIR X'|
 0008 02 01 T!    0002 A0 2 1FAMILY, MOV|TA, MOV|FA,
@@ -175,14 +188,14 @@ WANT :2
 0800     0000 0001 T!     01 00 2 FAMILY|R Y| N|
 04 GO!
 0800     0000 000E T!     02 00 8 FAMILY|R O| C| Z| CZ| S| P| L| LE|
-05 GO!
+05 GO!    \ Demands one of each of the Y| and O| family.
 0800 40 0F 0070 1PI J,
 0000,0800 80 0F00 800F 2PI J|X,                                           ( 3)
 00 GO!
 
 2102 00 FF02 008C 2PI MOV|SG,
 
-02 GO!
+02 GO!     \ The instructions demand one of two following fixups.
 0000 00 0200 0000 FIR 1|          ( 3)
 0000 00 0200 0200 FIR V|          ( 3)
 0000,0500 00 C703 T! ( 02,0000 is a lockin for 1| V|)                   ( 3)
@@ -193,8 +206,8 @@ WANT :2
  0800 00C0 8 2FAMILY, ROLI, RORI, RCLI, RCRI, SHLI, SHRI, -- SARI,  ( 3)
 08,0012 0000 3F,0300 C0,200F 3PI  MOV|CD,  ( 3)
 
-
-0800,0800 00 0100 T!  0100 0000 2 FAMILY|R Y'| N'|                      ( 3)
+\ Unfortunate duplication with Y| etc. It is the middle byte here.
+0800 00 0100 T!  0100 0000 2 FAMILY|R Y'| N'|                      ( 3)
 0800 00 0E00 T!  0200 0000 8 FAMILY|R O'| C'| Z'| CZ'| S'| P'| L'| LE'| ( 3)
 0901 00 C7,0F00 00,900F 3PI SET,  ( 3)
 
@@ -212,15 +225,16 @@ WANT :2
 00 40 0000 EB 1PI JMPS,
 00 40 0000 T!   0001 E0 4 1FAMILY, LOOPNZ, LOOPZ, LOOP, JCXZ,
 0000 00 0000 T!
-   0008   0026 4 1FAMILY, ES:, CS:, SS:, DS:,
+   0008   0026 4 1PIPFAMILY, ES:, CS:, SS:, DS:,
    0008   0027 4 1FAMILY, DAA, DAS, AAA, AAS,
    0001   0098 8 1FAMILY, CBW, CWD, -- WAIT, PUSHF, POPF, SAHF, LAHF,
    0008   00C3 2 1FAMILY, RET,  RETFAR,
    0001   00CC 4 1FAMILY, INT3, -- INTO, IRET,
-   0001   00F0 6 1FAMILY, LOCK, -- REPNZ, REPZ, HLT, CMC,
+   0001   00F0 4 1PIPFAMILY, LOCK, -- REPNZ, REPZ,
+   0001   00F4 2 1FAMILY, HLT, CMC,
    0001   00F8 6 1FAMILY, CLC, STC, CLI, STI, CLD, STD,
    0001   0060 2 1FAMILY, PUSH|ALL, POP|ALL, ( 3)
-   0001   0064 4 1FAMILY, FS:, GS:, OS:, AS:, ( 3)
+   0001   0064 4 1PIPFAMILY, FS:, GS:, OS:, AS:, ( 3)
  0100 A00F 3 2FAMILY, PUSH|FS, POP|FS, CPUID,
  0100 A80F 2 2FAMILY, PUSH|GS, POP|GS, ( RSM,)
   0002 04 0000   0068 1PI PUSHI|X,  ( 3)
@@ -229,6 +243,20 @@ WANT :2
       0000 00 00   00C9 1PI LEAVE, ( 3)
       0000 00 00   00D7 1PI XLAT,  ( 3)
       0000 00 00 060F 2PI CLTS,  ( 3)
+
+( ############## AMD ADDITIONS ######################################## )
+\ Extensions for 64 bits. N is normal, ' is primed, ] is the SIB-index
+\ So : ' applies to AX'| and ] applies to AX] while N applies to others.
+\ The modRM reg field is the extra register, i.e. the primed one.
+\ E is extended registers, Q is 64 bits and maybe extended registers.
+8000,0000 0 0 T!
+01 40 8 1PIPFAMILY, E: EN: E]: EN]: E': EN': E']: EN']:
+01 48 8 1PIPFAMILY, Q: QN: Q]: QN]: Q': QN': Q']: QN']:
+
+8000,0012 200 0700 B848 2PI Q:MOVI|X,
+8000,0012 200 0700 B849 2PI QN:MOVI|X,
+8000,0000 0 0 050F 2PI SYSCALL,
+0 0 0 T!
 
 ( ############## HANDLING THE SIB BYTE ################################ )
 
@@ -270,7 +298,7 @@ WANT :2
 :2 [MEM  ~SIB| SIB,, [MEM ;
 
 ( Fill in the transformation to TALLY-BA for `` AS:, OS:, ''            )
-( This flags them as prefixes.                                          )
+( They were already flagged as prefixes, by a `NOOP                     )
 ( The toggle inverts the 16 and 32 bits at the same time.               )
 : AS16<->32   TALLY-BA  C000 TOGGLE ;  ' AS16<->32 % AS:, >PRF !
 : OS16<->32   TALLY-BA 30000 TOGGLE ;  ' OS16<->32 % OS:, >PRF !
@@ -283,8 +311,9 @@ WANT :2
 : RL, _AP_ 04 + - (RL,) ;    ' .COMMA-SIGNED   % (RL,) >DSP !
 
 ( Require instructions as per a 32 resp. 16 bits segment.               )
-: BITS-32   02,8000 BA-DEFAULT ! ;
-: BITS-16   01,4000 BA-DEFAULT ! ;
+: BITS-16   4001,4000 BA-DEFAULT ! ;
+: BITS-32   4002,8000 BA-DEFAULT ! ;
+: BITS-64   8002,8000 BA-DEFAULT ! ;
 
 BITS-32
 PREVIOUS DEFINITIONS DECIMAL

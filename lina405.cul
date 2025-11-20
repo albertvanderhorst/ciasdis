@@ -1,5 +1,5 @@
 0804,9000 -ORG-
-
+"BITS-32" START-DIRECTIVE $!
 "_end e_ident - EQU filesz
 INCLUDE lina405equ.cul" 0804,9000 DIRECTIVE
 

@@ -1,9 +1,10 @@
- ( $Id: labeldis.frt,v 1.95 2018/07/24 11:48:07 albert Exp $ )
+ ( $Id: labeldis.frt,v 1.100 2025/10/21 13:57:50 albert Exp $ )
  ( Copyright{2004}: Albert van der Horst, HCC FIG Holland by GNU Public License)
  ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
 
-( Handle labels as far as disassembly is concerned.                     )
-( There is a separate one for the assembler.                            )
+\   Handle labels as far as disassembly is concerned.
+\   There is a separate one for the assembler.
+\   Note: ALLOC has nothing to do with ALLOCATE
 
 WANT ALIAS
 WANT @+
@@ -32,11 +33,11 @@ WANT BAG
 \ to the payload (mostly a string).
 \ They are sorted on target address for convenience.
 
-\ Realloc ADDRESS to new LENGTH, return new ADDRESS.
+\ Reallot ADDRESS to new LENGTH, return new ADDRESS.
 \ Ignoring old length, we may copy garbage, too bad.
 : REALLOC   HERE >R   DUP ALLOT   R@ SWAP MOVE   R> ;
 
-\ Realloc POINTER to old buffer to new LENGTH. Afterwards pointer points to
+\ Reallot POINTER to old buffer to new LENGTH. Afterwards pointer points to
 \ new buffer.
 : REALLOC-POINTER   >R    DUP @ R> REALLOC   SWAP ! ;
 
@@ -62,7 +63,7 @@ class LABELSTRUCT
   M: RELOCATABLE> DUP +! M;           \    and back. Don't use in between!
 \ Return largest INDEX of labels present.
   M: LAB-UPB |BAG| 2/ M;
-\ Reallocate if the class is full. 6 cells : does> pointer, 4 fields and
+\ Reallot if the class is full. 6 cells : does> pointer, 4 fields and
 \ upperbound of bag.
   M: ?REALLOC?
   DROP MAX-LAB LAB-UPB = IF DOUBLE-SIZE
@@ -179,7 +180,7 @@ VARIABLE MAX-DEV-N   8  MAX-DEV-N !        \ Max deviation acceptable with next
 \ ---------------- Names of labels ------------------------------
 
 \ Decompile label INDEX.
-: .EQU    LABELS[] DUP @ |L| H.- " EQU " TYPE  CELL+ @ %ID. CR ;
+: .EQU    LABELS[] DUP @ H.- " EQU " TYPE  CELL+ @ %ID. CR ;
 
 \ Contains equ labels, i.e. classes as associate with ``LABEL''
 MAX-LABEL ' .PAY-DEA ' .EQU LABELSTRUCT EQU-LABELS        LABELS !BAG
@@ -217,11 +218,9 @@ HEX FFFF INVERT CONSTANT LARGE-NUMBER-MASK
 \ Prevent leading hex letter for NUMBER by printing a zero.
 : .0?   DUP 0A0 100 WITHIN SWAP 0A 10 WITHIN OR IF &0 EMIT THEN ;
 
-
 \ Print a NUMBER in hex in a smart way.
 : SMART.   DUP ABS 100 < IF DUP .0? . ELSE
-\    LARGE-NUMBER-MASK OVER AND IF H.- ELSE (H.-) TYPE THEN SPACE THEN ;
-    |L| H.- SPACE THEN ;
+           DUP 0< IF &- EMIT NEGATE THEN H.- SPACE THEN ;
 
 \ For label INDEX and OFFSET print the label with offset.
 : .~LABEL   SWAP .PAY   ?DUP IF
@@ -414,7 +413,7 @@ CREATE TABLE 256 ALLOT      TABLE 256 ERASE
 \D ." EXPECT 0 -1 -1 :" ^A IS-PRINT .   &A IS-PRINT . BL IS-PRINT . CR .S
 
 \ Accumulates characters that may form a string.
-CREATE ACCU 100 ALLOT           ACCU 100 ERASE
+DATA ACCU   ACCU 100 CELL+ DUP ALLOT  ERASE
 
 \D ." Expect "  """ AA""""AA """ TYPE &: EMIT " AA""AA " ."$" CR .S
 
@@ -441,14 +440,18 @@ CREATE ACCU 100 ALLOT           ACCU 100 ERASE
 \ FIXME: to be renamd in WHERE-FLUSH
 VARIABLE NEXT-CUT       \ Host address where to separate db etc. in chunks.
 VARIABLE CUT-SIZE    16 CUT-SIZE !   \ Chunks for data-disassembly.
+VARIABLE LINE-SIZE   80 LINE-SIZE !   \ Chunks for data-disassembly.
 
 \ For ADDR of a (printable) char, add it to the accumulated range.
 \ Force an immediate flush, if the range is full.
 \ Otherwise postpone the flush at least one char.
 \ If the character following is a string ender, this is a desirable
 \ place to break. (String enders like ^J and 0 are not printable.)
-: ACCU-$C+   DUP C@ ACCU $C+   ACCU @ 64 = IF 1+ ELSE 2 + THEN NEXT-CUT ! ;
-
+< : ACCU-$C+   ACCU @ 99 > 13 ?ERROR
+    DUP C@ ACCU $C+   ACCU @ 64 = IF 1+ ELSE 2 + THEN NEXT-CUT ! ;
+\ : ACCU-$C+
+\     DUP C@ ACCU $C+   ACCU @ OUT @ + LINE-SIZE @ > IF
+\     1+ NEXT-CUT ! ELSE DROP THEN ;
 
 \ ---------------- Things to print at the start of a line --------------------------------------
 
@@ -473,14 +476,16 @@ VARIABLE CUT-SIZE    16 CUT-SIZE !   \ Chunks for data-disassembly.
 : CR+GENERIC   2>R DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF
      DUP CR-ADORNED  2R@ TYPE THEN REMEMBER-COMMENT: RDROP RDROP ;
 
-: CR+$         2>R DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR IF .ACCU
-     DUP CR-ADORNED  2R@ TYPE THEN REMEMBER-COMMENT: RDROP RDROP ;
+: CR+$         2>R DUP =EQU-LABEL >R DUP NEXT-CUT?   R> OR
+    OUT @ LINE-SIZE @ > OR IF .ACCU DUP CR-ADORNED  2R@ TYPE THEN
+    REMEMBER-COMMENT: RDROP RDROP ;
 
 \ For ADDRESS : interupt byte display.
 : CR+dn   "  " CR+GENERIC ;
 : CR+db   "  db " CR+GENERIC ;
 : CR+dw   "  dw " CR+GENERIC ;
 : CR+dl   "  dl " CR+GENERIC ;
+: CR+dq   "  dq " CR+GENERIC ;
 : CR+d$   "  d$ " CR+$ ;
 
 
@@ -522,7 +527,7 @@ endclass
 : CREATOR-XT   RANGE-XT RANGE-TYPES BAG-WHERE CELL+ @ ;
 
 \ Display range INDEX in a reconsumable form.
-: DECOMP-RANGE   DUP MAKE-CURRENT RANGE-START |L| H.- SPACE RANGE-END |L| H.- SPACE
+: DECOMP-RANGE   DUP MAKE-CURRENT RANGE-START H.- SPACE RANGE-END H.- SPACE
     CREATOR-XT ID. LABEL-NAME TYPE CR ;
 
 \ Contains range specification, limits plus type.
@@ -627,6 +632,25 @@ MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 
 % DUMP-L    % -dl:   ARE-COUPLED
 
+\ Dump quads to ADDRESS1 from ADDRESS2, plain.
+\ Fetching a 8 byte entity with `` @ '' only works with Intel's
+\ endianess.
+: (DUMP-Q)   DO I DUP CR+dq @ .LABEL/. 8 +LOOP PRINT-OLD-COMMENT: CR   ;
+
+\ Dump words from target ADDRESS1 to ADDRESS2 adorned with labels.
+: DUMP-Q   TARGET>HOST SWAP TARGET>HOST  DUP NEXT-CUT ! (DUMP-Q) ;
+
+\ Range ADDRESS1 .. ADDRESS2 are longs with name NAME.
+: -dq    2>R 'DUMP-Q 2R> RANGE ;
+
+\ Range ADDRESS1 .. ADDRESS2 are longs with name "name".
+: -dq:    NAME -dq ;
+
+\ Range ADDRESS1 .. ADDRESS2 is an anonymous long range.
+: -dq-    NONAME$ -dq ;
+
+% DUMP-Q    % -dq:   ARE-COUPLED
+
 \ Print all chars to ADDR1 from ADDR2 appropriately.
 \ Try to combine, playing with the next flush.
 : (DUMP-$)
@@ -696,19 +720,20 @@ MAX-LABEL ' .PAY-RANGE ' DECOMP-RANGE   LABELSTRUCT RANGE-LABELS   LABELS !BAG
 \ Generate the source of all labelclasss.
 : DECOMP-ALL THE-REGISTER DO-BAG   I @ EXECUTE DECOMP-ONE   LOOP-BAG ;
 
+\ Apparently this fails, for some cases.
+\ : DECOMP-ALL 'RANGE-LABELS DECOMP-ONE ;
+
 \ Make a full blown cul file from the internal data.
-: MAKE-CUL  TARGET-START |L| H.- " -ORG-" TYPE CR DECOMP-ALL ;
+: MAKE-CUL  TARGET-START H.- " -ORG-" TYPE CR DECOMP-ALL ;
 
 \ Show what type of labels there are.
 : SHOW-REGISTER   THE-REGISTER DO-BAG I @ %ID. LOOP-BAG ;
 
-\ Disassemble the current program as stored in the ``CODE-BUFFER''.
-\ Using what is known about it.
+\ Disassemble the current `SECTION of the program under investigation.
+\ Using everything that is known about it.
+\ FIXME! It is as yet unclear how to handle programs with multiple sections.
 : DISASSEMBLE-TARGET
-    TARGET-START . " ORG" TYPE CR   DISASSEMBLE-ALL   ;
-
-\ i386 dependant, should somehow be separated out.
-: DISASSEMBLE-TARGET "BITS-32" TYPE CR  DISASSEMBLE-TARGET CR  ;
+    TARGET-START . " ORG" TYPE CR   DISASSEMBLE-ALL CR  ;
 
 \ This is used to plug holes, where the user doesn't specify how to
 \ disassemble.

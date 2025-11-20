@@ -1,6 +1,8 @@
-( $Id: rfcrawl.cul,v 1.10 2016/05/26 19:18:31 albert Exp $ )
+( $Id: rfcrawl.cul,v 1.11 2022/04/10 10:09:39 albert Exp $ )
 ( Copyright{2000}: Albert van der Horst, HCC FIG Holland by GNU Public License)
 ( Uses Richard Stallmans convention. Uppercased word are parameters.    )
+
+WANT ABORT"
 
 \ In retroforth all calls return and ``INT 80'' too.
 ASSEMBLER

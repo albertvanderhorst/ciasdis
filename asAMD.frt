@@ -9,6 +9,6 @@
 \ E is extended registers, Q is 64 bits and maybe extended registers.
 \ The rule : ' applies to AX'| and ] applies to AX] while N applies to others.
 \ 01 48 8 1FAMILY, Q: QB: QX: QXB: QR: QRB: QRX: QRXB:
-01 49 8 1FAMILY, Q: QN: Q]: QN]: Q': QN': Q']: QN']:
+01 48 8 1FAMILY, Q: QN: Q]: QN]: Q': QN': Q']: QN']:
 01 40 8 1FAMILY, E: EN: E]: EN]: E': EN': E']: EN']:
 PREVIOUS DEFINITIONS DECIMAL

@@ -255,7 +255,8 @@ However with a proper cul file the 64 can disassemble rf751
 correctly. Also it can assemble it correctly.
 So the problem is in crawling the rf751 executable.
 This is not a priority.
-
+It is "solved" by adding a target regressiontest64 that require
+less of rf751.
 2019 oct 15
 label PASS32_5_3_0 is is a version where all tests pass for
 the ciasdis such as compile using the official 5.3.0 release.
@@ -300,3 +301,254 @@ SHOW-COMPLETION. Fixed.
 Clean up of text files in preparation of copying to github.
 2019 oct 21
 THose updated text are added and form release 2.0.0
+
+2019 oct 26
+Adding 64 bit stuff and using it to disassemble lina64 5.3.0
+has succeeded.
+
+2019 oct 27
+Cleanup of ciasdis before formally adding asAMD.frt. This includes
+64 bit facilities around Q : -dq- {Q,} that are not yet used.
+Mysterious problems were caused by symbolic links in the cvs repository,
+like the impossibility to burn down readme in favour of readme.txt.
+All symbolic links in the repository have been solved.
+
+2019 oct 30
+A problem is that the code is deciphered in the 32 bits mode,
+such that e.g. REL| is not recognized.
+
+The idea is that switching to 16 bit mode is rare.
+If it is done after the section we must switch back.
+
+On the other hand 32 or 64 bit mode is permanent.
+One or the other is choosen. If there is a switch between
+the two that must be added in the consult file.
+Still there might be needed a difference in the consult file
+between the dc32 and dc64. Until such time the disassembly
+uses the current mode, and doesn't switch it.
+
+The problem with REL| is that it is not encountered at the
+right position in the pifu list. This can be alleviated
+only in the most artificial manner, unless it is put in the asi386.frt
+source file. Also the switches for 32 and 64 bit become clearer
+then.
+
+2019 oct 31
+Made 1 byte prefixes a special postit: 1PIP.
+Prefixes now appear on the same line, which amounted to adding a condition
+to ADORN-ADDRESS. In asi386.frt instructions are recognizable as
+prefixes. All tests pass, but of course the testoutput changes.
+.
+
+2019 nov 1
+Cleaned up the handling of BITS-32/BITS-64. There is now a
+START-DIRECTIVE that can be filled in with such.
+The crawling of test rf and lina have been adapted to used
+that.
+
+Although ciasdis can handle only a single section, where the
+elf header is part of, at least the comment around ORG and
+code-buffers have been cleared up.
+
+2019 nov 2
+ADORN-ADDRESS crashes if there is no current pifu.
+Fixed by testing for zero.
+
+2019 nov 3
+The correct disassemblies for 32 versus 64 mode were not
+found. This was caused by not testing the BA bit in DIS-PI.
+Now the INC|X, instruction e.g. was found in 64 bit mode
+and later disapprover, leading to byte disassembly.
+One nit still remains. Somehow SHOW-ALL leaves out CLTS,
+the instruction immediately before the Q: stuff.
+This is noted and the regressiontest is made not to fail.
+
+2019 nov 5
+A target lina530.asm has been added to the Makefile of ciasdis
+that allows to disassemble and reassemble a 64 bit binary.
+<<<<<<< log.txt
+
+2019 nov 11
+The regressiontest succeeds for the default 5.3.0 lina
+regressiontest64 succeeds for the 64 bit Forth in this directory.
+Introduced MOVI|Q, to replace MOVI|X, for 64 bits Intel.
+
+2020 aug 10
+The regressiontest with FORTH=< lina 32 5.3.0 > runs with splendour.
+The plan is to add the MOVI|Q, instruction in the 64 bit set to
+hide the MOVI|X, instruction in 64 bit mode.
+(owever the same test with a 64 bit Forth crashes. check probablty
+documented.)
+
+2020 aug 11
+The remarks of ciasdis64 directory that is coupled to the
+optimiser are integrated, and this is the new release that accomodates
+the MOVI|Q, .. IQ, instruction.
+However MOVI|Q, is a bad idea. See the log of ciforth itself
+introducing E:MOVI|X,  Q:MOVI|X,  .
+
+2020 aug 13
+The conclusion is that there is one thing to do, stop assigning
+a special meaning to MOVI|X, within the optimiser that doesn't
+agree with the actual meaning.
+The next thing is to know what a prefix E: Q: does to a MOVI|X, .
+It turns out that only if preceeded by a Q: the MOVI|X, takes
+a 64 bit immediate value. So the policy becomes to have an E:
+prefix as long as we're manipulating 32 bit values in a movi.
+This way the decompilation is correct, not so the execution
+in subtle cases such as sign extension.
+However the intermediate code is not executed.
+A prefix E: does nothing to a MOVI|X, except maybe a ghost
+register. This means it can be introduced gratuitously and removed
+later for non-ghost registers.
+Furthermore Q.:MOVI|X, is needed and requires a 64 bit immediate.
+The consequence is that MOVI|X, is use
+We need the bad bits to disciminate between 32 and 64 bits
+through BITS-64. This disallows Q:MOVI|X, in 32 bits mode.
+A bit for 32 bits mode remains and it may be useful some time,
+but not for now.
+
+2020 aug 15
+There was the idea to have the Q prefixes generate the same code
+for E: temporarily for the optimiser. This doesn't work because
+now all the disassemblies of the low level code fail.
+So we must just start the tedious work of introducing the E:
+prefix manually at the places in front of the movi|x, where the
+data is just 32 bits. The rule is that tempory code inside the optimiser
+interprets E#: MOVI|X, as pertaining to 64 bits data.
+Should ever the need arise to have an e: prefix in combination with
+MOVI to pertain to 32 bit data E#: MOVI, can be used.
+
+2020 aug 16
+In the optimiser the output of E: MOVI, is Q: MOVI, because the
+data is 32 bit anyhow.
+
+HIATUS!
+
+2022 feb 18
+Updating to lina 5.4.0 :
+2>R must be added to the WANT's, no longer invisibly
+included through FORMAT.
+
+2022 feb 27
+Done an experiment. All decompilation range can be removed
+from the output.
+
+2022 apr 11
+regressiontest works in 5.4.0 lina 32
+regressiontest64 works in 5.4.0 lina 64
+regressiontest64 fails in 5.4.0 ciarm 64 but only in
+lina405.asm and lina530.asm
+The update to be done was small: only ABORT"
+was used in some obscure files.
+
+2022 apr 14
+Tag PASS_5_4_0 is ready to be copied to github.
+
+2022 jul 25
+In the file asAMD.frt the startcode for the Q series is wrong.
+This will not be detected by tests, because this has been fetched
+from asi386.frt
+
+2023 jan 23
+All labels appearing in lina530.asm between _start and _end , and
+all ranges can be removed. The resulting file assembles.
+Not only this the file can be relocated.
+
+2023 jan 30
+There was a provision to get rid of a duplication for e.g. douser.
+CLEAN-LABELS do that.
+
+2023 may 17
+The regressiontest fails with release 5.5
+(;CODE) is suspect.
+No! The Forth was not big enough. No problems with 60 Mbyte.
+
+2025 oct 4
+Do not use % to denote binary, because it is used to signal
+dea's used as struct or maybe class. Use %% instead.
+
+2025 oct 20
+CSRRW, doesnot disassemble properly.
+After all the components are found (they are), the fixup from
+sd9#| leaves 1F00,0000 in TALLY-BI signalling that the disassembly
+failed.
+It is mysterious that DFI succeeds in asalpha.frt
+Replacing DFIs by DFI doesn't help.
+2025 oct 21
+Debugging the bad bits, now the system is in place, but the
+disassembly has to be checked against the gnu assembler.
+Saved an assembler disassembler for riscv into the ciasdis archive.
+Next move to be done in a riscv system.
+
+2025 oct 23
+Testing on sinas2. Making testasriscv succeeds.
+There is no problem for byte order compared to Intel.
+However the target 386 to alpha fail.
+
+2025 oct 25
+Make all targets work on riscv. That is to say sinas2
+Done.
+2025 oct 26
+* remove duplicate fixup for the m.s. bits
+* gdb installed
+* disassemble riscv.bin by gdb and check.
+  This doesn't succeed, however we can use objdump "
+    objdump -b binary -mriscv --adjust-vma=0x1000 -D *bin
+
+The fixed code for MUL and MULW were not correct.   ?
+LD and LW were swapped.
+Apparently objdump -bin cannot handle mulw .. remuw.
+The opcode for SRAW was wrong, shadowed by another SRA.
+2025 oct 27
+The shift mask must accomodate 6 bits for 64 bits.
+This also fixes the duplicate entries of SB .. SH and LW
+in the testset.
+Handling the deviation.s fails because the disassembly generates
+an unending row of --""--. This is caused by no instruction
+matching the memory. TALLY-BI remains at zero, making AT-REST?
+think that all bits are reset to zero. Solved by inspecting the
+size of bag DISS.
+There was a provision for aligning instruction at 4 bytes,
+added to asriscv.frt.
+Made a file deviation.s with instructions that has not been checked
+yet. It looks that there maybe different instructions are generated
+by the same opcode.
+ADDIW was missing. Updating testsetriscv so that the
+duplicate entries of SB .. SH in the testset are removed.
+
+Later I doscovered that testcmp/gsetriscv was not updated in cox.
+(For ciasdis was not made). This test had later been done in sinas2
+and succeeds.)
+
+------------------
+
+;CODE is not needed in ciasdis : remove
+    - % is used to give a dea where fields are used.
+       replace by ' wherever an ct is meant.
+With 6.0 it is no longer needed to redefine BAG
+
+--------------------------
+
+These instruction are not confirmed yet.
+
+   remuw  t2, t3, t4
+   remw   t2, t3, t4
+   divuw  t2, t3, t4
+   divw   t2, t3, t4
+   mulw   t2, t3, t4
+   csrrci  t2, 12, 13
+   csrrw   t2, 12, 13
+   ebreak
+#  fencei  t2, t3, 12       ontbreekt
+#  fence   t2, t3, 0, 0, 0  krijg operands niet goed
+   srai    t2, t3, 12
+   subw    t2, t3, t4
+   srliw    t2, t3, 12
+   slliw    t2, t3, 12
+   addiw    t2, t3, 12
+   sraiw    t2, t3, 12
+   sd       t2, 12(t3)                     # ontbreekt
+   lwu      t2, 12(t3)                     # ontbreekt
+   lhu      t2, 12(t3)                      # normal
+   ld       t2, 12(t3)                     # ontbreekt
